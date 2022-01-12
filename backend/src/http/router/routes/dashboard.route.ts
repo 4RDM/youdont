@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = Router()
 
-router.get('/', (req, res) => res.send('Hello World!2'))
+router.get('/*', (req, res) => res.send(req.path))
 
 export default router
