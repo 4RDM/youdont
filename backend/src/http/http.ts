@@ -2,11 +2,12 @@ import expressWs, { Application } from 'express-ws'
 import express from 'express'
 import helmet from 'helmet'
 import session from 'express-session'
+import Logger from '../utils/logger'
 
 import indexRouter from './router/index.router'
 import apiRouter from './router/api.router'
 
-export default class HTTPManager {
+export default class HTTP {
 	public server: Application = expressWs(express()).app
 
 	constructor() {
@@ -25,6 +26,6 @@ export default class HTTPManager {
 		this.server.use('/', indexRouter)
 		this.server.use('/api', apiRouter)
 
-		this.server.listen(80, () => console.log('Listening to port 80'))
+		this.server.listen(80, () => Logger.ready('Listening to port 80'))
 	}
 }

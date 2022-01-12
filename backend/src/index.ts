@@ -1,10 +1,10 @@
-import HTTPManager from './http/http'
+import HTTP from './http/http'
 
 export default class Core {
-	public httpManager: HTTPManager
+	public httpServer: HTTP
 
 	constructor() {
-		this.httpManager = new HTTPManager()
+		this.httpServer = new HTTP()
 	}
 }
 

@@ -1,9 +1,12 @@
-import { Router } from 'express'
-const router = Router()
+import { Router, json, urlencoded } from 'express'
 
 import docsRouter from './routes/docs.route'
 import dashboardRouter from './routes/dashboard.route'
 
+const router = Router()
+
+router.use(json())
+router.use(urlencoded({ extended: true }))
 router.use('/docs', docsRouter)
 router.use('/dashboard', dashboardRouter)
 
