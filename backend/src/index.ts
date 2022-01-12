@@ -1,6 +1,10 @@
+import HTTPManager from './http/http'
+
 export default class Core {
+	public httpManager: HTTPManager
+
 	constructor() {
-		console.log('Hello World!')
+		this.httpManager = new HTTPManager()
 	}
 }
 
