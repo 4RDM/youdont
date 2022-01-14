@@ -4,13 +4,14 @@ import { UsersManager } from "./managers/users.manager"
 import { DonatesManager } from "./managers/donates.manager"
 import logger from "../utils/logger"
 import config from "../config"
+import { Core } from "../"
 
 export default class Database {
 	public readonly donates: DonatesManager
 	public readonly users: UsersManager
 	public readonly docs: DocsManager
 
-	constructor() {
+	constructor(core: Core) {
 		// prettier-ignore
 		this.donates = new DonatesManager()
 		this.users = new UsersManager()

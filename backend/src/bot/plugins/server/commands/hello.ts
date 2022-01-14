@@ -4,9 +4,7 @@ const command: Command = {
 	triggers: ["hello", "helloworld"],
 	description: "Testowa komenda",
 	permissions: ["ADMINISTRATOR"],
-	async exec(client, message, args) {
-		message.channel.send("Hello from: " + this.triggers.join(","))
-	},
+	async exec(client, message, args) {},
 }
 
 module.exports = command

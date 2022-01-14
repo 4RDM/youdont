@@ -8,9 +8,9 @@ export class Core {
 	public bot: Client
 
 	constructor() {
-		this.httpServer = new HTTP()
-		this.database = new Database()
-		this.bot = new Client({
+		this.httpServer = new HTTP(this)
+		this.database = new Database(this)
+		this.bot = new Client(this, {
 			intents: [
 				"DIRECT_MESSAGES",
 				"GUILDS",

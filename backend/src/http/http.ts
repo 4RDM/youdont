@@ -1,20 +1,21 @@
-import expressWs, { Application } from 'express-ws'
-import express from 'express'
-import helmet from 'helmet'
-import session from 'express-session'
-import logger from '../utils/logger'
+import expressWs, { Application } from "express-ws"
+import express from "express"
+import helmet from "helmet"
+import session from "express-session"
+import logger from "../utils/logger"
+import { Core } from "../"
 
-import indexRouter from './router/index.router'
-import apiRouter from './router/api.router'
+import indexRouter from "./router/index.router"
+import apiRouter from "./router/api.router"
 
 export default class HTTP {
 	public server: Application = expressWs(express()).app
 
-	constructor() {
+	constructor(core: Core) {
 		this.server.use(helmet({ contentSecurityPolicy: false }))
 		this.server.use(
 			session({
-				secret: '213213132123',
+				secret: "213213132123",
 				resave: false,
 				saveUninitialized: true,
 				cookie: {
@@ -23,9 +24,9 @@ export default class HTTP {
 			})
 		)
 
-		this.server.use('/', indexRouter)
-		this.server.use('/api', apiRouter)
+		this.server.use("/", indexRouter)
+		this.server.use("/api", apiRouter)
 
-		this.server.listen(80, () => logger.ready('Listening to port 80'))
+		this.server.listen(80, () => logger.ready("Listening to port 80"))
 	}
 }

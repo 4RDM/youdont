@@ -3,20 +3,19 @@ import PluginHandler from "./handlers/plugin.handler"
 import CommandHandler from "./handlers/command.handler"
 import logger from "../utils/logger"
 import config from "../config"
+import { Core } from "../"
 
 export class Client extends Cl {
 	public readonly PluginHandler: PluginHandler
 	public readonly CommandHandler: CommandHandler
+	public readonly Core: Core
 
-	constructor(options: ClientOptions) {
+	constructor(core: Core, options: ClientOptions) {
 		super(options)
 
+		this.Core = core
 		this.PluginHandler = new PluginHandler()
 		this.CommandHandler = new CommandHandler(this)
-
-		// console.log(this.CommandHandler.get("hello"))
-		// console.log(this.CommandHandler.get("world"))
-		// console.log(this.CommandHandler.get("helloworld"))
 
 		// TODO: przenieść eventy do handlera
 		this.on("ready", () => logger.ready("Bot is ready!"))
@@ -31,8 +30,9 @@ export class Client extends Cl {
 				const command = this.CommandHandler.get(commandName)
 
 				if (command) {
-					// prettier-ignore
-					// message.channel.send(`\`\`\`CP: ${this.ws.ping}ms\nCC: ${Date.now() - message.createdTimestamp}ms\nWS: ${this.ws.ping}, ${this.ws.status}\n\n${command.triggers.join(",")}\n${args.join(",")}\n${commandName}\n\`\`\``)
+					command.permissions.forEach(perm => {
+						if (!message.member?.permissions.has(perm)) return
+					})
 					command.exec(this, message, args)
 				}
 			} else {
