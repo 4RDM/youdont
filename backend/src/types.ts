@@ -1,4 +1,6 @@
-import { Message, PermissionResolvable } from "discord.js"
+import { Application, Message, PermissionResolvable } from "discord.js"
+import { Request as req } from "express"
+import { Core } from "."
 import { Client } from "./bot/main"
 
 export interface Command {

@@ -24,6 +24,11 @@ export default class HTTP {
 			})
 		)
 
+		this.server.use((req, res, next) => {
+			// @ts-ignore
+			req.core = core
+			next()
+		})
 		this.server.use("/", indexRouter)
 		this.server.use("/api", apiRouter)
 
