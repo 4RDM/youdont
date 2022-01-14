@@ -26,7 +26,7 @@ export default class Database {
 					autoCreate: true,
 				}
 			)
-			.then(() => logger.ready("Database connected"))
+			.then(() => logger.ready("Database ready"))
 			.catch(err => logger.error(`Cannot connect to database, ${err}`))
 	}
 }
