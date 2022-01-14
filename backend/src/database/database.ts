@@ -1,9 +1,9 @@
+import mongoose from "mongoose"
 import { DocsManager } from "./managers/docs.manager"
 import { UsersManager } from "./managers/users.manager"
 import { DonatesManager } from "./managers/donates.manager"
-import logger from "src/utils/logger"
-import mongoose from "mongoose"
-import config from "src/config"
+import logger from "../utils/logger"
+import config from "../config"
 
 export default class Database {
 	public readonly donates: DonatesManager
