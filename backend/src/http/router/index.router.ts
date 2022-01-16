@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
 		const url = await req.core.database.shorts.get(<string>req.query.r)
 
 		if (url) res.redirect(url)
-		else res.json({ code: 404, message: "Not Found" })
+		else res.status(404).json({ code: 404, message: "Not Found" })
 
 		return
 	}
