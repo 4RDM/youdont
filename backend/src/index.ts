@@ -2,6 +2,12 @@ import { Client } from "./bot/main"
 import Database from "./database/database"
 import HTTP from "./http/http"
 
+declare module "express-serve-static-core" {
+	interface Request {
+		core: Core
+	}
+}
+
 export class Core {
 	public httpServer: HTTP
 	public database: Database
