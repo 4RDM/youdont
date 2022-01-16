@@ -2,6 +2,7 @@ import { Router } from "express"
 import FormData from "form-data"
 import fetch from "node-fetch"
 import config from "../../../config"
+import { userCheck } from "../api.router"
 
 const router = Router()
 
@@ -59,8 +60,8 @@ router.get("/reply", (req, res) => {
 })
 
 // prettier-ignore
-router.get('/logout', (req, res) => req.session.destroy(() => res.redirect('/')))
+router.get('/logout', userCheck, (req, res) => req.session.destroy(() => res.redirect('/')))
 
-router.get("/session", (req, res) => {})
+router.get("/session", userCheck, (req, res) => {})
 
 export default router
