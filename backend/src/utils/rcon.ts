@@ -1,6 +1,8 @@
 /*
 	© 2019 - 2021, Nimplex, All rights reserved.
 	This code is under MIT license. Read more: https://choosealicense.com/licenses/mit
+
+	nercon - eddited
 */
 
 // standard nodejs socket library

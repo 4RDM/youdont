@@ -1,8 +1,8 @@
 import { Client } from "./bot/main"
-// import { RCON } from "./utils/rcon"
-// import config from "./config"
+import { RCON } from "./utils/rcon"
 import Database from "./database/database"
 import HTTP from "./http/http"
+import config from "./config"
 
 declare module "express-serve-static-core" {
 	interface Request {
@@ -14,8 +14,10 @@ export class Core {
 	public httpServer: HTTP
 	public database: Database
 	public bot: Client
+	public rcon: RCON
 
 	constructor() {
+		this.rcon = new RCON(config.rcon)
 		this.httpServer = new HTTP(this)
 		this.database = new Database(this)
 		this.bot = new Client(this, {
@@ -34,8 +36,5 @@ export class Core {
 		})
 	}
 }
-
-// const rcon = new RCON(config.rcon)
-// rcon.send("reloadchat")
 
 export default new Core()
