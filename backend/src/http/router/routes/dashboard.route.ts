@@ -1,10 +1,19 @@
-import { Router } from "express"
+import { NextFunction, Request, Response, Router } from "express"
 import FormData from "form-data"
 import fetch from "node-fetch"
 import config from "../../../config"
-import { userCheck } from "../api.router"
 
 const router = Router()
+
+const userCheck = (req: Request, res: Response, next: NextFunction) => {
+	const { username, tag, userid, email } = <any>req.session
+	if (username && tag && userid && email) next()
+	else
+		res.status(401).json({
+			code: 401,
+			message: "Unauthorized, not logged in",
+		})
+}
 
 router.get("/login", (req, res) => {
 	res.redirect(

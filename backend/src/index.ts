@@ -1,4 +1,6 @@
 import { Client } from "./bot/main"
+// import { RCON } from "./utils/rcon"
+// import config from "./config"
 import Database from "./database/database"
 import HTTP from "./http/http"
 
@@ -32,5 +34,8 @@ export class Core {
 		})
 	}
 }
+
+// const rcon = new RCON(config.rcon)
+// rcon.send("reloadchat")
 
 export default new Core()
