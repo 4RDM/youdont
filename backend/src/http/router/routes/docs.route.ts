@@ -26,15 +26,45 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	* /api/docs/docs
 	! Pobiera wszystkie podania
 */
-router.get("/docs", adminCheck, (req, res) => {
-	res.send("Hello Json!")
+router.get("/docs", adminCheck, async (req, res) => {
+	const fetched = (await req.core.database.docs.getAll()) || []
+	res.json({ code: 200, message: "Ok!", data: fetched })
 })
 
 /*
 	* /api/docs/doc/1234
 	! Pobiera podanie o :ID
 */
-router.get("/doc/:id", adminCheck, (req, res) => {})
+router.get("/doc/:id", adminCheck, async (req, res) => {
+	const { id } = req.params
+
+	if (!id) return res.json({ code: 400, message: "Missing 'id'." })
+
+	const fetched = await req.core.database.docs.get(id)
+
+	if (!fetched)
+		return res.json({
+			code: 404,
+			message: `Cannot found doc with ID '${id}'`,
+		})
+
+	const { author, nick, age, voice, long, short, steam, docID } = fetched
+
+	res.json({
+		code: 200,
+		message: "Ok!",
+		data: {
+			author,
+			nick,
+			age,
+			voice,
+			long,
+			short,
+			steam,
+			docID,
+		},
+	})
+})
 
 /*
 	* /api/docs/doc/1234

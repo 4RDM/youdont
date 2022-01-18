@@ -38,6 +38,10 @@ export class DocsManager {
 		return await DocsModel.findOne({ docID })
 	}
 
+	async getAll(): Promise<Podanie[] | null> {
+		return await DocsModel.find()
+	}
+
 	async create(doc: {
 		author: string
 		nick: string
