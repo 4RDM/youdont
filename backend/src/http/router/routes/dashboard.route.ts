@@ -57,11 +57,11 @@ router.get("/reply", (req, res) => {
 							code: 401,
 							message: "Discord returned an error",
 						})
-					;(<any>req.session).username = username
-					;(<any>req.session).userid = id
-					;(<any>req.session).tag = discriminator
-					;(<any>req.session).email = email
-					;(<any>req.session).avatar = avatar
+					req.session.username = username
+					req.session.userid = id
+					req.session.tag = discriminator
+					req.session.email = email
+					req.session.avatar = avatar
 
 					res.redirect("/")
 				})

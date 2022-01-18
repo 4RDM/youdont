@@ -3,10 +3,18 @@ import { RCON } from "./utils/rcon"
 import Database from "./database/database"
 import HTTP from "./http/http"
 import config from "./config"
+import { Session } from "express-session"
 
 declare module "express-serve-static-core" {
 	interface Request {
 		core: Core
+		session: Session & {
+			username?: string
+			userid?: string
+			tag?: string
+			email?: string
+			avatar?: string
+		}
 	}
 }
 
