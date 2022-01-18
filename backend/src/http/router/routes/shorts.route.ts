@@ -39,7 +39,7 @@ router.post("/create", adminCheck, async (req, res) => {
 
 	res.json({
 		code: 200,
-		message: "Fine!",
+		message: "Ok!",
 		shortID: document.shortID,
 	})
 })

@@ -34,7 +34,7 @@ export class DocsManager {
 		this.core = core
 	}
 
-	async get(docID: number): Promise<Podanie | null> {
+	async get(docID: string): Promise<Podanie | null> {
 		return await DocsModel.findOne({ docID })
 	}
 
@@ -54,5 +54,9 @@ export class DocsManager {
 			docID,
 			...doc,
 		})
+	}
+
+	async remove(docID: string): Promise<Podanie | null> {
+		return await DocsModel.findOneAndRemove({ docID })
 	}
 }

@@ -40,7 +40,15 @@ router.get("/doc/:id", adminCheck, (req, res) => {})
 	* /api/docs/doc/1234
 	! Usuwa podanie o :ID
 */
-router.delete("/doc/:id", adminCheck, (req, res) => {})
+router.delete("/doc/:id", adminCheck, async (req, res) => {
+	const { id } = req.params
+
+	if (!id) return res.json({ code: 400, message: "Missing 'id'." })
+
+	const removed = await req.core.database.docs.remove(id)
+
+	res.json({ code: 200, message: "Ok!", author: removed?.author })
+})
 
 /*
 	* /api/docs/doc/1234/accept
@@ -93,7 +101,7 @@ router.put("/upload", async (req, res) => {
 		steam,
 	})
 
-	res.json({ code: 200, message: "Fine!", docID: doc?.docID })
+	res.json({ code: 200, message: "Ok!", docID: doc?.docID })
 })
 
 export default router
