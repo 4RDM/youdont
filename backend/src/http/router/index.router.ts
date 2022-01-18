@@ -13,21 +13,7 @@ router.get("/", async (req, res) => {
 		return
 	}
 
-	res.send("Hello World!")
-
-	// @ts-ignore
-	// just for testing core in request
-	// const channel = req.core.bot.channels.cache.get("843444766187847690")
-	// if (channel?.isText()) channel.send("Hello World!")
-})
-
-router.get("/test", async (req, res) => {
-	const document = await req.core.database.shorts.create({
-		author: "364056796932997121",
-		url: "https://nimplex.xyz",
-	})
-
-	res.send(document.shortID)
+	res.send("Hello World!") // TODO: add SPA here
 })
 
 export default router

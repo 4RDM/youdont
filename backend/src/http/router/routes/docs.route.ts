@@ -1,32 +1,26 @@
 import { NextFunction, Request, Response, Router } from "express"
 const router = Router()
 
-const userCheck = (req: Request, res: Response, next: NextFunction) => {
-	const { username, tag, userid, email } = <any>req.session
-	if (username && tag && userid && email) next()
-	else
-		res.status(401).json({
-			code: 401,
-			message: "Unauthorized, not logged in",
-		})
-}
-
 const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { userid } = <any>req.session
-	const user = req.core.bot.guilds.cache
-		.get("843444305149427713")
-		?.members.cache.get(userid)
-		?.roles.cache.has("855159545290424330")
+	const settings = req.core.database.settings
+	const fetchedUser = settings.getUser(userid)
 
-	if (user) next()
-	else
-		res.status(401).json({
+	if (!fetchedUser)
+		return res.status(401).json({
 			code: 401,
-			message: "Unauthorized, not admin",
+			message: "Unauthorized",
 		})
+	else {
+		if (settings.hasPermission(userid, "MANAGE_DOCS")) next()
+		else {
+			res.status(401).json({
+				code: 5001,
+				message: "You dont have permissions to this",
+			})
+		}
+	}
 }
-
-router.use(userCheck)
 
 /*
 	* /api/docs/docs
