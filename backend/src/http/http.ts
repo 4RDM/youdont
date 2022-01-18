@@ -25,8 +25,8 @@ export default class HTTP {
 		)
 
 		this.server.use((req, res, next) => {
-			// @ts-ignore
 			req.core = core
+			res.setHeader("x-powered-by", "Nimplex's love") // easter egg ;)
 			next()
 		})
 		this.server.use("/", indexRouter)
