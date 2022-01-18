@@ -42,9 +42,12 @@ export class ShortsManager {
 	async get(id: string): Promise<string | undefined> {
 		const fetched = await ShortModel.findOne({ shortID: id })
 
-		fetched?.updateOne({
-			views: fetched.views + 1,
-		})
+		await ShortModel.findOneAndUpdate(
+			{ shortID: id },
+			{
+				views: (fetched?.views || 0) + 1,
+			}
+		)
 
 		return fetched?.url
 	}
