@@ -1,4 +1,9 @@
-import { Client as Cl, ClientOptions } from "discord.js"
+import {
+	Client as Cl,
+	ClientOptions,
+	MessageEmbed,
+	TextChannel,
+} from "discord.js"
 import PluginHandler from "./handlers/plugin.handler"
 import CommandHandler from "./handlers/command.handler"
 import isSimilar from "../utils/isSimilar"
@@ -45,8 +50,33 @@ export class Client extends Cl {
 		this.PluginHandler = new PluginHandler()
 		this.CommandHandler = new CommandHandler(this)
 
+		let hit = 0 // members joined counter
+		let captchaTimeout = setTimeout(() => {}, 0) // timeout to wait
+		let captcha = false
+
 		// TODO: przenieść eventy do handlera
 		this.on("ready", () => logger.ready("Bot is ready!"))
+
+		this.on("guildMemberAdd", () => {
+			hit++
+			captchaTimeout = setTimeout(() => {
+				if (hit >= 4) {
+					hit = 0
+					captcha = true
+					;(<TextChannel>(
+						this.channels.cache.get("853743241080995850")
+					)).send({
+						embeds: [
+							new MessageEmbed()
+								.setTitle("Automoderator")
+								.setDescription(
+									"Wykryto potencjalne zagrożenie raidem, captcha uruchomiona"
+								),
+						],
+					})
+				}
+			}, 10000)
+		})
 
 		this.on("messageCreate", message => {
 			if (message.author.bot) return
