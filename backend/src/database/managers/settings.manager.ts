@@ -19,12 +19,14 @@ export interface User {
 export interface Settings {
 	users: User[]
 	docsOpen: boolean
+	verificationChannel: string
+	verificationRole: string
 }
 
 export class SettingManager {
 	private readonly core: Core
 	private readonly path = join(__dirname, "..", "..", "..", "data.json")
-	private settings: Settings
+	public settings: Settings
 
 	constructor(core: Core) {
 		this.core = core

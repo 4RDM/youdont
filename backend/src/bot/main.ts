@@ -1,6 +1,7 @@
 import {
 	Client as Cl,
 	ClientOptions,
+	MessageAttachment,
 	MessageEmbed,
 	TextChannel,
 } from "discord.js"
@@ -10,6 +11,8 @@ import isSimilar from "../utils/isSimilar"
 import logger from "../utils/logger"
 import config from "../config"
 import { Core } from "../"
+import { join } from "path"
+import generateCaptcha from "../utils/generateCaptcha"
 
 const wordlist = [
 	{
@@ -52,10 +55,29 @@ export class Client extends Cl {
 
 		let hit = 0 // members joined counter
 		let captchaTimeout = setTimeout(() => {}, 0) // timeout to wait
-		let captcha = false
+		let captcha = true
+		const verificationRole =
+			core.database.settings.settings.verificationRole
 
 		// TODO: przenieść eventy do handlera
-		this.on("ready", () => logger.ready("Bot is ready!"))
+		this.on("ready", async () => {
+			logger.ready("Bot is ready!")
+
+			const channelID =
+				core.database.settings.settings.verificationChannel
+
+			const channel = await this.channels.fetch(channelID)
+			logger.warn(`Cached verification channel: ${channelID}`)
+
+			if (channel?.isText()) {
+				const lastMessage = await channel.messages.fetch()
+				logger.warn(
+					`Cached last message on verification channel: ${
+						lastMessage.last()?.id
+					}`
+				)
+			}
+		})
 
 		this.on("guildMemberAdd", () => {
 			hit++
@@ -71,11 +93,60 @@ export class Client extends Cl {
 								.setTitle("Automoderator")
 								.setDescription(
 									"Wykryto potencjalne zagrożenie raidem, captcha uruchomiona"
-								),
+								)
+								.setTimestamp(new Date()),
 						],
 					})
 				}
-			}, 10000)
+			}, 20000)
+		})
+
+		this.on("messageReactionAdd", async (reaction, user) => {
+			if (!reaction.message.guild) return
+
+			// prettier-ignore
+			if (reaction.message.embeds[0].footer?.text == `${reaction.message.guild.id} - ${this.user?.id}` && user.id !== this.user?.id) {
+				const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
+				for (const reaction of userReactions.values()) {
+					await reaction.users.remove(user.id);
+				}
+
+				if (!captcha)
+					reaction.message.guild.members.cache
+						.get(user.id)
+						?.roles.add(verificationRole)
+				else {
+					const code = await generateCaptcha(user.id)
+					const message = await user.send({
+						embeds: [
+							new MessageEmbed()
+								.setTitle("Captcha")
+								.setColor("#0091ff")
+								.setDescription(
+									"Captcha jest uruchomiona, aby kontynuować przepisz kod z obrazka poniżej w nowej wiadomości."
+								).setImage(`attachment://${user.id}.captcha.jpg`),
+						],
+						files: [join(__dirname, "..", "..", "images", `${user.id}.captcha.jpg`)]
+					})
+
+					const collector = await message.channel.awaitMessages({
+						filter: (collected => collected.author.id === user.id),
+						max: 1,
+						time: 15000,
+					}).catch(() => {
+						user.send("Czas na weryfikację minął")
+					})
+
+					if (typeof collector !== "undefined") {
+						if (collector.first()?.content == code) {
+							reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole)
+							user.send('Zweryfikowano pomyślnie!')
+						} {
+							user.send('Nieprawidłowy kod')
+						}
+					}
+				}
+			}
 		})
 
 		this.on("messageCreate", message => {

@@ -1,6 +1,5 @@
 import Jimp from "jimp"
 import { join } from "path"
-import logger from "./logger"
 
 const template = "xxxxxxxx"
 const letters = "abcdefghkmnopqrtufvy123456789ABCDEFGHKLMNPQRTFVWY".split("")
@@ -13,7 +12,7 @@ const random = (min: number, max: number) =>
 	Math.floor(Math.random() * (max - min) + min)
 
 export default async function (id: string) {
-	return new Promise<void>(async (resolve, reject) => {
+	return new Promise<string>(async (resolve, reject) => {
 		const code = template
 			.split("")
 			.map(l =>
@@ -50,7 +49,7 @@ export default async function (id: string) {
 			join(__dirname, "..", "..", "images", `${id}.captcha.jpg`),
 			err => {
 				if (err) reject(err)
-				resolve()
+				resolve(code.join(""))
 			}
 		)
 	})

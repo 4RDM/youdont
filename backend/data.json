@@ -8,5 +8,7 @@
 			"permissions": ["ADMINISTRATOR"]
 		}
 	],
+	"verificationChannel": "933461070952153148",
+	"verificationRole": "933462247295041630",
 	"docsOpen": false
 }
