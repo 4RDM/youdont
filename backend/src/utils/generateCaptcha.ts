@@ -2,7 +2,7 @@ import Jimp from "jimp"
 import { join } from "path"
 
 const template = "xxxxxxxx"
-const letters = "abcdefghkmnopqrtufvy123456789ABCDEFGHKLMNPQRTFVWY".split("")
+const letters = "abcdefghkmnopqrtufy123456789ABCDEFGHKLMNPQTFWY".split("")
 const cForBG = "0123456789".split("")
 
 const colors = [{ bg: "#ffffff", fg: "#FFFFFF00" }]
@@ -24,7 +24,7 @@ export default async function (id: string) {
 		const sans = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK)
 
 		const image = new Jimp(code.length * 30 + 30, 50, color.bg)
-		const font = new Jimp(30, 30, color.fg)
+		const font = new Jimp(30, 50, color.fg)
 
 		const x = random(20, 30)
 
@@ -39,7 +39,7 @@ export default async function (id: string) {
 				.print(sans, 0, 0, c)
 				.resize(25, 25, Jimp.RESIZE_BEZIER)
 				.rotate(random(1, 15))
-				.resize(random(40, 45), random(35, 45), Jimp.RESIZE_HERMITE)
+				.resize(random(40, 45), random(40, 50), Jimp.RESIZE_HERMITE)
 				.opacity(0.8)
 				.dither16()
 			image.composite(font, x + index * 30 - random(5, 10), random(2, 8))

@@ -1,4 +1,3 @@
-import { MessageEmbed } from "discord.js"
 import { Command } from "../../../../types"
 
 const command: Command = {
@@ -8,20 +7,10 @@ const command: Command = {
 	async exec(client, message, args) {
 		message.channel
 			.send({
-				embeds: [
-					new MessageEmbed()
-						.setColor("#0091ff")
-						.setTitle("Weryfikacja")
-						.setDescription(
-							"Naciśnij emotkę poniżej (:ok:), aby uzyskać dostęp do wszystkich kanałów"
-						)
-						.setFooter({
-							text: `${message.guild?.id} - ${client.user?.id}`,
-						})
-						.setTimestamp(new Date()),
-				],
+				content:
+					"Zweryfikuj się naciskając emoji pod wiadomością! Weryfikując się akceptujesz <#843484880116514830>",
 			})
-			.then(msg => msg.react("🆗"))
+			.then(msg => msg.react("❤️"))
 	},
 }
 
