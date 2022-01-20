@@ -13,6 +13,7 @@ import config from "../config"
 import { Core } from "../"
 import { join } from "path"
 import generateCaptcha from "../utils/generateCaptcha"
+import { fstat, unlinkSync } from "fs"
 
 const wordlist = [
 	{
@@ -78,37 +79,46 @@ export class Client extends Cl {
 				)
 			}
 		})
-
 		this.on("guildMemberAdd", () => {
-			hit++
+			clearTimeout(captchaTimeout)
+
 			captchaTimeout = setTimeout(() => {
-				if (hit >= 4) {
-					hit = 0
-					captcha = true
-					;(<TextChannel>(
-						this.channels.cache.get("853743241080995850")
-					)).send({
-						embeds: [
-							new MessageEmbed()
-								.setTitle("Automoderator")
-								.setDescription(
-									"Wykryto potencjalne zagrożenie raidem, captcha uruchomiona"
-								)
-								.setTimestamp(new Date()),
-						],
-					})
-				}
+				hit = 0
 			}, 20000)
+
+			// 6 members
+			if (hit >= 5 && !captcha) {
+				captcha = true
+				;(<TextChannel>(
+					this.channels.cache.get("853743241080995850")
+				)).send({
+					embeds: [
+						new MessageEmbed()
+							.setTitle("Automoderator")
+							.setDescription(
+								"Wykryto potencjalne zagrożenie raidem, captcha uruchomiona"
+							)
+							.setTimestamp(new Date()),
+					],
+				})
+			}
+
+			hit++
 		})
 
 		this.on("messageReactionAdd", async (reaction, user) => {
 			if (!reaction.message.guild) return
 
-			// prettier-ignore
-			if (reaction.message.embeds[0].footer?.text == `${reaction.message.guild.id} - ${this.user?.id}` && user.id !== this.user?.id) {
-				const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
+			if (
+				reaction.message.channelId ==
+					core.database.settings.settings.verificationChannel &&
+				reaction.emoji.name == "❤️"
+			) {
+				const userReactions = reaction.message.reactions.cache.filter(
+					reaction => reaction.users.cache.has(user.id)
+				)
 				for (const reaction of userReactions.values()) {
-					await reaction.users.remove(user.id);
+					await reaction.users.remove(user.id)
 				}
 
 				if (!captcha)
@@ -117,34 +127,55 @@ export class Client extends Cl {
 						?.roles.add(verificationRole)
 				else {
 					const code = await generateCaptcha(user.id)
-					const message = await user.send({
+					const captchaFile = join(
+						__dirname,
+						"..",
+						"..",
+						"images",
+						`${user.id}.captcha.jpg`
+					)
+					user.send({
 						embeds: [
 							new MessageEmbed()
 								.setTitle("Captcha")
 								.setColor("#0091ff")
 								.setDescription(
 									"Captcha jest uruchomiona, aby kontynuować przepisz kod z obrazka poniżej w nowej wiadomości."
-								).setImage(`attachment://${user.id}.captcha.jpg`),
+								)
+								.setImage(
+									`attachment://${user.id}.captcha.jpg`
+								),
 						],
-						files: [join(__dirname, "..", "..", "images", `${user.id}.captcha.jpg`)]
+						files: [captchaFile],
 					})
+						.then(async message => {
+							await message.channel
+								.awaitMessages({
+									filter: collected =>
+										collected.author.id === user.id,
+									max: 1,
+									time: 15000,
+								})
+								.then(collection => {
+									if (collection.first()?.content == code) {
+										reaction.message.guild?.members.cache
+											.get(user.id)
+											?.roles.add(verificationRole)
+										user.send("Zweryfikowano pomyślnie!")
+									}
+								})
+								.catch(() => {
+									user.send("Czas na weryfikację minął")
+								})
 
-					const collector = await message.channel.awaitMessages({
-						filter: (collected => collected.author.id === user.id),
-						max: 1,
-						time: 15000,
-					}).catch(() => {
-						user.send("Czas na weryfikację minął")
-					})
-
-					if (typeof collector !== "undefined") {
-						if (collector.first()?.content == code) {
-							reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole)
-							user.send('Zweryfikowano pomyślnie!')
-						} {
-							user.send('Nieprawidłowy kod')
-						}
-					}
+							unlinkSync(captchaFile)
+						})
+						.catch(() => {
+							logger.error(
+								`Cannot send message to ${user.id} (${user.tag})`
+							)
+							unlinkSync(captchaFile)
+						})
 				}
 			}
 		})
@@ -159,7 +190,6 @@ export class Client extends Cl {
 						return
 					}
 				})
-
 				return
 			}
 
@@ -170,11 +200,29 @@ export class Client extends Cl {
 				const command = this.CommandHandler.get(commandName)
 
 				if (command) {
-					command.permissions.forEach(perm => {
-						if (!message.member?.permissions.has(perm))
-							return message.react(":x:")
-					})
-					command.exec(this, message, args)
+					// if (
+					// 	command.role &&
+					// 	!message.member?.permissions.has("ADMINISTRATOR") &&
+					// 	!message.member?.roles.cache.has(command.role)
+					// )
+					// 	message.react("❌")
+					// else {
+					// 	let hit = false
+					// 	command.permissions.forEach(perm => {
+					// 		if (!message.member?.permissions.has(perm)) {
+					// 			hit = true
+					// 			message.react("❌")
+					// 		}
+					// 	})
+					// 	if (hit == false) command.exec(this, message, args)
+					// }
+
+					// prettier-ignore
+					if (
+						(command.role && message.member?.roles.cache.has(command.role)) ||
+						message.member?.permissions.has(command.permissions)
+					) command.exec(this, message, args)
+					else message.react("❌")
 				}
 			} else {
 				/* handle dms */
