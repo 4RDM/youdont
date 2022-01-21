@@ -31,6 +31,6 @@ export default class Handler {
 	}
 
 	get(name: string): Plugin | undefined {
-		return this.plugins.find(plugin => plugin.name === name)
+		return this.plugins.find(plugin => plugin.id === name)
 	}
 }

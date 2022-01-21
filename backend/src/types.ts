@@ -5,7 +5,7 @@ export interface Command {
 	triggers: string[]
 	description: string
 	role?: string
-	permissions: PermissionResolvable[]
+	permissions?: PermissionResolvable[]
 	exec(client: Client, message: Message, args: string[]): void
 }
 

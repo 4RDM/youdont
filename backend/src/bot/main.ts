@@ -220,7 +220,7 @@ export class Client extends Cl {
 					// prettier-ignore
 					if (
 						(command.role && message.member?.roles.cache.has(command.role)) ||
-						message.member?.permissions.has(command.permissions)
+						message.member?.permissions.has(command.permissions || [])
 					) command.exec(this, message, args)
 					else message.react("❌")
 				}
