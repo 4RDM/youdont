@@ -34,8 +34,7 @@ export class RCON {
 
 		let messageout: NodeJS.Timeout, connectionout: NodeJS.Timeout
 
-		// Prepare buffer
-		connBuffer.writeUInt32LE(0xffffffff, 0) // magic code
+		connBuffer.writeUInt32LE(0xffffffff, 0)
 		connBuffer.write("rcon ", 4)
 		connBuffer.write(pass, 9, passLen)
 		connBuffer.write(" ", 9 + passLen, 1)

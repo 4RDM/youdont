@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js"
+import { Embed } from "../../../../utils/discordEmbed"
 import { Command } from "../../../../types"
 
 const command: Command = {
@@ -13,22 +13,19 @@ const command: Command = {
 			if (!command) {
 				if (!cat) return
 
-				const embed = new MessageEmbed()
-				embed.setTitle(`${cat.name} ${cat.id}`)
-				embed.setDescription(`\`${cat.description}\``)
-				embed.setFooter({
-					text: `${message.author.tag} (${message.author.id})`,
+				const embed = Embed({
+					title: `${cat.name} ${cat.id}`,
+					description: `\`${cat.description}\``,
+					fields: [
+						{
+							name: "Komendy",
+							value: `\`${cat.commands
+								.map(com => com.triggers[0])
+								.join(", ")}\``,
+						},
+					],
+					user: message.author,
 				})
-				embed.setColor("#fcbe03")
-				embed.addFields([
-					{
-						name: "Komendy",
-						value: `\`${cat.commands
-							.map(com => com.triggers[0])
-							.join(", ")}\``,
-					},
-				])
-				embed.setTimestamp(new Date())
 
 				message.channel.send({ embeds: [embed] })
 
@@ -39,43 +36,36 @@ const command: Command = {
 				?.map(p => `\`${p}\``)
 				.join(", ")
 
-			const embed = new MessageEmbed()
-			embed.setTitle(command.triggers[0])
-			embed.setDescription(`\`${command.description}\``)
-			embed.setFooter({
-				text: `${message.author.tag} (${message.author.id})`,
+			const embed = Embed({
+				title: command.triggers[0],
+				description: `\`${command.description}\``,
+				user: message.author,
+				fields: [
+					{
+						name: "Aliasy",
+						value: `\`${command.triggers.join(", ")}\``,
+					},
+					{
+						name: "Poziom dostępu",
+						value: `${permissions ? permissions : "`BRAK`"}${
+							permissions && command.role
+								? ` bądź <@&${command.role}>`
+								: ""
+						}`,
+					},
+				],
 			})
-			embed.setColor("#fcbe03")
-			embed.addFields([
-				{
-					name: "Aliasy",
-					value: `\`${command.triggers.join(", ")}\``,
-				},
-				{
-					name: "Poziom dostępu",
-					value: `${permissions ? permissions : "`BRAK`"}${
-						permissions && command.role
-							? ` bądź <@&${command.role}>`
-							: ""
-					}`,
-				},
-			])
-			embed.setTimestamp(new Date())
 
 			message.channel.send({ embeds: [embed] })
 		} else {
-			const embed = new MessageEmbed()
-			embed.setTitle("Kategorie")
-			embed.setFooter({
-				text: `${message.author.tag} (${message.author.id})`,
-			})
-			embed.setColor("#fcbe03")
-			embed.setTimestamp(new Date())
-			embed.setDescription(
-				`\`\`\`${client.PluginHandler.plugins
+			const embed = Embed({
+				title: "Kategorie",
+				description: `\`\`\`${client.PluginHandler.plugins
 					.map(p => `${p.name} (ID: ${p.id})`)
-					.join("\n")}\`\`\``
-			)
+					.join("\n")}\`\`\``,
+				user: message.author,
+			})
+
 			message.channel.send({ embeds: [embed] })
 		}
 	},
