@@ -16,17 +16,29 @@ const command: Command = {
 			],
 		})
 
-		try {
-			client.Core.rcon.send(args.join(" "))
-		} catch (err) {
-			msg.edit({
-				embeds: [
-					new MessageEmbed()
-						.setDescription("Wystąpił błąd!")
-						.setTimestamp(new Date()),
-				],
-			})
-		}
+		client.Core.rcon.send(
+			args.join(" "),
+			() => {
+				msg.edit({
+					embeds: [
+						new MessageEmbed()
+							.setColor("DARK_GREEN")
+							.setDescription("**Wysłano!**")
+							.setTimestamp(new Date()),
+					],
+				})
+			},
+			() => {
+				msg.edit({
+					embeds: [
+						new MessageEmbed()
+							.setColor("RED")
+							.setDescription("**Wystąpił błąd!**")
+							.setTimestamp(new Date()),
+					],
+				})
+			}
+		)
 	},
 }
 

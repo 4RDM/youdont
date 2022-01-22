@@ -23,7 +23,11 @@ export class RCON {
 		this.config = config
 	}
 
-	async send(cmd: string): Promise<void> {
+	async send(
+		cmd: string,
+		resolve?: () => void,
+		reject?: () => void
+	): Promise<void> {
 		const connection = dgram.createSocket("udp4")
 		const connBuffer = Buffer.alloc(
 			11 + this.config.pass.length + cmd.length
@@ -64,6 +68,9 @@ export class RCON {
 			(error: Error | null, _: number) => {
 				if (error) {
 					connection.close()
+					if (reject) reject()
+				} else {
+					if (resolve) resolve()
 				}
 			}
 		)
