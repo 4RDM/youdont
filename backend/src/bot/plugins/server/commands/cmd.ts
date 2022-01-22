@@ -1,8 +1,8 @@
-import { MessageEmbed } from "discord.js"
+import { Embed } from "../../../../utils/discordEmbed"
 import { Command } from "../../../../types"
 
 const command: Command = {
-	triggers: ["cmd"],
+	triggers: ["cmd", "command"],
 	description: "Wyślij polecenie do konsoli",
 	permissions: ["ADMINISTRATOR"],
 	async exec(client, message, args) {
@@ -10,9 +10,10 @@ const command: Command = {
 
 		const msg = await message.channel.send({
 			embeds: [
-				new MessageEmbed()
-					.setDescription("Wysyłanie")
-					.setTimestamp(new Date()),
+				Embed({
+					description: "**Wysyłanie**",
+					user: message.author,
+				}),
 			],
 		})
 
@@ -21,20 +22,22 @@ const command: Command = {
 			() => {
 				msg.edit({
 					embeds: [
-						new MessageEmbed()
-							.setColor("DARK_GREEN")
-							.setDescription("**Wysłano!**")
-							.setTimestamp(new Date()),
+						Embed({
+							color: "#1F8B4C",
+							description: "**Wysłano!**",
+							user: message.author,
+						}),
 					],
 				})
 			},
 			() => {
 				msg.edit({
 					embeds: [
-						new MessageEmbed()
-							.setColor("RED")
-							.setDescription("**Wystąpił błąd!**")
-							.setTimestamp(new Date()),
+						Embed({
+							color: "#E74C3C",
+							description: "**Wystąpił błąd!**",
+							user: message.author,
+						}),
 					],
 				})
 			}
