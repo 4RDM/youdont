@@ -14,6 +14,7 @@ import { Core } from "../"
 import { join } from "path"
 import generateCaptcha from "../utils/generateCaptcha"
 import { fstat, unlinkSync } from "fs"
+import { checkMessage } from "./handlers/automoderator.handler"
 
 const wordlist = [
 	{
@@ -184,6 +185,7 @@ export class Client extends Cl {
 			if (message.author.bot) return
 
 			if (!message.content.startsWith(config.discord.prefix)) {
+				checkMessage(message.content)
 				wordlist.forEach(word => {
 					if (isSimilar(message.content, word.msg)) {
 						message.reply(word.res)
@@ -200,23 +202,6 @@ export class Client extends Cl {
 				const command = this.CommandHandler.get(commandName)
 
 				if (command) {
-					// if (
-					// 	command.role &&
-					// 	!message.member?.permissions.has("ADMINISTRATOR") &&
-					// 	!message.member?.roles.cache.has(command.role)
-					// )
-					// 	message.react("❌")
-					// else {
-					// 	let hit = false
-					// 	command.permissions.forEach(perm => {
-					// 		if (!message.member?.permissions.has(perm)) {
-					// 			hit = true
-					// 			message.react("❌")
-					// 		}
-					// 	})
-					// 	if (hit == false) command.exec(this, message, args)
-					// }
-
 					// prettier-ignore
 					if (
 						(command.role && message.member?.roles.cache.has(command.role)) ||
