@@ -6,6 +6,7 @@ export type Permission =
 	| "MANAGE_USERS"
 	| "MANAGE_SHORTS"
 	| "MANAGE_DOCS"
+	| "MANAGE_FILES"
 	| "ADMINISTRATOR"
 
 export interface User {
