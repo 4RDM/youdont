@@ -3,12 +3,18 @@ import ReactDOM from 'react-dom'
 // import { gsap } from 'gsap'
 
 import './style.scss'
-import Title from './components/Title'
+import Container from './components/Container'
 
 const App = () => {
 	return (
 		<div className="App">
-			<Title />
+			<Container>
+				<h1>Hello World!</h1>
+				<h1>Hello World!</h1>
+				<h1>Hello World!</h1>
+				<h1>Hello World!</h1>
+				<h1>Hello World!</h1>
+			</Container>
 		</div>
 	)
 }
