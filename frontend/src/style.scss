@@ -1,3 +1,34 @@
+$navbar-bg: rgb(27, 27, 27);
+$body-bg: #0f0f0f;
+
+// Scroll
+::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+::-webkit-scrollbar-button {
+	width: 0px;
+	height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #e1e1e1;
+	border: 0px none #ffffff;
+	border-radius: 50px;
+}
+
+::-webkit-scrollbar-track {
+	background: #666666;
+	border: 0px none #ffffff;
+	border-radius: 50px;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+// Main code
 * {
 	margin: 0;
 	padding: 0;
@@ -9,9 +40,57 @@
 	* 600 (+ italic),
 	* 700
 	*/
+	color: white;
 }
 
 body {
-	background: #0f0f0f;
-	color: white;
+	background: $body-bg;
+}
+
+#navbar {
+	// Width and height of navbar
+	width: 100vw;
+	height: 64px;
+	background: rgba($navbar-bg, 0.5);
+
+	// Sticky position
+	top: 0;
+	position: fixed;
+	overflow: hidden;
+
+	// Background blur effect
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+
+	// Flex items display
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-items: center;
+	justify-content: space-between;
+
+	// Gap between screen borders
+	* {
+		padding: 0 0.5rem;
+	}
+
+	// Navbar buttons styling
+	button {
+		min-width: 100px;
+		height: 40px;
+		margin: 0 5px;
+
+		background: #3a3a3a;
+		outline: none;
+		border: none;
+		border-radius: 0.2rem;
+
+		font-size: 15px;
+		font-weight: 500;
+	}
+}
+
+#content {
+	// Add some padding to make content visible under navbar
+	padding-top: 72px;
 }
