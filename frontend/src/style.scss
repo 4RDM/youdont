@@ -59,8 +59,8 @@ body {
 	overflow: hidden;
 
 	// Background blur effect
-	backdrop-filter: blur(20px);
-	-webkit-backdrop-filter: blur(20px);
+	backdrop-filter: blur(9px);
+	-webkit-backdrop-filter: blur(9px);
 
 	// Flex items display
 	display: flex;
@@ -81,6 +81,7 @@ body {
 		margin: 0 5px;
 
 		background: #3a3a3a;
+		cursor: pointer;
 		outline: none;
 		border: none;
 		border-radius: 0.2rem;
@@ -92,5 +93,27 @@ body {
 
 #content {
 	// Add some padding to make content visible under navbar
-	padding-top: 72px;
+	padding: 72px 8px 8px;
+
+	// Some height & width calculating here
+	min-height: 100vh;
+	height: 100%;
+}
+
+#footer {
+	width: 100vw;
+	min-height: 300px;
+
+	background: $navbar-bg;
+
+	// Grid for footer
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	justify-items: center;
+
+	.footer-content {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
 }
