@@ -9,11 +9,10 @@ const App = () => {
 	return (
 		<div className="App">
 			<Container>
-				<h1>Hello World!</h1>
-				<h1>Hello World!</h1>
-				<h1>Hello World!</h1>
-				<h1>Hello World!</h1>
-				<h1>Hello World!</h1>
+				<div id="home-container">
+					<h1>4RDM</h1>
+					<p>Serwer tworzony dla ciebie!</p>
+				</div>
 			</Container>
 		</div>
 	)
