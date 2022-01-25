@@ -1,17 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component, CSSProperties } from 'react'
 
 import Footer from './Footer'
 import Navbar from './Navbar'
-import tlo from '../public/tloBB.png'
 
-export default class Container extends Component {
+interface Props {
+	style?: CSSProperties
+}
+
+export default class Container extends Component<Props, any> {
+	constructor(props: Props) {
+		super(props)
+	}
 	render() {
 		return (
-			<div
-				style={{
-					backgroundImage: `url(${tlo})`,
-				}}
-			>
+			<div style={this.props.style}>
 				<Navbar></Navbar>
 				<div id="content">{this.props.children}</div>
 				<Footer></Footer>

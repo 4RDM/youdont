@@ -38,7 +38,7 @@ export default class Footer extends Component<Props, any> {
 								<Discord size={20} />
 								Discord
 							</a>
-							<a href="https://">
+							<a href="https://steamcommunity.com/groups/4rdm">
 								<Steam size={20} />
 								Steam
 							</a>

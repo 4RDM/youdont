@@ -33,6 +33,7 @@
 		"gsap": "^3.4.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
+		"react-router-dom": "6",
 		"styled-components": "^5.3.3"
 	}
 }
