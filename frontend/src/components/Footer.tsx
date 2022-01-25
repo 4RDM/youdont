@@ -1,31 +1,67 @@
 import React, { Component } from 'react'
+import { Discord, Github, Steam } from '@styled-icons/fa-brands'
 
-export default class Footer extends Component {
+interface Props {}
+
+const cytaty = [
+	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2k21',
+	'"Revert "dzbam"" ~ Nimplex 2k21',
+	'"nie dla psa kiebłasa" ~ Kubamaz 2k21',
+	'"/nimplexma2zakola" ~ Nimplex 2k21',
+	'"ja z pc lece" ~ Kubamaz 2k22',
+	'"ty no słuchaj no" ~ Helix 2k22',
+	'"za zero" ~ Helix 2k22',
+	'"no co?" ~ Kaliberek 2k22',
+	'"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac" ~ Kubamaz 2k20',
+]
+
+export default class Footer extends Component<Props, any> {
+	constructor(props: Props) {
+		super(props)
+
+		this.state = {
+			cytat: cytaty[Math.floor(Math.random() * cytaty.length)],
+		}
+	}
 	render() {
 		return (
 			<div id="footer">
-				<div>
-					<p>Znajdź nas</p>
-					<div className="footer-content">
-						<a href="https://discord.4rdm.pl">
-							<i className="bx bxl-discord-alt"></i>
-							Discord
-						</a>
-						<a href="https://steamcommunity.com/groups/4rdm">
-							<i className="bx bxl-steam"></i>
-							Steam
-						</a>
-						<a href="https://github.com/4RDM">
-							<i className="bx bxl-github "></i>
-							Github
-						</a>
+				<div id="footer-content">
+					<div id="cytat">
+						<h1>Cytat</h1>
+						<p>{this.state.cytat}</p>
+					</div>
+					<div>
+						<h1>Linki</h1>
+						<div className="footer-links">
+							<a href="https://discord.4rdm.pl">
+								<Discord size={20} />
+								Discord
+							</a>
+							<a href="https://">
+								<Steam size={20} />
+								Steam
+							</a>
+							<a href="">
+								<Github size={20} />
+								Github
+							</a>
+						</div>
+					</div>
+					<div>
+						<h1>Mapa strony</h1>
+						<div className="footer-links">
+							<a href="#">Strona główna</a>
+							<a href="#">Podania</a>
+							<a href="#">Artykuły</a>
+							<a href="#">Panel użytkownika</a>
+							<a href="#">Za(-Wy)loguj się</a>
+						</div>
 					</div>
 				</div>
-				<div>
-					<p>Nasza Strona</p>
-				</div>
-				<div>
-					<p>Dodatkowe</p>
+				<div id="footer-bottom">
+					4RDM &copy; 2020-2022, made by{' '}
+					<a href="https://github.com/Nimplex">Nimplex</a>.
 				</div>
 			</div>
 		)

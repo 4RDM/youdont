@@ -1,4 +1,3 @@
-$navbar-bg: rgb(27, 27, 27);
 $body-bg: #0f0f0f;
 
 // Scroll
@@ -32,55 +31,34 @@ $body-bg: #0f0f0f;
 * {
 	margin: 0;
 	padding: 0;
+	overflow-x: hidden;
 	font-family: 'Work Sans', sans-serif;
-	/*
-	* 300,
-	* 400 (+ italic),
-	* 500 (+ italic),
-	* 600 (+ italic),
-	* 700
-	*/
 	color: white;
 }
 
 body {
 	background: $body-bg;
+	width: 100vw;
 }
 
 #navbar {
-	// Width and height of navbar
 	width: 100vw;
 	height: 64px;
-	background: rgba($navbar-bg, 0.5);
 
-	// Sticky position
-	top: 0;
-	position: fixed;
-	overflow: hidden;
-
-	// Background blur effect
-	backdrop-filter: blur(9px);
-	-webkit-backdrop-filter: blur(9px);
-
-	// Flex items display
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-items: center;
 	justify-content: space-between;
 
-	// Gap between screen borders
-	* {
-		padding: 0 0.5rem;
+	& > h1,
+	div {
+		padding: 0 12px;
 	}
 
-	// Navbar buttons styling
 	button {
-		min-width: 100px;
-		height: 40px;
 		margin: 0 5px;
 
-		background: #3a3a3a;
+		background: none;
 		cursor: pointer;
 		outline: none;
 		border: none;
@@ -92,28 +70,94 @@ body {
 }
 
 #content {
-	// Add some padding to make content visible under navbar
-	padding: 72px 8px 8px;
-
-	// Some height & width calculating here
 	min-height: 100vh;
 	height: 100%;
+	padding: 0 8px;
 }
 
 #footer {
+	background: #1a1a1a;
+
 	width: 100vw;
-	min-height: 300px;
+	min-height: 450px;
+	height: 100%;
+	font-size: 15px;
 
-	background: $navbar-bg;
-
-	// Grid for footer
 	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	justify-items: center;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
 
-	.footer-content {
+	& > div {
+		padding: 1rem 0;
+	}
+
+	#footer-content {
+		width: 90vw;
+		height: 100%;
+
 		display: grid;
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr 1fr 1fr;
+		column-gap: 15px;
+		row-gap: 15px;
+
+		@media (max-width: 900px) {
+			& {
+				grid-template-columns: 1fr 1fr;
+			}
+		}
+		@media (max-width: 500px) {
+			& {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		h1 {
+			font-weight: 700;
+			font-size: 25px;
+			margin-bottom: 5px;
+			padding-bottom: 5px;
+		}
+
+		p {
+			font-size: 15px;
+			text-align: justify;
+			line-height: 23px;
+		}
+
+		& > div {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
+	}
+
+	#footer-bottom {
+		font-size: 15px;
+		font-weight: 700;
+	}
+
+	.footer-links {
+		display: grid;
+		row-gap: 10px;
+
+		svg {
+			margin-right: 5px;
+		}
+
+		a {
+			display: inline-flex;
+			align-items: center;
+			text-decoration: none;
+			font-weight: 400;
+			font-size: 16px;
+			transition: color 0.2s;
+		}
+
+		a:hover {
+			color: #aaaaaa;
+			transition: color 0.2s;
+		}
 	}
 }

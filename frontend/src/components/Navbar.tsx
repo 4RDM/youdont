@@ -5,7 +5,7 @@ export default class Navbar extends Component {
 		return (
 			<div id="navbar">
 				<h1>4RDM</h1>
-				<div>
+				<div id="nav-buttons">
 					<button>Artykuły</button>
 					<button>Zaloguj Się</button>
 				</div>
