@@ -4,15 +4,16 @@ import { Discord, Github, Steam } from '@styled-icons/fa-brands'
 interface Props {}
 
 const cytaty = [
-	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2k21',
-	'"Revert "dzbam"" ~ Nimplex 2k21',
-	'"nie dla psa kiebłasa" ~ Kubamaz 2k21',
-	'"/nimplexma2zakola" ~ Nimplex 2k21',
-	'"ja z pc lece" ~ Kubamaz 2k22',
-	'"ty no słuchaj no" ~ Helix 2k22',
-	'"za zero" ~ Helix 2k22',
-	'"no co?" ~ Kaliberek 2k22',
-	'"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac" ~ Kubamaz 2k20',
+	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2021',
+	'"Revert "dzbam"" ~ Nimplex 2021',
+	'"nie dla psa kiebłasa" ~ Kubamaz 2021',
+	'"/nimplexma2zakola" ~ Nimplex 2021',
+	'"ja z pc lece" ~ Kubamaz 2022',
+	'"ty no słuchaj no" ~ Helix 2022',
+	'"za zero" ~ Helix 2022',
+	'"no co?" ~ Kaliberek 2022',
+	'"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac" ~ Kubamaz 2020',
+	'"Litwo, Ojczyzno moja! ty jesteś jak zdrowie, Ile cię trzeba cenić, ten tylko się dowie, Kto cię stracił. Dziś piękność twą w całej ozdobie Widzę i opisuję, bo tęsknię po tobie." ~ Adam Mickiewicz 1834',
 ]
 
 export default class Footer extends Component<Props, any> {
@@ -42,7 +43,7 @@ export default class Footer extends Component<Props, any> {
 								<Steam size={20} />
 								Steam
 							</a>
-							<a href="">
+							<a href="https://github.com/4RDM">
 								<Github size={20} />
 								Github
 							</a>
