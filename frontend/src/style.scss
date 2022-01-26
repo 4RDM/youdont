@@ -73,7 +73,7 @@ body {
 #content {
 	min-height: 100vh;
 	height: 100%;
-	padding: 0 8px;
+	margin: 10px 0;
 }
 
 #footer {
@@ -174,5 +174,29 @@ body {
 
 	h1 {
 		font-size: 75px;
+	}
+}
+
+#article-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	row-gap: 10px;
+	column-gap: 10px;
+
+	.card {
+		@media (max-width: 586px) {
+			& {
+				width: 90%;
+				height: 320px;
+			}
+		}
+
+		border-radius: 0.5rem;
+		width: 288px;
+		height: 320px;
+		background: #404040;
 	}
 }

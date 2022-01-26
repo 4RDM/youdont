@@ -4,8 +4,13 @@ import Card from '../components/Card'
 
 export class Articles extends Component {
 	render() {
-		return <Container>
-			<Card></Card>
-		</Container>
+		return (
+			<Container>
+				<div id="article-container">
+					<Card></Card>
+					<Card></Card>
+				</div>
+			</Container>
+		)
 	}
 }
