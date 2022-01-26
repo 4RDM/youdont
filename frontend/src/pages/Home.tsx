@@ -9,6 +9,8 @@ export class Home extends Component {
 			<Container
 				style={{
 					backgroundImage: `url(${tlo})`,
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
 				}}
 			>
 				<div id="home-container">

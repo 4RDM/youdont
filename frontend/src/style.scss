@@ -71,9 +71,9 @@ body {
 }
 
 #content {
-	min-height: 100vh;
+	min-height: 90vh;
 	height: 100%;
-	margin: 10px 0;
+	padding: 10px 0;
 }
 
 #footer {
@@ -194,9 +194,27 @@ body {
 			}
 		}
 
-		border-radius: 0.5rem;
+		background: #262626;
 		width: 288px;
 		height: 320px;
-		background: #404040;
+		border-radius: 0.5rem;
+		padding: 15px;
+		cursor: pointer;
+		user-select: none;
+
+		& > p {
+			padding: 8px 0;
+		}
+
+		.card-title {
+			font-size: 20px;
+			font-weight: 700;
+			border-bottom: 1px solid #393939;
+			color: white;
+		}
+
+		p {
+			color: #fefefe;
+		}
 	}
 }

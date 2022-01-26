@@ -7,8 +7,14 @@ export class Articles extends Component {
 		return (
 			<Container>
 				<div id="article-container">
-					<Card></Card>
-					<Card></Card>
+					<Card
+						name="Wpłata na serwer"
+						description="Artykuł przedstawiający jak dokonać wpłaty na serwer."
+					/>
+					<Card
+						name="Skąd zdobyć hexa?"
+						description="Poradnik jak sprawdzić identyfikator HEX konta steam."
+					/>
 				</div>
 			</Container>
 		)
