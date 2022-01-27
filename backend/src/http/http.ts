@@ -29,8 +29,8 @@ export default class HTTP {
 			res.setHeader("x-powered-by", "Nimplex's love") // easter egg ;)
 			next()
 		})
-		this.server.use("/", indexRouter)
 		this.server.use("/api", apiRouter)
+		this.server.use("/", indexRouter)
 
 		this.server.listen(80, () => logger.ready("Listening to port 80"))
 	}

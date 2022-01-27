@@ -7,6 +7,7 @@ export class Home extends Component {
 	render() {
 		return (
 			<Container
+				id="home-container-c"
 				style={{
 					backgroundImage: `url(${tlo})`,
 					backgroundSize: 'cover',

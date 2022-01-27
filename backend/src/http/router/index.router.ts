@@ -1,8 +1,17 @@
-import { Router } from "express"
+import {
+	NextFunction,
+	Request,
+	Response,
+	Router,
+	static as staticFiles,
+} from "express"
+import { existsSync } from "fs"
+import { join } from "path"
 
 const router = Router()
+const publicPath = join(__dirname, "..", "..", "..", "..", "frontend", "dist")
 
-router.get("/", async (req, res) => {
+const spaHandler = async (req: Request, res: Response, next: NextFunction) => {
 	// URL shortener
 	if (req.query.r) {
 		const url = await req.core.database.shorts.get(<string>req.query.r)
@@ -13,7 +22,16 @@ router.get("/", async (req, res) => {
 		return
 	}
 
-	res.send("Hello World!") // TODO: add SPA here
-})
+	if (existsSync(publicPath)) {
+		res.sendFile(join(publicPath, "index.html"))
+	} else {
+		res.send(
+			"<h1>Błąd serwera, skontaktuj się z administratorem strony</h1>"
+		)
+	}
+}
+
+router.use(staticFiles(join(publicPath, "public")))
+router.get(["/", "/articles", "/article/:id"], spaHandler)
 
 export default router

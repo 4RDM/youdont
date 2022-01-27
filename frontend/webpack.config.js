@@ -1,6 +1,6 @@
 // https://github.com/JaZax/webpackReactTemplate
 
-const path = require('path')
+const { join, resolve } = require('path')
 
 module.exports = {
 	mode: 'development',
@@ -9,9 +9,10 @@ module.exports = {
 		contentBase: './dist',
 		historyApiFallback: true,
 	},
-	entry: path.resolve(__dirname, './src/app.tsx'),
+	entry: resolve(__dirname, './src/app.tsx'),
 	output: {
 		filename: 'bundle.js',
+		path: join(__dirname, 'dist', 'public'),
 	},
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js', '.jsx'],

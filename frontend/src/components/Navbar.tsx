@@ -10,7 +10,7 @@ export default class Navbar extends Component {
 				<div id="nav-buttons">
 					<Link to="/">Strona głowna</Link>
 					<Link to="/articles">Artykuły</Link>
-					<a href="">Logowanie</a>
+					<a href="/api/dashboard/login">Logowanie</a>
 				</div>
 			</div>
 		)

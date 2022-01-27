@@ -3,3 +3,11 @@ node_modules
 backend/src/config.ts
 backend/images/*
 backend/temp/*
+**/dist/**/*.js
+**/dist/**/*.css
+**/dist/**/*.png
+**/dist/**/*.jpg
+**/dist/**/*.mp3
+**/dist/**/*.mp4
+**/dist/**/*.svg
+**/dist/**/*.json
