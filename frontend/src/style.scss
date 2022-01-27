@@ -202,7 +202,11 @@ body {
 		cursor: pointer;
 		user-select: none;
 
-		& > p {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		& > .card-header > p {
 			padding: 8px 0;
 		}
 
@@ -213,8 +217,19 @@ body {
 			color: white;
 		}
 
+		.card-footer {
+			width: 288px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			p {
+				color: #666666;
+			}
+		}
+
 		p {
-			color: #fefefe;
+			color: #dedede;
 		}
 	}
 }
