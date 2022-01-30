@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Discord, Github, Steam } from '@styled-icons/fa-brands'
+import { Link } from 'react-router-dom'
 
 interface Props {}
 
@@ -52,11 +53,10 @@ export default class Footer extends Component<Props, any> {
 					<div>
 						<h1>Mapa strony</h1>
 						<div className="footer-links">
-							<a href="#">Strona główna</a>
-							<a href="#">Podania</a>
-							<a href="#">Artykuły</a>
-							<a href="#">Panel użytkownika</a>
-							<a href="#">Za(-Wy)loguj się</a>
+							<Link to="/">Strona główna</Link>
+							<Link to="/articles">Artykuły</Link>
+							<Link to="/">Podania</Link>
+							<a href="/dashboard">Panel użytkownika</a>
 						</div>
 					</div>
 				</div>

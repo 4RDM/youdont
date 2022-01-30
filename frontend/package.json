@@ -30,6 +30,7 @@
 	},
 	"dependencies": {
 		"@styled-icons/fa-brands": "^10.38.0",
+		"axios": "0.24.0",
 		"gsap": "^3.4.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
