@@ -1,19 +1,14 @@
-import {
-	Client as Cl,
-	ClientOptions,
-	MessageAttachment,
-	MessageEmbed,
-	TextChannel,
-} from "discord.js"
+import { Client as Cl, ClientOptions, MessageEmbed, User } from "discord.js"
 import PluginHandler from "./handlers/plugin.handler"
 import CommandHandler from "./handlers/command.handler"
 import isSimilar from "../utils/isSimilar"
 import logger from "../utils/logger"
+import { Embed } from "../utils/discordEmbed"
 import config from "../config"
 import { Core } from "../"
 import { join } from "path"
 import generateCaptcha from "../utils/generateCaptcha"
-import { fstat, unlinkSync } from "fs"
+import { unlinkSync } from "fs"
 import { checkMessage } from "./handlers/automoderator.handler"
 
 const wordlist = [
@@ -80,28 +75,23 @@ export class Client extends Cl {
 				)
 			}
 		})
+
 		this.on("guildMemberAdd", () => {
 			clearTimeout(captchaTimeout)
 
 			captchaTimeout = setTimeout(() => {
 				hit = 0
-			}, 20000)
+			}, 12000)
 
 			// 6 members
 			if (hit >= 5 && !captcha) {
+				const channel = this.channels.cache.get("937813027007385630")
+
+				// prettier-ignore
+				if (channel?.isText() && !captcha) channel.send({ embeds: [ Embed({ title: "Automoderator", color: "#E74C3C", description: "Wykryto potencjalne zagrożenie raidem, captcha uruchomiona", user: <User>this.user }) ]})
+
 				captcha = true
-				;(<TextChannel>(
-					this.channels.cache.get("853743241080995850")
-				)).send({
-					embeds: [
-						new MessageEmbed()
-							.setTitle("Automoderator")
-							.setDescription(
-								"Wykryto potencjalne zagrożenie raidem, captcha uruchomiona"
-							)
-							.setTimestamp(new Date()),
-					],
-				})
+				setTimeout(() => (captcha = false), 1000 * 60 * 60)
 			}
 
 			hit++
@@ -185,7 +175,13 @@ export class Client extends Cl {
 			if (message.author.bot) return
 
 			if (!message.content.startsWith(config.discord.prefix)) {
-				checkMessage(message.content)
+				checkMessage(message.content).then(s => {
+					if (s) {
+						message.channel.send(
+							"wth bro, what is this shit? are you crazy?"
+						)
+					}
+				})
 				wordlist.forEach(word => {
 					if (isSimilar(message.content, word.msg)) {
 						message.reply(word.res)
