@@ -5,8 +5,20 @@ const command: Command = {
 	triggers: ["gameban"],
 	description: "Zbanuj osobę na serwerze",
 	permissions: ["ADMINISTRATOR"],
+	role: "843444642539110400", // TEAM 4RDM
 	async exec(client, message, args) {
-		if (!args[0]) return
+		if (!args[0])
+			return message.channel.send({
+				embeds: [
+					Embed({
+						color: "#E74C3C",
+						title: "Błąd składni polecenia",
+						description:
+							"```Brakuje parametru 'ID',\nPrawidłowe użycie: .gameban id```",
+						user: message.author,
+					}),
+				],
+			})
 
 		const msg = await message.channel.send({
 			embeds: [
@@ -18,7 +30,7 @@ const command: Command = {
 		})
 
 		client.Core.rcon.send(
-			args.join(" "),
+			args.join(`ban ${args[0]}`),
 			() => {
 				msg.edit({
 					embeds: [

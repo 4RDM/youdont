@@ -2,10 +2,10 @@ import { Embed } from "../../../../utils/discordEmbed"
 import { Command } from "../../../../types"
 
 const command: Command = {
-	triggers: ["cmd", "command"],
-	description: "Wyślij polecenie do konsoli",
+	triggers: ["unban"],
+	description: "Odbanuj osobę na serwerze",
 	permissions: ["ADMINISTRATOR"],
-	role: "843444626726584370", // ZARZĄD
+	role: "843444642539110400", // TEAM 4RDM
 	async exec(client, message, args) {
 		if (!args[0])
 			return message.channel.send({
@@ -14,7 +14,7 @@ const command: Command = {
 						color: "#E74C3C",
 						title: "Błąd składni polecenia",
 						description:
-							"```Brakuje parametru 'cmd',\nPrawidłowe użycie: .cmd polecenie```",
+							"```Brakuje parametru 'ID',\nPrawidłowe użycie: .unban id-bana```",
 						user: message.author,
 					}),
 				],
@@ -30,7 +30,7 @@ const command: Command = {
 		})
 
 		client.Core.rcon.send(
-			args.join(" "),
+			args.join(`unban ${args[0]}`),
 			() => {
 				msg.edit({
 					embeds: [

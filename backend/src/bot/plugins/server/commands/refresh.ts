@@ -2,24 +2,11 @@ import { Embed } from "../../../../utils/discordEmbed"
 import { Command } from "../../../../types"
 
 const command: Command = {
-	triggers: ["cmd", "command"],
-	description: "Wyślij polecenie do konsoli",
+	triggers: ["refresh"],
+	description: "Przeładuj uprawnienia na serwerze",
 	permissions: ["ADMINISTRATOR"],
 	role: "843444626726584370", // ZARZĄD
 	async exec(client, message, args) {
-		if (!args[0])
-			return message.channel.send({
-				embeds: [
-					Embed({
-						color: "#E74C3C",
-						title: "Błąd składni polecenia",
-						description:
-							"```Brakuje parametru 'cmd',\nPrawidłowe użycie: .cmd polecenie```",
-						user: message.author,
-					}),
-				],
-			})
-
 		const msg = await message.channel.send({
 			embeds: [
 				Embed({
@@ -30,7 +17,7 @@ const command: Command = {
 		})
 
 		client.Core.rcon.send(
-			args.join(" "),
+			"exec permisje.cfg",
 			() => {
 				msg.edit({
 					embeds: [
