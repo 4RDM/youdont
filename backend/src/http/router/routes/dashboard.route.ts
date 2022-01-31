@@ -85,7 +85,6 @@ router.get("/session", userCheck, (req, res) => {
 			avatar,
 		},
 	})
-	logger.log("REQUEST")
 })
 
 export default router

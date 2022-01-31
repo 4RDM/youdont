@@ -46,16 +46,23 @@ export class RCON {
 		connBuffer.write("\n", 10 + passLen + cmd.length, 1)
 
 		connectionout = setTimeout(() => {
-			connection.close()
-			logger.error("Connection timeout")
+			// connection.close()
+			logger.error("RCON Connection timeout")
+			if (reject) reject()
 		}, this.timeout)
 
 		connection.on("message", () => {
 			clearTimeout(connectionout) // stop connectiontimeout event
 			clearTimeout(messageout) // clear messageout (if there is something already)
 
+			const resolveTimeout = setTimeout(
+				() => (resolve ? resolve() : null),
+				this.timeout + 500
+			)
 			messageout = setTimeout(() => {
 				connection.close()
+				if (reject) reject()
+				clearTimeout(resolveTimeout)
 			}, this.timeout)
 		})
 
@@ -65,14 +72,7 @@ export class RCON {
 			connBuffer.length,
 			this.config.port,
 			this.config.host,
-			(error: Error | null, _: number) => {
-				if (error) {
-					connection.close()
-					if (reject) reject()
-				} else {
-					if (resolve) resolve()
-				}
-			}
+			(error: Error | null, _: number) => {}
 		)
 	}
 }
