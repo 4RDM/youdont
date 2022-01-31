@@ -31,3 +31,11 @@ export const Embed = ({
 
 	return embed
 }
+
+export const ErrorEmbed = ({ reason, user }: { reason: string; user: User }) =>
+	Embed({
+		title: "Błąd polecenia",
+		color: "#E74C3C",
+		description: `\`\`\`${reason}\`\`\``,
+		user,
+	})
