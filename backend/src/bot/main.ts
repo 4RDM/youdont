@@ -52,7 +52,7 @@ export class Client extends Cl {
 
 		let hit = 0 // members joined counter
 		let captchaTimeout = setTimeout(() => {}, 0) // timeout to wait
-		let captcha = true
+		let captcha = false
 		const verificationRole =
 			core.database.settings.settings.verificationRole
 
