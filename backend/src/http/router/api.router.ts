@@ -10,6 +10,7 @@ import {
 import docsRouter from "./routes/docs.route"
 import dashboardRouter from "./routes/dashboard.route"
 import shortsRouter from "./routes/shorts.route"
+import filesRoute from "./routes/files.route"
 
 const router = Router()
 
@@ -28,6 +29,7 @@ router.use(urlencoded({ extended: true }))
 
 router.use("/docs", userCheck, docsRouter)
 router.use("/shorts", userCheck, shortsRouter)
+router.use("/files", userCheck, filesRoute)
 router.use("/dashboard", dashboardRouter)
 
 router.get("/*", (req, res) =>

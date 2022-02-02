@@ -158,7 +158,6 @@ export class Client extends Cl {
 								.catch(() => {
 									user.send("Czas na weryfikację minął")
 								})
-
 							unlinkSync(captchaFile)
 						})
 						.catch(() => {

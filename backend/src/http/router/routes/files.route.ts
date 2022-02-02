@@ -1,11 +1,18 @@
 import { NextFunction, Request, Response, Router } from "express"
 import { join } from "path"
 import multer from "multer"
-import { stat, unlinkSync } from "fs"
+import { unlinkSync } from "fs"
 
 const router = Router()
-const temp = join(__dirname, "..", "..", "..", "..", "temp")
-const upload = multer({ dest: temp })
+const temp = join(__dirname, "..", "..", "..", "..", "..", "temp")
+
+const storage = multer.diskStorage({
+	destination: (req, file, call) => call(null, temp),
+	filename: (req, file, call) =>
+		// prettier-ignore
+		call(null, new Date().getTime() + "-" + file.originalname),
+})
+const upload = multer({ storage })
 
 const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { userid } = <any>req.session
@@ -28,12 +35,16 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
-router.post("/upload", adminCheck, upload.single("file"), (req, res) =>
+router.get("/", (req, res) => res.sendFile(join(__dirname, "test.html")))
+
+router.post("/upload", adminCheck, upload.single("file"), (req, res) => {
 	res.json({
 		code: 200,
-		message: `${req.file?.filename} - ${req.file?.size}`,
+		message: `OK`,
+		filename: req.file?.filename,
+		filesize: req.file?.size,
 	})
-)
+})
 
 router.delete("/delete", adminCheck, (req, res) => {
 	const { file } = req.body
