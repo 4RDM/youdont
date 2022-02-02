@@ -4,38 +4,13 @@ import config from "../../config"
 
 const virustotal = config.virustotalkey
 
-const urlPattern =
-	/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gm
-
-const whitelist = [
-	"4rdm.pl",
-	"youtube.com",
-	"google.com",
-	"facebook.com",
-	"google.pl",
-	"youtube.pl",
-	"4rdm.cf",
-	"reddit.com",
-	"discord.com",
-	"discordapp.com",
-	"help.4rdm.pl",
-	"help.4rdm.cf",
-	"duck.com",
-	"duckduckgo.com",
-	"fivem.net",
-	"forum.fivem.net",
-	"status.cfx.re",
-]
-
+// prettier-ignore
+const urlPattern = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gm
+// prettier-ignore
+const whitelist = ["4rdm.pl", "4rdm.cf", "bing.com", "twitter.com", "discord.gg", "youtube.com", "google.com", "facebook.com", "google.pl", "youtube.pl", "reddit.com", "discord.com", "discordapp.com", "help.4rdm.pl", "help.4rdm.cf", "duck.com", "duckduckgo.com", "fivem.net", "forum.fivem.net", "status.cfx.re"]
 const baseURL = "https://www.virustotal.com/api/v3/urls"
-
-const check = (s: { result: string }) => {
-	return s.result == "malware" ||
-		s.result == "phishing" ||
-		s.result == "malicious"
-		? true
-		: false
-}
+// prettier-ignore
+const check = (s: { result: string }) => s.result == "malware" || s.result == "phishing" || s.result == "malicious" ? true : false
 
 export const checkMessage = async (message: string): Promise<boolean> => {
 	try {
