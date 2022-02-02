@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express"
 import { join } from "path"
 import multer from "multer"
-import { unlinkSync } from "fs"
+import { existsSync, unlinkSync } from "fs"
 
 const router = Router()
 const temp = join(__dirname, "..", "..", "..", "..", "..", "temp")
@@ -38,24 +38,41 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 router.get("/", (req, res) => res.sendFile(join(__dirname, "test.html")))
 
 router.post("/upload", adminCheck, upload.single("file"), (req, res) => {
+	const url = `http://${req.hostname}/api/files/${req.file?.filename}`
 	res.json({
 		code: 200,
 		message: `OK`,
 		filename: req.file?.filename,
 		filesize: req.file?.size,
+		url,
 	})
 })
 
-router.delete("/delete", adminCheck, (req, res) => {
-	const { file } = req.body
+router.get("/:id", adminCheck, (req, res) => {
+	const { id } = req.params
 
-	if (!file)
-		return res.status(400).json({
-			code: 400,
-			message: "Missing 'file'",
+	if (!existsSync(join(temp, id)))
+		return res.status(404).json({
+			code: 404,
+			message: "File not found",
 		})
+	res.sendFile(join(temp, id))
+})
 
-	unlinkSync(join(temp, file))
+router.delete("/:id", adminCheck, (req, res) => {
+	const { id } = req.params
+
+	if (!existsSync(join(temp, id)))
+		return res.status(404).json({
+			code: 404,
+			message: "File not found",
+		})
+	unlinkSync(join(temp, id))
+
+	res.json({
+		code: 200,
+		message: "OK",
+	})
 })
 
 export default router

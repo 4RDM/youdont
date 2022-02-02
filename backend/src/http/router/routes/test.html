@@ -15,5 +15,13 @@
 			<input type="file" name="file" id="file" />
 			<input type="submit" value="Wyślij" />
 		</form>
+		<button id="bbtn">KLIKAJ</button>
+		<script>
+			document.getElementById("bbtn").addEventListener("click", () => {
+				fetch("/api/files/1643834967849-logo.png", {
+					method: "DELETE",
+				})
+			})
+		</script>
 	</body>
 </html>
