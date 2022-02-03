@@ -180,6 +180,54 @@ body {
 #panel-container {
 	width: 100vw;
 	height: 100vh;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	#profile-card {
+		width: 80%;
+		height: 100vh;
+
+		background: #1a1a1a;
+		border-radius: 9px;
+
+		margin: 20px;
+		& > * {
+			padding: 20px;
+		}
+
+		#profile-details {
+			height: 250px;
+
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+
+			background: #262626;
+
+			& > * {
+				margin: 0 10px;
+			}
+
+			h1 {
+				font-size: 30px;
+				font-weight: 700;
+
+				b {
+					font-weight: 800;
+					color: #ffaadd;
+				}
+			}
+		}
+
+		#profile-avatar {
+			width: 200px;
+			height: 200px;
+			border-radius: 100%;
+			border: black solid 1px;
+		}
+	}
 }
 
 .error-401-container {
