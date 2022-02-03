@@ -55,8 +55,8 @@ export default class Footer extends Component<Props, any> {
 						<div className="footer-links">
 							<Link to="/">Strona główna</Link>
 							<Link to="/articles">Artykuły</Link>
-							<Link to="/">Podania</Link>
-							<a href="/dashboard">Panel użytkownika</a>
+							<Link to="/podania">Podania</Link>
+							<Link to="/panel">Panel użytkownika</Link>
 						</div>
 					</div>
 				</div>

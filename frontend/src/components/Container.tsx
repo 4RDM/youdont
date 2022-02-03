@@ -1,5 +1,4 @@
-import React, { Component, CSSProperties } from 'react'
-
+import React, { CSSProperties, FC } from 'react'
 import Footer from './Footer'
 import Navbar from './Navbar'
 
@@ -8,31 +7,14 @@ interface Props {
 	id?: string
 }
 
-interface session {
-	UserID: string
-	UserTag: string
-	Username: string
-	UserEmail: string
-	UserAvatar: string
-}
-export type Session = session | undefined
-
-export interface State {
-	session: Session
+const Container: FC<Props> = (props) => {
+	return (
+		<div style={props.style} id={props.id}>
+			<Navbar></Navbar>
+			<div id="content">{props.children}</div>
+			<Footer></Footer>
+		</div>
+	)
 }
 
-export default class Container extends Component<Props> {
-	constructor(props: Props) {
-		super(props)
-	}
-
-	render() {
-		return (
-			<div style={this.props.style} id={this.props.id}>
-				<Navbar></Navbar>
-				<div id="content">{this.props.children}</div>
-				<Footer></Footer>
-			</div>
-		)
-	}
-}
+export default Container
