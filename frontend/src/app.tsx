@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { IUserContext, UserContext } from './provider/UserContext'
+import { IUserContext, UserContext } from './utils/UserContext'
+import ScrollToTop from './utils/ScrollToTop'
 
 // import { gsap } from 'gsap'
 
@@ -26,6 +27,7 @@ export const App = () => {
 		<BrowserRouter>
 			<div className="App">
 				<UserContext.Provider value={{ user, setUser }}>
+					<ScrollToTop />
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="articles" element={<Articles />} />

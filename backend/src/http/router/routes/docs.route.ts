@@ -22,19 +22,76 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
-/*
-	* /api/docs/docs
-	! Pobiera wszystkie podania
-*/
 router.get("/docs", adminCheck, async (req, res) => {
 	const fetched = (await req.core.database.docs.getAll()) || []
 	res.json({ code: 200, message: "Ok!", data: fetched })
 })
 
-/*
-	* /api/docs/doc/1234
-	! Pobiera podanie o :ID
-*/
+router.get("/user/all", async (req, res) => {
+	res.json({
+		code: 200,
+		message: "OK",
+		data: [
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "DxrX2c",
+				admin: "Helix#0001",
+			},
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "uLya0c",
+				admin: "Helix#0001",
+			},
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "q59Njx",
+				admin: "Helix#0001",
+			},
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "7ebeyl",
+				admin: "Helix#0001",
+			},
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "Ahte7t",
+				admin: "Helix#0001",
+			},
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "dIAvel",
+				admin: "Helix#0001",
+			},
+			{
+				author: "Nimplex#1010",
+				date: new Date().getTime(),
+				reason: "Wiek",
+				approved: false,
+				id: "U9Z6qV",
+				admin: "Helix#0001",
+			},
+		],
+	})
+})
+
 router.get("/doc/:id", adminCheck, async (req, res) => {
 	const { id } = req.params
 
@@ -66,10 +123,6 @@ router.get("/doc/:id", adminCheck, async (req, res) => {
 	})
 })
 
-/*
-	* /api/docs/doc/1234
-	! Usuwa podanie o :ID
-*/
 router.delete("/doc/:id", adminCheck, async (req, res) => {
 	const { id } = req.params
 
@@ -80,32 +133,10 @@ router.delete("/doc/:id", adminCheck, async (req, res) => {
 	res.json({ code: 200, message: "Ok!", author: removed?.author })
 })
 
-/*
-	* /api/docs/doc/1234/accept
-	! Akceptuje podanie o :ID
-*/
 router.post("/doc/:id/accept", adminCheck, (req, res) => {})
-
-/*
-	* /api/docs/doc/1234/reject
-	! Odrzuca podanie o :ID
-
-	?{
-	?	reason: string
-	?}
-*/
 router.post("/doc/:id/reject", adminCheck, (req, res) => {})
-
-/*
-	* /api/docs/publish
-	! Publikuje wyniki
-*/
 router.get("/publish", adminCheck, (req, res) => {})
 
-/*
-	* /api/docs/upload
-	! Złóż podanie do sprawdzenia
-*/
 router.put("/upload", async (req, res) => {
 	const { author, nick, age, voice, long, short, steam } = req.body
 

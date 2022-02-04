@@ -6,7 +6,7 @@ interface Props {
 		author: string
 		reason: string
 		id: string
-		date: Date
+		date: number
 		approved: boolean
 		admin: string
 	}
@@ -42,7 +42,7 @@ const PodanieCard: FC<Props> = (props) => {
 					) : null}
 					<div>
 						<p>Data</p>
-						<h1>{props.podanie.date.toLocaleString()}</h1>
+						<h1>{new Date(props.podanie.date).toLocaleString()}</h1>
 					</div>
 				</div>
 			) : null}

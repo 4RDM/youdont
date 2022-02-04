@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { UserContext } from '../provider/UserContext'
+import { UserContext } from '../utils/UserContext'
 
 const Navbar: FC = (props) => {
 	const context = useContext(UserContext)

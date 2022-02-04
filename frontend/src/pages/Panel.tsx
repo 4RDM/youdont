@@ -1,197 +1,33 @@
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import Container from '../components/Container'
 import PodanieCard from '../components/PodanieCard'
-import { UserContext } from '../provider/UserContext'
+import { UserContext } from '../utils/UserContext'
+
+export interface Doc {
+	author: string
+	date: number
+	reason: string
+	approved: boolean
+	id: string
+	admin: string
+}
 
 const Panel: FC = () => {
 	const context = useContext(UserContext)
+	const [loading, setLoading] = useState(true)
+	const [docs, setDocs] = useState<Doc[]>([])
 
-	const podania = [
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'IXEt9l',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'ylFx6a',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'g9MJQU',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'UquwOn',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'vI2pTO',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'kH52lq',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'cP22ml',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'WNXeBX',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'iq1K5l',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'XGqinz',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'dudhDI',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'BhWwuV',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'fuGsoO',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'VQhNJ4',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'DxrX2c',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'uLya0c',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'q59Njx',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: '7ebeyl',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'Ahte7t',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'dIAvel',
-			admin: 'Helix#0001',
-		},
-		{
-			author: 'Nimplex#1010',
-			date: new Date(),
-			reason: 'Wiek',
-			approved: false,
-			id: 'U9Z6qV',
-			admin: 'Helix#0001',
-		},
-	]
+	useEffect(() => {
+		fetch('/api/docs/user/all')
+			.then((x) => x.json())
+			.then((x) => {
+				if (x.code == 401) return
+				setDocs(x.data)
+				setLoading(false)
+			})
+	}, [])
 
-	/*
-	{
-		"user": {
-			"code": 200,
-			"message": "OK",
-			"user": {
-				"userid": "364056796932997121",
-				"tag": "1010",
-				"username": "Nimplex",
-				"email": "a@gmail.com",
-				"avatar": "71b46749cfd16d05f3630139d9383eb5"
-			}
-		}
-	}
-	*/
+	scrollTo({ top: 100 })
 
 	return (
 		<Container>
@@ -245,10 +81,12 @@ const Panel: FC = () => {
 						<div id="profile-podania">
 							<h1>Podania</h1>
 							<div className="profile-flex">
-								{podania.length == 0 ? (
+								{loading ? (
+									<h1>Wczytywanie...</h1>
+								) : docs.length == 0 ? (
 									<h1>Nie pisałeś jeszcze podań</h1>
 								) : (
-									podania.map((podanie) => {
+									docs.map((podanie) => {
 										return (
 											<PodanieCard
 												key={podanie.id}
