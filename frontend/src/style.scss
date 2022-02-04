@@ -179,53 +179,132 @@ body {
 
 #panel-container {
 	width: 100vw;
-	height: 100vh;
 
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	row-gap: 10px;
 
-	#profile-card {
-		width: 80%;
-		height: 100vh;
+	@media (max-width: 740px) {
+		#profile-avatar {
+			display: none;
+		}
+		#profile-header {
+			justify-content: center;
+		}
+		#profile-details {
+			.profile-grid {
+				grid-template-columns: 1fr !important;
+			}
+		}
+		#profile-podania {
+			.podanie-details {
+				flex-direction: column !important;
+			}
+		}
+	}
+	@media (min-width: 1170px) {
+		#profile-details {
+			.profile-grid {
+				grid-template-columns: 1fr 1fr 1fr !important;
+			}
+		}
+	}
 
-		background: #1a1a1a;
+	#profile-header {
+		background: #1d1d1d;
+		width: 90vw;
+		height: 250px;
 		border-radius: 9px;
-
-		margin: 20px;
+		display: flex;
+		align-items: center;
 		& > * {
-			padding: 20px;
+			margin: 0 10px;
+		}
+	}
+
+	#profile-avatar {
+		width: 200px;
+		height: 200px;
+		border-radius: 100%;
+		border: black solid 1px;
+	}
+
+	#profile-details,
+	#profile-podania {
+		width: 90vw;
+		display: flex;
+		flex-direction: column;
+		row-gap: 10px;
+	}
+
+	#profile-details {
+		.profile-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			row-gap: 10px;
+			column-gap: 10px;
 		}
 
-		#profile-details {
-			height: 250px;
-
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-
-			background: #262626;
-
-			& > * {
-				margin: 0 10px;
-			}
+		.smallCard {
+			padding: 10px;
+			background: #1d1d1d;
+			border-radius: 9px;
 
 			h1 {
-				font-size: 30px;
-				font-weight: 700;
+				font-size: 25px;
+			}
+		}
+	}
 
-				b {
-					font-weight: 800;
-					color: #ffaadd;
-				}
+	#profile-podania {
+		.profile-flex {
+			display: flex;
+			flex-direction: column;
+			row-gap: 10px;
+		}
+
+		.podanie-card {
+			display: flex;
+			flex-direction: column;
+			background: #1d1d1d;
+			border-radius: 5px;
+			padding: 10px;
+		}
+
+		.podanie-details {
+			display: flex;
+			column-gap: 15px;
+			row-gap: 15px;
+
+			h1 {
+				font-size: 20px;
+				font-weight: 600;
 			}
 		}
 
-		#profile-avatar {
-			width: 200px;
-			height: 200px;
-			border-radius: 100%;
-			border: black solid 1px;
+		.podanie-container {
+			height: 50px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			button {
+				& > * {
+					margin: 0 5px;
+				}
+				outline: none;
+				border: none;
+				text-decoration: none;
+				height: 35px;
+				padding: 5px;
+				border-radius: 5px;
+				background: #393939;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 		}
 	}
 }
