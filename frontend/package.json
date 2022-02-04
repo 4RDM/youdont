@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"serv": "webpack-dev-server",
-		"build": "webpack"
+		"serv": "set NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server",
+		"build": "set NODE_OPTIONS=--openssl-legacy-provider && webpack"
 	},
 	"keywords": [],
 	"author": "",
