@@ -73,49 +73,49 @@ const Panel: FC = () => {
 								<p>Czas gry</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>0.0h</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>0.0h</h1>)
 								}
 							</div>
 							<div className="smallCard">
 								<p>Kille</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.kills || 0}</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.kills || 0}</h1>)
 								}
 							</div>
 							<div className="smallCard">
 								<p>Śmierci</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.deaths || 0}</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.deaths || 0}</h1>)
 								}
 							</div>
 							<div className="smallCard">
 								<p>Heady</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.heady || 0}</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.heady || 0}</h1>)
 								}
 							</div>
 							<div className="smallCard">
 								<p>K/D</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.kdr?.toFixed(2)}</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.kdr?.toFixed(2)}</h1>)
 								}
 							</div>
 							<div className="smallCard">
 								<p>Steam HEX</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.identifier || 'Nie wykryto'}</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.identifier || 'Nie wykryto'}</h1>)
 								}
 							</div>
 							<div className="smallCard">
 								<p>Ranga</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12" />) : (<h1>Partner+</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>Partner+</h1>)
 								}
 							</div>
 						</div>
@@ -124,7 +124,7 @@ const Panel: FC = () => {
 							<div className="profile-flex">
 								{
 									/* prettier-ignore */
-									loadingDocs ? (<PL color="white" size="30" />) : docs.length == 0 ? (<h1>Nie pisałeś jeszcze podań</h1>) : (
+									loadingDocs ? (<PL color="white" size="30px" />) : docs.length == 0 ? (<h1>Nie pisałeś jeszcze podań</h1>) : (
 										docs.map((podanie) => <PodanieCard key={podanie.id} podanie={podanie} />)
 									)
 								}

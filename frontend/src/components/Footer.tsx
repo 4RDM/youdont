@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Discord, Github, Steam } from '@styled-icons/fa-brands'
 import { Link } from 'react-router-dom'
 
 interface Props {}
@@ -37,15 +36,15 @@ export default class Footer extends Component<Props, any> {
 						<h1>Linki</h1>
 						<div className="footer-links">
 							<a href="https://discord.4rdm.pl">
-								<Discord size={20} />
+								{/* <Discord size={20} /> */}
 								Discord
 							</a>
 							<a href="https://steamcommunity.com/groups/4rdm">
-								<Steam size={20} />
+								{/* <Steam size={20} /> */}
 								Steam
 							</a>
 							<a href="https://github.com/4RDM">
-								<Github size={20} />
+								{/* <Github size={20} /> */}
 								Github
 							</a>
 						</div>

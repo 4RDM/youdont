@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { IUserContext, UserContext } from './utils/UserContext'
@@ -7,9 +7,10 @@ import ScrollToTop from './utils/ScrollToTop'
 // import { gsap } from 'gsap'
 
 import './style.scss'
-import Articles from './pages/Articles'
-import Home from './pages/Home'
-import Panel from './pages/Panel'
+
+const Articles = lazy(() => import('./pages/Articles'))
+const Home = lazy(() => import('./pages/Home'))
+const Panel = lazy(() => import('./pages/Panel'))
 
 export const App = () => {
 	const [user, setUser] = useState<IUserContext>(null)
@@ -26,14 +27,22 @@ export const App = () => {
 	return (
 		<BrowserRouter>
 			<div className="App">
-				<UserContext.Provider value={{ user, setUser }}>
-					<ScrollToTop />
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="articles" element={<Articles />} />
-						<Route path="panel" element={<Panel />} />
-					</Routes>
-				</UserContext.Provider>
+				<Suspense
+					fallback={
+						<div id="TOP_LOADING">
+							<p>Wczytywanie...</p>
+						</div>
+					}
+				>
+					<UserContext.Provider value={{ user, setUser }}>
+						<ScrollToTop />
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route path="articles" element={<Articles />} />
+							<Route path="panel" element={<Panel />} />
+						</Routes>
+					</UserContext.Provider>
+				</Suspense>
 			</div>
 		</BrowserRouter>
 	)
