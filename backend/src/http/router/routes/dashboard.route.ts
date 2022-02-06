@@ -1,10 +1,35 @@
 import { NextFunction, Request, Response, Router } from "express"
 import FormData from "form-data"
 import fetch from "node-fetch"
-import logger from "../../../utils/logger"
+import mariadb from "mariadb"
 import config from "../../../config"
+import timeSince from "../../../utils/timeSince"
+
+interface IUserCache {
+	[index: string]: {
+		identifier?: string
+		license?: string
+		discord?: string
+		deaths?: number
+		heady?: number
+		kills?: number
+		date?: Date
+	}
+}
+
+interface IUser {
+	identifier: string
+	license: string
+	discord: string
+	deaths: number
+	heady: number
+	kills: number
+}
+
+type user = null | IUser
 
 const router = Router()
+const userCache: IUserCache = {}
 
 const userCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { username, tag, userid, email } = <any>req.session
@@ -84,6 +109,58 @@ router.get("/session", userCheck, (req, res) => {
 			email,
 			avatar,
 		},
+	})
+})
+
+router.get("/stats", userCheck, async (req, res) => {
+	const { userid } = req.session
+
+	if (!userid) return
+
+	if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
+		const connection = await mariadb.createConnection({
+			host: config.mysql.host,
+			user: config.mysql.user,
+			password: config.mysql.password,
+			database: "rdm",
+			allowPublicKeyRetrieval: true,
+		})
+
+		const response: user = (
+			await connection.query(
+				`SELECT * FROM kdr WHERE \`discord\` = '${userid}'`
+			)
+		)[0]
+
+		if (response) {
+			const { discord, identifier, license, kills, deaths, heady } =
+				response
+			userCache[userid] = {
+				discord,
+				license,
+				heady,
+				kills,
+				deaths,
+				identifier,
+				date: new Date(),
+			}
+		} else {
+			userCache[userid] = {
+				discord: userid,
+				license: undefined,
+				heady: undefined,
+				kills: undefined,
+				deaths: undefined,
+				identifier: undefined,
+				date: new Date(),
+			}
+		}
+	}
+
+	res.json({
+		code: 200,
+		message: "OK",
+		...userCache[userid],
 	})
 })
 

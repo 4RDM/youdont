@@ -3,6 +3,7 @@ import express from "express"
 import helmet from "helmet"
 import session from "express-session"
 import logger from "../utils/logger"
+import compression from "compression"
 import { Core } from "../"
 
 import indexRouter from "./router/index.router"
@@ -23,6 +24,7 @@ export default class HTTP {
 				},
 			})
 		)
+		this.server.use(compression())
 
 		this.server.use((req, res, next) => {
 			req.core = core

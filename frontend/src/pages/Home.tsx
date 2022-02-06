@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import Container from '../components/Container'
 
-import tlo from '../public/tloBB.png'
+import tlo from '../public/tloBB.webp'
 
 const Home: FC = () => {
 	return (

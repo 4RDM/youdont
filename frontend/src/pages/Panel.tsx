@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from 'react'
+import { PulseLoader as PL } from 'react-spinners'
 import Container from '../components/Container'
 import PodanieCard from '../components/PodanieCard'
 import { UserContext } from '../utils/UserContext'
@@ -12,9 +13,21 @@ export interface Doc {
 	admin: string
 }
 
+export interface UserStats {
+	identifier?: string
+	license?: string
+	discord?: string
+	deaths?: number
+	heady?: number
+	kills?: number
+	kdr?: number
+}
+
 const Panel: FC = () => {
 	const context = useContext(UserContext)
-	const [loading, setLoading] = useState(true)
+	const [loadingDocs, setLoadingDocs] = useState(true)
+	const [loadingStats, setLoadingStats] = useState(true)
+	const [stats, setStats] = useState<UserStats>({})
 	const [docs, setDocs] = useState<Doc[]>([])
 
 	useEffect(() => {
@@ -23,11 +36,18 @@ const Panel: FC = () => {
 			.then((x) => {
 				if (x.code == 401) return
 				setDocs(x.data)
-				setLoading(false)
+				setLoadingDocs(false)
+			})
+		fetch('/api/dashboard/stats')
+			.then((x) => x.json())
+			.then((x) => {
+				if (x.code == 401) return
+				// prettier-ignore
+				const kdr = isNaN((x.kills || 0) / (x.deaths || 0)) ? 0 : (x.kills || 0) / (x.deaths || 0)
+				setStats({ kdr, ...x })
+				setLoadingStats(false)
 			})
 	}, [])
-
-	scrollTo({ top: 100 })
 
 	return (
 		<Container>
@@ -37,7 +57,7 @@ const Panel: FC = () => {
 						<img
 							crossOrigin="anonymous"
 							src={`https://cdn.discordapp.com/avatars/${context.user.user.userid}/${context.user.user.avatar}.png?size=2048`}
-							alt="?"
+							alt="User avatar"
 							id="profile-avatar"
 						/>
 						<div>
@@ -51,60 +71,70 @@ const Panel: FC = () => {
 						<div className="profile-grid">
 							<div className="smallCard">
 								<p>Czas gry</p>
-								<h1>0h</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>0.0h</h1>)
+								}
 							</div>
 							<div className="smallCard">
 								<p>Kille</p>
-								<h1>0</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.kills || 0}</h1>)
+								}
 							</div>
 							<div className="smallCard">
 								<p>Śmierci</p>
-								<h1>0</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.deaths || 0}</h1>)
+								}
 							</div>
 							<div className="smallCard">
 								<p>Heady</p>
-								<h1>0</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.heady || 0}</h1>)
+								}
 							</div>
 							<div className="smallCard">
 								<p>K/D</p>
-								<h1>0.0</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.kdr?.toFixed(2)}</h1>)
+								}
 							</div>
 							<div className="smallCard">
 								<p>Steam HEX</p>
-								<h1>Nie wykryto</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>{stats.identifier || 'Nie wykryto'}</h1>)
+								}
 							</div>
 							<div className="smallCard">
 								<p>Ranga</p>
-								<h1>Partner+</h1>
+								{
+									/* prettier-ignore */
+									loadingStats ? (<PL color="white" size="12" />) : (<h1>Partner+</h1>)
+								}
 							</div>
 						</div>
 						<div id="profile-podania">
 							<h1>Podania</h1>
 							<div className="profile-flex">
-								{loading ? (
-									<h1>Wczytywanie...</h1>
-								) : docs.length == 0 ? (
-									<h1>Nie pisałeś jeszcze podań</h1>
-								) : (
-									docs.map((podanie) => {
-										return (
-											<PodanieCard
-												key={podanie.id}
-												podanie={podanie}
-											/>
-										)
-									})
-								)}
+								{
+									/* prettier-ignore */
+									loadingDocs ? (<PL color="white" size="30" />) : docs.length == 0 ? (<h1>Nie pisałeś jeszcze podań</h1>) : (
+										docs.map((podanie) => <PodanieCard key={podanie.id} podanie={podanie} />)
+									)
+								}
 							</div>
 						</div>
 					</div>
 				</div>
 			)) || (
 				<div className="error-401-container">
-					<h1>
-						Nie masz tutaj dostępu do tego miejsca, zaloguj się
-						najpierw!
-					</h1>
+					<h1>ZALOGUJ SIĘ NAJPIERW!</h1>
 				</div>
 			)}
 		</Container>
