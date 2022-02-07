@@ -1,3 +1,5 @@
+import { Eye } from '@styled-icons/bootstrap/Eye'
+import { X } from '@styled-icons/bootstrap/X'
 import React, { FC, useState } from 'react'
 // import { Eye, X } from '@styled-icons/bootstrap'
 
@@ -25,7 +27,7 @@ const PodanieCard: FC<Props> = (props) => {
 					<p>
 						{props.podanie.approved ? 'Zaakceptowane' : 'Odrzucone'}
 					</p>
-					{/* {!open ? <Eye size={20} /> : <X size={20} />} */}
+					{!open ? <Eye size={20} /> : <X size={20} />}
 				</button>
 			</div>
 			{open ? (
