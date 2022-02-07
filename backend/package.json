@@ -6,7 +6,9 @@
 	"private": true,
 	"scripts": {
 		"build": "tsc",
-		"dev": "set NODE_ENV=production && nodemon src/index.ts"
+		"dev": "nodemon src/index.ts",
+		"prod": "set NODE_ENV=production && nodemon src/index.ts",
+		"prod-linux": "export NODE_ENV=production && nodemon src/index.ts"
 	},
 	"dependencies": {
 		"bufferutil": "^4.0.6",
