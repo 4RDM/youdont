@@ -6,7 +6,7 @@
 	"scripts": {
 		"serv": "set NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server",
 		"build": "set NODE_OPTIONS=--openssl-legacy-provider  && webpack",
-		"prod": "set NODE_OPTIONS=--openssl-legacy-provider && set GENERATE_SOURCEMAP=false && webpack"
+		"prod": "set NODE_OPTIONS=--openssl-legacy-provider && webpack"
 	},
 	"keywords": [],
 	"author": "",
@@ -37,6 +37,8 @@
 		"react-dom": "^16.13.1",
 		"react-router-dom": "6",
 		"react-spinners": "^0.11.0",
-		"styled-components": "^5.3.3"
+		"styled-components": "^5.3.3",
+		"terser-webpack-plugin": "4.2.3",
+		"uglify-js": "^3.15.1"
 	}
 }
