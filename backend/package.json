@@ -6,7 +6,7 @@
 	"private": true,
 	"scripts": {
 		"build": "tsc",
-		"build:dev": "nodemon src/index.ts"
+		"dev": "set NODE_ENV=production && nodemon src/index.ts"
 	},
 	"dependencies": {
 		"bufferutil": "^4.0.6",

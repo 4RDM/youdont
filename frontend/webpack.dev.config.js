@@ -1,27 +1,6 @@
 // https://github.com/JaZax/webpackReactTemplate
 
-const { optimize, DefinePlugin } = require('webpack')
-const TerserPlugin = require('terser-webpack-plugin')
 const { join, resolve } = require('path')
-const { readdirSync, unlinkSync } = require('fs')
-
-var nodeEnv = process.env.NODE_ENV || 'development'
-
-const minify = (input, sourceMap, minimizerOptions, extractsComments) => {
-	const { map, code } = require('uglify-js').minify(input, {})
-
-	return { map, code, warnings: [], errors: [], extractedComments: [] }
-}
-
-minify.getMinimizerVersion = () => {
-	let packageJson
-
-	try {
-		packageJson = require('uglify-module/package.json')
-	} catch (error) {}
-
-	return packageJson && packageJson.version
-}
 
 module.exports = {
 	mode: 'development',
@@ -62,14 +41,6 @@ module.exports = {
 				test: /\.(png|svg|jpg|gif|webp)$/,
 				use: ['file-loader'],
 			},
-		],
-	},
-	optimization: {
-		minimize: true,
-		minimizer: [
-			new TerserPlugin({
-				parallel: 4,
-			}),
 		],
 	},
 }

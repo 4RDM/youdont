@@ -48,4 +48,4 @@ export const App = () => {
 	)
 }
 
-ReactDOM.hydrate(<App />, document.getElementById('App'))
+ReactDOM.render(<App />, document.getElementById('App'))
