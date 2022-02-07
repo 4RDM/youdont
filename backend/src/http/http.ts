@@ -16,7 +16,7 @@ export default class HTTP {
 		this.server.use(helmet({ contentSecurityPolicy: false }))
 		this.server.use(
 			session({
-				secret: "213213132123",
+				secret: "{/GDB4pZjG[CG45_Y8yp~3Km,T$A(Em.]x{9g4'7>@fu&h^g",
 				resave: false,
 				saveUninitialized: true,
 				cookie: {
@@ -34,6 +34,6 @@ export default class HTTP {
 		this.server.use("/api", apiRouter)
 		this.server.use("/", indexRouter)
 
-		this.server.listen(80, () => logger.ready("Listening to port 80"))
+		this.server.listen(8021, () => logger.ready("Listening to port 8021"))
 	}
 }
