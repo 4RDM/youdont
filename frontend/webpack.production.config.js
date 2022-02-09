@@ -1,6 +1,7 @@
 // https://github.com/JaZax/webpackReactTemplate
 
 const TerserPlugin = require('terser-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const { join, resolve } = require('path')
 
 module.exports = {
@@ -42,9 +43,8 @@ module.exports = {
 	optimization: {
 		minimize: true,
 		minimizer: [
-			new TerserPlugin({
-				parallel: 4,
-			}),
+			new TerserPlugin({ parallel: 4 }),
+			new UglifyJsPlugin({ parallel: 4 }),
 		],
 	},
 }
