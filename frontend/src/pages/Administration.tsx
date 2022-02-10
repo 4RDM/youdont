@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import LazyLoad from 'react-lazyload'
 import Container from '../components/Container'
 import { PulseLoader as PL } from 'react-spinners'
 import { Card } from '../components/Card'
@@ -24,16 +25,12 @@ const Home: FC = () => {
 					/* prettier-ignore */
 					loading ? (<div id="TOP_LOADING"><PL color="white" size="30px" /></div>) : (
 					admins.admins.map((admin: any) => {
-						console.log(admin)
 						return (
 							<Card key={admin.id}>
 								<h1>{admin.role.name}</h1>
-								<img
-									crossOrigin="anonymous"
-									src={admin.avatar}
-									width="100%"
-									alt="avatar"
-									/>
+								<LazyLoad once>
+									<img crossOrigin="anonymous" src={admin.avatar} width="100%" alt="avatar" />
+								</LazyLoad>
 								<p>{admin.nickname}</p>
 							</Card>
 						)

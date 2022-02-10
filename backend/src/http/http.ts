@@ -34,6 +34,6 @@ export default class HTTP {
 		this.server.use("/api", apiRouter)
 		this.server.use("/", indexRouter)
 
-		this.server.listen(8021, () => logger.ready("Listening to port 8021"))
+		this.server.listen(80, () => logger.ready("Listening to port 80"))
 	}
 }
