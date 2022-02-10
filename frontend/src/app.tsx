@@ -20,8 +20,15 @@ export const App = () => {
 		fetch('/api/dashboard/session')
 			.then((x) => x.json())
 			.then((j) => {
+				console.log(j)
 				if (j.code == 401) setUser(null)
-				else setUser(j)
+				else
+					setUser({
+						data: {
+							user: j.user,
+							permissions: j.permissions,
+						},
+					})
 			})
 	}, [])
 
@@ -35,7 +42,8 @@ export const App = () => {
 						</div>
 					}
 				>
-					<UserContext.Provider value={{ user, setUser }}>
+					{/* @ts-ignore */}
+					<UserContext.Provider value={{ data: user?.data }}>
 						<ScrollToTop />
 						<Routes>
 							<Route path="/" element={<Home />} />

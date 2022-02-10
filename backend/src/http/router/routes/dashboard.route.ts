@@ -43,10 +43,7 @@ type user = null | IUser
 
 const router = Router()
 let userCache: IUserCache = {}
-let AdminCache: IAdmin = {
-	admins: [],
-	lastFetched: new Date(0),
-}
+let AdminCache: IAdmin = { admins: [], lastFetched: new Date(0) }
 
 const userCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { username, tag, userid, email } = <any>req.session
@@ -61,10 +58,7 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 router.get("/admins", (req, res) => {
 	if (req.core.bot.isReady()) {
 		if (timeSince(AdminCache.lastFetched) > 3600) {
-			AdminCache = {
-				admins: [],
-				lastFetched: new Date(),
-			}
+			AdminCache = { admins: [], lastFetched: new Date() }
 			// prettier-ignore
 			req.core.bot.guilds.cache.get("843444305149427713")?.roles.cache.get("843444642539110400")?.members.forEach(member => { AdminCache.admins.push({ nickname: member.user.tag, id: member.user.id, avatar: member.user.displayAvatarURL({ dynamic: true, size: 1024, format: "webp" }), role: getHighestRole(member.roles.cache), }) })
 			// prettier-ignore
@@ -141,6 +135,11 @@ router.get('/logout', userCheck, (req, res) => req.session.destroy(() => res.red
 
 router.get("/session", userCheck, (req, res) => {
 	const { userid, tag, username, email, avatar } = req.session
+
+	if (!userid) return
+	const permissions =
+		req.core.database.settings.getUser(userid)?.permissions || []
+
 	res.json({
 		code: 200,
 		message: "OK",
@@ -151,6 +150,7 @@ router.get("/session", userCheck, (req, res) => {
 			email,
 			avatar,
 		},
+		permissions,
 	})
 })
 

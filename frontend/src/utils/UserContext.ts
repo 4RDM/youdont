@@ -1,12 +1,24 @@
 import { createContext } from 'react'
 
-// interface UserContext {
-// 	UserID?: string
-// 	UserTag?: string
-// 	Username?: string
-// 	UserEmail?: string
-// 	UserAvatar?: string
-// }
+export type Permission =
+	| 'MANAGE_USERS'
+	| 'MANAGE_SHORTS'
+	| 'MANAGE_DOCS'
+	| 'MANAGE_FILES'
+	| 'ADMINISTRATOR'
 
-export type IUserContext = any
+interface UserContext {
+	data: {
+		user: {
+			userid: string
+			tag: string
+			username: string
+			email: string
+			avatar: string
+		}
+		permissions: Permission[]
+	}
+}
+
+export type IUserContext = UserContext | null
 export const UserContext = createContext<IUserContext>(null)

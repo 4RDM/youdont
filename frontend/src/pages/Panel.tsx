@@ -24,13 +24,14 @@ export interface UserStats {
 }
 
 const Panel: FC = () => {
-	const context = useContext(UserContext)
+	const context = useContext(UserContext)?.data
 	const [loadingDocs, setLoadingDocs] = useState(true)
 	const [loadingStats, setLoadingStats] = useState(true)
 	const [stats, setStats] = useState<UserStats>({})
 	const [docs, setDocs] = useState<Doc[]>([])
 
 	useEffect(() => {
+		if (context?.user == undefined) return
 		fetch('/api/docs/user/all')
 			.then((x) => x.json())
 			.then((x) => {
@@ -47,26 +48,31 @@ const Panel: FC = () => {
 				setStats({ kdr, ...x })
 				setLoadingStats(false)
 			})
-	}, [])
+	}, [context])
+
+	console.log(context)
 
 	return (
 		<Container>
-			{(context.user !== null && (
+			{(context?.user !== undefined && (
 				<div id="panel-container">
 					<div id="profile-header">
 						<img
 							crossOrigin="anonymous"
-							src={`https://cdn.discordapp.com/avatars/${context.user.user.userid}/${context.user.user.avatar}.png?size=2048`}
+							src={`https://cdn.discordapp.com/avatars/${context?.user.userid}/${context?.user.avatar}.png?size=2048`}
 							alt="User avatar"
 							id="profile-avatar"
 						/>
 						<div>
 							{/* prettier-ignore */}
-							<h1>Witaj <b>{context.user.user.username}#{context.user.user.tag}</b>!</h1>
-							<p>{context.user.user.userid}</p>
+							<h1>Witaj <b>{context?.user.username}#{context?.user.tag}</b>!</h1>
+							<p>{context?.user?.userid}</p>
 						</div>
 					</div>
 					<div id="profile-details">
+						{context?.permissions.includes('ADMINISTRATOR') ? (
+							<h1>Helloworld</h1>
+						) : null}
 						<h1>Statystyki</h1>
 						<div className="profile-grid">
 							<div className="smallCard">

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import { UserContext } from '../utils/UserContext'
 
 const Navbar: FC = (props) => {
-	const context = useContext(UserContext)
+	const context = useContext(UserContext)?.data
 	let button
 
-	if (context.user == null)
+	if (context?.user == null)
 		button = <a href="/api/dashboard/login">Logowanie</a>
 	else button = <a href="/api/dashboard/logout">Wyloguj się</a>
 
