@@ -4,6 +4,7 @@ import fetch from "node-fetch"
 import mariadb from "mariadb"
 import config from "../../../config"
 import timeSince from "../../../utils/timeSince"
+import { AdministratorRole, getHighestRole } from "../../../utils/users"
 
 interface IUserCache {
 	[index: string]: {
@@ -26,10 +27,26 @@ interface IUser {
 	kills: number
 }
 
+interface IAdmin {
+	admins: [
+		{
+			nickname: string
+			avatar: string
+			id: string
+			role: AdministratorRole
+		}?
+	]
+	lastFetched: Date
+}
+
 type user = null | IUser
 
 const router = Router()
-const userCache: IUserCache = {}
+let userCache: IUserCache = {}
+let AdminCache: IAdmin = {
+	admins: [],
+	lastFetched: new Date(0),
+}
 
 const userCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { username, tag, userid, email } = <any>req.session
@@ -40,6 +57,37 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 			message: "Unauthorized, not logged in",
 		})
 }
+
+router.get("/admins", (req, res) => {
+	if (timeSince(AdminCache.lastFetched) > 3600) {
+		AdminCache = {
+			admins: [],
+			lastFetched: new Date(),
+		}
+		req.core.bot.guilds.cache
+			.get("843444305149427713")
+			?.roles.cache.get("843444642539110400")
+			?.members.forEach(member => {
+				AdminCache.admins.push({
+					nickname: member.user.tag,
+					id: member.user.id,
+					avatar: member.user.displayAvatarURL({
+						dynamic: true,
+						size: 2048,
+					}),
+					role: getHighestRole(member.roles.cache),
+				})
+			})
+		AdminCache.admins = AdminCache.admins.sort((a, b) => {
+			return (b?.role.rarity || 0) - (a?.role.rarity || 0)
+		})
+	}
+	res.json({
+		code: 200,
+		message: "OK",
+		admins: AdminCache,
+	})
+})
 
 router.get("/login", (req, res) => {
 	res.redirect(

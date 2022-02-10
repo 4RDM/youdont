@@ -11,6 +11,7 @@ import './style.scss'
 const Articles = lazy(() => import('./pages/Articles'))
 const Home = lazy(() => import('./pages/Home'))
 const Panel = lazy(() => import('./pages/Panel'))
+const Administration = lazy(() => import('./pages/Administration'))
 
 export const App = () => {
 	const [user, setUser] = useState<IUserContext>(null)
@@ -40,6 +41,8 @@ export const App = () => {
 							<Route path="/" element={<Home />} />
 							<Route path="articles" element={<Articles />} />
 							<Route path="panel" element={<Panel />} />
+							{ /* prettier-ignore */ }
+							<Route path="Administration" element={<Administration />} />
 						</Routes>
 					</UserContext.Provider>
 				</Suspense>

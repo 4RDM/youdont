@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import Container from '../components/Container'
 
+// @ts-ignore
 import tlo from '../public/tloBB.webp'
 
 const Home: FC = () => {

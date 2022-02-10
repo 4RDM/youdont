@@ -341,51 +341,43 @@ body {
 	flex-wrap: wrap;
 	row-gap: 10px;
 	column-gap: 10px;
+}
+
+#administration-container {
+	display: grid;
+	width: 100vw;
+	height: 100%;
+	grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+	row-gap: 20px;
+	column-gap: 10px;
+	justify-items: center;
+
+	img {
+		border-radius: 9px;
+	}
+
+	word-wrap: break-word;
 
 	.card {
 		@media (max-width: 586px) {
 			& {
 				width: 90%;
-				height: 320px;
 			}
 		}
 
 		background: #262626;
-		width: 288px;
-		height: 320px;
+		width: 260px;
 		border-radius: 0.5rem;
 		padding: 15px;
-		cursor: pointer;
-		user-select: none;
-
+		user-select: text;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-
-		& > .card-header > p {
-			padding: 8px 0;
-		}
-
-		.card-title {
-			font-size: 20px;
-			font-weight: 700;
-			border-bottom: 1px solid #393939;
-			color: white;
-		}
-
-		.card-footer {
-			width: 288px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-
-			p {
-				color: #666666;
-			}
-		}
+		row-gap: 10px;
 
 		p {
 			color: #dedede;
+			font-size: 15px;
 		}
 	}
 }
