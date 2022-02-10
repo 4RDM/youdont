@@ -50,8 +50,6 @@ const Panel: FC = () => {
 			})
 	}, [context])
 
-	console.log(context)
-
 	return (
 		<Container>
 			{(context?.user !== undefined && (
@@ -140,7 +138,7 @@ const Panel: FC = () => {
 				</div>
 			)) || (
 				<div className="error-401-container">
-					<h1>ZALOGUJ SIĘ NAJPIERW!</h1>
+					<h1>Zaloguj się najpierw!</h1>
 				</div>
 			)}
 		</Container>

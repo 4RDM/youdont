@@ -1,0 +1,28 @@
+#container {
+	width: 100vw;
+
+	display: flex;
+	align-content: center;
+	align-self: center;
+	justify-content: center;
+	justify-items: center;
+
+	form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	input[type='file'] {
+		display: none;
+	}
+
+	button {
+		width: 150px;
+		height: 35px;
+		background: #393939;
+		border-radius: 4px;
+		color: white;
+		outline: none;
+		border: none;
+	}
+}

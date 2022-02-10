@@ -398,3 +398,44 @@ body {
 	height: 100vh;
 	font-size: 30px;
 }
+
+.popup {
+	position: fixed;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	height: 100vh;
+	top: 0;
+	left: 0;
+
+	.popup-header {
+		width: 90%;
+		height: 50px;
+		font-size: 15px;
+		.close-icon {
+			position: absolute;
+			cursor: pointer;
+			right: 5px;
+			top: 5px;
+			background: #666666;
+			border-radius: 9px;
+			width: 25px;
+			height: 25px;
+			line-height: 20px;
+			text-align: center;
+			font-size: 20px;
+		}
+	}
+
+	.popup-container {
+		position: relative;
+		width: 70%;
+		margin: 0 auto;
+		min-height: 200px;
+		max-height: 70vh;
+		margin-top: calc(100vh - 85vh - 20px);
+		background: #393939;
+		border-radius: 5px;
+		padding: 20px;
+		overflow: auto;
+	}
+}

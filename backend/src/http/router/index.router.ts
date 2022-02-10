@@ -34,7 +34,7 @@ const spaHandler = async (req: Request, res: Response, next: NextFunction) => {
 router.use(staticFiles(join(publicPath, "public")))
 router.use(staticFiles(join(publicPath, "data")))
 router.get(
-	["/", "/articles", "/article/:id", "/panel", "/administration"],
+	["/", "/articles", "/article/:id", "/panel", "/files", "/administration"],
 	spaHandler
 )
 

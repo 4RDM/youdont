@@ -7,6 +7,7 @@ import ScrollToTop from './utils/ScrollToTop'
 // import { gsap } from 'gsap'
 
 import './style.scss'
+import FileUploader from './pages/FIleUploader'
 
 const Articles = lazy(() => import('./pages/Articles'))
 const Home = lazy(() => import('./pages/Home'))
@@ -20,7 +21,6 @@ export const App = () => {
 		fetch('/api/dashboard/session')
 			.then((x) => x.json())
 			.then((j) => {
-				console.log(j)
 				if (j.code == 401) setUser(null)
 				else
 					setUser({
@@ -47,10 +47,12 @@ export const App = () => {
 						<ScrollToTop />
 						<Routes>
 							<Route path="/" element={<Home />} />
-							<Route path="articles" element={<Articles />} />
-							<Route path="panel" element={<Panel />} />
+							<Route path="/articles" element={<Articles />} />
+							<Route path="/panel" element={<Panel />} />
 							{ /* prettier-ignore */ }
-							<Route path="Administration" element={<Administration />} />
+							<Route path="/files" element={<FileUploader />} />
+							{ /* prettier-ignore */ }
+							<Route path="/administration" element={<Administration />} />
 						</Routes>
 					</UserContext.Provider>
 				</Suspense>
