@@ -37,14 +37,13 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 
 router.get("/", (req, res) => res.sendFile(join(__dirname, "test.html")))
 
-router.post("/upload", adminCheck, upload.single("file"), (req, res) => {
-	const url = `http://${req.hostname}/api/files/${req.file?.filename}`
+router.post("/upload", adminCheck, upload.array("file"), (req, res) => {
+	if (!req.files) return
 	res.json({
 		code: 200,
 		message: `OK`,
-		filename: req.file?.filename,
-		filesize: req.file?.size,
-		url,
+		// @ts-ignore
+		files: req.files.map((file: any) => file.filename),
 	})
 })
 
