@@ -41,10 +41,9 @@ module.exports = {
 		],
 	},
 	optimization: {
-		minimize: true,
 		minimizer: [
-			new TerserPlugin({ parallel: 4 }),
-			new UglifyJsPlugin({ parallel: 4 }),
+			new UglifyJsPlugin({ parallel: 6 }),
+			new TerserPlugin({ parallel: 6 }),
 		],
 	},
 }

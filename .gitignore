@@ -12,3 +12,4 @@ backend/dist
 **/dist/**/*.mp4
 **/dist/**/*.svg
 **/dist/**/*.json
+temp

@@ -1,6 +1,7 @@
+import { X } from '@styled-icons/bootstrap/X'
 import React, { FC, useContext, useRef, useState } from 'react'
 import Container from '../components/Container'
-import Popup from '../components/popup'
+import Popup from '../components/Popup'
 import { UserContext } from '../utils/UserContext'
 
 import './FileUploader.scss'
@@ -31,9 +32,7 @@ const FileUploader: FC = () => {
 		}
 
 		const form = new FormData()
-		files.forEach((file: any) => {
-			form.append('file', file)
-		})
+		files.forEach((file) => form.append('file', file))
 
 		try {
 			fetch('/api/files/upload', {
@@ -50,7 +49,12 @@ const FileUploader: FC = () => {
 					}
 					console.log(x)
 					setPopupContent(
-						`Pomyślnie wrzucono plik na serwer, jest dostępny pod adresem: ${x.url}`
+						`Pomyślnie wrzucono plik na serwer, jest dostępny pod adresem: ${x.files
+							.map(
+								(file: string) =>
+									`https://4rdm.pl/api/files/${file}`
+							)
+							.join(', ')}`
 					)
 					setPopupTitle('🎉 Tada!')
 					setShowPopup(true)
@@ -86,7 +90,15 @@ const FileUploader: FC = () => {
 							</div>
 							<div className="files-list">
 								{files.map((file) => (
-									<h1>{file.name}</h1>
+									<div className="file" key={file.name}>
+										<p>{file.name}</p>
+										<button
+											/* prettier-ignore */
+											onClick={() => setFiles(files.filter((x) => x.name !== file.name))}
+										>
+											<X size={'15px'} />
+										</button>
+									</div>
 								))}
 							</div>
 						</div>

@@ -25,6 +25,7 @@ export default class HTTP {
 			})
 		)
 		this.server.use(compression())
+		this.server.set("view engine", "ejs")
 
 		this.server.use((req, res, next) => {
 			req.core = core

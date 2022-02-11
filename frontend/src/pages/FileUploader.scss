@@ -11,7 +11,8 @@
 
 	.content {
 		width: 400px;
-
+		row-gap: 10px;
+		column-gap: 10px;
 		display: flex;
 		flex-direction: column;
 	}
@@ -25,6 +26,27 @@
 	.files-list {
 		display: flex;
 		flex-direction: column;
+		row-gap: 10px;
+		column-gap: 10px;
+	}
+
+	.file {
+		height: 50px;
+		padding: 10px;
+		background: #393939;
+		flex-direction: row;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-radius: 4px;
+
+		button {
+			width: 35px;
+			height: 35px;
+			cursor: pointer;
+			background: #666666;
+			border-radius: 9px;
+		}
 	}
 
 	input[type='file'] {

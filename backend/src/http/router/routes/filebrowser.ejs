@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Przeglądarka plików</title>
+		<style>
+			#preview {
+				position: sticky;
+				top: 0;
+				right: 0;
+				border: 1px solid black;
+				width: 100px;
+				height: 100px;
+				display: none;
+			}
+			#preview img {
+				width: 100%;
+				height: 100%;
+			}
+			li > * {
+				margin: 0 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Pliki na serwerze</h1>
+		<input type="checkbox" name="Podgląd" id="podglad" />
+		<label for="podglad">Podgląd plików</label>
+		<div id="preview"><img src="" id="image" alt="plik" /></div>
+		<ul>
+			<% files.forEach((file) => {%>
+			<li>
+				<button
+					onclick="fetch('/api/files/<%-file%>', { method: 'DELETE' }).then(location.reload())"
+				>
+					❌
+				</button>
+				<a
+					href="/api/files/<%- file %>"
+					class="file"
+					data-file="<%-file%>"
+				>
+					<%= file %>
+				</a>
+			</li>
+			<% }) %>
+		</ul>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+	<script>
+		const display = _.debounce(ev => {
+			document.getElementById("preview").style.display = "block"
+			document.getElementById(
+				"image"
+			).src = `/api/files/${ev.target.dataset.file}`
+		}, 500)
+
+		const checkbox = document.getElementById("podglad")
+		const files = document.getElementsByClassName("file")
+		for (file of files) {
+			file.onmouseover = ev => {
+				if (!checkbox.checked) return
+				if (
+					/.*(\w)\.(png|jpg|svg|webp|mp4|mp3|ico).*/.test(
+						ev.target.dataset.file
+					)
+				) {
+					display(ev)
+				} else {
+					document.getElementById("image").src = ``
+				}
+			}
+		}
+	</script>
+</html>

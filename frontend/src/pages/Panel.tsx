@@ -3,7 +3,7 @@ import { PulseLoader as PL } from 'react-spinners'
 import Container from '../components/Container'
 import PodanieCard from '../components/PodanieCard'
 import { UserContext } from '../utils/UserContext'
-
+import Popup from '../components/Popup'
 export interface Doc {
 	author: string
 	date: number
@@ -29,31 +29,49 @@ const Panel: FC = () => {
 	const [loadingStats, setLoadingStats] = useState(true)
 	const [stats, setStats] = useState<UserStats>({})
 	const [docs, setDocs] = useState<Doc[]>([])
+	const [showPopup, setShowPopup] = useState(false)
+	const [popupTitle, setPopupTitle] = useState('')
+	const [popupContent, setPopupContent] = useState('')
+
+	const err = () => {
+		setPopupContent('Nieznany błąd serwera!')
+		setPopupTitle('❌ Błąd!')
+		setShowPopup(true)
+	}
 
 	useEffect(() => {
 		if (context?.user == undefined) return
 		fetch('/api/docs/user/all')
 			.then((x) => x.json())
 			.then((x) => {
-				if (x.code == 401) return
+				if (x.code !== 200) return err()
 				setDocs(x.data)
 				setLoadingDocs(false)
 			})
+			.catch(err)
 		fetch('/api/dashboard/stats')
 			.then((x) => x.json())
 			.then((x) => {
-				if (x.code == 401) return
+				if (x.code !== 200) return err()
 				// prettier-ignore
 				const kdr = isNaN((x.kills || 0) / (x.deaths || 0)) ? 0 : (x.kills || 0) / (x.deaths || 0)
 				setStats({ kdr, ...x })
 				setLoadingStats(false)
 			})
+			.catch(err)
 	}, [context])
 
 	return (
 		<Container>
 			{(context?.user !== undefined && (
 				<div id="panel-container">
+					{showPopup && (
+						<Popup
+							title={popupTitle}
+							content={popupContent}
+							handleClose={() => setShowPopup(!showPopup)}
+						/>
+					)}
 					<div id="profile-header">
 						<img
 							crossOrigin="anonymous"

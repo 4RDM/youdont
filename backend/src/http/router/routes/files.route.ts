@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express"
 import { join } from "path"
 import multer from "multer"
-import { existsSync, unlinkSync } from "fs"
+import { existsSync, readdirSync, unlinkSync } from "fs"
 
 const router = Router()
 const temp = join(__dirname, "..", "..", "..", "..", "..", "temp")
@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
 	destination: (req, file, call) => call(null, temp),
 	filename: (req, file, call) =>
 		// prettier-ignore
-		call(null, new Date().getTime() + "-" + file.originalname),
+		call(null, Math.floor(Math.random() * 50000).toString() + new Date().getTime() + "-" + file.originalname),
 })
 const upload = multer({ storage })
 
@@ -35,7 +35,11 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
-router.get("/", (req, res) => res.sendFile(join(__dirname, "test.html")))
+router.get("/", adminCheck, (req, res) =>
+	res.render(join(__dirname, "filebrowser.ejs"), {
+		files: readdirSync(temp),
+	})
+)
 
 router.post("/upload", adminCheck, upload.array("file"), (req, res) => {
 	if (!req.files) return
