@@ -31,7 +31,7 @@ router.use(morgan("dev")) // morgan for development/debug purposes
 
 router.use("/docs", userCheck, docsRouter)
 router.use("/shorts", userCheck, shortsRouter)
-router.use("/files", userCheck, filesRoute)
+router.use("/files", filesRoute)
 router.use("/dashboard", dashboardRouter)
 
 router.get("/*", (req, res) =>

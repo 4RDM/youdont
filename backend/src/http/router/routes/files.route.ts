@@ -35,23 +35,39 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
-router.get("/", adminCheck, (req, res) =>
+const userCheck = (req: Request, res: Response, next: NextFunction) => {
+	const { username, tag, userid, email } = <any>req.session
+	if (username && tag && userid && email) next()
+	else
+		res.status(401).json({
+			code: 401,
+			message: "Log in first.",
+		})
+}
+
+router.get("/", userCheck, adminCheck, (req, res) =>
 	res.render(join(__dirname, "filebrowser.ejs"), {
 		files: readdirSync(temp),
 	})
 )
 
-router.post("/upload", adminCheck, upload.array("file"), (req, res) => {
-	if (!req.files) return
-	res.json({
-		code: 200,
-		message: `OK`,
-		// @ts-ignore
-		files: req.files.map((file: any) => file.filename),
-	})
-})
+router.post(
+	"/upload",
+	userCheck,
+	adminCheck,
+	upload.array("file"),
+	(req, res) => {
+		if (!req.files) return
+		res.json({
+			code: 200,
+			message: `OK`,
+			// @ts-ignore
+			files: req.files.map((file: any) => file.filename),
+		})
+	}
+)
 
-router.get("/:id", adminCheck, (req, res) => {
+router.get("/:id", (req, res) => {
 	const { id } = req.params
 
 	if (!existsSync(join(temp, id)))
@@ -62,7 +78,7 @@ router.get("/:id", adminCheck, (req, res) => {
 	res.sendFile(join(temp, id))
 })
 
-router.delete("/:id", adminCheck, (req, res) => {
+router.delete("/:id", userCheck, adminCheck, (req, res) => {
 	const { id } = req.params
 
 	if (!existsSync(join(temp, id)))
