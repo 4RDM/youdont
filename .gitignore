@@ -14,3 +14,4 @@ backend/dist
 **/dist/**/*.json
 temp
 playersDB.json
+backend/.env

@@ -5,6 +5,9 @@ import HTTP from "./http/http"
 import config from "./config"
 import { Session } from "express-session"
 
+import dotenv from "dotenv"
+dotenv.config()
+
 declare module "express-serve-static-core" {
 	interface Request {
 		core: Core
