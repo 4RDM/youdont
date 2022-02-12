@@ -8,11 +8,7 @@ const Home: FC = () => {
 	return (
 		<Container
 			id="home-container-c"
-			style={{
-				backgroundImage: `url(${tlo})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-			}}
+			style={{ backgroundImage: `url(${tlo})` }}
 		>
 			<div id="home-container">
 				<h1>4RDM</h1>

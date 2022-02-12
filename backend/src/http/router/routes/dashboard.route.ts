@@ -29,14 +29,15 @@ interface IUser {
 }
 
 interface IAdmin {
-	admins: [
-		{
-			nickname: string
-			avatar: string
-			id: string
-			role: AdministratorRole
-		}?
-	]
+	roles: {
+		[index: string]: [
+			{
+				nickname: string
+				avatar: string
+				id: string
+			}?
+		]
+	}
 	lastFetched: Date
 }
 
@@ -44,7 +45,7 @@ type user = null | IUser
 
 const router = Router()
 let userCache: IUserCache = {}
-let AdminCache: IAdmin = { admins: [], lastFetched: new Date(0) }
+let AdminCache: IAdmin = { roles: {}, lastFetched: new Date(0) }
 
 const userCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { username, tag, userid, email } = <any>req.session
@@ -59,16 +60,37 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 router.get("/admins", (req, res) => {
 	if (req.core.bot.isReady()) {
 		if (timeSince(AdminCache.lastFetched) > 3600) {
-			AdminCache = { admins: [], lastFetched: new Date() }
-			// prettier-ignore
-			req.core.bot.guilds.cache.get("843444305149427713")?.roles.cache.get("843444642539110400")?.members.forEach(member => { AdminCache.admins.push({ nickname: member.user.tag, id: member.user.id, avatar: member.user.displayAvatarURL({ dynamic: true, size: 1024, format: "webp" }), role: getHighestRole(member.roles.cache), }) })
-			// prettier-ignore
-			AdminCache.admins = AdminCache.admins.sort((a, b) => (b?.role.rarity || 0) - (a?.role.rarity || 0))
+			AdminCache = { roles: {}, lastFetched: new Date() }
+			/* prettier-ignore */
+			req.core.bot.guilds.cache.get("843444305149427713")?.roles.cache.get("843444642539110400")?.members.forEach(member => {
+					const role = getHighestRole(member.roles.cache)
+					/* prettier-ignore */
+					if (!AdminCache.roles[role.name]) AdminCache.roles[role.name] = []
+					AdminCache.roles[role.name].push({
+						nickname: member.user.tag,
+						id: member.user.id,
+						avatar: member.user.displayAvatarURL({
+							dynamic: true,
+							size: 1024,
+							format: "webp",
+						}),
+					})
+				})
 		}
 		res.json({
 			code: 200,
 			message: "OK",
-			admins: AdminCache,
+			admins: {
+				roles: {
+					Właściciel: AdminCache.roles["Właściciel"],
+					Zarząd: AdminCache.roles["Zarząd"],
+					"Head Admin": AdminCache.roles["Head Admin"],
+					Admin: AdminCache.roles["Admin"],
+					Moderator: AdminCache.roles["Moderator"],
+					Support: AdminCache.roles["Support"],
+					"Trial Support": AdminCache.roles["Trial Support"],
+				},
+			},
 		})
 	} else {
 		res.json({
