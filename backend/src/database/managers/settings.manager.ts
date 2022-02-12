@@ -26,7 +26,7 @@ export interface Settings {
 
 export class SettingManager {
 	private readonly core: Core
-	private readonly path = join(__dirname, "..", "..", "..", "data.json")
+	private readonly path = join(__dirname, "..", "..", "data", "data.json")
 	public settings: Settings
 
 	constructor(core: Core) {

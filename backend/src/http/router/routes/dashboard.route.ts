@@ -15,6 +15,7 @@ interface IUserCache {
 		heady?: number
 		kills?: number
 		date?: Date
+		playTime?: number
 	}
 }
 
@@ -177,6 +178,7 @@ router.get("/stats", userCheck, async (req, res) => {
 		if (response) {
 			const { discord, identifier, license, kills, deaths, heady } =
 				response
+			const { playTime } = req.core.database.playerData.getUser(license)
 			userCache[userid] = {
 				discord,
 				license,
@@ -184,6 +186,7 @@ router.get("/stats", userCheck, async (req, res) => {
 				kills,
 				deaths,
 				identifier,
+				playTime,
 				date: new Date(),
 			}
 		} else {
@@ -194,6 +197,7 @@ router.get("/stats", userCheck, async (req, res) => {
 				kills: undefined,
 				deaths: undefined,
 				identifier: undefined,
+				playTime: 0,
 				date: new Date(),
 			}
 		}

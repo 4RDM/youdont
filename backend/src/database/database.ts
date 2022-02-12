@@ -7,6 +7,7 @@ import logger from "../utils/logger"
 import config from "../config"
 import { Core } from "../"
 import { SettingManager } from "./managers/settings.manager"
+import { PlayerDataManager } from "./managers/PlayerData.manager"
 
 export default class Database {
 	public readonly donates: DonatesManager
@@ -14,6 +15,7 @@ export default class Database {
 	public readonly docs: DocsManager
 	public readonly shorts: ShortsManager
 	public readonly settings: SettingManager
+	public readonly playerData: PlayerDataManager
 
 	constructor(core: Core) {
 		// prettier-ignore
@@ -22,6 +24,7 @@ export default class Database {
 		this.docs = new DocsManager(core)
 		this.shorts = new ShortsManager(core)
 		this.settings = new SettingManager(core)
+		this.playerData = new PlayerDataManager()
 
 		mongoose
 			.connect(

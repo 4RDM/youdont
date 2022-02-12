@@ -21,6 +21,7 @@ export interface UserStats {
 	heady?: number
 	kills?: number
 	kdr?: number
+	playTime?: number
 }
 
 const Panel: FC = () => {
@@ -95,7 +96,7 @@ const Panel: FC = () => {
 								<p>Czas gry</p>
 								{
 									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>0.0h</h1>)
+									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{((stats.playTime || 0) / 60).toFixed(2)}h</h1>)
 								}
 							</div>
 							<div className="smallCard">

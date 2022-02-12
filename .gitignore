@@ -13,3 +13,4 @@ backend/dist
 **/dist/**/*.svg
 **/dist/**/*.json
 temp
+playersDB.json
