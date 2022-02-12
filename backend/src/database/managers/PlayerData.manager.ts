@@ -35,7 +35,7 @@ export class PlayerDataManager {
 
 	constructor() {
 		// prettier-ignore
-		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "PRODUCTION" ? prodPath : devPath, { encoding: 'utf-8' }).toString())
+		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: 'utf-8' }).toString())
 		this.players = json.players.map(({ license, playTime }) => ({
 			license,
 			playTime,
