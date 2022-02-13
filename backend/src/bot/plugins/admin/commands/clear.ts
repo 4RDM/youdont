@@ -1,6 +1,6 @@
-import { Embed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
-import { TextChannel } from "discord.js"
+import { Embed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
+import { TextChannel } from "discord.js";
 
 const command: Command = {
 	triggers: ["clear", "purge", "wyczysc"],
@@ -23,14 +23,14 @@ const command: Command = {
 						user: message.author,
 					}),
 				],
-			})
+			});
 
 		const messages = await message.channel.messages.fetch({
 			limit: parseInt(args[0]),
-		})
+		});
 
 		try {
-			await (<TextChannel>message.channel).bulkDelete(messages)
+			await (<TextChannel>message.channel).bulkDelete(messages);
 			message.channel.send({
 				embeds: [
 					Embed({
@@ -40,20 +40,20 @@ const command: Command = {
 						user: message.author,
 					}),
 				],
-			})
+			});
 		} catch (err) {
 			message.channel.send({
 				embeds: [
 					Embed({
 						color: "#E74C3C",
 						title: ":broom: Brooooom",
-						description: `**Wystąpił błąd podczas usuwania wiadomości**`,
+						description: "**Wystąpił błąd podczas usuwania wiadomości**",
 						user: message.author,
 					}),
 				],
-			})
+			});
 		}
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

@@ -1,5 +1,5 @@
-import { Schema, Document, model } from "mongoose"
-import { Core } from "../../"
+import { Schema, Document, model } from "mongoose";
+import { Core } from "../../";
 
 const schema = new Schema(
 	{
@@ -12,7 +12,7 @@ const schema = new Schema(
 		longDescription: String,
 	},
 	{ timestamps: true }
-)
+);
 
 export interface Donate extends Document {
 	dID: number
@@ -24,12 +24,12 @@ export interface Donate extends Document {
 	approver: string
 }
 
-const DonateModel = model<Donate>("donates", schema)
+const DonateModel = model<Donate>("donates", schema);
 
 export class DonatesManager {
-	private readonly core: Core
+	private readonly core: Core;
 
 	constructor(core: Core) {
-		this.core = core
+		this.core = core;
 	}
 }

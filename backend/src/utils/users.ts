@@ -1,4 +1,4 @@
-import { Collection, Role } from "discord.js"
+import { Collection, Role } from "discord.js";
 
 export interface AdministratorRole {
 	name: string
@@ -57,15 +57,15 @@ export const RolesObject = [
 		rarity: 1,
 		id: "843444639997886465",
 	},
-]
+];
 
 export const getHighestRole = (
 	roles: Collection<string, Role>
 ): AdministratorRole => {
-	let highest: AdministratorRole | undefined = undefined
+	let highest: AdministratorRole | undefined = undefined;
 	roles.forEach(role => {
-		const role2 = RolesObject.find(x => x?.id === role.id)
-		if (role2 && role2.rarity > (highest?.rarity || 0)) highest = role2
-	})
-	return highest || { name: "Członek", id: "", rarity: 0 }
-}
+		const role2 = RolesObject.find(x => x?.id === role.id);
+		if (role2 && role2.rarity > (highest?.rarity || 0)) highest = role2;
+	});
+	return highest || { name: "Członek", id: "", rarity: 0 };
+};

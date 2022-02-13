@@ -1,5 +1,5 @@
-import { Embed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
 
 const command: Command = {
 	triggers: ["cmd", "command"],
@@ -18,7 +18,7 @@ const command: Command = {
 						user: message.author,
 					}),
 				],
-			})
+			});
 
 		const msg = await message.channel.send({
 			embeds: [
@@ -27,7 +27,7 @@ const command: Command = {
 					user: message.author,
 				}),
 			],
-		})
+		});
 
 		client.Core.rcon.send(
 			args.join(" "),
@@ -40,7 +40,7 @@ const command: Command = {
 							user: message.author,
 						}),
 					],
-				})
+				});
 			},
 			() => {
 				msg.edit({
@@ -51,10 +51,10 @@ const command: Command = {
 							user: message.author,
 						}),
 					],
-				})
+				});
 			}
-		)
+		);
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

@@ -1,5 +1,5 @@
-import { Message, PermissionResolvable } from "discord.js"
-import { Client } from "./bot/main"
+import { Message, PermissionResolvable } from "discord.js";
+import { Client } from "./bot/main";
 
 export interface Command {
 	triggers: string[]

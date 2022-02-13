@@ -1,5 +1,5 @@
-import { Schema, Document, model } from "mongoose"
-import { Core } from "../../"
+import { Schema, Document, model } from "mongoose";
+import { Core } from "../../";
 
 const schema = new Schema(
 	{
@@ -12,7 +12,7 @@ const schema = new Schema(
 		steam: String,
 	},
 	{ timestamps: true }
-)
+);
 
 export interface Podanie extends Document {
 	author: string // id ex. 364056796932997121
@@ -25,21 +25,21 @@ export interface Podanie extends Document {
 	docID?: number
 }
 
-const DocsModel = model<Podanie>("podania", schema)
+const DocsModel = model<Podanie>("podania", schema);
 
 export class DocsManager {
-	private readonly core: Core
+	private readonly core: Core;
 
 	constructor(core: Core) {
-		this.core = core
+		this.core = core;
 	}
 
 	async get(docID: string): Promise<Podanie | null> {
-		return await DocsModel.findOne({ docID })
+		return await DocsModel.findOne({ docID });
 	}
 
 	async getAll(): Promise<Podanie[] | null> {
-		return await DocsModel.find()
+		return await DocsModel.find();
 	}
 
 	async create(doc: {
@@ -52,15 +52,15 @@ export class DocsManager {
 		steam: string
 	}): Promise<Podanie | null> {
 		const docID =
-			((await DocsModel.findOne().sort({ _id: -1 }))?.docID || 0) + 1
+			((await DocsModel.findOne().sort({ _id: -1 }))?.docID || 0) + 1;
 
 		return await DocsModel.create({
 			docID,
 			...doc,
-		})
+		});
 	}
 
 	async remove(docID: string): Promise<Podanie | null> {
-		return await DocsModel.findOneAndRemove({ docID })
+		return await DocsModel.findOneAndRemove({ docID });
 	}
 }

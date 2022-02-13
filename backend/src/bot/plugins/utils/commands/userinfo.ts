@@ -1,14 +1,14 @@
-import { Embed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
 
 const command: Command = {
 	triggers: ["userinfo", "user"],
 	description: "Sprawdź informacje na temat użytkownika",
-	async exec(client, message, args) {
-		const user = message.mentions.members?.first() || message.member
-		if (!user) return
+	async exec(client, message) {
+		const user = message.mentions.members?.first() || message.member;
+		if (!user) return;
 
-		await user.user.fetch(true)
+		await user.user.fetch(true);
 
 		const embed = Embed({
 			title: user.nickname || user.user.tag,
@@ -45,11 +45,8 @@ const command: Command = {
 				{
 					name: "Booster od",
 					value: `${
-						user.premiumSince
-							? `<t:${Math.floor(
-									(user.premiumSince.getTime() || 0) / 1000
-							  )}:R>`
-							: "`Brak`"
+						// prettier-ignore
+						user.premiumSince ? `<t:${Math.floor((user.premiumSince.getTime() || 0) / 1000)}:R>` : "`Brak`"
 					}`,
 					inline: true,
 				},
@@ -62,10 +59,10 @@ const command: Command = {
 				}) || "",
 			thumbnail: user.displayAvatarURL({ dynamic: true }),
 			user: message.author,
-		})
+		});
 
-		message.channel.send({ embeds: [embed] })
+		message.channel.send({ embeds: [embed] });
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

@@ -6,21 +6,21 @@
 */
 
 // standard nodejs socket library
-import dgram from "dgram"
-import logger from "./logger"
+import dgram from "dgram";
+import logger from "./logger";
 
 export interface config {
-	port: number
-	host: string
-	pass: string
+	port: number;
+	host: string;
+	pass: string;
 }
 
 export class RCON {
-	private config: config
-	public timeout: number = 1500
+	private config: config;
+	public timeout = 1500;
 
 	constructor(config: config) {
-		this.config = config
+		this.config = config;
 	}
 
 	async send(
@@ -28,43 +28,43 @@ export class RCON {
 		resolve?: () => void,
 		reject?: () => void
 	): Promise<void> {
-		const connection = dgram.createSocket("udp4")
+		const connection = dgram.createSocket("udp4");
 		const connBuffer = Buffer.alloc(
 			11 + this.config.pass.length + cmd.length
-		) // allocate memory
+		); // allocate memory
 
-		const pass = this.config.pass
-		const passLen = pass.length
+		const pass = this.config.pass;
+		const passLen = pass.length;
 
-		let messageout: NodeJS.Timeout, connectionout: NodeJS.Timeout
+		let messageout: NodeJS.Timeout;
 
-		connBuffer.writeUInt32LE(0xffffffff, 0)
-		connBuffer.write("rcon ", 4)
-		connBuffer.write(pass, 9, passLen)
-		connBuffer.write(" ", 9 + passLen, 1)
-		connBuffer.write(cmd, 10 + passLen, cmd.length)
-		connBuffer.write("\n", 10 + passLen + cmd.length, 1)
+		connBuffer.writeUInt32LE(0xffffffff, 0);
+		connBuffer.write("rcon ", 4);
+		connBuffer.write(pass, 9, passLen);
+		connBuffer.write(" ", 9 + passLen, 1);
+		connBuffer.write(cmd, 10 + passLen, cmd.length);
+		connBuffer.write("\n", 10 + passLen + cmd.length, 1);
 
-		connectionout = setTimeout(() => {
+		const connectionout = setTimeout(() => {
 			// connection.close()
-			logger.error("RCON Connection timeout")
-			if (reject) reject()
-		}, this.timeout)
+			logger.error("RCON Connection timeout");
+			if (reject) reject();
+		}, this.timeout);
 
 		connection.on("message", () => {
-			clearTimeout(connectionout) // stop connectiontimeout event
-			clearTimeout(messageout) // clear messageout (if there is something already)
+			clearTimeout(connectionout); // stop connectiontimeout event
+			clearTimeout(messageout); // clear messageout (if there is something already)
 
 			const resolveTimeout = setTimeout(
 				() => (resolve ? resolve() : null),
 				this.timeout + 500
-			)
+			);
 			messageout = setTimeout(() => {
-				connection.close()
-				if (reject) reject()
-				clearTimeout(resolveTimeout)
-			}, this.timeout)
-		})
+				connection.close();
+				if (reject) reject();
+				clearTimeout(resolveTimeout);
+			}, this.timeout);
+		});
 
 		connection.send(
 			connBuffer,
@@ -73,6 +73,6 @@ export class RCON {
 			this.config.port,
 			this.config.host,
 			(error: Error | null, _: number) => {}
-		)
+		);
 	}
 }

@@ -1,5 +1,5 @@
-import { Embed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
 
 const command: Command = {
 	triggers: ["help"],
@@ -7,11 +7,11 @@ const command: Command = {
 		"Sprawdź wszystkie dostępne komendy bota oraz ich zastosowanie",
 	async exec(client, message, args) {
 		if (args[0]) {
-			const command = client.CommandHandler.get(args[0])
-			const cat = client.PluginHandler.get(args[0])
+			const command = client.CommandHandler.get(args[0]);
+			const cat = client.PluginHandler.get(args[0]);
 
 			if (!command) {
-				if (!cat) return
+				if (!cat) return;
 
 				const embed = Embed({
 					title: `${cat.name} ${cat.id}`,
@@ -25,16 +25,16 @@ const command: Command = {
 						},
 					],
 					user: message.author,
-				})
+				});
 
-				message.channel.send({ embeds: [embed] })
+				message.channel.send({ embeds: [embed] });
 
-				return
+				return;
 			}
 
 			const permissions = command.permissions
 				?.map(p => `\`${p}\``)
-				.join(", ")
+				.join(", ");
 
 			const embed = Embed({
 				title: command.triggers[0],
@@ -54,9 +54,9 @@ const command: Command = {
 						}`,
 					},
 				],
-			})
+			});
 
-			message.channel.send({ embeds: [embed] })
+			message.channel.send({ embeds: [embed] });
 		} else {
 			const embed = Embed({
 				title: "Kategorie",
@@ -64,11 +64,11 @@ const command: Command = {
 					.map(p => `${p.name} (ID: ${p.id})`)
 					.join("\n")}\`\`\``,
 				user: message.author,
-			})
+			});
 
-			message.channel.send({ embeds: [embed] })
+			message.channel.send({ embeds: [embed] });
 		}
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

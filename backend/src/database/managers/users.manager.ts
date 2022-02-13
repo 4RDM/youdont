@@ -1,9 +1,9 @@
-import { Core } from "../../"
+import { Core } from "../../";
 
 export class UsersManager {
-	private readonly core: Core
+	private readonly core: Core;
 
 	constructor(core: Core) {
-		this.core = core
+		this.core = core;
 	}
 }

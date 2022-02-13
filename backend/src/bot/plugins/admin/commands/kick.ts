@@ -1,5 +1,5 @@
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
 
 const command: Command = {
 	triggers: ["kick"],
@@ -14,9 +14,9 @@ const command: Command = {
 						user: message.author,
 					}),
 				],
-			})
-		const mention = message.mentions.members?.first()
-		const reason = args.join(" ").replace(args[0], "").replace(" ", "")
+			});
+		const mention = message.mentions.members?.first();
+		const reason = args.join(" ").replace(args[0], "").replace(" ", "");
 		if (!mention)
 			return message.channel.send({
 				embeds: [
@@ -25,7 +25,7 @@ const command: Command = {
 						user: message.author,
 					}),
 				],
-			})
+			});
 		else {
 			if (!mention.kickable)
 				return message.channel.send({
@@ -35,14 +35,14 @@ const command: Command = {
 							user: message.author,
 						}),
 					],
-				})
+				});
 			if (
 				(mention.id == "594526434526101527" &&
 					message.author.id !== "364056796932997121") ||
 				(mention.id == "364056796932997121" &&
 					message.author.id !== "594526434526101527")
 			)
-				return message.react("🖕")
+				return message.react("🖕");
 			await mention
 				.kick(reason ? reason : "")
 				.then(() => {
@@ -61,7 +61,7 @@ const command: Command = {
 								user: message.author,
 							}),
 						],
-					})
+					});
 				})
 				.catch(() =>
 					message.channel.send({
@@ -72,9 +72,9 @@ const command: Command = {
 							}),
 						],
 					})
-				)
+				);
 		}
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

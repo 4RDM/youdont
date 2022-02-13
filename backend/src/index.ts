@@ -1,12 +1,12 @@
-import { Client } from "./bot/main"
-import { RCON } from "./utils/rcon"
-import Database from "./database/database"
-import HTTP from "./http/http"
-import config from "./config"
-import { Session } from "express-session"
+import { Client } from "./bot/main";
+import { RCON } from "./utils/rcon";
+import Database from "./database/database";
+import HTTP from "./http/http";
+import config from "./config";
+import { Session } from "express-session";
 
-import dotenv from "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 declare module "express-serve-static-core" {
 	interface Request {
@@ -22,15 +22,15 @@ declare module "express-serve-static-core" {
 }
 
 export class Core {
-	public httpServer: HTTP
-	public database: Database
-	public bot: Client
-	public rcon: RCON
+	public httpServer: HTTP;
+	public database: Database;
+	public bot: Client;
+	public rcon: RCON;
 
 	constructor() {
-		this.rcon = new RCON(config.rcon)
-		this.httpServer = new HTTP(this)
-		this.database = new Database(this)
+		this.rcon = new RCON(config.rcon);
+		this.httpServer = new HTTP(this);
+		this.database = new Database(this);
 		this.bot = new Client(this, {
 			intents: [
 				"DIRECT_MESSAGES",
@@ -44,8 +44,8 @@ export class Core {
 				"GUILD_BANS",
 			],
 			partials: ["CHANNEL", "GUILD_MEMBER", "USER"],
-		})
+		});
 	}
 }
 
-export default new Core()
+export default new Core();

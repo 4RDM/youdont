@@ -1,10 +1,10 @@
-import { Embed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
 
 const command: Command = {
 	triggers: ["serverinfo", "server"],
 	description: "Sprawdź informacje o serwerze",
-	async exec(client, message, args) {
+	async exec(client, message) {
 		const embed = Embed({
 			title: message.guild?.name,
 			fields: [
@@ -47,9 +47,9 @@ const command: Command = {
 			],
 			thumbnail: message.guild?.iconURL({ dynamic: true }) || "",
 			user: message.author,
-		})
-		message.channel.send({ embeds: [embed] })
+		});
+		message.channel.send({ embeds: [embed] });
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

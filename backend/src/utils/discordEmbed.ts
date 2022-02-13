@@ -1,4 +1,4 @@
-import { EmbedFieldData, HexColorString, MessageEmbed, User } from "discord.js"
+import { EmbedFieldData, HexColorString, MessageEmbed, User } from "discord.js";
 
 export interface EmbedStructure {
 	title?: string
@@ -21,22 +21,22 @@ export const Embed = ({
 	image,
 	user,
 }: EmbedStructure): MessageEmbed => {
-	const embed = new MessageEmbed()
+	const embed = new MessageEmbed();
 
-	if (title) embed.setTitle(title)
-	if (color) embed.setColor(color)
-	else embed.setColor("#fcbe03")
-	if (description) embed.setDescription(description)
-	if (fields) embed.addFields(fields)
+	if (title) embed.setTitle(title);
+	if (color) embed.setColor(color);
+	else embed.setColor("#fcbe03");
+	if (description) embed.setDescription(description);
+	if (fields) embed.addFields(fields);
 	if (footer)
 		embed
 			.setFooter({ text: `${user.tag} (${user.id})` })
-			.setTimestamp(new Date())
-	if (image) embed.setImage(image)
-	if (thumbnail) embed.setThumbnail(thumbnail)
+			.setTimestamp(new Date());
+	if (image) embed.setImage(image);
+	if (thumbnail) embed.setThumbnail(thumbnail);
 
-	return embed
-}
+	return embed;
+};
 
 export const ErrorEmbed = ({ reason, user }: { reason: string; user: User }) =>
 	Embed({
@@ -44,4 +44,4 @@ export const ErrorEmbed = ({ reason, user }: { reason: string; user: User }) =>
 		color: "#E74C3C",
 		description: `\`\`\`${reason}\`\`\``,
 		user,
-	})
+	});

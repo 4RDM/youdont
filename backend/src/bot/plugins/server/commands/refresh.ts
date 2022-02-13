@@ -1,12 +1,12 @@
-import { Embed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
 
 const command: Command = {
 	triggers: ["refresh"],
 	description: "Przeładuj uprawnienia na serwerze",
 	permissions: ["ADMINISTRATOR"],
 	role: "843444626726584370", // ZARZĄD
-	async exec(client, message, args) {
+	async exec(client, message) {
 		const msg = await message.channel.send({
 			embeds: [
 				Embed({
@@ -14,7 +14,7 @@ const command: Command = {
 					user: message.author,
 				}),
 			],
-		})
+		});
 
 		client.Core.rcon.send(
 			"exec permisje.cfg",
@@ -27,7 +27,7 @@ const command: Command = {
 							user: message.author,
 						}),
 					],
-				})
+				});
 			},
 			() => {
 				msg.edit({
@@ -38,10 +38,10 @@ const command: Command = {
 							user: message.author,
 						}),
 					],
-				})
+				});
 			}
-		)
+		);
 	},
-}
+};
 
-module.exports = command
+module.exports = command;

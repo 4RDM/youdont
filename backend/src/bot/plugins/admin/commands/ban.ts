@@ -1,5 +1,6 @@
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed"
-import { Command } from "../../../../types"
+import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Command } from "../../../../types";
+import { GuildMember, User } from "discord.js";
 
 const command: Command = {
 	triggers: ["ban"],
@@ -14,9 +15,9 @@ const command: Command = {
 						user: message.author,
 					}),
 				],
-			})
-		const mention = message.mentions.members?.first()
-		const reason = args.join(" ").replace(args[0], "").replace(" ", "")
+			});
+		const mention = message.mentions.members?.first();
+		const reason = args.join(" ").replace(args[0], "").replace(" ", "");
 		if (!mention) {
 			if (
 				(args[0] == "594526434526101527" &&
@@ -24,17 +25,17 @@ const command: Command = {
 				(args[0] == "364056796932997121" &&
 					message.author.id !== "594526434526101527")
 			)
-				return message.react("🖕")
+				return message.react("🖕");
 			await message.guild?.members
 				.ban(args[0], { reason: reason ? reason : "", days: 7 })
-				.then((user: any) => {
+				.then((user: User | string | GuildMember) => {
 					message.channel.send({
 						embeds: [
 							Embed({
 								title: ":hammer: Banhammer",
 								color: "#1F8B4C",
 								description: `Zbanowany: \`${
-									user.username || user.id || user
+									typeof user !== "string" ? user.id : user
 								}\` (\`${args[0]}\`)\nModerator: \`${
 									message.author.tag
 								}\` (\`${message.author.id}\`)\nPowód: \`${
@@ -43,7 +44,7 @@ const command: Command = {
 								user: message.author,
 							}),
 						],
-					})
+					});
 				})
 				.catch(() =>
 					message.channel.send({
@@ -54,8 +55,8 @@ const command: Command = {
 							}),
 						],
 					})
-				)
-			return
+				);
+			return;
 		} else {
 			if (!mention.bannable)
 				return message.channel.send({
@@ -65,14 +66,14 @@ const command: Command = {
 							user: message.author,
 						}),
 					],
-				})
+				});
 			if (
 				(mention.id == "594526434526101527" &&
 					message.author.id !== "364056796932997121") ||
 				(mention.id == "364056796932997121" &&
 					message.author.id !== "594526434526101527")
 			)
-				return message.react("🖕")
+				return message.react("🖕");
 			await mention
 				.ban({ reason: reason ? reason : "", days: 7 })
 				.then(() => {
@@ -91,7 +92,7 @@ const command: Command = {
 								user: message.author,
 							}),
 						],
-					})
+					});
 				})
 				.catch(() =>
 					message.channel.send({
@@ -102,9 +103,9 @@ const command: Command = {
 							}),
 						],
 					})
-				)
+				);
 		}
 	},
-}
+};
 
-module.exports = command
+module.exports = command;
