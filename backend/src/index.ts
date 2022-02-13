@@ -6,18 +6,19 @@ import config from "./config";
 import { Session } from "express-session";
 
 import dotenv from "dotenv";
+import { Intents } from "discord.js";
 dotenv.config();
 
 declare module "express-serve-static-core" {
 	interface Request {
-		core: Core
+		core: Core;
 		session: Session & {
-			username?: string
-			userid?: string
-			tag?: string
-			email?: string
-			avatar?: string
-		}
+			username?: string;
+			userid?: string;
+			tag?: string;
+			email?: string;
+			avatar?: string;
+		};
 	}
 }
 
@@ -33,17 +34,17 @@ export class Core {
 		this.database = new Database(this);
 		this.bot = new Client(this, {
 			intents: [
-				"DIRECT_MESSAGES",
-				"GUILDS",
-				"GUILD_MEMBERS",
-				"GUILD_MESSAGE_REACTIONS",
-				"GUILD_MESSAGES",
-				"DIRECT_MESSAGE_REACTIONS",
-				"GUILD_PRESENCES",
-				"GUILD_WEBHOOKS",
-				"GUILD_BANS",
+				Intents.FLAGS.GUILDS,
+				Intents.FLAGS.GUILD_MEMBERS,
+				Intents.FLAGS.GUILD_MESSAGES,
+				Intents.FLAGS.DIRECT_MESSAGES,
+				Intents.FLAGS.GUILD_VOICE_STATES,
+				Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
 			],
 			partials: ["CHANNEL", "GUILD_MEMBER", "USER"],
+			presence: {
+				status: "idle",
+			},
 		});
 	}
 }

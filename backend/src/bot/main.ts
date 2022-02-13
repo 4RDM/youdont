@@ -100,31 +100,19 @@ export class Client extends Cl {
 		this.on("messageReactionAdd", async (reaction, user) => {
 			if (!reaction.message.guild) return;
 
-			if (
-				reaction.message.channelId ==
-					core.database.settings.settings.verificationChannel &&
-				reaction.emoji.name == "❤️"
-			) {
-				const userReactions = reaction.message.reactions.cache.filter(
-					reaction => reaction.users.cache.has(user.id)
-				);
+			// prettier-ignore
+			if (reaction.message.channelId == core.database.settings.settings.verificationChannel && reaction.emoji.name == "❤️") {
+				// prettier-ignore
+				const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
 				for (const reaction of userReactions.values()) {
 					await reaction.users.remove(user.id);
 				}
 
-				if (!captcha)
-					reaction.message.guild.members.cache
-						.get(user.id)
-						?.roles.add(verificationRole);
+				// prettier-ignore
+				if (!captcha) reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole);
 				else {
 					const code = await generateCaptcha(user.id);
-					const captchaFile = join(
-						__dirname,
-						"..",
-						"..",
-						"images",
-						`${user.id}.captcha.jpg`
-					);
+					const captchaFile = join(__dirname, "..", "..", "images", `${user.id}.captcha.jpg`);
 					user.send({
 						embeds: [
 							new MessageEmbed()
@@ -173,7 +161,8 @@ export class Client extends Cl {
 		this.on("messageCreate", message => {
 			if (message.author.bot) return;
 
-			if (!message.content.startsWith(config.discord.prefix)) {
+			// prettier-ignore
+			if (!message.content.startsWith(config.discord.prefix) && message.guild) {
 				checkMessage(message.content).then(s => {
 					if (s) {
 						message.channel.send(
@@ -205,7 +194,17 @@ export class Client extends Cl {
 					else message.react("❌");
 				}
 			} else {
-				/* handle dms */
+				const content = message.content.split("\n");
+				message.channel.send({
+					embeds: [
+						Embed({
+							// prettier-ignore
+							description: `${content.map((x: string) => `> ${x}`).join("\n")}\n\nNie mogę zrozumieć co chcesz mi przekazać! Spróbuj \`help\` aby uzyskać dostępne polecenia!`,
+							color: "#f54242",
+							user: message.author,
+						}),
+					],
+				});
 			}
 		});
 
