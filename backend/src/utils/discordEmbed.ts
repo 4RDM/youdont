@@ -1,4 +1,4 @@
-import { EmbedFieldData, HexColorString, MessageEmbed, User } from "discord.js";
+import { EmbedFieldData, HexColorString, Message, MessageEmbed, User } from "discord.js";
 
 export interface EmbedStructure {
 	title?: string
@@ -38,10 +38,10 @@ export const Embed = ({
 	return embed;
 };
 
-export const ErrorEmbed = ({ reason, user }: { reason: string; user: User }) =>
+export const ErrorEmbed = (message: Message, reason: string) =>
 	Embed({
-		title: "Błąd polecenia",
-		color: "#E74C3C",
-		description: `\`\`\`${reason}\`\`\``,
-		user,
+		title: "Błąd",
+		description: `${message.content.split("\n").map((x: string) => `> ${x}`).join("\n")}\n\n**${reason}**`,
+		color: "#f54242",
+		user: message.author,
 	});

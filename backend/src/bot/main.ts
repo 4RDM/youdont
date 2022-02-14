@@ -53,41 +53,31 @@ export class Client extends Cl {
 		let hit = 0; // members joined counter
 		let captchaTimeout = setTimeout(() => {}, 0); // timeout to wait
 		let captcha = false;
-		const verificationRole =
-			core.database.settings.settings.verificationRole;
+		const verificationRole = core.database.settings.settings.verificationRole;
 
 		// TODO: przenieść eventy do handlera
 		this.on("ready", async () => {
 			logger.ready("Bot is ready!");
 
-			const channelID =
-				core.database.settings.settings.verificationChannel;
-
+			const channelID = core.database.settings.settings.verificationChannel;
 			const channel = await this.channels.fetch(channelID);
 			logger.warn(`Cached verification channel: ${channelID}`);
 
 			if (channel?.isText()) {
 				const lastMessage = await channel.messages.fetch();
-				logger.warn(
-					`Cached last message on verification channel: ${
-						lastMessage.last()?.id
-					}`
-				);
+				logger.warn(`Cached last message on verification channel: ${lastMessage.last()?.id}`);
 			}
 		});
 
 		this.on("guildMemberAdd", () => {
 			clearTimeout(captchaTimeout);
 
-			captchaTimeout = setTimeout(() => {
-				hit = 0;
-			}, 12000);
+			captchaTimeout = setTimeout(() => { hit = 0; }, 12000);
 
 			// 6 members
 			if (hit >= 5 && !captcha) {
 				const channel = this.channels.cache.get("937813027007385630");
 
-				// prettier-ignore
 				if (channel?.isText() && !captcha) channel.send({ embeds: [Embed({ title: "Automoderator", color: "#E74C3C", description: "Wykryto potencjalne zagrożenie raidem, captcha uruchomiona", user: <User>this.user })] });
 
 				captcha = true;
@@ -100,15 +90,12 @@ export class Client extends Cl {
 		this.on("messageReactionAdd", async (reaction, user) => {
 			if (!reaction.message.guild) return;
 
-			// prettier-ignore
 			if (reaction.message.channelId == core.database.settings.settings.verificationChannel && reaction.emoji.name == "❤️") {
-				// prettier-ignore
 				const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
 				for (const reaction of userReactions.values()) {
 					await reaction.users.remove(user.id);
 				}
 
-				// prettier-ignore
 				if (!captcha) reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole);
 				else {
 					const code = await generateCaptcha(user.id);
@@ -118,42 +105,26 @@ export class Client extends Cl {
 							new MessageEmbed()
 								.setTitle("Captcha")
 								.setColor("#0091ff")
-								.setDescription(
-									"Captcha jest uruchomiona, aby kontynuować przepisz kod z obrazka poniżej w nowej wiadomości."
-								)
-								.setImage(
-									`attachment://${user.id}.captcha.jpg`
-								),
+								.setDescription("Captcha jest uruchomiona, aby kontynuować przepisz kod z obrazka poniżej w nowej wiadomości.")
+								.setImage(`attachment://${user.id}.captcha.jpg`),
 						],
 						files: [captchaFile],
-					})
-						.then(async message => {
-							await message.channel
-								.awaitMessages({
-									filter: collected =>
-										collected.author.id === user.id,
-									max: 1,
-									time: 15000,
-								})
-								.then(collection => {
-									if (collection.first()?.content == code) {
-										reaction.message.guild?.members.cache
-											.get(user.id)
-											?.roles.add(verificationRole);
-										user.send("Zweryfikowano pomyślnie!");
-									}
-								})
-								.catch(() => {
-									user.send("Czas na weryfikację minął");
-								});
-							unlinkSync(captchaFile);
-						})
-						.catch(() => {
-							logger.error(
-								`Cannot send message to ${user.id} (${user.tag})`
-							);
-							unlinkSync(captchaFile);
-						});
+					}).then(async message => {
+						await message.channel.awaitMessages({
+							filter: collected => collected.author.id === user.id,
+							max: 1,
+							time: 15000,
+						}).then(collection => {
+							if (collection.first()?.content == code) {
+								reaction.message.guild?.members.cache.get(user.id)?.roles.add(verificationRole);
+								user.send("Zweryfikowano pomyślnie!");
+							}
+						}).catch(() => user.send("Czas na weryfikację minął"));
+						unlinkSync(captchaFile);
+					}).catch(() => {
+						logger.error(`Cannot send message to ${user.id} (${user.tag})`);
+						unlinkSync(captchaFile);
+					});
 				}
 			}
 		});
@@ -161,36 +132,21 @@ export class Client extends Cl {
 		this.on("messageCreate", message => {
 			if (message.author.bot) return;
 
-			// prettier-ignore
+			core.database.users.createIfNotExists(message.author.id);
+
 			if (!message.content.startsWith(config.discord.prefix) && message.guild) {
 				checkMessage(message.content).then(s => {
-					if (s) {
-						message.channel.send(
-							"wth bro, what is this shit? are you crazy?"
-						);
-					}
+					if (s) message.channel.send("wth bro, what is this shit? are you crazy?");
 				});
-				wordlist.forEach(word => {
-					if (isSimilar(message.content, word.msg)) {
-						message.reply(word.res);
-						return;
-					}
-				});
+				wordlist.forEach(word => (isSimilar(message.content, word.msg)) && message.reply(word.res));
 				return;
 			}
 
 			if (message.guild) {
-				const [commandName, ...args] = message.content
-					.slice(config.discord.prefix.length)
-					.split(/ +/g);
+				const [commandName, ...args] = message.content.slice(config.discord.prefix.length).split(/ +/g);
 				const command = this.CommandHandler.get(commandName);
-
 				if (command) {
-					// prettier-ignore
-					if (
-						(command.role && message.member?.roles.cache.has(command.role)) ||
-						message.member?.permissions.has(command.permissions || [])
-					) command.exec(this, message, args);
+					if ((command.role && message.member?.roles.cache.has(command.role)) || message.member?.permissions.has(command.permissions || [])) command.exec(this, message, args);
 					else message.react("❌");
 				}
 			} else {
@@ -198,7 +154,6 @@ export class Client extends Cl {
 				message.channel.send({
 					embeds: [
 						Embed({
-							// prettier-ignore
 							description: `${content.map((x: string) => `> ${x}`).join("\n")}\n\nNie mogę zrozumieć co chcesz mi przekazać! Spróbuj \`help\` aby uzyskać dostępne polecenia!`,
 							color: "#f54242",
 							user: message.author,

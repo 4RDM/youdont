@@ -1,4 +1,4 @@
-import { Embed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { Command } from "../../../../types";
 
 const command: Command = {
@@ -16,8 +16,7 @@ const command: Command = {
 			],
 		});
 
-		client.Core.rcon.send(
-			"exec permisje.cfg",
+		client.Core.rcon.send("exec permisje.cfg",
 			() => {
 				msg.edit({
 					embeds: [
@@ -28,17 +27,8 @@ const command: Command = {
 						}),
 					],
 				});
-			},
-			() => {
-				msg.edit({
-					embeds: [
-						Embed({
-							color: "#E74C3C",
-							description: "**Wystąpił błąd!**",
-							user: message.author,
-						}),
-					],
-				});
+			}, () => {
+				msg.edit({ embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")] });
 			}
 		);
 	},

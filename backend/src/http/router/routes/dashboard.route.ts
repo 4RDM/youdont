@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import FormData from "form-data";
 import fetch from "node-fetch";
-import mariadb from "mariadb";
 import config from "../../../config";
 import timeSince from "../../../utils/timeSince";
 import { getHighestRole } from "../../../utils/users";
@@ -19,15 +18,6 @@ interface IUserCache {
 	};
 }
 
-interface IUser {
-	identifier: string;
-	license: string;
-	discord: string;
-	deaths: number;
-	heady: number;
-	kills: number;
-}
-
 interface IAdmin {
 	roles: {
 		[index: string]: [
@@ -40,8 +30,6 @@ interface IAdmin {
 	};
 	lastFetched: Date;
 }
-
-type user = null | IUser;
 
 const router = Router();
 const userCache: IUserCache = {};
@@ -183,19 +171,7 @@ router.get("/stats", userCheck, async (req, res) => {
 	if (!userid) return;
 
 	if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
-		const connection = await mariadb.createConnection({
-			host: config.mysql.host,
-			user: config.mysql.user,
-			password: config.mysql.password,
-			database: "rdm",
-			allowPublicKeyRetrieval: true,
-		});
-
-		const response: user = (
-			await connection.query(
-				`SELECT * FROM kdr WHERE \`discord\` = '${userid}'`
-			)
-		)[0];
+		const response = await req.core.database.users.getUserFromServer(userid);
 
 		if (response) {
 			const { discord, identifier, license, kills, deaths, heady } =

@@ -1,4 +1,4 @@
-import { Embed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { Command } from "../../../../types";
 
 const command: Command = {
@@ -9,15 +9,7 @@ const command: Command = {
 	async exec(client, message, args) {
 		if (!args[0])
 			return message.channel.send({
-				embeds: [
-					Embed({
-						color: "#E74C3C",
-						title: "Błąd składni polecenia",
-						description:
-							"```Brakuje parametru 'ID',\nPrawidłowe użycie: .unban id-bana```",
-						user: message.author,
-					}),
-				],
+				embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.unban <id-bana>`")],
 			});
 
 		const msg = await message.channel.send({
@@ -29,8 +21,7 @@ const command: Command = {
 			],
 		});
 
-		client.Core.rcon.send(
-			args.join(`unban ${args[0]}`),
+		client.Core.rcon.send(args.join(`unban ${parseInt(args[0])}`),
 			() => {
 				msg.edit({
 					embeds: [
@@ -41,16 +32,9 @@ const command: Command = {
 						}),
 					],
 				});
-			},
-			() => {
+			}, () => {
 				msg.edit({
-					embeds: [
-						Embed({
-							color: "#E74C3C",
-							description: "**Wystąpił błąd!**",
-							user: message.author,
-						}),
-					],
+					embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 				});
 			}
 		);

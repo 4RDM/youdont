@@ -1,4 +1,4 @@
-import { Embed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { Command } from "../../../../types";
 import { TextChannel } from "discord.js";
 
@@ -7,22 +7,9 @@ const command: Command = {
 	description: "Usuwa określoną ilość wiadomości",
 	permissions: ["MANAGE_MESSAGES"],
 	async exec(client, message, args) {
-		if (
-			!args[0] ||
-			isNaN(parseInt(args[0])) ||
-			parseInt(args[0]) > 100 ||
-			parseInt(args[0]) < 0
-		)
+		if (!args[0] || isNaN(parseInt(args[0])) || parseInt(args[0]) > 100 || parseInt(args[0]) < 0)
 			return message.channel.send({
-				embeds: [
-					Embed({
-						color: "#E74C3C",
-						title: "Błąd składni polecenia",
-						description:
-							"```Brakuje parametru 'ilosc (0>number<100)',\nPrawidłowe użycie: .clear ilosc-wiadomosci```",
-						user: message.author,
-					}),
-				],
+				embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.clear <ilosc-wiadomosci>`")],
 			});
 
 		const messages = await message.channel.messages.fetch({

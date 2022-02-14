@@ -20,7 +20,7 @@ export default class Database {
 	constructor(core: Core) {
 		// prettier-ignore
 		this.donates = new DonatesManager(core);
-		this.users = new UsersManager(core);
+		this.users = new UsersManager();
 		this.docs = new DocsManager(core);
 		this.shorts = new ShortsManager(core);
 		this.settings = new SettingManager(core);

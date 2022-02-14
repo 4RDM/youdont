@@ -6,10 +6,7 @@ const command: Command = {
 	permissions: ["ADMINISTRATOR"],
 	async exec(client, message) {
 		message.channel
-			.send({
-				content:
-					"Zweryfikuj się naciskając emoji pod wiadomością! Weryfikując się akceptujesz <#843484880116514830>",
-			})
+			.send({ content: "Zweryfikuj się naciskając emoji pod wiadomością! Weryfikując się akceptujesz <#843484880116514830>" })
 			.then(msg => msg.react("❤️"));
 	},
 };
