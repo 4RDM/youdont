@@ -9,6 +9,8 @@ const cytaty = [
 	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2021',
 	'"Revert "dzbam"" ~ Nimplex 2021',
 	'"nie dla psa kiebłasa" ~ Kubamaz 2021',
+	'"ty no kurwa majster" ~ DemonS 2021',
+	'"KURWA ODDAJ MI MOJE RANGI" ~ Helix 2021',
 	'"/nimplexma2zakola" ~ Nimplex 2021',
 	'"ja z pc lece" ~ Kubamaz 2022',
 	'"ty no słuchaj no" ~ Helix 2022',
