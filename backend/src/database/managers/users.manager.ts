@@ -1,7 +1,6 @@
 import mariadb from "mariadb";
 import config from "../../config";
-import { model, Schema } from "mongoose";
-import { Donate } from "./donates.manager";
+import { model, Schema, Document } from "mongoose";
 
 type DBUser = null | IUser;
 interface IUser {
@@ -21,9 +20,17 @@ interface User {
 	donates: any
 }
 
-const UserModel = model<User>("users", new Schema<User>(
+interface UUser extends Document {
+	userID: string
+	role: string
+	total: number
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	donates: any
+}
+
+const UserModel = model<UUser>("users", new Schema<UUser>(
 	{
-		userID: { type: String, required: true , unique: true },
+		userID: { type: String, required: true, unique: true },
 		role: { type: String, required: true },
 		total: { type: Number, required: true },
 		donates: { type: Array, required: true }
@@ -31,35 +38,25 @@ const UserModel = model<User>("users", new Schema<User>(
 ));
 
 export class UsersManager {
-	async get(userID: string): Promise<User | null> {
-		return await UserModel.findOne({ userID });
+	async get(userID: string): Promise<UUser | null> {
+		const user = await UserModel.findOne({ userID });
+		return user;
 	}
 
-	async create(userID: string): Promise<User> {
+	async create(userID: string): Promise<UUser> {
 		const document = new UserModel({ userID, total: 0, role: "Członek", donates: {} });
 		await document.save();
 
 		return document;
 	}
 
-	async createIfNotExists(userID: string): Promise<User> {
+	async createIfNotExists(userID: string): Promise<UUser> {
 		let user = await this.get(userID);
 
 		if (user) return user;
 		else user = await this.create(userID);
 
 		return user;
-	}
-
-	async addDonate(userID: string, donate: Donate) {
-		const document = await UserModel.findOne({ userID });
-		const donates = { ...document?.donates };
-
-		donates[donates.length + 1] = donate.amount;
-
-		UserModel.findOneAndUpdate({ userID }, {
-			donates
-		});
 	}
 
 	async getUserFromServer(discord: string): Promise<DBUser | null> {

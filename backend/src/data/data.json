@@ -10,5 +10,6 @@
 	],
 	"verificationChannel": "933461070952153148",
 	"verificationRole": "933462247295041630",
+	"donateWebhook": "https://discord.com/api/webhooks/843514904807866388/V2bbqTjO7BkEz8x6JIHXt-gIXkfGyx0-DFBl2tE8xvMd9qVOQucAYxGHtO4xUoI96zhb",
 	"docsOpen": false
 }

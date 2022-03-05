@@ -22,6 +22,7 @@ export interface Settings {
 	docsOpen: boolean
 	verificationChannel: string
 	verificationRole: string
+	donateWebhook: string
 }
 
 export class SettingManager {

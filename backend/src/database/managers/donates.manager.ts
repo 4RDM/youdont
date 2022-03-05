@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
 import { Core } from "../../";
+import logger from "../../utils/logger";
+
 export interface Donate {
 	dID?: number;
 	amount?: number;
@@ -40,16 +42,22 @@ export class DonatesManager {
 		const document = new DonateModel({ userID, amount: 0, type, timestamp, approved: false, approver: "", dID: newID });
 		await document.save();
 
-		await this.core.database.users.addDonate(userID, document);
+		const user = await this.core.database.users.get(userID);
+		if (!user) logger.error("Cannot fetch (src/database/managers/donates.managers.ts)");
+		else {
+			const donates = user.donates;
+			donates.push(document.dID);
+			await user.updateOne({ donates });
+			await user.save();
+		}
 
 		return document;
 	}
 
 	async approve(donateID: number, approver: string, amount: string): Promise<Donate | null> {
 		const document =  await DonateModel.findOneAndUpdate({ dID: donateID }, { approved: true, approver, amount });
-
-		document?.save();
-
+		await document?.save();
+		
 		return document;
 	}
 }
