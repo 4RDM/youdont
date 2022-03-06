@@ -1,6 +1,7 @@
 import mariadb from "mariadb";
 import config from "../../config";
 import { model, Schema, Document } from "mongoose";
+import { Donate } from "./donates.manager";
 
 type DBUser = null | IUser;
 interface IUser {
@@ -40,6 +41,14 @@ const UserModel = model<UUser>("users", new Schema<UUser>(
 export class UsersManager {
 	async get(userID: string): Promise<UUser | null> {
 		const user = await UserModel.findOne({ userID });
+		return user;
+	}
+
+	async approve(userID: string, donate: Donate): Promise<UUser | null> {
+		let user = await UserModel.findOne({ userID });
+		if (!user) return null;
+		user = await UserModel.findOneAndUpdate({ userID }, { total: user.total + (donate.amount || 0 ) }).exec();
+		user = await UserModel.findOne({ userID });
 		return user;
 	}
 

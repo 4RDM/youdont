@@ -15,7 +15,9 @@ const command: Command = {
 		const donate = await client.Core.database.donates.get(parseInt(args[0]));
 
 		if (donate && donate.dID && !donate.approved) {
-			await client.Core.database.donates.approve(donate.dID, message.author.tag, args[1]);
+			const don = await client.Core.database.donates.approve(donate.dID, message.author.tag, args[1]);
+
+			if (!don) return;
 
 			message.channel.send({
 				embeds: [Embed({
@@ -27,23 +29,21 @@ const command: Command = {
 			});
 
 			const dmUser = await client.users.createDM(donate.userID);
-			const dbUser = await client.Core.database.users.get(donate.userID); 
+			const dbUser = await client.Core.database.users.approve(donate.userID, don); 
 			const user = await client.users.fetch(dbUser?.userID || "");
 			const webhook =  new WebhookClient({ url: client.Core.database.settings.settings.donateWebhook });
-
-			console.log(dbUser);
-
-			// webhook.send({
-			// 	embeds: [
-			// 		Embed({
-			// 			title: "Nowa dotacja",
-			// 			description: `Dziękujemy **${user.tag}** za wpłatę \`${parseInt(args[1])}zł\` na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/article-wplata-na-serwer))`,
-			// 			thumbnail: user.displayAvatarURL(),
-			// 			color: "#ffffff",
-			// 			user: <User>client.user 
-			// 		})
-			// 	]
-			// });
+			
+			webhook.send({
+				embeds: [
+					Embed({
+						title: "Nowa dotacja",
+						description: `Dziękujemy **${user.tag}** za wpłatę \`${parseInt(args[1])}zł\` na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/article-wplata-na-serwer))`,
+						thumbnail: user.displayAvatarURL(),
+						color: "#ffffff",
+						user: <User>client.user 
+					})
+				]
+			});
 
 			dmUser.send({
 				embeds: [

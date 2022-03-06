@@ -22,8 +22,9 @@ export const checkMessage = async (message: string): Promise<boolean> => {
 
 			// prettier-ignore
 			const detectionResults = await fetch(`${baseURL}/${resultsJson.data?.id?.split("-")[1]}`, { headers: { "x-apikey": virustotal } });
-			const detecionJson = await detectionResults.json();
-			const detecions = detecionJson.data.attributes.last_analysis_results;
+			const detectionJson = await detectionResults.json();
+			if (!detectionJson) return false;
+			const detecions = detectionJson.data.attributes.last_analysis_results;
 
 			// prettier-ignore
 			const malwareOp = Object.keys(detecions).map(key => detecions[key]).map(x => check(x)).filter(x => x == true);

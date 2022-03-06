@@ -55,9 +55,11 @@ export class DonatesManager {
 	}
 
 	async approve(donateID: number, approver: string, amount: string): Promise<Donate | null> {
-		const document =  await DonateModel.findOneAndUpdate({ dID: donateID }, { approved: true, approver, amount });
+		let document = await DonateModel.findOneAndUpdate({ dID: donateID }, { approved: true, approver, amount: parseInt(amount) });
 		await document?.save();
 		
+		document = await DonateModel.findOne({ dID: donateID });
+
 		return document;
 	}
 }
