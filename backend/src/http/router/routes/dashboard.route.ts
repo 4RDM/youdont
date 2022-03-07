@@ -145,12 +145,13 @@ router.get("/reply", (req, res) => {
 // prettier-ignore
 router.get("/logout", userCheck, (req, res) => req.session.destroy(() => res.redirect("/")));
 
-router.get("/session", userCheck, (req, res) => {
+router.get("/session", userCheck, async (req, res) => {
 	const { userid, tag, username, email, avatar } = req.session;
 
 	if (!userid) return;
-	const permissions =
-		req.core.database.settings.getUser(userid)?.permissions || [];
+	const permissions = req.core.database.settings.getUser(userid)?.permissions || [];
+
+	const role = (await req.core.database.users.get(userid))?.role;
 
 	res.json({
 		code: 200,
@@ -161,6 +162,7 @@ router.get("/session", userCheck, (req, res) => {
 			username,
 			email,
 			avatar,
+			role: role || "Członek",
 		},
 		permissions,
 	});

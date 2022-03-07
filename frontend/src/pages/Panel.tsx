@@ -91,52 +91,31 @@ const Panel: FC = () => {
 						<div className="profile-grid">
 							<div className="smallCard">
 								<p>Czas gry</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{((stats.playTime || 0) / 60).toFixed(2)}h</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{((stats.playTime || 0) / 60).toFixed(2)}h</h1>) }
 							</div>
 							<div className="smallCard">
 								<p>Kille</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.kills || 0}</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.kills || 0}</h1>) }
 							</div>
 							<div className="smallCard">
 								<p>Śmierci</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.deaths || 0}</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.deaths || 0}</h1>) }
 							</div>
 							<div className="smallCard">
 								<p>Heady</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.heady || 0}</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.heady || 0}</h1>) }
 							</div>
 							<div className="smallCard">
 								<p>K/D</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.kdr?.toFixed(2)}</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.kdr?.toFixed(2)}</h1>) }
 							</div>
 							<div className="smallCard">
 								<p>Steam HEX</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.identifier || 'Nie wykryto'}</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{stats.identifier || 'Nie wykryto'}</h1>) }
 							</div>
 							<div className="smallCard">
 								<p>Ranga</p>
-								{
-									/* prettier-ignore */
-									loadingStats ? (<PL color="white" size="12px" />) : (<h1>Partner+</h1>)
-								}
+								{ loadingStats ? (<PL color="white" size="12px" />) : (<h1>{context.user.role}</h1>) }
 							</div>
 						</div>
 						<div id="profile-podania">
