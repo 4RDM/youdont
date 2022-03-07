@@ -5,6 +5,7 @@ import logger from "../../../utils/logger";
 import config from "../../../config";
 import timeSince from "../../../utils/timeSince";
 import { getHighestRole } from "../../../utils/users";
+import { GuildMember, User } from "discord.js";
 
 interface IUserCache {
 	[index: string]: {
@@ -50,11 +51,43 @@ router.get("/admins", async (req, res) => {
 	if (req.core.bot.isReady()) {
 		if (timeSince(AdminCache.lastFetched) > 3600) {
 			AdminCache = { roles: {}, lastFetched: new Date() };
-			const guild = await req.core.bot.guilds.cache.get("843444305149427713")?.fetch();
-			const role = await guild?.roles.fetch("843444642539110400", { force: true, cache: true });
-			if (!role) return;
 
-			role.members.forEach(member => {
+			const members: GuildMember[] = [];
+
+			[
+				"913946327254183947", // yenn
+				"932638518449172520", // Wedel
+				"530495771074887701", // Shinra
+				"735152195993075722", // PUDZIAN
+				"565156308429570070", // PABLITO
+				"364056796932997121", // NIMPLEX
+				"423865728463273984", // LUCKY
+				"451050486712369163", // LAMA
+				"799596081549279253", // Klaudyna
+				"598148434863849506", // KapitanKuba
+				"413295283322093570", // Kaliberek
+				"482576133322178570", // Kaktus_X
+				"850067911237697547", // KAJO111
+				"594526434526101527", // K3IX
+				"528212334670249996", // IGI
+				"725095334279381073", // Hydrant
+				"427240221197729792", // Helix_
+				"530438225026613248", // Donki Kong
+				"913847104747761765", // DejvideK
+				"737250240763265064", // DamianJakisTam
+				"650715268976476200", // Chubby
+				"497854466427715615", // Black_Dog
+				"828550270455250945", // Betkal
+				"688094519652253739", // Bambix
+				"420220391823245314", // Adrianito
+				"919162480700301323", // .exe
+			].forEach(async (member) => {
+				const mem = await req.core.bot.guilds.cache.get("843444305149427713")?.members.fetch(member);
+				if (!mem) return;
+				members.push(mem);
+			});
+
+			members.forEach(member => {
 				const role = getHighestRole(member.roles.cache);
 				/* prettier-ignore */
 				if (!AdminCache.roles[role.name]) AdminCache.roles[role.name] = [];
