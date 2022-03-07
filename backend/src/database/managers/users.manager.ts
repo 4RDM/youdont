@@ -83,6 +83,8 @@ export class UsersManager {
 			)
 		)[0];
 
+		connection.end();
+
 		return response;
 	}
 }
