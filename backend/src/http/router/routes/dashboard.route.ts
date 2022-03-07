@@ -50,9 +50,11 @@ router.get("/admins", async (req, res) => {
 	if (req.core.bot.isReady()) {
 		if (timeSince(AdminCache.lastFetched) > 3600) {
 			AdminCache = { roles: {}, lastFetched: new Date() };
-			await req.core.bot.guilds.cache.get("843444305149427713")?.fetch();
-			await req.core.bot.guilds.cache.get("843444305149427713")?.roles.fetch("843444642539110400");
-			req.core.bot.guilds.cache.get("843444305149427713")?.roles.cache.get("843444642539110400")?.members.forEach(member => {
+			const guild = await req.core.bot.guilds.cache.get("843444305149427713")?.fetch();
+			const role = await guild?.roles.fetch("843444642539110400", { force: true, cache: true });
+			if (!role) return;
+
+			role.members.forEach(member => {
 				const role = getHighestRole(member.roles.cache);
 				/* prettier-ignore */
 				if (!AdminCache.roles[role.name]) AdminCache.roles[role.name] = [];
