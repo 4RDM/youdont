@@ -7,7 +7,7 @@
 		"serv": "set NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server",
 		"build": "set NODE_OPTIONS=--openssl-legacy-provider && set NODE_ENV=development && webpack --config ./webpack.dev.config.js",
 		"prod": "set NODE_OPTIONS=--openssl-legacy-provider && set NODE_ENV=production && webpack --config ./webpack.production.config.js",
-		"prod-linux": "exports NODE_OPTIONS=--openssl-legacy-provider && exports NODE_ENV=production && webpack --config ./webpack.production.config.js"
+		"prod-linux": "export NODE_OPTIONS=--openssl-legacy-provider && export NODE_ENV=production && webpack --config ./webpack.production.config.js"
 	},
 	"keywords": [],
 	"author": "",
