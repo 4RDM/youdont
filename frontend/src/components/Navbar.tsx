@@ -15,7 +15,7 @@ const Navbar: FC = (props) => {
 				<Link to="/articles">Artykuły</Link>
 				{context?.user == null ?
 					<a href="/api/dashboard/login">Logowanie</a> :
-					location.pathname == "/panel" ? <a href="/api/dashboard/logout"></a> :
+					location.pathname == "/panel" ? <a href="/api/dashboard/logout">Wyloguj Się</a> :
 						<Link to="/panel">Panel użytkownika</Link>
 				}
 			</div>

@@ -87,9 +87,6 @@ const Panel: FC = () => {
 						</div>
 					</div>
 					<div id="profile-details">
-						{context?.permissions.includes('ADMINISTRATOR') ? (
-							<h1>Helloworld</h1>
-						) : null}
 						<h1>Statystyki</h1>
 						<div className="profile-grid">
 							<div className="smallCard">
