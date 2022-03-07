@@ -1,14 +1,10 @@
 import React, { FC, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { UserContext } from '../utils/UserContext'
 
 const Navbar: FC = (props) => {
 	const context = useContext(UserContext)?.data
-	let button
-
-	if (context?.user == null)
-		button = <a href="/api/dashboard/login">Logowanie</a>
-	else button = <a href="/api/dashboard/logout">Wyloguj się</a>
+	const location = useLocation()
 
 	return (
 		<div id="navbar">
@@ -17,7 +13,11 @@ const Navbar: FC = (props) => {
 				<Link to="/">Strona głowna</Link>
 				<Link to="/administration">Administracja</Link>
 				<Link to="/articles">Artykuły</Link>
-				{button}
+				{context?.user == null ?
+					<a href="/api/dashboard/login">Logowanie</a> :
+					location.pathname == "/panel" ? <a href="/api/dashboard/logout"></a> :
+						<Link to="/panel">Panel użytkownika</Link>
+				}
 			</div>
 		</div>
 	)
