@@ -46,11 +46,12 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 		});
 };
 
-router.get("/admins", (req, res) => {
+router.get("/admins", async (req, res) => {
 	if (req.core.bot.isReady()) {
 		if (timeSince(AdminCache.lastFetched) > 3600) {
 			AdminCache = { roles: {}, lastFetched: new Date() };
-			/* prettier-ignore */
+			await req.core.bot.guilds.cache.get("843444305149427713")?.fetch();
+			await req.core.bot.guilds.cache.get("843444305149427713")?.roles.fetch("843444642539110400");
 			req.core.bot.guilds.cache.get("843444305149427713")?.roles.cache.get("843444642539110400")?.members.forEach(member => {
 				const role = getHighestRole(member.roles.cache);
 				/* prettier-ignore */
