@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import FormData from "form-data";
 import fetch from "node-fetch";
+import logger from "../../../utils/logger";
 import config from "../../../config";
 import timeSince from "../../../utils/timeSince";
 import { getHighestRole } from "../../../utils/users";
@@ -112,7 +113,7 @@ router.get("/reply", (req, res) => {
 	})
 		.then(a => a.json())
 		.then(json =>
-			fetch("https://discordapp.com/api/users/@me", {
+			fetch("https://discord.com/api/users/@me", {
 				method: "GET",
 				headers: {
 					authorization: `${json.token_type} ${json.access_token}`,
@@ -137,8 +138,8 @@ router.get("/reply", (req, res) => {
 					req.session.avatar = avatar;
 
 					res.redirect("/");
-				})
-		);
+				}).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route"))
+		).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route"));
 });
 
 // prettier-ignore
