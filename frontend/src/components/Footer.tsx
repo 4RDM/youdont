@@ -9,14 +9,13 @@ const cytaty = [
 	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2021',
 	'"Revert "dzbam"" ~ Nimplex 2021',
 	'"nie dla psa kiebłasa" ~ Kubamaz 2021',
-	'"ty no kurwa majster" ~ DemonS 2021',
-	'"KURWA ODDAJ MI MOJE RANGI" ~ Helix 2021',
+	'"ty no majster" ~ DemonS 2021',
+	'"ODDAJ MI MOJE RANGI" ~ Helix 2021',
 	'"/nimplexma2zakola" ~ Nimplex 2021',
 	'"ja z pc lece" ~ Kubamaz 2022',
 	'"ty no słuchaj no" ~ Helix 2022',
 	'"za zero" ~ Helix 2022',
-	'"I fuck your mama last night" ~ Helix 2021',
-	'"Kurwa nie działa" ~ Helix 2021',
+	'"nie działa" ~ Helix 2021',
 	'"Zabij sie" ~ Kubamaz 2021',
 	'"no co?" ~ Kaliberek 2022',
 	'"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac" ~ Kubamaz 2020',
@@ -41,18 +40,9 @@ const Footer: FC = (props) => {
 				<div>
 					<h1>Linki</h1>
 					<div className="footer-links">
-						<a href="https://discord.4rdm.pl">
-							<Discord size={20} />
-							Discord
-						</a>
-						<a href="https://steamcommunity.com/groups/4rdm">
-							<Steam size={20} />
-							Steam
-						</a>
-						<a href="https://github.com/4RDM">
-							<Github size={20} />
-							Github
-						</a>
+						<a href="https://discord.4rdm.pl"><Discord size={20} /> Discord</a>
+						<a href="https://steamcommunity.com/groups/4rdm"><Steam size={20} /> Steam</a>
+						<a href="https://github.com/4RDM"><Github size={20} /> Github</a>
 					</div>
 				</div>
 				<div>
@@ -61,18 +51,10 @@ const Footer: FC = (props) => {
 						<Link to="/">Strona główna</Link>
 						<Link to="/articles">Artykuły</Link>
 						<Link to="/administration">Administracja</Link>
-						{
-							/* prettier-ignore */ hasPermissions('MANAGE_DOCS') && <Link to="/docs">Sprawdzanie podań</Link>
-						}
-						{
-							/* prettier-ignore */ hasPermissions('MANAGE_SHORTS') && <Link to="/short">Skracanie linków</Link>
-						}
-						{
-							/* prettier-ignore */ hasPermissions('MANAGE_FILES') && <Link to="/files">Wrzuć pliki</Link>
-						}
-						{
-							/* prettier-ignore */ hasPermissions('MANAGE_FILES') && <a href="/api/files">Przeglądaj pliki</a>
-						}
+						{ hasPermissions('MANAGE_DOCS') && <Link to="/docs">Sprawdzanie podań</Link> }
+						{ hasPermissions('MANAGE_SHORTS') && <Link to="/short">Skracanie linków</Link> }
+						{ hasPermissions('MANAGE_FILES') && <Link to="/files">Wrzuć pliki</Link> }
+						{ hasPermissions('MANAGE_FILES') && <a href="/api/files">Przeglądaj pliki</a> }
 						<Link to="/podania">Podania</Link>
 						<Link to="/panel">Panel użytkownika</Link>
 					</div>
