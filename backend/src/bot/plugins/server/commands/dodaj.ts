@@ -1,7 +1,7 @@
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
 import { Command } from "../../../../types";
 import { addFile } from "../../../../utils/filesystem";
-import { hexToDec } from "src/utils/strings";
+import { hexToDec } from "../../../../utils/strings";
 
 const command: Command = {
 	triggers: ["dodaj"],
