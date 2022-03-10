@@ -10,7 +10,7 @@ const Navbar: FC = (props) => {
 		<div id="navbar">
 			<h1>4RDM</h1>
 			<div id="nav-buttons">
-				<Link to="/">Strona głowna</Link>
+				<Link to="/">Strona główna</Link>
 				<Link to="/administration">Administracja</Link>
 				<Link to="/articles">Artykuły</Link>
 				{context?.user == null ?
