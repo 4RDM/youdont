@@ -19,7 +19,12 @@ const Navbar: FC = (props) => {
 	return (
 		<>
 			<div id="nav-sidebar" style={{display: isOpen ? "flex" : "none"}}>
-				<h1> W </h1>		
+				<button id="nav-close-sidebar" onClick={() => setOpen(false)}>×</button>		
+				<div>
+				<Link to="/">Strona głowna</Link>
+				<Link to="/administration">Administracja</Link>
+				<Link to="/articles">Artykuły</Link>
+				</div>
 			</div>
 			<div id="navbar">
 				<h1>4RDM</h1>
