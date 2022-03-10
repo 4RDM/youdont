@@ -41,6 +41,19 @@ body {
 	width: 100vw;
 }
 
+
+#nav-sidebar {
+                position: absolute;
+                width: 100vw;
+                height: 100vh;
+                background: yellow;
+                z-index: 1000;
+                top: 0px;
+                bottom: 0px;
+                right: 0px;
+                left: 0px;
+}
+
 #navbar {
 	width: 100vw;
 	height: 64px;
@@ -53,6 +66,18 @@ body {
 	& > h1,
 	div {
 		padding: 0 12px;
+	}
+
+	#nav-open-close {
+		button {
+			border: 1px solid grey;
+			border-radius: 5px;
+			background: #5f5f5f;
+			outline: none;
+			color: white;
+			width: 30px;
+			height: 30px;
+		}
 	}
 
 	a {
