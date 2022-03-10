@@ -91,8 +91,6 @@ router.get("/admins", async (req, res) => {
 				});
 			});
 
-			console.log(members);
-
 			members.forEach(member => {
 				const role = getHighestRole(member.roles.cache);
 				/* prettier-ignore */
