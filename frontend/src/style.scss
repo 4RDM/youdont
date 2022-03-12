@@ -372,6 +372,94 @@ body {
 	column-gap: 10px;
 }
 
+#owners-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	row-gap: 10px;
+	column-gap: 10px;
+	
+	&>div {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		flex-wrap: wrap;
+		row-gap: 10px;
+		column-gap: 10px;
+		&>div {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			flex-wrap: wrap;
+			row-gap: 10px;
+			column-gap: 10px;
+		}
+	}
+
+	.card {
+		@media (max-width: 586px) {
+			& {
+				width: 90%;
+			}
+		}
+
+		display: grid;
+		gap: 10px;
+		grid-template-columns: 1fr 1fr 1fr 100px;
+		grid-template-areas: "info info info avatar";
+		width: 501px;
+		border-radius: 0.5rem;
+		padding: 15px;
+		user-select: text;
+		background: #262626;
+
+		.avatar {
+			grid-area: avatar;
+			img {
+				width: 100px;
+				height: 100px;
+				border-radius: 90px;
+			}
+		}
+
+		.info {
+			grid-area: info;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: 100%;
+			p {
+				color: #8a8a8a;
+				font-size: 14px;
+				margin-bottom: 4px;
+			}
+			h1 {
+				font-size: 20px;
+			}
+			.opis {
+				color: white;
+				font-size: 16px;
+				line-height: 20px;
+				margin-bottom: 10px;
+			}
+			.social {
+				display: flex;
+				align-items: center;
+				column-gap: 6px;
+				width: 100%;
+				height: 20px;
+				margin-top: auto;
+				a {
+					width: 20px;
+					font-size: 10px !important;
+				}
+			}
+		}
+	}
+}
+
 #administration-container {
 	display: flex;
 	width: 100vw;

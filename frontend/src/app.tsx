@@ -8,6 +8,7 @@ import ScrollToTop from './utils/ScrollToTop'
 
 import './style.scss'
 import FileUploader from './pages/FIleUploader'
+import Owners from './pages/Owners'
 
 const Articles = lazy(() => import('./pages/Articles'))
 const Home = lazy(() => import('./pages/Home'))
@@ -51,6 +52,7 @@ export const App = () => {
 							<Route path="/panel" element={<Panel />} />
 							<Route path="/files" element={<FileUploader />} />
 							<Route path="/administration" element={<Administration />} />
+							<Route path="/wlasciciele" element={<Owners />} />
 						</Routes>
 					</UserContext.Provider>
 				</Suspense>

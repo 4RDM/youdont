@@ -33,6 +33,7 @@
 	},
 	"dependencies": {
 		"@styled-icons/bootstrap": "^10.34.0",
+		"@styled-icons/entypo": "^10.34.0",
 		"@styled-icons/fa-brands": "^10.38.0",
 		"formik": "^2.2.9",
 		"gsap": "^3.4.2",
