@@ -1,7 +1,6 @@
 import { Eye } from '@styled-icons/bootstrap/Eye'
 import { X } from '@styled-icons/bootstrap/X'
 import React, { FC, useState } from 'react'
-// import { Eye, X } from '@styled-icons/bootstrap'
 
 interface Props {
 	podanie: {
@@ -30,24 +29,24 @@ const PodanieCard: FC<Props> = (props) => {
 					{!open ? <Eye size={20} /> : <X size={20} />}
 				</button>
 			</div>
-			{open ? (
+			{open &&
 				<div className="podanie-details">
 					<div>
 						<p>Administrator</p>
 						<h1>{props.podanie.admin}</h1>
 					</div>
-					{!props.podanie.approved ? (
+					{!props.podanie.approved &&
 						<div>
 							<p>Powód</p>
 							<h1>{props.podanie.reason}</h1>
 						</div>
-					) : null}
+					}
 					<div>
 						<p>Data</p>
 						<h1>{new Date(props.podanie.date).toLocaleString()}</h1>
 					</div>
 				</div>
-			) : null}
+			}
 		</div>
 	)
 }

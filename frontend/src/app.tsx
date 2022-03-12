@@ -49,9 +49,7 @@ export const App = () => {
 							<Route path="/" element={<Home />} />
 							<Route path="/articles" element={<Articles />} />
 							<Route path="/panel" element={<Panel />} />
-							{ /* prettier-ignore */ }
 							<Route path="/files" element={<FileUploader />} />
-							{ /* prettier-ignore */ }
 							<Route path="/administration" element={<Administration />} />
 						</Routes>
 					</UserContext.Provider>

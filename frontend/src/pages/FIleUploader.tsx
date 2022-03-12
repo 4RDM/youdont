@@ -19,9 +19,7 @@ const FileUploader: FC = () => {
 		setFiles([...files, ...Object.values(fileInput.current.files)])
 	}
 
-	const handleSubmit = (
-		ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
-	) => {
+	const handleSubmit = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		ev.preventDefault()
 
 		if (!files || !files[0]) {
@@ -47,7 +45,6 @@ const FileUploader: FC = () => {
 						setShowPopup(true)
 						return
 					}
-					console.log(x)
 					setPopupContent(
 						`Pomyślnie wrzucono plik na serwer, jest dostępny pod adresem: ${x.files
 							.map(
@@ -80,22 +77,16 @@ const FileUploader: FC = () => {
 							/>
 						)}
 						<div className="content">
-							{ /* prettier-ignore */}
 							<input type="file" name="file" id="file" ref={fileInput} onChange={handleChange} multiple/>
 							<div className="buttons">
-								{ /* prettier-ignore */}
 								<button onClick={() => fileInput.current?.click()}>Dodaj plik</button>
-								{ /* prettier-ignore */}
 								<button onClick={(ev) => handleSubmit(ev)}>Wyślij</button>
 							</div>
 							<div className="files-list">
 								{files.map((file) => (
 									<div className="file" key={file.name}>
 										<p>{file.name}</p>
-										<button
-											/* prettier-ignore */
-											onClick={() => setFiles(files.filter((x) => x.name !== file.name))}
-										>
+										<button onClick={() => setFiles(files.filter((x) => x.name !== file.name))}>
 											<X size={'15px'} />
 										</button>
 									</div>

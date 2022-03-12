@@ -31,21 +31,18 @@ const Home: FC = () => {
 	return (
 		<Container>
 			<div id="administration-container">
-				{
-					/* prettier-ignore */
-					loading ? (<div id="TOP_LOADING"><PL color="white" size="30px" /></div>) : (
-						Object.keys(roles).map((role) => {
-							return (
-								<div className='administration-column' key={role}>
-									<h1>{role}</h1>
-									<div className='administration-row' key={role}>
-										{roles[role].map((admin) => <Card key={admin?.id}><h1>{admin?.nickname}</h1><LazyLoad once><img crossOrigin="anonymous" src={admin?.avatar} width="100%" alt="avatar" /></LazyLoad></Card>)}
-									</div>
+				{loading ? (<div id="TOP_LOADING"><PL color="white" size="30px" /></div>) : (
+					Object.keys(roles).map((role) => {
+						return (
+							<div className='administration-column' key={role}>
+								<h1>{role}</h1>
+								<div className='administration-row' key={role}>
+									{roles[role].map((admin) => <Card key={admin?.id}><h1>{admin?.nickname}</h1><LazyLoad once><img crossOrigin="anonymous" src={admin?.avatar} width="100%" alt="avatar" /></LazyLoad></Card>)}
 								</div>
-							)
-						})
-					)
-				}
+							</div>
+						)
+					})
+				)}
 			</div>
 		</Container>
 	)

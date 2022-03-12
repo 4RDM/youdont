@@ -1,9 +1,10 @@
-import { Discord } from '@styled-icons/fa-brands/Discord'
-import { Github } from '@styled-icons/fa-brands/Github'
-import { Steam } from '@styled-icons/fa-brands/Steam'
 import React, { FC, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Permission, UserContext } from '../utils/UserContext'
+
+import { Discord } from '@styled-icons/fa-brands/Discord'
+import { Github } from '@styled-icons/fa-brands/Github'
+import { Steam } from '@styled-icons/fa-brands/Steam'
 
 const cytaty = [
 	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2021',

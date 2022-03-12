@@ -81,7 +81,6 @@ const Panel: FC = () => {
 							id="profile-avatar"
 						/>
 						<div>
-							{/* prettier-ignore */}
 							<h1>Witaj <b>{context?.user.username}#{context?.user.tag}</b>!</h1>
 							<p>{context?.user?.userid}</p>
 						</div>

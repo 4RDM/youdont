@@ -1,10 +1,13 @@
-import expressWs, { Application } from "express-ws";
 import express from "express";
-import helmet from "helmet";
 import session from "express-session";
-import logger from "../utils/logger";
-import compression from "compression";
+import expressWs, { Application } from "express-ws";
+
 import { Core } from "../";
+import logger from "../utils/logger";
+
+import helmet from "helmet";
+import compression from "compression";
+import MemoryStore from "memorystore";
 
 import indexRouter from "./router/index.router";
 import apiRouter from "./router/api.router";
@@ -14,16 +17,21 @@ export default class HTTP {
 
 	constructor(core: Core) {
 		this.server.use(helmet({ contentSecurityPolicy: false }));
+
+		const memoryStore = MemoryStore(session);
+
 		this.server.use(
 			session({
 				secret: "{/GDB4pZjG[CG45_Y8yp~3Km,T$A(Em.]x{9g4'7>@fu&h^g",
+				store: new memoryStore({ checkPeriod: 86400000 }),
 				resave: false,
-				saveUninitialized: true,
+				saveUninitialized: false,
 				cookie: {
-					secure: false, // tylko na razie
+					secure: process.env.NODE_ENV == "production",
 				},
 			})
 		);
+	
 		this.server.use(compression());
 		this.server.set("view engine", "ejs");
 
