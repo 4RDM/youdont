@@ -31,67 +31,11 @@ router.get("/docs", adminCheck, async (req, res) => {
 });
 
 router.get("/user/all", async (req, res) => {
+	const docs = await req.core.database.docs.getAllUser(req.session.userid || "000");
 	res.json({
 		code: 200,
 		message: "OK",
-		data: [
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "DxrX2c",
-				admin: "Helix#0001",
-			},
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "uLya0c",
-				admin: "Helix#0001",
-			},
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "q59Njx",
-				admin: "Helix#0001",
-			},
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "7ebeyl",
-				admin: "Helix#0001",
-			},
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "Ahte7t",
-				admin: "Helix#0001",
-			},
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "dIAvel",
-				admin: "Helix#0001",
-			},
-			{
-				author: "Nimplex#1010",
-				date: new Date().getTime(),
-				reason: "Wiek",
-				approved: false,
-				id: "U9Z6qV",
-				admin: "Helix#0001",
-			},
-		],
+		data: docs || [],
 	});
 });
 
