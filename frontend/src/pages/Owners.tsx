@@ -6,25 +6,25 @@ import { Youtube } from '@styled-icons/fa-brands/Youtube'
 import { Twitter } from '@styled-icons/fa-brands/Twitter'
 
 const Owners: FC = () => {
-const [kubamaz, setKubamaz] = useState("");
-const [nimplex, setNimplex] = useState("");
-const [demons, setDemon] = useState("");
-const [helix, setHelix] = useState("");
-useEffect(() => {
-fetch("/api/dashboard/admins").then(x => x.json()).then(x => {
-x.admins.roles.map((v) => {
-v.map(user => {
-if (user.nickname == "Nimplex#1010") { 
-setNimplex(user.avatar);
-alert(JSON.stringify(user))
-}
-if (user.nickname == "Kubamaz#7775") setKubamaz(user.avatar);
-if (user.nickname == "DemonS#2581") setDemon(user.avatar);
-if (user.nickname == "Helix_#6666") setHelix(user.avatar)
-})
-})
-})
-},[])
+	const [kubamaz, setKubamaz] = useState("");
+	const [nimplex, setNimplex] = useState("");
+	const [demons, setDemon] = useState("");
+	const [helix, setHelix] = useState("");
+	useEffect(() => {
+		fetch("/api/dashboard/admins").then(x => x.json()).then(x => {
+			console.log(x, x.admins.roles)
+			Object.values(x.admins.roles).map((v: any) => {
+				v.map((user: any) => {
+					if (user.nickname == "Nimplex#1010") { 
+						setNimplex(user.avatar);
+					}
+					if (user.nickname == "Kubamaz#7775") setKubamaz(user.avatar);
+					if (user.nickname == "DemonS#2581") setDemon(user.avatar);
+					if (user.nickname == "Helix_#6666") setHelix(user.avatar)
+				})
+			})
+		})
+	},[])
 	return (
 		<Container>
 			<div id="owners-container">
