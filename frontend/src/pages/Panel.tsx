@@ -121,8 +121,7 @@ const Panel: FC = () => {
 							<h1>Podania</h1>
 							<div className="profile-flex">
 								{
-									/* prettier-ignore */
-									loadingDocs ? (<PL color="white" size="30px" />) : docs.length == 0 ? (<h1>Nie pisałeś jeszcze podań</h1>) : (
+									loadingDocs ? (<PL color="white" size="30px" />) : docs.length == 0 ? (<p>Nie pisałeś jeszcze podań</p>) : (
 										docs.map((podanie) => <PodanieCard key={podanie.id} podanie={podanie} />)
 									)
 								}
