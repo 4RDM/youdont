@@ -12,14 +12,11 @@ const Owners: FC = () => {
 	const [helix, setHelix] = useState("");
 	useEffect(() => {
 		fetch("/api/dashboard/admins").then(x => x.json()).then(x => {
-			console.log(x, x.admins.roles)
 			Object.values(x.admins.roles).map((v: any) => {
 				v.map((user: any) => {
-					if (user.nickname == "Nimplex#1010") { 
-						setNimplex(user.avatar);
-					}
-					if (user.nickname == "Kubamaz#7775") setKubamaz(user.avatar);
-					if (user.nickname == "DemonS#2581") setDemon(user.avatar);
+					if (user.nickname == "Nimplex#1010") setNimplex(user.avatar)
+					if (user.nickname == "Kubamaz#7775") setKubamaz(user.avatar)
+					if (user.nickname == "DemonS#2581") setDemon(user.avatar)
 					if (user.nickname == "Helix_#6666") setHelix(user.avatar)
 				})
 			})
