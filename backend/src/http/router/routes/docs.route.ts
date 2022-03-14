@@ -26,7 +26,7 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 };
 
 router.get("/docs", adminCheck, async (req, res) => {
-	const fetched = (await req.core.database.docs.getAll()) || [];
+	const fetched = (await req.core.database.docs.getAllActive()) || [];
 	res.json({ code: 200, message: "Ok!", data: fetched });
 });
 
@@ -80,11 +80,28 @@ router.delete("/doc/:id", adminCheck, async (req, res) => {
 	res.json({ code: 200, message: "Ok!", author: removed?.author });
 });
 
-router.post("/doc/:id/accept", adminCheck, (req, res) => {});
-router.post("/doc/:id/reject", adminCheck, (req, res) => {});
-router.get("/publish", adminCheck, (req, res) => {});
+router.post("/doc/:id/accept", adminCheck, async (req, res) => {
+	const { id } = req.params;
+	if (!req.session.username) return res.json({ code: 400, message: "Bad request" });
+	await req.core.database.docs.changeState(id, true, req.session.username, "");
+	return res.json({ code: 200, message: "Ok!" });
+});
 
-router.put("/upload", async (req, res) => {
+router.post("/doc/:id/reject", adminCheck, async (req, res) => {
+	const { id } = req.params;
+	const { reason } = req.body;
+	console.log(reason);
+	if (!req.session.username || !reason) return res.json({ code: 400, message: "Bad request" });
+	await req.core.database.docs.changeState(id, false, req.session.username, reason);
+	return res.json({ code: 200, message: "Ok!" });
+});
+
+router.get("/publish", adminCheck, (req, res) => {
+	if (!req.session.userid) return;
+	req.core.database.docs.publishResults(req.session.userid);
+});
+
+router.post("/upload", async (req, res) => {
 	const { author, nick, age, voice, long, short, steam } = req.body;
 
 	if (!nick || !author || !steam || !age || !short || !long)

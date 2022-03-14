@@ -4,13 +4,15 @@ import Container from '../components/Container'
 import PodanieCard from '../components/PodanieCard'
 import { UserContext } from '../utils/UserContext'
 import Popup from '../components/Popup'
+import { Link } from 'react-router-dom'
 export interface Doc {
 	author: string
 	date: number
 	reason: string
 	approved: boolean
-	id: string
-	admin: string
+	active: boolean
+	_id: string
+	approver: string
 }
 
 export interface UserStats {
@@ -119,10 +121,11 @@ const Panel: FC = () => {
 						</div>
 						<div id="profile-podania">
 							<h1>Podania</h1>
+							{(context.permissions.includes('ADMINISTRATOR') || context.permissions.includes('MANAGE_DOCS')) && <Link to="/panel/admin">Sprawdzanie podań</Link>}
 							<div className="profile-flex">
 								{
 									loadingDocs ? (<PL color="white" size="30px" />) : docs.length == 0 ? (<p>Nie pisałeś jeszcze podań</p>) : (
-										docs.map((podanie) => <PodanieCard key={podanie.id} podanie={podanie} />)
+										docs.map((podanie) => <PodanieCard key={podanie._id} podanie={podanie} />)
 									)
 								}
 							</div>

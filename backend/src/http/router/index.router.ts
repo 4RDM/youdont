@@ -34,7 +34,17 @@ const spaHandler = async (req: Request, res: Response) => {
 router.use(staticFiles(join(publicPath, "public")));
 router.use(staticFiles(join(publicPath, "data")));
 router.get(
-	["/", "/articles", "/article/:id", "/panel", "/files", "/administration", "/wlasciciele"],
+	[
+		"/",
+		"/articles",
+		"/article/:id",
+		"/panel",
+		"/panel/admin",
+		"/files",
+		"/administration",
+		"/wlasciciele",
+		"/podania"
+	],
 	spaHandler
 );
 

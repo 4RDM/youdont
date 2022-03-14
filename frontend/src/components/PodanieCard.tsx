@@ -6,10 +6,11 @@ interface Props {
 	podanie: {
 		author: string
 		reason: string
-		id: string
+		_id: string
 		date: number
 		approved: boolean
-		admin: string
+		active: boolean
+		approver: string
 	}
 }
 
@@ -21,10 +22,10 @@ const PodanieCard: FC<Props> = (props) => {
 	return (
 		<div className="podanie-card">
 			<div className="podanie-container">
-				<h1>#{props.podanie.id}</h1>
+				<h1>#{props.podanie._id.split('').splice(0, 10).join('')}</h1>
 				<button onClick={changeState}>
 					<p>
-						{props.podanie.approved ? 'Zaakceptowane' : 'Odrzucone'}
+						{props.podanie.active ? 'Sprawdzane' : props.podanie.approved ? 'Zaakceptowane' : 'Odrzucone'}
 					</p>
 					{!open ? <Eye size={20} /> : <X size={20} />}
 				</button>
@@ -33,17 +34,17 @@ const PodanieCard: FC<Props> = (props) => {
 				<div className="podanie-details">
 					<div>
 						<p>Administrator</p>
-						<h1>{props.podanie.admin}</h1>
+						<h1>{props.podanie.active ? 'Sprawdzane' : props.podanie.approver}</h1>
 					</div>
 					{!props.podanie.approved &&
 						<div>
 							<p>Powód</p>
-							<h1>{props.podanie.reason}</h1>
+							<h1>{props.podanie.active ? 'Sprawdzane' : props.podanie.reason}</h1>
 						</div>
 					}
 					<div>
 						<p>Data</p>
-						<h1>{new Date(props.podanie.date).toLocaleString()}</h1>
+						<h1>{props.podanie.active ? 'Sprawdzane' : new Date(props.podanie.date).toLocaleString()}</h1>
 					</div>
 				</div>
 			}
