@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Container from '../components/Container'
 import { Card } from '../components/Card'
 import { Globe } from '@styled-icons/entypo/Globe'
@@ -6,6 +6,22 @@ import { Youtube } from '@styled-icons/fa-brands/Youtube'
 import { Twitter } from '@styled-icons/fa-brands/Twitter'
 
 const Owners: FC = () => {
+const [kubamaz, setKubamaz] = useState("");
+const [nimplex, setNimplex] = useState("");
+const [demons, setDemon] = useState("");
+const [helix, setHelix] = useState("");
+useEffect(() => {
+fetch("/api/dashboard/admins").then(x => x.json()).then(x => {
+x.admins.roles.map((v) => {
+v.map(user => {
+if (user.nickname == "Nimplex#1010") setNimplex(user.avatar);
+if (user.nickname == "Kubamaz#7775") setKubamaz(user.avatar);
+if (user.nickname == "DemonS#2581") setDemon(user.avatar);
+if (user.nickname == "Helix_#6666") setHelix(user.avatar)
+})
+})
+})
+},[])
 	return (
 		<Container>
 			<div id="owners-container">
@@ -23,7 +39,7 @@ const Owners: FC = () => {
 								</div>
 							</div>
 							<div className="avatar">
-								<img src="https://cdn.discordapp.com/avatars/594526434526101527/a_c1af0e5c48ff435a49da731b412d0c63.gif?size=1024" crossOrigin="anonymous" />
+								<img src={kubamaz} crossOrigin="anonymous" />
 							</div>
 						</Card>
 						<Card>
@@ -38,7 +54,7 @@ const Owners: FC = () => {
 								</div>
 							</div>
 							<div className="avatar">
-								<img src="https://cdn.discordapp.com/avatars/364056796932997121/71b46749cfd16d05f3630139d9383eb5.webp?size=1024" crossOrigin="anonymous" />
+								<img src={nimplex} crossOrigin="anonymous" />
 							</div>
 						</Card>
 					</div>
@@ -51,7 +67,7 @@ const Owners: FC = () => {
 								<div className="social"></div>
 							</div>
 							<div className="avatar">
-								<img src="https://cdn.discordapp.com/avatars/427240221197729792/a_c972180d5931834d5024babf3ce55e5d.gif?size=1024" crossOrigin="anonymous" />
+								<img src={helix} crossOrigin="anonymous" />
 							</div>
 						</Card>
 						<Card>
@@ -62,7 +78,7 @@ const Owners: FC = () => {
 								<div className="social"></div>
 							</div>
 							<div className="avatar">
-								<img src="https://cdn.discordapp.com/avatars/530438225026613248/a_af35bd4ae314c0f693374a4db58647c0.gif?size=1024" crossOrigin="anonymous" />
+								<img src={demons} crossOrigin="anonymous" />
 							</div>
 						</Card>
 					</div>
