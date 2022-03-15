@@ -5,6 +5,7 @@ import PodanieCard from '../components/PodanieCard'
 import { UserContext } from '../utils/UserContext'
 import Popup from '../components/Popup'
 import { Link } from 'react-router-dom'
+
 export interface Doc {
 	author: string
 	date: number

@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 const router = Router();
 
+const regex = /(?:https?:\/\/)?steamcommunity\.com\/(?:profiles|id)\/[a-zA-Z0-9]+/gm;
+
 const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { userid } = req.session;
 
@@ -104,17 +106,22 @@ router.get("/publish", adminCheck, (req, res) => {
 router.post("/upload", async (req, res) => {
 	const { author, nick, age, voice, long, short, steam } = req.body;
 
+	const user = await req.core.database.docs.getAllUser(author);
+	if (user && user.length > 2) return res.json({ code: 400, message: 9012 });
+
 	if (!nick || !author || !steam || !age || !short || !long)
 		return res.json({ code: 1, message: 1 });
-	if (long.length < 200) return res.json({ code: 1, message: 2 });
-	if (short.length < 30) return res.json({ code: 1, message: 3 });
-	if (age < 12 || age > 99) return res.json({ code: 1, message: 4 });
-	if (nick.length == 0 || nick !== req.session.username)
-		return res.json({ code: 1, message: 5 });
-	if (author.length == 0 || author !== req.session.userid)
-		return res.json({ code: 1, message: 6 });
-	if (steam.length < "https://steamcommunity.com/".length)
-		return res.json({ code: 1, message: 7 });
+
+	const problems = [];
+
+	if (long.length < 200) problems.push("long");
+	if (short.length < 30) problems.push("short");
+	if (age < 12 || age > 99) problems.push("age");
+	if (nick !== `${req.session.username}#${req.session.tag}`) problems.push("nick");
+	if (author !== req.session.userid) problems.push("discord");
+	if (!regex.test(steam)) problems.push("steam");
+
+	if (problems.length !== 0) return res.json({ code: 400, message: "Bad request", problems });
 
 	const doc = await req.core.database.docs.create({
 		author,
