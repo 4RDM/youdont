@@ -48,7 +48,6 @@ export default class HTTP {
 			});
 		});
 
-
 		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
 
