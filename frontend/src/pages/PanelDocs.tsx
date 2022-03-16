@@ -109,7 +109,7 @@ const AdminDocs: FC = () => {
 	const publish = () => {
 		fetch("/api/docs/publish").then(x => x.json()).then(x => {
 			if (x.code !== 200) return err()
-			else location.reload()
+			else refetch()
 		})
 	}
 
@@ -123,7 +123,7 @@ const AdminDocs: FC = () => {
 	const changeState = () => {
 		fetch("/api/docs/switchstate").then(x => x.json()).then(x => {
 			if (x.code !== 200) return err()
-			else refetch()
+			else location.reload()
 		})
 	}
 
