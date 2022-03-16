@@ -6,6 +6,7 @@ import Popup from '../components/Popup'
 import { Card } from '../components/Card'
 import { EyeFill } from '@styled-icons/bootstrap/EyeFill'
 import { ArrowClockwise } from '@styled-icons/bootstrap/ArrowClockwise'
+import { X } from '@styled-icons/bootstrap/X'
 
 export interface Doc {
 	author: string
@@ -100,6 +101,13 @@ const AdminDocs: FC = () => {
 		})
 	}
 
+	const remove = (docID: string) => {
+		fetch(`/api/docs/doc/${docID}`, { method: "DELETE" }).then(x => x.json()).then(x => {
+			if (x.code !== 200) return err()
+			else refetch()
+		})
+	}
+
 	return (
 		display && (
 			<div id="wholescreenpopup">
@@ -168,7 +176,10 @@ const AdminDocs: FC = () => {
 										{docs.filter((doc) => doc.approver == "").map((doc) =>
 											<Card key={doc._id}>
 												<h2>{doc.nick}</h2>
-												<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
+												<div className="card-buttons">
+													<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
+													<button onClick={() => remove(doc.docID)}><X></X></button>
+												</div>
 											</Card>
 										)}
 									</div>
