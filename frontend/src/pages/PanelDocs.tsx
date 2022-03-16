@@ -107,7 +107,7 @@ const AdminDocs: FC = () => {
 	}
 
 	const publish = () => {
-		fetch(`/api/docs/publish`).then(x => x.json()).then(x => {
+		fetch("/api/docs/publish").then(x => x.json()).then(x => {
 			if (x.code !== 200) return err()
 			else refetch()
 		})
@@ -115,6 +115,13 @@ const AdminDocs: FC = () => {
 
 	const remove = (docID: string) => {
 		fetch(`/api/docs/doc/${docID}`, { method: "DELETE" }).then(x => x.json()).then(x => {
+			if (x.code !== 200) return err()
+			else refetch()
+		})
+	}
+
+	const changeState = () => {
+		fetch("/api/docs/switchstate").then(x => x.json()).then(x => {
 			if (x.code !== 200) return err()
 			else refetch()
 		})
@@ -180,6 +187,7 @@ const AdminDocs: FC = () => {
 											</Card>
 										)}
 										<button onClick={() => publish()}>Opublikuj</button>
+										<button onClick={() => changeState()}>{context.user.applicationState ? "Zamknij podania" : "Otwórz podania"}</button>
 									</div>
 								</div>
 								<div className="right">

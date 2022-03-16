@@ -148,7 +148,7 @@ const Podania: FC = () => {
 
 	return (
 		<Container>
-			{(context?.user !== undefined && (
+			{context?.user !== undefined ? context.user.applicationState ? (
 				loading ? (<div id="TOP_LOADING"><PL color="white" size="30px" /></div>) : (
 					<div id="podanie-container">
 						{showPopup && (
@@ -172,7 +172,11 @@ const Podania: FC = () => {
 						</div>
 					</div>
 				)
-			)) || (
+			) : (
+				<div className="error-401-container">
+					<h1>Podania są zamknięte!</h1>
+				</div>
+			) : (
 				<div className="error-401-container">
 					<h1>Zaloguj się najpierw!</h1>
 				</div>

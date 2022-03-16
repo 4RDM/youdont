@@ -16,6 +16,7 @@ interface UserContext {
 			email: string
 			avatar: string
 			role: string
+			applicationState: boolean
 		}
 		permissions: Permission[]
 	}

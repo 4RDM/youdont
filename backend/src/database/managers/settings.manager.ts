@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Core } from "../../";
 
@@ -17,7 +17,8 @@ export interface User {
 	permissions: Permission[]
 }
 
-export interface Settings {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface Settings extends Array<any> {
 	users: User[]
 	docsOpen: boolean
 	verificationChannel: string
@@ -35,6 +36,19 @@ export class SettingManager {
 		this.settings = JSON.parse(
 			readFileSync(this.path, { encoding: "utf-8" })
 		);
+	}
+
+	set<T>(key: string, value: T | string) {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		this.settings[key] = value;
+		writeFileSync(this.path, JSON.stringify(this.settings), { encoding: "utf-8" });
+	}
+
+	get<T>(key: string): T | undefined {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		return this.settings[key];
 	}
 
 	getUser(discordID: string): User | undefined {

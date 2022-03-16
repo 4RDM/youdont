@@ -27,6 +27,11 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
+router.get("/switchstate", adminCheck, async (req, res) => {
+	req.core.database.settings.set("docsOpen", !req.core.database.settings.get<boolean>("docsOpen"));
+	res.json({ code: 200, message: "Ok!" });
+});
+
 router.get("/docs", adminCheck, async (req, res) => {
 	const fetched = (await req.core.database.docs.getAllActive()) || [];
 	res.json({ code: 200, message: "Ok!", data: fetched });
@@ -121,6 +126,8 @@ router.get("/publish", adminCheck, async (req, res) => {
 });
 
 router.post("/upload", async (req, res) => {
+	if (!req.core.database.settings.get<boolean>("docsOpen")) return res.json({ code: 403, message: "Applications are closed" });
+
 	const { author, nick, age, voice, long, short, steam } = req.body;
 
 	const user = (await req.core.database.docs.getAllUser(author))?.filter(x => x.active);

@@ -202,6 +202,7 @@ router.get("/session", userCheck, async (req, res) => {
 			username,
 			email,
 			avatar,
+			applicationState: req.core.database.settings.get<boolean>("docsOpen"),
 			role: role || "Członek",
 		},
 		permissions,
