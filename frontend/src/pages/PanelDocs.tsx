@@ -5,6 +5,7 @@ import { UserContext } from '../utils/UserContext'
 import Popup from '../components/Popup'
 import { Card } from '../components/Card'
 import { EyeFill } from '@styled-icons/bootstrap/EyeFill'
+import { ArrowClockwise } from '@styled-icons/bootstrap/ArrowClockwise'
 
 export interface Doc {
 	author: string
@@ -87,7 +88,13 @@ const AdminDocs: FC = () => {
 				'Content-Type': 'application/json'
 			}
 		}).then(x => x.json()).then(x => {
-			console.log(x);
+			if (x.code !== 200) return err()
+			else refetch()
+		})
+	}
+
+	const revert = (docID: string) => {
+		fetch(`/api/docs/doc/${docID}/revert`).then(x => x.json()).then(x => {
 			if (x.code !== 200) return err()
 			else refetch()
 		})
@@ -148,7 +155,7 @@ const AdminDocs: FC = () => {
 												</div>
 												<div className="card-buttons">
 													<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
-													<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
+													<button onClick={() => revert(doc.docID)}><ArrowClockwise></ArrowClockwise></button>
 												</div>
 											</Card>
 										)}

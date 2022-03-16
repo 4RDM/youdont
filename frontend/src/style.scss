@@ -259,6 +259,8 @@ body {
 		background: #262626;
 		.card-buttons {
 			display: flex;
+			flex-direction: row;
+			width: 90px;
 			align-items: center;
 			row-gap: 5px;
 			column-gap: 5px;
