@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import expressWs, { Application } from "express-ws";
+import { WebSocket } from "ws";
 
 import { Core } from "../";
 import logger from "../utils/logger";
@@ -12,8 +13,10 @@ import MemoryStore from "memorystore";
 import indexRouter from "./router/index.router";
 import apiRouter from "./router/api.router";
 
+
 export default class HTTP {
 	public server: Application = expressWs(express()).app;
+	public wssclients: WebSocket[] = [];
 
 	constructor(core: Core) {
 		this.server.use(helmet({ contentSecurityPolicy: false }));
@@ -42,6 +45,13 @@ export default class HTTP {
 		});
 		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
+
+		this.server.ws("/api/docs", async (ws) => {
+			this.wssclients.push(ws);
+			ws.on("close", () => {
+				this.wssclients.splice(this.wssclients.indexOf(ws), 1);
+			});
+		});
 
 		this.server.listen(8021, () => logger.ready("Listening to port 8021"));
 	}
