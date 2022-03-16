@@ -7,11 +7,11 @@ import ScrollToTop from './utils/ScrollToTop'
 // import { gsap } from 'gsap'
 
 import './style.scss'
-import FileUploader from './pages/FIleUploader'
-import Owners from './pages/Owners'
-import Podania from './pages/Podania'
-import AdminDocs from './pages/PanelDocs'
 
+const FileUploader = lazy(() => import('./pages/FIleUploader'))
+const Owners = lazy(() => import('./pages/Owners'))
+const Podania = lazy(() => import('./pages/Podania'))
+const AdminDocs = lazy(() => import('./pages/PanelDocs'))
 const Articles = lazy(() => import('./pages/Articles'))
 const Home = lazy(() => import('./pages/Home'))
 const Panel = lazy(() => import('./pages/Panel'))
