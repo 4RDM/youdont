@@ -230,6 +230,23 @@ body {
 	}
 	.left {
 		grid-area: left;
+		button {
+			margin-top: 10px;
+			& > * {
+				margin: 0 5px;
+			}
+			outline: none;
+			border: none;
+			text-decoration: none;
+			height: 35px;
+			padding: 5px;
+			border-radius: 5px;
+			background: #393939;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 	.right {
 		grid-area: right;

@@ -101,6 +101,13 @@ const AdminDocs: FC = () => {
 		})
 	}
 
+	const publish = () => {
+		fetch(`/api/docs/publish`).then(x => x.json()).then(x => {
+			if (x.code !== 200) return err()
+			else refetch()
+		})
+	}
+
 	const remove = (docID: string) => {
 		fetch(`/api/docs/doc/${docID}`, { method: "DELETE" }).then(x => x.json()).then(x => {
 			if (x.code !== 200) return err()
@@ -167,6 +174,7 @@ const AdminDocs: FC = () => {
 												</div>
 											</Card>
 										)}
+										<button onClick={() => publish()}>Opublikuj</button>
 									</div>
 								</div>
 								<div className="right">
