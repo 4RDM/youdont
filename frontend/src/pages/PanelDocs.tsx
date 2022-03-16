@@ -146,7 +146,10 @@ const AdminDocs: FC = () => {
 													<h2>{doc.nick}</h2>
 													<p>{doc.approved ? "Przyjęty" : "Odrzucony"}: {doc.approver}</p>
 												</div>
-												<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
+												<div className="card-buttons">
+													<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
+													<button onClick={() => showApplication(doc.docID)}><EyeFill></EyeFill></button>
+												</div>
 											</Card>
 										)}
 									</div>

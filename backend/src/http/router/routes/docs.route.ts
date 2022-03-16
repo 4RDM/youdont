@@ -92,9 +92,19 @@ router.post("/doc/:id/accept", adminCheck, async (req, res) => {
 router.post("/doc/:id/reject", adminCheck, async (req, res) => {
 	const { id } = req.params;
 	const { reason } = req.body;
-	console.log(reason);
 	if (!req.session.username || !reason) return res.json({ code: 400, message: "Bad request" });
 	await req.core.database.docs.changeState(id, false, req.session.username, reason);
+	return res.json({ code: 200, message: "Ok!" });
+});
+
+router.get("/doc/:id/revert", adminCheck, async (req, res) => {
+	const { id } = req.params;
+
+	if (!req.session.username) return res.json({ code: 400, message: "Bad request" });
+	const response = await req.core.database.docs.revert(id);
+
+	if (!response) return res.json({ code: 400, message: "Cannot find active application with provided ID" });
+
 	return res.json({ code: 200, message: "Ok!" });
 });
 

@@ -65,6 +65,21 @@ export class DocsManager {
 		return podanie;
 	}
 
+	// Must be active!
+	async revert(docID: string): Promise<Podanie | null> {
+		const podanie = await DocsModel.findOne({ docID, active: true });
+		
+		if (!podanie) return null;
+
+		podanie.active = true;
+		podanie.approved = false;
+		podanie.approver = "";
+
+		await podanie?.save();
+
+		return podanie;
+	}
+
 	async getAll(): Promise<Podanie[] | null> {
 		return await DocsModel.find();
 	}

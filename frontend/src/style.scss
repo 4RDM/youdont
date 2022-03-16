@@ -257,6 +257,12 @@ body {
 		border-radius: 5px;
 		height: 60px;
 		background: #262626;
+		.card-buttons {
+			display: flex;
+			align-items: center;
+			row-gap: 5px;
+			column-gap: 5px;
+		}
 		button {
 			height: 40px;
 			width: 40px;
