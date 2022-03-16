@@ -35,6 +35,11 @@ const AdminDocs: FC = () => {
 	const [popupTitle, setPopupTitle] = useState('')
 	const [popupContent, setPopupContent] = useState('')
 
+	const wsclient = new WebSocket(`${location.href.startsWith('https') ? "wss" : "ws"}://${location.host}/api/docs`)
+	wsclient.onmessage = (msg) => {
+		if(msg.data == "UPDATE") refetch();
+	}
+
 	const err = () => {
 		setPopupContent('Nieznany błąd serwera!')
 		setPopupTitle('❌ Błąd!')

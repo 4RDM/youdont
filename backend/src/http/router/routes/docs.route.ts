@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { WebSocket } from "ws";
 const router = Router();
 
 const regex = /(?:https?:\/\/)?steamcommunity\.com\/(?:profiles|id)\/[a-zA-Z0-9]+/gm;
+const wssclients: WebSocket[] = [];
 
 const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { userid } = req.session;
@@ -26,6 +28,13 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 		}
 	}
 };
+
+router.ws("/", async (ws) => {
+	wssclients.push(ws);
+	ws.on("close", () => {
+		wssclients.splice(wssclients.indexOf(ws), 1);
+	});
+});
 
 router.get("/docs", adminCheck, async (req, res) => {
 	const fetched = (await req.core.database.docs.getAllActive()) || [];
@@ -79,6 +88,7 @@ router.delete("/doc/:id", adminCheck, async (req, res) => {
 
 	const removed = await req.core.database.docs.remove(id);
 
+	wssclients.forEach((c) => c.send("UPDATE"));
 	res.json({ code: 200, message: "Ok!", author: removed?.author });
 });
 
@@ -86,6 +96,8 @@ router.post("/doc/:id/accept", adminCheck, async (req, res) => {
 	const { id } = req.params;
 	if (!req.session.username) return res.json({ code: 400, message: "Bad request" });
 	await req.core.database.docs.changeState(id, true, req.session.username, "");
+
+	wssclients.forEach((c) => c.send("UPDATE"));
 	return res.json({ code: 200, message: "Ok!" });
 });
 
@@ -94,6 +106,8 @@ router.post("/doc/:id/reject", adminCheck, async (req, res) => {
 	const { reason } = req.body;
 	if (!req.session.username || !reason) return res.json({ code: 400, message: "Bad request" });
 	await req.core.database.docs.changeState(id, false, req.session.username, reason);
+
+	wssclients.forEach((c) => c.send("UPDATE"));
 	return res.json({ code: 200, message: "Ok!" });
 });
 
@@ -105,12 +119,14 @@ router.get("/doc/:id/revert", adminCheck, async (req, res) => {
 
 	if (!response) return res.json({ code: 400, message: "Cannot find active application with provided ID" });
 
+	wssclients.forEach((c) => c.send("UPDATE"));
 	return res.json({ code: 200, message: "Ok!" });
 });
 
-router.get("/publish", adminCheck, (req, res) => {
+router.get("/publish", adminCheck, async (req, res) => {
 	if (!req.session.userid) return;
-	req.core.database.docs.publishResults(req.session.userid);
+	await req.core.database.docs.publishResults(req.session.userid);
+	wssclients.forEach((c) => c.send("UPDATE"));
 });
 
 router.post("/upload", async (req, res) => {
@@ -143,6 +159,7 @@ router.post("/upload", async (req, res) => {
 		steam,
 	});
 
+	wssclients.forEach((c) => c.send("UPDATE"));
 	res.json({ code: 200, message: "Ok!", docID: doc?.docID });
 });
 
