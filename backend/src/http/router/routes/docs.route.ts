@@ -106,11 +106,11 @@ router.get("/publish", adminCheck, (req, res) => {
 router.post("/upload", async (req, res) => {
 	const { author, nick, age, voice, long, short, steam } = req.body;
 
-	const user = await req.core.database.docs.getAllUser(author);
-	if (user && user.length > 2) return res.json({ code: 400, message: 9012 });
+	const user = (await req.core.database.docs.getAllUser(author))?.filter(x => x.active);
+	if (user && user.length >= 2) return res.json({ code: 400, message: "Too many active docs" });
 
 	if (!nick || !author || !steam || !age || !short || !long)
-		return res.json({ code: 1, message: 1 });
+		return res.json({ code: 400, message: "Missing request fields" });
 
 	const problems = [];
 
@@ -119,7 +119,7 @@ router.post("/upload", async (req, res) => {
 	if (age < 12 || age > 99) problems.push("age");
 	if (nick !== `${req.session.username}#${req.session.tag}`) problems.push("nick");
 	if (author !== req.session.userid) problems.push("discord");
-	if (!regex.test(steam)) problems.push("steam");
+	// if (!test) problems.push("steam");
 
 	if (problems.length !== 0) return res.json({ code: 400, message: "Bad request", problems });
 
