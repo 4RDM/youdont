@@ -29,9 +29,6 @@ export default class HTTP {
 				store: new memoryStore({ checkPeriod: 86400000 }),
 				resave: false,
 				saveUninitialized: false,
-				cookie: {
-					secure: process.env.NODE_ENV == "production",
-				},
 			})
 		);
 	
@@ -43,8 +40,6 @@ export default class HTTP {
 			res.setHeader("x-powered-by", "Nimplex's love"); // easter egg ;)
 			next();
 		});
-		this.server.use("/api", apiRouter);
-		this.server.use("/", indexRouter);
 
 		this.server.ws("/api/docs", async (ws) => {
 			this.wssclients.push(ws);
@@ -52,6 +47,10 @@ export default class HTTP {
 				this.wssclients.splice(this.wssclients.indexOf(ws), 1);
 			});
 		});
+
+
+		this.server.use("/api", apiRouter);
+		this.server.use("/", indexRouter);
 
 		this.server.listen(8021, () => logger.ready("Listening to port 8021"));
 	}
