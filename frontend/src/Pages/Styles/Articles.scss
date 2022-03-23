@@ -1,0 +1,60 @@
+#articles-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	padding: 20px;
+}
+
+.article-card {
+	display: grid;
+	grid-template-areas: "header" "description" "sub";
+	grid-template-rows: 0.25fr 1fr 0.25fr;
+	gap: 5px;
+	padding: 10px;
+	height: 300px;
+	width: 450px;
+	background: #1a1a1a;
+	border-radius: 5px;
+	cursor: pointer;
+	* {
+		color: white;
+	}
+	.article-card-header {
+		display: flex;
+		align-items: center;
+		grid-area: header;
+		font-size: 25px;
+	}
+	.article-card-description {
+		grid-area: description;
+		display: flex;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+	}
+	.article-card-sub {
+		grid-area: sub;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-top: 1px solid #2a2a2a;
+		padding-top: 5px;
+		.article-card-author {
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			img {
+				height: 35px;
+				width: 35px;
+				border-radius: 90px;
+			}
+		}
+		.article-views, .article-author {
+			font-size: 15px;
+			color: white;
+		}
+	}
+}
