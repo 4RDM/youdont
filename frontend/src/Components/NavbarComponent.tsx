@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar: FC = () => {
-	const { pathname } = useLocation();
+	const location = useLocation();
 	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 	const [toggle, setToggle] = useState(false);
 
@@ -16,7 +16,7 @@ const Navbar: FC = () => {
 	}, []);
 
 
-	useEffect(() => setToggle(false), [pathname]);
+	useEffect(() => setToggle(false), [location.pathname]);
 
 	return (
 		<div id="container-navbar">

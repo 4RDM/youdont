@@ -36,14 +36,14 @@ router.use(staticFiles(join(publicPath, "data")));
 router.get(
 	[
 		"/",
+		"/dashboard",
+		"/dashboard/admin",
+		"/dashboard/admin/applications",
+		"/dashboard/admin/stats",
+		"/dashboard/admin/articles",
 		"/articles",
-		"/article/:id",
-		"/panel",
-		"/panel/admin",
-		"/files",
-		"/administration",
-		"/wlasciciele",
-		"/podania"
+		"/articles/:id",
+		"/applications",
 	],
 	spaHandler
 );

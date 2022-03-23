@@ -28,7 +28,7 @@ const ArticleCard: FC<{ article: Article }> = (props) => {
 				<p className="article-card-description">{props.article.description}</p>
 				<div className="article-card-sub">
 					<div className="article-card-author">
-						<img src={props.article.author.avatar} alt="Awatar autora" />
+						<img src={props.article.author.avatar} alt="Awatar autora" crossOrigin="anonymous" />
 						<p className="article-author">{props.article.author.nickname}</p>
 					</div>
 					<p className="article-views"><Eye size={15} /> {props.article.views}</p>
@@ -42,26 +42,13 @@ const Articles: FC = () => {
 	const [isLoading, setLoading] = useState(true);
 	const [articles, setArticles] = useState<Article[]>([]);
 
-	const temp: Article[] = [];
-	for (let i = 0; i < 20; i++) temp.push({
-		title: "Wpłata na serwer",
-		description: "Krótki artykuł wyjaśniający wszystko co musisz wiedzieć przed/po wpłaceniu dotacji na serwer.",
-		background: "https://4rdm.pl/content/images/2021/08/donateuwaga.png",
-		id: "1234",
-		author: {
-			nickname: "Kubamaz",
-			avatar: "https://cdn.discordapp.com/avatars/594526434526101527/a_c1af0e5c48ff435a49da731b412d0c63.webp?size=96"
-		},
-		tags: ["donate", "4rdm", "rdm", "paypal", "psc", "blik"],
-		views: 100,
-		createDate: new Date(),
-	});
-
 	useEffect(() => {
-		setArticles(temp);
+		fetch("/api/articles").then(x => x.json()).then(json => {
+			if (json.code !== 200) return alert("BŁĄD");
+			setArticles(json.articles);
+			setLoading(false);
+		});
 	}, []);
-
-	setTimeout(() => setLoading(false), 200);
 
 	return (
 		<>

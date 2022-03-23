@@ -10,18 +10,17 @@ import Footer from "./FooterComponent";
 import Navbar from "./NavbarComponent";
 
 const Container: FC = (props) => {
-	const { pathname } = useLocation();
+	const location = useLocation();
 
 	useEffect(() => {
 		window.scrollTo({
 			top: 0,
 			left: 0,
-			// behavior: "smooth",
 		});
-	}, [pathname]);
+	}, [location.pathname]);
 
 	return (
-		<div id="container" style={{ "backgroundImage": pathname == "/" ? `url(${image})` : "none"}}>
+		<div id="container" style={{ "backgroundImage": location.pathname == "/" ? `url(${image})` : "none"}}>
 			<Navbar />
 			<div id="container-content">{props.children}</div>
 			<Footer />

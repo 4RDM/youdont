@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import * as marked from "marked";
 
 // Assets
@@ -22,28 +23,21 @@ const Article: FC = () => {
 	const [isLoading, setLoading] = useState(true);
 	const [article, setArticle] = useState<Article | null>(null);
 	const content = useRef<HTMLDivElement>(null);
+	const { id } = useParams();
 
 	useEffect(() => {
-		setArticle({
-			title: "Wpłata na serwer",
-			content: "# Witaj świecie!\n\nCześć co u ciebie?\n\n![Lorem ipsum](https://4rdm.pl/public/assets/logo.png)",
-			author: {
-				nickname: "Kubamaz",
-				avatar: "https://cdn.discordapp.com/avatars/594526434526101527/a_c1af0e5c48ff435a49da731b412d0c63.webp?size=96"
-			},
-			tags: ["donate", "4rdm", "rdm", "paypal", "psc", "blik"],
-			views: 100,
-			createDate: new Date(),
+		fetch(`/api/articles/${id}`).then(x => x.json()).then(json => {
+			if (json.code !== 200) return alert("BŁĄD");
+			setArticle(json.article);
+			setLoading(false);
 		});
 	}, []);
 
 	useEffect(() => {
 		if (article && content.current) {
-			content.current.innerHTML = marked.marked(article.content);
+			content.current.innerHTML = marked.marked(article.content).replace(/<img/, "<img crossorigin=\"anonymous\" ");
 		}
 	}, [isLoading, article, content]);
-
-	setTimeout(() => setLoading(false), 1000);
 
 	return (
 		<>
@@ -57,7 +51,7 @@ const Article: FC = () => {
 									<img src={article.author.avatar} alt="Awatar autora" crossOrigin="anonymous" />
 									<p>{article.author.nickname},</p>
 								</div>
-								<p id="article-publication-date">Data publikacji: {article.createDate.toLocaleDateString()}, wyświetlenia: {article.views}</p>
+								<p id="article-publication-date">Data publikacji: {new Date(article.createDate).toLocaleDateString()}</p>
 							</div>
 						</div>
 						<div id="article-content" ref={content}></div>

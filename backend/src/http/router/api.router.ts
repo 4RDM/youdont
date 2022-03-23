@@ -11,7 +11,7 @@ import docsRouter from "./routes/docs.route";
 import dashboardRouter from "./routes/dashboard.route";
 import shortsRouter from "./routes/shorts.route";
 import filesRoute from "./routes/files.route";
-import morgan from "morgan";
+import articleRouter from "./routes/article.route";
 
 const router = Router();
 
@@ -27,10 +27,10 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 
 router.use(json());
 router.use(urlencoded({ extended: true }));
-router.use(morgan("dev")); // morgan for development/debug purposes
 
 router.use("/docs", userCheck, docsRouter);
 router.use("/shorts", userCheck, shortsRouter);
+router.use("/articles", articleRouter);
 router.use("/files", filesRoute);
 router.use("/dashboard", dashboardRouter);
 

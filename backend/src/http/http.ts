@@ -19,7 +19,7 @@ export default class HTTP {
 	public wssclients: WebSocket[] = [];
 
 	constructor(core: Core) {
-		this.server.use(helmet({ contentSecurityPolicy: false }));
+		// this.server.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }));
 
 		const memoryStore = MemoryStore(session);
 
