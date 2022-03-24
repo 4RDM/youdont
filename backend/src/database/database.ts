@@ -8,6 +8,7 @@ import config from "../config";
 import { Core } from "../";
 import { SettingManager } from "./managers/settings.manager";
 import { PlayerDataManager } from "./managers/PlayerData.manager";
+import { ArticleManager } from "./managers/articles.manager";
 
 export default class Database {
 	public readonly donates: DonatesManager;
@@ -16,6 +17,7 @@ export default class Database {
 	public readonly shorts: ShortsManager;
 	public readonly settings: SettingManager;
 	public readonly playerData: PlayerDataManager;
+	public readonly articles: ArticleManager;
 
 	constructor(core: Core) {
 		// prettier-ignore
@@ -25,6 +27,7 @@ export default class Database {
 		this.shorts = new ShortsManager(core);
 		this.settings = new SettingManager(core);
 		this.playerData = new PlayerDataManager();
+		this.articles = new ArticleManager();
 
 		mongoose
 			.connect(

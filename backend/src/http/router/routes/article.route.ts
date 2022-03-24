@@ -1,37 +1,84 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 const router = Router();
 
-router.get("/", (req, res) => {
+const adminCheck = (req: Request, res: Response, next: NextFunction) => {
+	const { userid } = req.session;
+
+	if (!userid) return res.send("500");
+
+	const settings = req.core.database.settings;
+	const fetchedUser = settings.getUser(userid);
+
+	if (!fetchedUser)
+		return res.status(401).json({
+			code: 401,
+			message: "Unauthorized",
+		});
+	else {
+		if (settings.hasPermission(userid, "MANAGE_ARTICLES")) next();
+		else {
+			res.status(401).json({
+				code: 5001,
+				message: "You dont have permissions to this",
+			});
+		}
+	}
+};
+
+router.get("/", async (req, res) => {
 	res.json({
 		code: 200,
 		message: "Ok!",
-		articles: [{
-			title: "Wpłata na serwer",
-			description: "Krótki artykuł wyjaśniający wszystko co musisz wiedzieć przed/po wpłąceniu dotacji na serwer.",
-			author: {
-				nickname: "Kubamaz",
-				avatar: "https://cdn.discordapp.com/avatars/594526434526101527/a_c1af0e5c48ff435a49da731b412d0c63.webp?size=96"
-			},
-			id: "1",
-			views: 100,
-			createDate: new Date(),
-		}]
+		articles: await req.core.database.articles.getAll()
 	});
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
+	const { id } = req.params;
+	const article = await req.core.database.articles.get(id);
+
+	if (!article) res.json({
+		code: 404,
+		message: "Not found article"
+	});
+
 	res.json({
 		code: 200,
 		message: "Ok!",
-		article: {
-			title: "Wpłata na serwer",
-			content: "# Witaj świecie!\n\nCześć co u ciebie?\n\n![Lorem ipsum](https://4rdm.pl/public/assets/logo.png)",
-			author: {
-				nickname: "Kubamaz",
-				avatar: "https://cdn.discordapp.com/avatars/594526434526101527/a_c1af0e5c48ff435a49da731b412d0c63.webp?size=96"
-			},
-			createDate: new Date(),
-		}
+		article
+	});
+});
+
+router.post("/create", adminCheck, async (req, res) => {
+	const { title, description, content, id } = req.body;
+
+	if (!title || !description || !content || !id) return res.status(400).json({
+		code: 400,
+		message: "Missing body",
+	});
+
+	if (!req.session.username || !req.session.avatar) return res.status(400).json({
+		code: 400,
+		message: "Missing avatar or nickname",
+	});
+
+	const article = await req.core.database.articles.create({
+		title,
+		description,
+		content,
+		id,
+		createDate: new Date(),
+		author: {
+			nickname: req.session.username,
+			avatar: `https://cdn.discordapp.com/avatars/${req.session.userid}/${req.session.avatar}`,
+		},
+		views: 0
+	});
+
+	res.json({
+		code: 200,
+		message: "Ok!",
+		article
 	});
 });
 
