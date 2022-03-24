@@ -27,6 +27,7 @@ const Article: FC = () => {
 
 	useEffect(() => {
 		fetch(`/api/articles/${id}`).then(x => x.json()).then(json => {
+			// TODO: handle error
 			if (json.code !== 200) return alert("BŁĄD");
 			setArticle(json.article);
 			setLoading(false);

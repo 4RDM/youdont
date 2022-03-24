@@ -32,7 +32,7 @@ router.get("/switchstate", adminCheck, async (req, res) => {
 	res.json({ code: 200, message: "Ok!" });
 });
 
-router.get("/docs", adminCheck, async (req, res) => {
+router.get("/applications", adminCheck, async (req, res) => {
 	const fetched = (await req.core.database.docs.getAllActive()) || [];
 	res.json({ code: 200, message: "Ok!", data: fetched });
 });
@@ -46,7 +46,7 @@ router.get("/user/all", async (req, res) => {
 	});
 });
 
-router.get("/doc/:id", adminCheck, async (req, res) => {
+router.get("/application/:id", adminCheck, async (req, res) => {
 	const { id } = req.params;
 
 	if (!id) return res.json({ code: 400, message: "Missing 'id'." });
@@ -77,7 +77,7 @@ router.get("/doc/:id", adminCheck, async (req, res) => {
 	});
 });
 
-router.delete("/doc/:id", adminCheck, async (req, res) => {
+router.delete("/application/:id", adminCheck, async (req, res) => {
 	const { id } = req.params;
 
 	if (!id) return res.json({ code: 400, message: "Missing 'id'." });
@@ -88,7 +88,7 @@ router.delete("/doc/:id", adminCheck, async (req, res) => {
 	res.json({ code: 200, message: "Ok!", author: removed?.author });
 });
 
-router.post("/doc/:id/accept", adminCheck, async (req, res) => {
+router.post("/application/:id/accept", adminCheck, async (req, res) => {
 	const { id } = req.params;
 	if (!req.session.username) return res.json({ code: 400, message: "Bad request" });
 	await req.core.database.docs.changeState(id, true, req.session.username, "");
@@ -97,7 +97,7 @@ router.post("/doc/:id/accept", adminCheck, async (req, res) => {
 	return res.json({ code: 200, message: "Ok!" });
 });
 
-router.post("/doc/:id/reject", adminCheck, async (req, res) => {
+router.post("/application/:id/reject", adminCheck, async (req, res) => {
 	const { id } = req.params;
 	const { reason } = req.body;
 	if (!req.session.username || !reason) return res.json({ code: 400, message: "Bad request" });
@@ -107,7 +107,7 @@ router.post("/doc/:id/reject", adminCheck, async (req, res) => {
 	return res.json({ code: 200, message: "Ok!" });
 });
 
-router.get("/doc/:id/revert", adminCheck, async (req, res) => {
+router.get("/application/:id/revert", adminCheck, async (req, res) => {
 	const { id } = req.params;
 
 	if (!req.session.username) return res.json({ code: 400, message: "Bad request" });

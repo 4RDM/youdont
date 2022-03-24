@@ -1,12 +1,14 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "../App";
 
 const Navbar: FC = () => {
 	const location = useLocation();
+	const session = useContext(UserContext);
 	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 	const [toggle, setToggle] = useState(false);
 
-	const PanelOrLogout = location.pathname == "/dashboard" ? <a href="/api/dashboard/logout">Wyloguj Się</a> : <Link to="/dashboard">Panel użytkownika</Link>;
+	const PanelOrLogout = session !== null ? location.pathname == "/dashboard" ? <a href="/api/dashboard/logout">Wyloguj Się</a> : <Link to="/dashboard">Panel użytkownika</Link> : <a href="/api/dashboard/login">Zaloguj się</a>;
 	const toggleMenu = () => setToggle(!toggle);
 
 	useEffect(() => {
@@ -14,7 +16,6 @@ const Navbar: FC = () => {
 		window.addEventListener("resize", resizeListener);
 		return () => window.removeEventListener("resize", resizeListener);
 	}, []);
-
 
 	useEffect(() => setToggle(false), [location.pathname]);
 

@@ -7,7 +7,7 @@ import {
 	Response,
 } from "express";
 
-import docsRouter from "./routes/docs.route";
+import applicationsRouter from "./routes/applications.route";
 import dashboardRouter from "./routes/dashboard.route";
 import shortsRouter from "./routes/shorts.route";
 import filesRoute from "./routes/files.route";
@@ -28,7 +28,7 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 router.use(json());
 router.use(urlencoded({ extended: true }));
 
-router.use("/docs", userCheck, docsRouter);
+router.use("/applications", userCheck, applicationsRouter);
 router.use("/shorts", userCheck, shortsRouter);
 router.use("/articles", articleRouter);
 router.use("/files", filesRoute);

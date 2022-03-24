@@ -14,8 +14,8 @@
 	[x] Lista artykułów
 	[x] Pojedyńczy artykuł
 	[x] Renderowanie Markdownu
-	[ ] Pobieranie listy artykułów z API
-	[ ] Pobieranie artykułów z API
+	[x] Pobieranie listy artykułów z API
+	[x] Pobieranie artykułów z API
 [x] Container
 	[x] Footer
 		[x] Cytaty

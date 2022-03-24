@@ -25,7 +25,7 @@ const spaHandler = async (req: Request, res: Response) => {
 	if (existsSync(publicPath)) {
 		res.sendFile(join(publicPath, "index.html"));
 	} else {
-		res.send(
+		res.status(500).send(
 			"<h1>Błąd serwera, skontaktuj się z administratorem strony</h1>"
 		);
 	}
