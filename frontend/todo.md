@@ -1,8 +1,8 @@
 [X] Homepage
-[ ] Dashboard
-	[ ] Wyświetlanie rangi
-	[ ] Wyświetlanie podań
-	[ ] Wyświetlanie statystyk
+[x] Dashboard
+	[x] Wyświetlanie rangi
+	[x] Wyświetlanie podań
+	[x] Wyświetlanie statystyk
 [ ] Admin dashboard
 	[ ] Statystyki serwera / bota
 	[ ] Ustawienia administracyjne
