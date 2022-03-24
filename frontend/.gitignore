@@ -1,3 +1,4 @@
 dist/public
+!dist/data/*
 yarn.lock
 node_modules
