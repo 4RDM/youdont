@@ -3,6 +3,7 @@
 	[x] Wyświetlanie rangi
 	[x] Wyświetlanie podań
 	[x] Wyświetlanie statystyk
+[x] Administracja
 [ ] Admin dashboard
 	[ ] Statystyki serwera / bota
 	[ ] Ustawienia administracyjne

@@ -84,7 +84,7 @@ const Dashboard: FC = () => {
 						<div className="content">
 							<Card className="dashboard-stat">
 								<h1>Czas gry</h1>
-								<p>{stats.playTime}</p>
+								<p>{((stats.playTime || 0) / 60).toFixed(2)}h</p>
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>Kills</h1>
