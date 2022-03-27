@@ -20,6 +20,8 @@ const Articles = lazy(() => import("./Pages/Articles/Index"));
 const Article = lazy(() => import("./Pages/Articles/Article"));
 const Applications = lazy(() => import("./Pages/Applications"));
 const Administration = lazy(() => import("./Pages/Administration"));
+const AdminShorts = lazy(() => import("./Pages/Dashboard/AdminShorts"));
+const AdminFiles = lazy(() => import("./Pages/Dashboard/AdminFiles"));
 
 export type Permission =
 	| "MANAGE_USERS"
@@ -88,8 +90,10 @@ const App: FC = () => {
 									<Route path="admin">
 										<Route index element={<AdminDashboard />} />
 										<Route path="applications" element={<AdminApplications />} />
-										<Route path="stats" element={<AdminStats />} />
 										<Route path="articles" element={<AdminArticles />} />
+										<Route path="shorts" element={<AdminShorts />} />
+										<Route path="files" element={<AdminFiles />} />
+										<Route path="stats" element={<AdminStats />} />
 									</Route>
 								</Route>
 								<Route path="articles">

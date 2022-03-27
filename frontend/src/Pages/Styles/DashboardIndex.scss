@@ -57,6 +57,7 @@ $card-background: #1f1f1f;
 			gap: 10px;
 			.content {
 				display: flex;
+				flex-wrap: wrap;
 				gap: 5px;
 				@media (max-width: 720px) {
 					& {
@@ -64,9 +65,10 @@ $card-background: #1f1f1f;
 					}
 				}
 			}
-			button {
+			a {
 				outline: none;
 				border: none;
+				text-decoration: none;
 				padding: 10px;
 				border-radius: 5px;
 				cursor: pointer;
@@ -85,10 +87,12 @@ $card-background: #1f1f1f;
 				background: $card-background;
 				border-radius: 5px;
 				h1 {
-					font-size: 25px;
+					font-size: 15px;
+					font-weight: 400;
 				}
 				p {
-					font-size: 18px;
+					font-size: 25px;
+					font-weight: 800;
 				}
 			}
 			.content {

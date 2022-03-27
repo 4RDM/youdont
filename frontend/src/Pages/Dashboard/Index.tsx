@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 
 // Assets
@@ -74,11 +75,12 @@ const Dashboard: FC = () => {
 						<div id="dashboard-admin">
 							<h1>Administracyjne</h1>
 							<div className="content">
-								{hasPermissions(session, "MANAGE_DOCS") && <button>Sprawdzanie podań</button>}
-								{hasPermissions(session, "MANAGE_SHORTS") && <button>Skracanie linków</button>}
-								{hasPermissions(session, "MANAGE_FILES") && <button>Współdzielenie plików</button>}
-								{hasPermissions(session, "MANAGE_ARTICLES") && <button>Zarządzanie artykułami</button>}
-								{hasPermissions(session, "ADMINISTRATOR") && <button>Statystyki</button>}
+								<Link to="/admin">Panel administracyjny</Link>
+								{hasPermissions(session, "MANAGE_DOCS") && <Link to="admin/applications">Sprawdzanie podań</Link>}
+								{hasPermissions(session, "MANAGE_SHORTS") && <Link to="admin/shorts">Skracanie linków</Link>}
+								{hasPermissions(session, "MANAGE_FILES") && <Link to="admin/files">Współdzielenie plików</Link>}
+								{hasPermissions(session, "MANAGE_ARTICLES") && <Link to="admin/articles">Zarządzanie artykułami</Link>}
+								{hasPermissions(session, "ADMINISTRATOR") && <Link to="admin/stats">Statystyki</Link>}
 							</div>
 						</div>
 					}
