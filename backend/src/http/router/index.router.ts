@@ -36,6 +36,7 @@ router.use(staticFiles(join(publicPath, "data")));
 router.get(
 	[
 		"/",
+		"/administration",
 		"/dashboard",
 		"/dashboard/admin",
 		"/dashboard/admin/applications",
