@@ -4,6 +4,7 @@ import { PulseLoader } from "react-spinners";
 // Assets
 import { UserContext } from "../../App";
 import Loading from "../../Components/LoadingComponent";
+import LoginComponent from "../../Components/LoginComponent";
 import "../Styles/DashboardIndex.scss";
 
 interface Application {
@@ -58,7 +59,7 @@ const Dashboard: FC = () => {
 		});
 	}, []);
 
-	return loading ? <Loading /> : (
+	return session?.user == undefined ? <LoginComponent /> : (
 		<div id="dashboard-container">
 			<div id="dashboard-center-container">
 				<div id="dashboard-header">
@@ -84,37 +85,37 @@ const Dashboard: FC = () => {
 						<div className="content">
 							<Card className="dashboard-stat">
 								<h1>Czas gry</h1>
-								<p>{((stats.playTime || 0) / 60).toFixed(2)}h</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{((stats.playTime || 0) / 60).toFixed(2)}h</p> }
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>Kills</h1>
-								<p>{stats.kills}</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{stats.kills}</p> }
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>Deaths</h1>
-								<p>{stats.deaths}</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{stats.deaths}</p> }
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>K/D ratio</h1>
-								<p>{stats.kdr?.toFixed(2)}</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{stats.kdr?.toFixed(2)}</p> }
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>Headshots</h1>
-								<p>{stats.heady}</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{stats.heady}</p> }
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>Steam HEX</h1>
-								<p>{stats.identifier}</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{stats.identifier}</p> }
 							</Card>
 							<Card className="dashboard-stat">
 								<h1>Ranga</h1>
-								<p>{session?.user?.role}</p>
+								{ loading ? <PulseLoader color="white" size={15} /> : <p>{session?.user?.role}</p> }
 							</Card>
 						</div>
 					</div>
 					<div id="dashboard-applications">
 						<h1>Podania</h1>
-						{applicationsLoading && <PulseLoader size={35} color={"white"} />}
+						{applicationsLoading && <PulseLoader size={35} color="white" />}
 						<div className="content">
 							{applications.map((podanie) => <Card key={podanie._id} className="dashboard-application">
 								<h1>#{podanie._id.substring(0, 7)}</h1>
