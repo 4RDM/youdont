@@ -26,6 +26,7 @@ export type Permission =
 	| "MANAGE_SHORTS"
 	| "MANAGE_DOCS"
 	| "MANAGE_FILES"
+	| "MANAGE_ARTICLES"
 	| "ADMINISTRATOR"
 
 interface IUserContext {
@@ -44,6 +45,21 @@ interface IUserContext {
 type State = IUserContext | null;
 
 export const UserContext = createContext<State>({});
+
+export const isAdmin = (user: IUserContext) => {
+	if (!user.permissions) return false;
+	return	hasPermissions(user, "ADMINISTRATOR")   ||
+			hasPermissions(user, "MANAGE_DOCS")     ||
+			hasPermissions(user, "MANAGE_FILES")    ||
+			hasPermissions(user, "MANAGE_SHORTS")   ||
+			hasPermissions(user, "MANAGE_ARTICLES") ||
+			hasPermissions(user, "MANAGE_USERS");
+};
+
+export const hasPermissions = (user: IUserContext, permission: Permission) => {
+	if (!user.permissions) return false;
+	return user.permissions.includes("ADMINISTRATOR") || user.permissions.includes(permission);
+};
 
 const App: FC = () => {
 	const [UserState, setUserState] = useState<IUserContext | null>(null);

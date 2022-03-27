@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 
 // Assets
-import { UserContext } from "../../App";
+import { hasPermissions, isAdmin, UserContext } from "../../App";
 import Loading from "../../Components/LoadingComponent";
 import LoginComponent from "../../Components/LoginComponent";
 import "../Styles/DashboardIndex.scss";
@@ -70,16 +70,18 @@ const Dashboard: FC = () => {
 					</div>
 				</div>
 				<div id="dashboard-stats">
-					<div id="dashboard-admin">
-						<h1>Administracyjne</h1>
-						<div className="content">
-							{true && <button>Sprawdzanie podań</button>}
-							{true && <button>Skracanie linków</button>}
-							{true && <button>Współdzielenie plików</button>}
-							{true && <button>Statystyki</button>}
-							{true && <button>Zarządzanie artykułami</button>}
+					{ isAdmin(session) &&
+						<div id="dashboard-admin">
+							<h1>Administracyjne</h1>
+							<div className="content">
+								{hasPermissions(session, "MANAGE_DOCS") && <button>Sprawdzanie podań</button>}
+								{hasPermissions(session, "MANAGE_SHORTS") && <button>Skracanie linków</button>}
+								{hasPermissions(session, "MANAGE_FILES") && <button>Współdzielenie plików</button>}
+								{hasPermissions(session, "MANAGE_ARTICLES") && <button>Zarządzanie artykułami</button>}
+								{hasPermissions(session, "ADMINISTRATOR") && <button>Statystyki</button>}
+							</div>
 						</div>
-					</div>
+					}
 					<div id="dashboard-ingame">
 						<h1>Statystyki</h1>
 						<div className="content">
