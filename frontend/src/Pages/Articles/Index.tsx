@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 
 // Assets
 import LoadingComponent from "../../Components/LoadingComponent";
+import Container from "../../Components/ContainerComponent";
 import "../Styles/Articles.scss";
+
 
 interface Article {
 	title: string
@@ -52,7 +54,7 @@ const Articles: FC = () => {
 	}, []);
 
 	return (
-		<>
+		<Container>
 			{isLoading ? (<LoadingComponent />) :
 				(
 					<div id="articles-container">
@@ -62,7 +64,7 @@ const Articles: FC = () => {
 					</div>
 				)
 			}
-		</>
+		</Container>
 	);
 };
 

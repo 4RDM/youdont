@@ -4,7 +4,9 @@ import * as marked from "marked";
 
 // Assets
 import LoadingComponent from "../../Components/LoadingComponent";
+import Container from "../../Components/ContainerComponent";
 import "../Styles/Article.scss";
+
 
 interface Article {
 	title: string
@@ -41,7 +43,7 @@ const Article: FC = () => {
 	}, [isLoading, article, content]);
 
 	return (
-		<>
+		<Container>
 			{(isLoading || !article) ? (<LoadingComponent />) :
 				(
 					<div id="article-container">
@@ -59,7 +61,7 @@ const Article: FC = () => {
 					</div>
 				)
 			}
-		</>
+		</Container>
 	);
 };
 

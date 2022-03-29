@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 
 // Assets
 import Loading from "../Components/LoadingComponent";
+import Container from "../Components/ContainerComponent";
 import "./Styles/Administration.scss";
 
 interface Roles {
@@ -29,7 +30,7 @@ const Administration: FC = () => {
 	}, []);
 
 	return (
-		<>
+		<Container>
 			{
 				loading ? (<Loading />) : (
 					<div id="administration-container">
@@ -48,7 +49,7 @@ const Administration: FC = () => {
 					</div>
 				)
 			}
-		</>
+		</Container>
 	);
 };
 
