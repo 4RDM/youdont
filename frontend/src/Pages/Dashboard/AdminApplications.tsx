@@ -21,29 +21,40 @@ interface Podanie {
 	docID?: string
 }
 
-const Card: FC<{ podanie: Podanie }> = (props) => {
-	return (
-		<div className="card">
-			<h1>{props.podanie.nick}</h1>
-			<div className="buttons">
-				<button><Eye /></button>
-				<button><Trash /></button>
-			</div>
-		</div>
-	);
-};
-
 const AdminApplications: FC = () => {
 	const [Applications, setApplications] = useState<Podanie[]>([]);
 	
 	useEffect(() => {
-		fetch("/api/applications/applications").then(x => x.json()).then(res => {
+		refetch();
+	}, []);
+
+	const refetch = () => fetch("/api/applications/applications").then(x => x.json()).then(res => {
+		// TODO: handle error
+		if (res.code !== 200) return;
+		setApplications(res.data);
+	});
+
+	const remove = (docID: string) => {
+		fetch(`/api/applications/application/${docID}`, {
+			method: "DELETE"
+		}).then((x) => x.json()).then(res => {
 			// TODO: handle error
 			if (res.code !== 200) return;
-			console.log(res);
-			setApplications(res.data);
+			refetch();
 		});
-	}, []);
+	};
+
+	const Card: FC<{ podanie: Podanie }> = (props) => {
+		return (
+			<div className="card">
+				<h1>{props.podanie.nick}</h1>
+				<div className="buttons">
+					<button><Eye /></button>
+					<button onClick={() => props.podanie.docID && remove(props.podanie.docID)}><Trash /></button>
+				</div>
+			</div>
+		);
+	};
 
 	return (
 		<div id="admin-applications">
