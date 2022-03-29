@@ -1,0 +1,38 @@
+#admin-applications {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax(500px, 1fr) );
+	gap: 15px;
+	align-content: center;
+	justify-items: center;
+	width: 100%;
+	padding: 20px;
+	.admin-application-cat {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 100%;
+	}
+	.card {
+		display: flex;
+		padding: 10px;
+		justify-content: space-between;
+		align-items: center;
+		height: 70px;
+		border-radius: 5px;
+		background: #1f1f1f;
+		.buttons {
+			display: flex;
+			gap: 5px;
+			button {
+				border: none;
+				outline: none;
+				border-radius: 5px;
+				color: white;
+				background: #2a2a2a;
+				padding: 10px;
+				height: 40px;
+				width: 40px;
+			}
+		}
+	}
+}

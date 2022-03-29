@@ -5,7 +5,7 @@ import SidebarDesktop from "./SidebarDesktop";
 import SidebarMobile from "./SidebarMobile";
 
 // Assets
-import "./styles/Container.scss";
+import "./Styles/Container.scss";
 
 const Container: FC = (props) => {
 	const [screenWidth, setWidth] = useState(window.innerWidth);

@@ -15,20 +15,16 @@ const SidebarDesktop: FC = (props) => {
 
 	return (
 		<div id="sidebar-desktop">
-			<a href="/" id="sidebar-desktop-back"><ArrowLeft />Powrót</a>
-			<div className="sidebar-category">
-				<p className="sidebar-spacer">Ogólne</p>
-				<Link to="/dashboard/admin" className={pathname.endsWith("admin") ? "active" : ""}><PieChart />Statystyki</Link>
-				<Link to="applications" className={pathname.endsWith("applications") ? "active" : ""}><Man />Podania</Link>
-				<Link to="articles" className={pathname.endsWith("articles") ? "active" : ""}><Image />Artykuły</Link>
-				<Link to="shorts" className={pathname.endsWith("shorts") ? "active" : ""}><Lin />Skracanie linków</Link>
-				<Link to="files" className={pathname.endsWith("files") ? "active" : ""}><Folder />Pliki</Link>
-			</div>
-			<div className="sidebar-category">
-				<p className="sidebar-spacer">Twoje konto</p>
-				<Link to="settings" className={pathname.endsWith("settings") ? "active" : ""}><Switch />Ustawienia konta</Link>
-				<a href="/api/dashboard/logout"><LogOut />Wyloguj się</a>
-			</div>
+			<a href="/" id="sidebar-desktop-back"><ArrowLeft /></a>
+			<div className="separator"></div>
+			<Link to="/dashboard/admin" className={pathname.endsWith("admin") ? "active" : ""}><PieChart /></Link>
+			<Link to="applications" className={pathname.endsWith("applications") ? "active" : ""}><Man /></Link>
+			<Link to="articles" className={pathname.endsWith("articles") ? "active" : ""}><Image /></Link>
+			<Link to="shorts" className={pathname.endsWith("shorts") ? "active" : ""}><Lin /></Link>
+			<Link to="files" className={pathname.endsWith("files") ? "active" : ""}><Folder /></Link>
+			<div className="separator"></div>
+			<Link to="settings" className={pathname.endsWith("settings") ? "active" : ""}><Switch /></Link>
+			<a href="/api/dashboard/logout"><LogOut /></a>
 		</div>
 	);
 };
