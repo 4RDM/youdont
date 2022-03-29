@@ -44,6 +44,44 @@ const AdminApplications: FC = () => {
 		});
 	};
 
+	const accept = (docID: string) => {
+		fetch(`/api/applications/application/${docID}/accept`, {
+			method: "POST"
+		}).then((x) => x.json()).then(res => {
+			// TODO: handle error
+			if (res.code !== 200) return;
+			refetch();
+		});
+	};
+
+	const reject = (docID: string, reason: string) => {
+		fetch(`/api/applications/application/${docID}/reject`, {
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify({ reason }),
+		}).then((x) => x.json()).then(res => {
+			// TODO: handle error
+			if (res.code !== 200) return;
+			refetch();
+		});
+	};
+
+	const revert = (docID: string, reason: string) => {
+		fetch(`/api/applications/application/${docID}/revert`).then((x) => x.json()).then(res => {
+			// TODO: handle error
+			if (res.code !== 200) return;
+			refetch();
+		});
+	};
+
+	const publish = () => {
+		fetch("/api/applications/publish").then((x) => x.json()).then(res => {
+			// TODO: handle error
+			if (res.code !== 200) return;
+			refetch();
+		});
+	};
+
 	const Card: FC<{ podanie: Podanie }> = (props) => {
 		return (
 			<div className="card">
