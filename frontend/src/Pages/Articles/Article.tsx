@@ -7,8 +7,7 @@ import LoadingComponent from "../../Components/LoadingComponent";
 import Container from "../../Components/ContainerComponent";
 import "../Styles/Article.scss";
 
-
-interface Article {
+export interface Article {
 	title: string
 	content: string
 	author: {
@@ -19,7 +18,6 @@ interface Article {
 	views: number
 	createDate: Date
 }
-
 
 const Article: FC = () => {
 	const [isLoading, setLoading] = useState(true);

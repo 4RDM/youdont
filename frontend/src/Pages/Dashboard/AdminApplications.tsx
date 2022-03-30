@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import "../Styles/AdminApplications.scss";
 import { Trash } from "@styled-icons/entypo/Trash";
 import { Eye } from "@styled-icons/entypo/Eye";
+import { ArrowWithCircleRight } from "@styled-icons/entypo/ArrowWithCircleRight";
 
 interface Podanie {
 	author: string
@@ -34,7 +35,7 @@ const AdminApplications: FC = () => {
 		setApplications(res.data);
 	});
 
-	const remove = (docID: string) => {
+	const removeApplication = (docID: string) => {
 		fetch(`/api/applications/application/${docID}`, {
 			method: "DELETE"
 		}).then((x) => x.json()).then(res => {
@@ -43,6 +44,8 @@ const AdminApplications: FC = () => {
 			refetch();
 		});
 	};
+
+	const openApplication = (docID: string) => {};
 
 	const accept = (docID: string) => {
 		fetch(`/api/applications/application/${docID}/accept`, {
@@ -66,7 +69,7 @@ const AdminApplications: FC = () => {
 		});
 	};
 
-	const revert = (docID: string, reason: string) => {
+	const revert = (docID: string) => {
 		fetch(`/api/applications/application/${docID}/revert`).then((x) => x.json()).then(res => {
 			// TODO: handle error
 			if (res.code !== 200) return;
@@ -82,13 +85,16 @@ const AdminApplications: FC = () => {
 		});
 	};
 
-	const Card: FC<{ podanie: Podanie }> = (props) => {
+	const Card: FC<{ podanie: Podanie, sprawdzone: boolean }> = (props) => {
 		return (
 			<div className="card">
 				<h1>{props.podanie.nick}</h1>
 				<div className="buttons">
-					<button><Eye /></button>
-					<button onClick={() => props.podanie.docID && remove(props.podanie.docID)}><Trash /></button>
+					<button onClick={() => props.podanie.docID && openApplication(props.podanie.docID)}><Eye /></button>
+					{props.sprawdzone
+						? <button onClick={() => props.podanie.docID && removeApplication(props.podanie.docID)}><Trash /></button>
+						: <button onClick={() => props.podanie.docID && revert(props.podanie.docID)}><ArrowWithCircleRight /></button>
+					}
 				</div>
 			</div>
 		);
@@ -98,11 +104,13 @@ const AdminApplications: FC = () => {
 		<div id="admin-applications">
 			<div className="admin-application-cat">
 				<h1>Podania do sprawdzenia</h1>
-				{Applications.filter((a) => !a.approved).map((a) => <Card key={a.docID} podanie={a}></Card>)}
+				{Applications.filter((a) => !a.approved).length == 0 && <p>Nie ma nic do wyświetlenia</p>}
+				{Applications.filter((a) => !a.approved).map((a) => <Card key={a.docID} podanie={a} sprawdzone={false}></Card>)}
 			</div>
 			<div className="admin-application-cat">
 				<h1>Podania sprawdzone</h1>
-				{Applications.filter((a) => a.approved).map((a) => <Card key={a.docID} podanie={a}></Card>)}
+				{Applications.filter((a) => a.approved).length == 0 && <p>Nie ma nic do wyświetlenia</p>}
+				{Applications.filter((a) => a.approved).map((a) => <Card key={a.docID} podanie={a} sprawdzone={true}></Card>)}
 			</div>
 		</div>
 	);

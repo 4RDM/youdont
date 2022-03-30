@@ -1,0 +1,40 @@
+#admin-articles {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 100%;
+	padding: 20px;
+
+	#admin-articles-articles {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.card {
+		display: flex;
+		padding: 10px;
+		justify-content: space-between;
+		align-items: center;
+		height: 50px;
+		border-radius: 5px;
+		background: #1f1f1f;
+		cursor: pointer;
+		user-select: none;
+		h1 {
+			font-size: 20px;
+		}
+		.card-author {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 5px;
+			p {
+				color: grey;
+			}
+			img {
+				border-radius: 100%;
+				width: 40px;
+			}
+		}
+	}
+}
