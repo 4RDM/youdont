@@ -141,7 +141,7 @@ router.get("/admins", async (req, res) => {
 
 router.get("/login", (req, res) => {
 	res.redirect(
-		`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify`
+		`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`
 	);
 });
 
