@@ -12,6 +12,7 @@ const AdminArticles: FC = () => {
 	const [article, setArticle] = useState<Article | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [open, setOpen] = useState(false);
+	const [createMode, setCreateMode] = useState(false);
 
 	const refetch = () =>
 		fetch("/api/articles").then(x => x.json()).then(json => {
@@ -20,6 +21,24 @@ const AdminArticles: FC = () => {
 			setArticles(json.articles);
 			setLoading(false);
 		});
+
+	const remove = (id: string) => {
+		console.log(id);
+		setOpen(false);
+		fetch("/api/articles/delete", {
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({id}),
+			method: "DELETE",
+		}).then(x => x.json()).then(json => {
+			// TODO: handle error
+			console.log(json);
+			if (json.code !== 200) return alert("BŁĄD");
+			setOpen(false);
+			setArticle(null);
+			setCreateMode(false);
+			refetch();
+		});
+	};
 
 	useEffect(() => {
 		refetch();
@@ -37,7 +56,25 @@ const AdminArticles: FC = () => {
 			} : null;
 		}, [open]);
 
-		const apply = () => {
+		const create = () => {
+			fetch("/api/articles/create", {
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					title, description, content, id,
+				}),
+				method: "POST",
+			}).then(x => x.json()).then(json => {
+				// TODO: handle error
+				if (json.code !== 200) return alert("BŁĄD");
+				setOpen(false);
+				setArticle(null);
+				setCreateMode(false);
+				refetch();
+			});
+		};
+
+		const save = () => {
+			if (createMode) return create();
 			fetch("/api/articles/update", {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
@@ -49,6 +86,7 @@ const AdminArticles: FC = () => {
 				if (json.code !== 200) return alert("BŁĄD");
 				setOpen(false);
 				setArticle(null);
+				setCreateMode(false);
 				refetch();
 			});
 		};
@@ -81,7 +119,7 @@ const AdminArticles: FC = () => {
 							<div className="preview" dangerouslySetInnerHTML={{ __html: marked.marked(content || "") }}></div>
 						</div>
 					</div>
-					<button className="apply-button" onClick={apply}>Zastosuj zmiany</button>
+					<button className="apply-button" onClick={save}>Zastosuj zmiany</button>
 				</div>
 			</div>
 		);
@@ -95,8 +133,7 @@ const AdminArticles: FC = () => {
 			}}>
 				<h1>{props.article.title}</h1>
 				<div className="card-author">
-					<img src={props.article.author.avatar} crossOrigin="anonymous" />
-					<p>{props.article.author.nickname}</p>
+					<button onClick={() => remove(props.article.id)}><Cross /></button>
 				</div>
 			</div>
 		);
@@ -109,6 +146,20 @@ const AdminArticles: FC = () => {
 				<h1>Artykuły</h1>
 				<div id="admin-articles-articles">
 					{loading && <div id="admin-loading"><PulseLoader size={20} color={"white"} /></div>}
+					<button onClick={() => {
+						setCreateMode(true);
+						setArticle({
+							"content": "",
+							"author": { "avatar": "", "nickname": "" },
+							"createDate": new Date(),
+							"description": "",
+							"id": "",
+							"tags": [],
+							"title": "",
+							"views": 0
+						}),
+						setOpen(true);
+					}}>Stwórz nowy</button>
 					{articles.map((article) => <Card key={article.title} article={article} />)}
 				</div>
 			</div>

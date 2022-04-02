@@ -37,7 +37,7 @@ router.get("/:id", async (req, res) => {
 	const { id } = req.params;
 	const article = await req.core.database.articles.get(id);
 
-	if (!article) res.json({
+	if (!article) return res.status(404).json({
 		code: 404,
 		message: "Not found article"
 	});

@@ -3,7 +3,7 @@ import React, { FC } from "react";
 const AdminFiles: FC = () => {
 	return (
 		<div>
-			<h1>Pliki</h1>
+			<h1>SOON &trade</h1>
 		</div>
 	);
 };
