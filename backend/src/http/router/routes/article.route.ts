@@ -82,4 +82,24 @@ router.post("/create", adminCheck, async (req, res) => {
 	});
 });
 
+router.post("/update", adminCheck, async (req, res) => {
+	const { title, content, description, id, originalID } = req.body;
+	if (!title || !content || !description || !id || !originalID) return res.json({ code: 500, message: "Can't update" });
+
+	const update = await req.core.database.articles.update(originalID, {
+		title, description, content, id,
+		author: {
+			nickname: req.session.username || "",
+			avatar: `https://cdn.discordapp.com/avatars/${req.session.userid}/${req.session.avatar}`,
+		},
+	});
+
+	if (!update) return res.json({ code: 500, message: "Can't update" });
+
+	res.json({
+		code: 200,
+		message: "Ok!",
+	});
+});
+
 export default router;

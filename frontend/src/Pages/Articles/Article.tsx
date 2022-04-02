@@ -10,6 +10,8 @@ import "../Styles/Article.scss";
 export interface Article {
 	title: string
 	content: string
+	description: string
+	id: string
 	author: {
 		nickname: string
 		avatar: string

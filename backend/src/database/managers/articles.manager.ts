@@ -41,6 +41,28 @@ export class ArticleManager {
 	async getAll(): Promise<Article[] | null> {
 		return await ArticleModel.find();
 	}
+	async update(id: string, document: {
+		title: string
+		description: string
+		content: string
+		author: {
+			nickname: string
+			avatar: string
+		}
+		id: string
+	}): Promise<Article | null> {
+		const article = await ArticleModel.findOne({ id });
+		if (!article) return null;
+
+		article.title = document.title;
+		article.description = document.description;
+		article.content = document.content;
+		article.author = document.author;
+		article.id = document.id;
+
+		await article.save();
+		return article;
+	}
 	async create(document: {
 		title: string
 		description: string
