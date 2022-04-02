@@ -41,6 +41,9 @@ export class ArticleManager {
 	async getAll(): Promise<Article[] | null> {
 		return await ArticleModel.find();
 	}
+	async delete(id: string) {
+		return await ArticleModel.deleteOne({ id });
+	}
 	async update(id: string, document: {
 		title: string
 		description: string

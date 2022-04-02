@@ -38,7 +38,6 @@ const AdminArticles: FC = () => {
 		}, [open]);
 
 		const apply = () => {
-			console.log(id);
 			fetch("/api/articles/update", {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({

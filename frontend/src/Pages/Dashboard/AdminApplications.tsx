@@ -24,6 +24,8 @@ interface Podanie {
 
 const AdminApplications: FC = () => {
 	const [Applications, setApplications] = useState<Podanie[]>([]);
+	const [podanie, setPodanie] = useState<Podanie | null>(null);
+	const [open, setOpen] = useState(false);
 	
 	useEffect(() => {
 		refetch();
@@ -45,7 +47,10 @@ const AdminApplications: FC = () => {
 		});
 	};
 
-	const openApplication = (docID: string) => {};
+	const openApplication = (docID: Podanie) => {
+		setPodanie(podanie);
+		setOpen(true);
+	};
 
 	const accept = (docID: string) => {
 		fetch(`/api/applications/application/${docID}/accept`, {
@@ -90,7 +95,7 @@ const AdminApplications: FC = () => {
 			<div className="card">
 				<h1>{props.podanie.nick}</h1>
 				<div className="buttons">
-					<button onClick={() => props.podanie.docID && openApplication(props.podanie.docID)}><Eye /></button>
+					<button onClick={() => props.podanie.docID && openApplication(props.podanie)}><Eye /></button>
 					{props.sprawdzone
 						? <button onClick={() => props.podanie.docID && removeApplication(props.podanie.docID)}><Trash /></button>
 						: <button onClick={() => props.podanie.docID && revert(props.podanie.docID)}><ArrowWithCircleRight /></button>

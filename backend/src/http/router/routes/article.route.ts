@@ -102,4 +102,18 @@ router.post("/update", adminCheck, async (req, res) => {
 	});
 });
 
+router.delete("/delete", adminCheck, async (req, res) => {
+	const { id } = req.body;
+	if (!id) return res.json({ code: 500, message: "Can't delete" });
+
+	const update = await req.core.database.articles.delete(id);
+
+	if (!update) return res.json({ code: 500, message: "Can't delete" });
+
+	res.json({
+		code: 200,
+		message: "Ok!",
+	});
+});
+
 export default router;
