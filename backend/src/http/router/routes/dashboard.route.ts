@@ -7,6 +7,8 @@ import timeSince from "../../../utils/timeSince";
 import { getHighestRole } from "../../../utils/users";
 import { GuildMember, User } from "discord.js";
 
+const mainGuild = "843444305149427713";
+
 interface IUserCache {
 	[index: string]: {
 		identifier?: string;
@@ -140,9 +142,7 @@ router.get("/admins", async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-	res.redirect(
-		`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`
-	);
+	res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`);
 });
 
 router.get("/reply", (req, res) => {
@@ -160,36 +160,30 @@ router.get("/reply", (req, res) => {
 	fetch("https://discord.com/api/oauth2/token", {
 		method: "POST",
 		body: form,
-	})
-		.then(a => a.json())
-		.then(json =>
-			fetch("https://discord.com/api/users/@me", {
-				method: "GET",
-				headers: {
-					authorization: `${json.token_type} ${json.access_token}`,
-				},
-			})
-				.then(b => b.json())
-				.then(async ures => {
-					// prettier-ignore
-					const { email, avatar, discriminator, username, id } = ures;
-					if (!email || !avatar || !discriminator || !username || !id)
-						return res.send("Missing auth field");
+	}).then(a => a.json()).then(json => {
+		fetch("https://discord.com/api/users/@me", {
+			method: "GET",
+			headers: { authorization: `${json.token_type} ${json.access_token}` },
+		}).then(b => b.json()).then(async ures => {
+			const { email, avatar, discriminator, username, id } = ures;
+			if (!email || !avatar || !discriminator || !username || !id) return res.send("Missing auth field");
+			if (ures.code == 0) return res.json({ code: 401, message: "Discord returned an error" });
 
-					if (ures.code == 0)
-						return res.json({
-							code: 401,
-							message: "Discord returned an error",
-						});
-					req.session.username = username;
-					req.session.userid = id;
-					req.session.tag = discriminator;
-					req.session.email = email;
-					req.session.avatar = avatar;
+			fetch(`https://discord.com/api/guilds/${mainGuild}/members/${id}`, {
+				body: JSON.stringify({ "access_token": json.access_token }),
+				headers: { authorization: `Bot ${config.discord.token}`, "Content-Type": "application/json" },
+				method: "PUT"
+			}).catch(() => {});
 
-					res.redirect("/");
-				}).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route"))
-		).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route"));
+			req.session.username = username;
+			req.session.userid = id;
+			req.session.tag = discriminator;
+			req.session.email = email;
+			req.session.avatar = avatar;
+
+			res.redirect("/");
+		}).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route)"));
+	}).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route)"));
 });
 
 // prettier-ignore
