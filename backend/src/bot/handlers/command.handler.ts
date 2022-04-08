@@ -10,12 +10,12 @@ export default class Handler {
 
 	get(name: string): Command | undefined {
 		const plugin = this.client.PluginHandler.plugins.find(plugin =>
-			plugin.commands.find(cmd => cmd.triggers.includes(name))
+			plugin.commands.find(cmd => cmd.info.triggers.includes(name))
 		);
 
 		if (!plugin) return;
 		else {
-			return plugin.commands.find(cmd => cmd.triggers.includes(name));
+			return plugin.commands.find(cmd => cmd.info.triggers.includes(name));
 		}
 	}
 }

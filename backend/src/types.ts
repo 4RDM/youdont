@@ -1,12 +1,20 @@
 import { Message, PermissionResolvable } from "discord.js";
 import { Client } from "./bot/main";
 
+export interface CommandArgs {
+	client: Client,
+	message: Message,
+	args: string[]
+}
+
 export interface Command {
-	triggers: string[]
-	description: string
-	role?: string
-	permissions?: PermissionResolvable[]
-	exec(client: Client, message: Message, args: string[]): void
+	info: {
+		triggers: string[]
+		description: string
+		role?: string
+		permissions?: PermissionResolvable[]
+	},
+	execute({ client, message, args }: { client: Client, message: Message, args: string[] }): Promise<void>
 }
 
 export interface Plugin {

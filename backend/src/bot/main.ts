@@ -61,11 +61,9 @@ export class Client extends Cl {
 
 			const channelID = core.database.settings.settings.verificationChannel;
 			const channel = await this.channels.fetch(channelID);
-			logger.warn(`Cached verification channel: ${channelID}`);
 
 			if (channel?.isText()) {
-				const lastMessage = await channel.messages.fetch();
-				logger.warn(`Cached last message on verification channel: ${lastMessage.last()?.id}`);
+				await channel.messages.fetch();
 			}
 		});
 
@@ -146,7 +144,7 @@ export class Client extends Cl {
 				const [commandName, ...args] = message.content.slice(config.discord.prefix.length).split(/ +/g);
 				const command = this.CommandHandler.get(commandName);
 				if (command) {
-					if ((command.role && message.member?.roles.cache.has(command.role)) || message.member?.permissions.has(command.permissions || [])) command.exec(this, message, args);
+					if ((command.info.role && message.member?.roles.cache.has(command.info.role)) || message.member?.permissions.has(command.info.permissions || [])) command.execute({ client: this, message, args });
 					else message.react("❌");
 				}
 			} else {

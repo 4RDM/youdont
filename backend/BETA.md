@@ -35,3 +35,21 @@ module.info = {
 }
 
 ```
+
+[x] clear
+[x] kick
+[x] ban
+[x] cmd
+[x] dodaj
+[x] gameban
+[x] refresh
+[x] testwplata
+[x] unban
+[x] verification
+[x] zaakceptuj
+[x] choose
+[x] color
+[x] help
+[x] ping
+[x] serverinfo
+[x] userinfo

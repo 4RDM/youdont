@@ -13,6 +13,7 @@ import MemoryStore from "memorystore";
 import indexRouter from "./router/index.router";
 import apiRouter from "./router/api.router";
 
+const port = 8021;
 
 export default class HTTP {
 	public server: Application = expressWs(express()).app;
@@ -51,6 +52,6 @@ export default class HTTP {
 		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
 
-		this.server.listen(8021, () => logger.ready("Listening to port 8021"));
+		this.server.listen(port, () => logger.ready(`Website is listening to port ${port}`));
 	}
 }
