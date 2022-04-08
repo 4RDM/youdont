@@ -2,7 +2,6 @@ import { CommandArgs } from "../../../../types";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { User, WebhookClient } from "discord.js";
 
-
 export const execute = async function({ client, message, args }: CommandArgs) {
 	if (!args[0] || !args[1]) return message.channel.send({
 		embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.zaakceptuj <ID> <kwota>`")],
