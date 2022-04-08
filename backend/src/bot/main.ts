@@ -88,7 +88,7 @@ export class Client extends Cl {
 		this.on("messageReactionAdd", async (reaction, user) => {
 			if (!reaction.message.guild) return;
 
-			if (reaction.message.channelId == core.database.settings.settings.verificationChannel && reaction.emoji.name == "❤️") {
+			if (reaction.message.channelId == core.database.settings.settings.verificationChannel && user.id !== this.user?.id && reaction.emoji.name == "❤️") {
 				const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
 				for (const reaction of userReactions.values()) {
 					await reaction.users.remove(user.id);
