@@ -9,8 +9,8 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 		embeds: [ErrorEmbed(message, "Nie spingowano roli, którą mam nadać po weryfikacji!")]
 	});
 
-	client.Core.database.settings.set("verificationChannel", message.channel.id);
-	client.Core.database.settings.set("verificationRole", role.id);
+	await client.Core.database.settings.set("verificationChannel", message.channel.id);
+	await client.Core.database.settings.set("verificationRole", role.id);
 
 	const msg = await message.channel.send({ content: "Zweryfikuj się naciskając emoji pod wiadomością! Weryfikując się akceptujesz <#843484880116514830>" });
 	await msg.react("❤️");

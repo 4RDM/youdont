@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, promises } from "fs";
 import { join } from "path";
 import { Core } from "../../";
 
@@ -39,14 +39,14 @@ export class SettingManager {
 		);
 	}
 
-	set<T = string>(key: string, value: T | string) {
+	async set<T = string>(key: string, value: T | string) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		this.settings[key] = value;
-		writeFileSync(this.path, JSON.stringify(this.settings), { encoding: "utf-8" });
+		await promises.writeFile(this.path, JSON.stringify(this.settings), { encoding: "utf-8" });
 	}
 
-	get<T = string>(key: string): T | undefined {
+	get<T = string>(key: string): Promise<T | undefined> {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		return this.settings[key];
