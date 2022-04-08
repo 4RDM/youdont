@@ -13,7 +13,13 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 
 	client.Core.database.settings.set("verificationChannel", message.channel.id);
 	client.Core.database.settings.set("verificationRole", role.id);
+
+	const verChannel = client.Core.database.settings.get("verificationChannel");
+	const verRole = client.Core.database.settings.get("verificationRole");
+
 	logger.log("Verification is set!");
+	logger.log(`Verification channel is now ${verChannel}`);
+	logger.log(`Verification role is now ${verRole}`);
 };
 
 export const info = {

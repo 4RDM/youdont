@@ -39,14 +39,14 @@ export class SettingManager {
 		);
 	}
 
-	set<T>(key: string, value: T | string) {
+	set<T = string>(key: string, value: T | string) {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		this.settings[key] = value;
 		writeFileSync(this.path, JSON.stringify(this.settings), { encoding: "utf-8" });
 	}
 
-	get<T>(key: string): T | undefined {
+	get<T = string>(key: string): T | undefined {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		return this.settings[key];
@@ -57,16 +57,10 @@ export class SettingManager {
 	}
 
 	hasPermission(discordID: string, permission: Permission): boolean {
-		const user = this.settings.users.find(
-			user => user.discordID === discordID
-		);
+		const user = this.settings.users.find(user => user.discordID === discordID);
 
 		if (!user) return false;
-		else if (
-			user.permissions.includes("ADMINISTRATOR") ||
-			user.permissions.includes(permission)
-		)
-			return true;
+		else if (user.permissions.includes("ADMINISTRATOR") || user.permissions.includes(permission)) return true;
 		else return false;
 	}
 }
