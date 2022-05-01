@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "connect-mongo": "^4.6.0"
-  }
-}
