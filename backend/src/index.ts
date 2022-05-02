@@ -3,10 +3,13 @@ import { RCON } from "./utils/rcon";
 import Database from "./database/database";
 import HTTP from "./http/http";
 import config from "./config";
-import { Session } from "express-session";
+import { refreshTops } from "./utils/serverStatus";
+import logger from "./utils/logger";
 
 import dotenv from "dotenv";
-import { Intents } from "discord.js";
+import { Collection, Intents } from "discord.js";
+import { Session } from "express-session";
+
 dotenv.config();
 
 declare module "express-serve-static-core" {
@@ -27,6 +30,7 @@ export class Core {
 	public database: Database;
 	public bot: Client;
 	public rcon: RCON;
+	public cache = new Collection();
 
 	constructor() {
 		this.rcon = new RCON(config.rcon);
@@ -46,6 +50,18 @@ export class Core {
 				status: "idle",
 			},
 		});
+
+		this.tops();
+	}
+
+	async tops() {
+		const status = await refreshTops(this);
+		if (!status) logger.error("core::tops::ERR_CANNOT_GET_TOPS");
+
+		setInterval(async () => {
+			const status = await refreshTops(this);
+			if (!status) logger.error("core::tops::ERR_CANNOT_GET_TOPS");
+		}, 120000); // 2m
 	}
 }
 
