@@ -39,7 +39,7 @@ const Navbar: FC = () => {
 								<Link to="/">Strona główna</Link>
 								<Link to="/administration">Administracja</Link>
 								<Link to="/articles">Artykuły</Link>
-								<Link to="/applications">Podania</Link>
+								{/* <Link to="/applications">Podania</Link> */}
 								{PanelOrLogout}
 							</div>
 						</div>

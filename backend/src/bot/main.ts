@@ -1,9 +1,9 @@
-import { Client as Cl, ClientOptions, MessageEmbed, User } from "discord.js";
+import { Client as Cl, ClientOptions, MessageEmbed, TextChannel, User } from "discord.js";
 import PluginHandler from "./handlers/plugin.handler";
 import CommandHandler from "./handlers/command.handler";
 import isSimilar from "../utils/isSimilar";
 import logger from "../utils/logger";
-import { Embed } from "../utils/discordEmbed";
+import { Embed, ErrorEmbed } from "../utils/discordEmbed";
 import config from "../config";
 import { Core } from "../";
 import { join } from "path";
@@ -50,9 +50,6 @@ export class Client extends Cl {
 		this.PluginHandler = new PluginHandler();
 		this.CommandHandler = new CommandHandler(this);
 
-		let hit = 0; // members joined counter
-		let captchaTimeout = setTimeout(() => {}, 0); // timeout to wait
-		let captcha = false;
 		const verificationRole = core.database.settings.settings.verificationRole;
 
 		// TODO: przenieść eventy do handlera
@@ -67,24 +64,6 @@ export class Client extends Cl {
 			}
 		});
 
-		this.on("guildMemberAdd", () => {
-			clearTimeout(captchaTimeout);
-
-			captchaTimeout = setTimeout(() => { hit = 0; }, 12000);
-
-			// 6 members
-			if (hit >= 5 && !captcha) {
-				const channel = this.channels.cache.get("937813027007385630");
-
-				if (channel?.isText() && !captcha) channel.send({ embeds: [Embed({ title: "Automoderator", color: "#E74C3C", description: "Wykryto potencjalne zagrożenie raidem, captcha uruchomiona", user: <User>this.user })] });
-
-				captcha = true;
-				setTimeout(() => (captcha = false), 1000 * 60 * 60);
-			}
-
-			hit++;
-		});
-
 		this.on("messageReactionAdd", async (reaction, user) => {
 			if (!reaction.message.guild) return;
 
@@ -94,40 +73,11 @@ export class Client extends Cl {
 					await reaction.users.remove(user.id);
 				}
 
-				if (!captcha) reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole);
-				else {
-					const code = await generateCaptcha(user.id);
-					const captchaFile = join(__dirname, "..", "..", "images", `${user.id}.captcha.jpg`);
-					user.send({
-						embeds: [
-							new MessageEmbed()
-								.setTitle("Captcha")
-								.setColor("#0091ff")
-								.setDescription("Captcha jest uruchomiona, aby kontynuować przepisz kod z obrazka poniżej w nowej wiadomości.")
-								.setImage(`attachment://${user.id}.captcha.jpg`),
-						],
-						files: [captchaFile],
-					}).then(async message => {
-						await message.channel.awaitMessages({
-							filter: collected => collected.author.id === user.id,
-							max: 1,
-							time: 15000,
-						}).then(collection => {
-							if (collection.first()?.content == code) {
-								reaction.message.guild?.members.cache.get(user.id)?.roles.add(verificationRole);
-								user.send("Zweryfikowano pomyślnie!");
-							}
-						}).catch(() => user.send("Czas na weryfikację minął"));
-						unlinkSync(captchaFile);
-					}).catch(() => {
-						logger.error(`Cannot send message to ${user.id} (${user.tag})`);
-						unlinkSync(captchaFile);
-					});
-				}
+				reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole);
 			}
 		});
 
-		this.on("messageCreate", message => {
+		this.on("messageCreate", async message => {
 			if (message.author.bot) return;
 
 			core.database.users.createIfNotExists(message.author.id);
@@ -149,6 +99,105 @@ export class Client extends Cl {
 				}
 			} else {
 				const content = message.content.split("\n");
+				const [commandName, ...args] = message.content.split(/ +/g)
+
+				if (commandName == "donate") {
+					if (args[0] == "tipply") {
+						const document = await this.Core.database.donates.create({
+							userID: message.author.id,
+							type: "tipply",
+							timestamp: new Date(),
+						});
+
+						;(<TextChannel>(
+							await this.channels.fetch(
+								'843586192879517776'
+							)
+						)).send(
+							`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
+						);
+
+						message.channel.send({
+							embeds: [Embed({
+								title: "Donate",
+								description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://tipply.pl/u/4RDM)**`,
+								color: "#ffffff",
+								user: message.author
+							})]
+						});
+					} else if (args[0] == "paypal") {
+						const document = await this.Core.database.donates.create({
+							userID: message.author.id,
+							type: "paypal",
+							timestamp: new Date(),
+						});
+
+						;(<TextChannel>(
+							await this.channels.fetch(
+								'843586192879517776'
+							)
+						)).send(
+							`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
+						);
+
+						message.channel.send({
+							embeds: [Embed({
+								title: "Donate",
+								description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://paypal.me/fourxrdm)**`,
+								color: "#ffffff",
+								user: message.author
+							})]
+						});
+					} else if (args[0] == "psc") {
+						if (!args[1] || (args[1].length !== 16 && args[1].length !== 19)) {
+							message.channel.send({
+								embeds: [ErrorEmbed(
+									message,
+									'Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`',
+								)],
+							});
+
+							return;
+						}
+
+						const document = await this.Core.database.donates.create({
+							userID: message.author.id,
+							type: "psc",
+							timestamp: new Date(),
+						});
+
+						;(<TextChannel>(
+							await this.channels.fetch(
+								'843586192879517776'
+							)
+						)).send(
+							`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
+						);
+					}
+
+					return;
+				}
+
+				if (commandName == "help") {
+					message.channel.send("`donate`, `69`");
+					return;
+				}
+
+				if (message.content == "69") {
+					message.reply("```46,22769732530488 ^ 2 :)```");
+					return;
+				}
+
+				if (message.content == "2137") {
+					message.reply("```1388404274 / 2 :)```");
+					return;
+				}
+
+				if (message.content == "694202137") {
+					message.reply("```uggcf://jjj.lbhghor.pbz/jngpu?i=qDj4j9JtKpD```");
+					return
+				}
+
 				message.channel.send({
 					embeds: [
 						Embed({
