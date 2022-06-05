@@ -49,6 +49,10 @@ const wordlist = [
 		res: "Sprawdź czy nie są obecnie otwarte na <#843444756821966878> (otwieramy średnio co miesiąc)",
 	},
 	{
+		msg: "Kiedy wyniki podań?",
+		res: "Wyniki podań publikujemy max do tygodnia po ich zamknięciu"
+	},
+	{
 		msg: "Kiedy gotowe auto",
 		res: "Auta dodajemy średnio do 2-3 dni",
 	},
