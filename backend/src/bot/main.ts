@@ -84,8 +84,11 @@ export class Client extends Cl {
 
 			if (!message.content.startsWith(config.discord.prefix) && message.guild) {
 				checkMessage(message.content).then(s => {
-					if (s) message.channel.send("wth bro, what is this shit? are you crazy?");
+					if (!s) return;
+					message.member?.timeout(120 * 60 * 1000, "Phishing / scam URL"); // for 2 hours
+					message.delete();
 				});
+
 				wordlist.forEach(word => (isSimilar(message.content, word.msg)) && message.reply(word.res));
 				return;
 			}
