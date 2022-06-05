@@ -13,6 +13,14 @@ import { checkMessage } from "./handlers/automoderator.handler";
 
 const wordlist = [
 	{
+		msg: "Skąd wziąść donator",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+	},
+	{
+		msg: "Skąd wziąść partner",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+	},
+	{
 		msg: "gdzie kupić donator",
 		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
 	},
@@ -35,6 +43,18 @@ const wordlist = [
 	{
 		msg: "jak kupić donator",
 		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+	},
+	{
+		msg: "Kiedy otwarte podania na triala",
+		res: "Sprawdź czy nie są obecnie otwarte na <#843444756821966878> (otwieramy średnio co miesiąc)",
+	},
+	{
+		msg: "Kiedy gotowe auto",
+		res: "Auta dodajemy średnio do 2-3 dni",
+	},
+	{
+		msg: "Kiedy zrobisz auto",
+		res: "Auta dodajemy średnio do 2-3 dni",
 	},
 ];
 
