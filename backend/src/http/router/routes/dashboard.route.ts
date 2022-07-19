@@ -96,10 +96,14 @@ router.get("/admins", async (req, res) => {
 					"675731645591977995", // zbyci
 				];
 				users.forEach(async (member) => {
-					const mem = await req.core.bot.guilds.cache.get("843444305149427713")?.members.fetch(member);
-					if (!mem) return;
-					members.push(mem);
-					if (users.length == members.length) resolve("");
+					try {
+						const mem = await req.core.bot.guilds.cache.get("843444305149427713")?.members.fetch(member);
+						if (!mem) return;
+						members.push(mem);
+						if (users.length == members.length) resolve("");
+					} catch(err) {
+						resolve("");
+					}
 				});
 			});
 
