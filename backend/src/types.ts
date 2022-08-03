@@ -4,7 +4,7 @@ import { Client } from "./bot/main";
 export interface CommandArgs {
 	client: Client,
 	message: Message,
-	args: string[]
+	args: any[]
 }
 
 export interface Command {

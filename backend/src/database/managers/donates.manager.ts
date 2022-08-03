@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import { Core } from "../../";
 import logger from "../../utils/logger";
 
@@ -29,7 +29,7 @@ export class DonatesManager {
 
 	constructor(core: Core) { this.core = core; }
 
-	async get(donateID: number): Promise<Donate | null> {
+	async get(donateID: number): Promise<(Document<unknown, any, Donate> & Donate) | null> {
 		return await DonateModel.findOne({ dID: donateID });
 	}
 

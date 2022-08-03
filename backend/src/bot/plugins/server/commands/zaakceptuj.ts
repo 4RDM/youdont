@@ -78,7 +78,7 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 		try {
 			await client.guilds.cache.get("843444305149427713")?.members.cache.get(user.id)?.roles.add(findClosest(dbUser?.total || 0).roleID);
 		} catch(err) {
-			logger.error(`[zaakceptuj.ts ~78]: ${err}`);
+			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
 			message.channel.send(`An error occurred while adding role: \`${err}\`, check console for more details!`);
 		}
 
