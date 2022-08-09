@@ -1,5 +1,5 @@
 import { CommandArgs } from "../../../../types";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const execute = async function({ client, message, args }: CommandArgs) {
 	if (!args[0]) return message.channel.send({
@@ -17,12 +17,12 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 		embeds: [ErrorEmbed(message, "Nie podano właściwości do zmiany")]
 	});
 
-	if (!isNaN(parseInt(args[2])) && args[1] !== "userID") args[2] = parseInt(args[2])
+	if (!isNaN(parseInt(args[2])) && args[1] !== "userID") args[2] = parseInt(args[2]);
 
 	// @ts-ignore
-	donate[args[1]] = args[2]
+	donate[args[1]] = args[2];
 
-	await donate.replaceOne(Object.assign(donate, donate))
+	await donate.replaceOne(Object.assign(donate, donate));
 	donate = await donate.save();
 
 	if (!donate) return message.channel.send({

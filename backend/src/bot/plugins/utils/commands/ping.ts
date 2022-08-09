@@ -7,6 +7,7 @@ export const execute = async function({ client, message }: CommandArgs) {
 		description: `\`\`\`API: ${Math.floor(client.ws.ping)}ms\nWiadomość: ${Date.now() - message.createdTimestamp}ms\`\`\``,
 		user: message.author,
 	});
+
 	message.channel.send({ embeds: [embed] });
 };
 
