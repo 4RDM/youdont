@@ -34,12 +34,20 @@ export class PlayerDataManager {
 	public players: PlayerShort[];
 
 	constructor() {
-		// prettier-ignore
 		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
 		this.players = json.players.map(({ license, playTime }) => ({
 			license,
 			playTime,
 		}));
+
+		// prettier-ignore
+		setInterval(() => {
+			const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
+			this.players = json.players.map(({ license, playTime }) => ({
+				license,
+				playTime,
+			}));
+		}, 1000 * 60 * 15);
 	}
 
 	getUser(license: string): PlayerShort {
