@@ -21,13 +21,12 @@ const Navbar: FC = () => {
 
 	return (
 		<div id="container-navbar">
-			<h1 id="container-navbar-title">4RDM</h1>
+			<Link to="/"><h1 id="container-navbar-title">4RDM</h1></Link>
 			{screenWidth > 720 ? (
 				<div>
 					<Link to="/">Strona główna</Link>
 					<Link to="/administration">Administracja</Link>
 					<Link to="/articles">Artykuły</Link>
-					<Link to="/applications">Podania</Link>
 					{PanelOrLogout}
 				</div>
 			): (
@@ -39,7 +38,6 @@ const Navbar: FC = () => {
 								<Link to="/">Strona główna</Link>
 								<Link to="/administration">Administracja</Link>
 								<Link to="/articles">Artykuły</Link>
-								{/* <Link to="/applications">Podania</Link> */}
 								{PanelOrLogout}
 							</div>
 						</div>

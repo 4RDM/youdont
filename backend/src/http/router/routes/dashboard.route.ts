@@ -5,7 +5,7 @@ import logger from "../../../utils/logger";
 import config from "../../../config";
 import timeSince from "../../../utils/timeSince";
 import { getHighestRole } from "../../../utils/users";
-import { GuildMember, User } from "discord.js";
+import { GuildMember } from "discord.js";
 
 const mainGuild = "843444305149427713";
 
@@ -210,7 +210,6 @@ router.get("/session", userCheck, async (req, res) => {
 			username,
 			email,
 			avatar,
-			applicationState: req.core.database.settings.get<boolean>("docsOpen"),
 			role: role || "Członek",
 		},
 		permissions,

@@ -5,6 +5,7 @@
 	background: #0f0f0f;
 	a {
 		text-decoration: none;
+		color: white;
 	}
 	#container-navbar {
 		display: flex;
@@ -15,9 +16,6 @@
 		div {
 			display: flex;
 			column-gap: 10px;
-			a {
-				color: white;
-			}
 		}
 		#container-navbar-menu {
 			position: fixed;
@@ -40,9 +38,6 @@
 				flex-direction: column;
 				row-gap: 10px;
 				padding-top: 15px;
-				a {
-					color: white;
-				}
 			}
 		}
 		#container-navbar-menu button, button {

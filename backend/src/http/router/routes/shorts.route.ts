@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { badRequest, unauthorized } from "../errors";
 const router = Router();
 
 const adminCheck = (req: Request, res: Response, next: NextFunction) => {
@@ -10,18 +11,10 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const fetchedUser = settings.getUser(userid);
 
 	if (!fetchedUser)
-		return res.status(401).json({
-			code: 401,
-			message: "Unauthorized",
-		});
+		return unauthorized(res);
 	else {
 		if (settings.hasPermission(userid, "MANAGE_SHORTS")) next();
-		else {
-			res.status(401).json({
-				code: 5001,
-				message: "You dont have permissions to this",
-			});
-		}
+		else unauthorized(res);
 	}
 };
 
@@ -32,10 +25,7 @@ router.post("/create", adminCheck, async (req, res) => {
 	if (!userid) return res.send("500");
 
 	if (!url)
-		return res.status(400).json({
-			code: 400,
-			message: "Missing 'url'",
-		});
+		return badRequest(res, "Bad request, missing 'url' field.");
 
 	const document = await req.core.database.shorts.create({
 		author: userid,

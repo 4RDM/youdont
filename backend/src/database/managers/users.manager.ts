@@ -73,8 +73,10 @@ export class UsersManager {
 			host: config.mysql.host,
 			user: config.mysql.user,
 			password: config.mysql.password,
+			port: 3306,
+			connectTimeout: 20000,
 			database: "rdm",
-			allowPublicKeyRetrieval: true,
+			// allowPublicKeyRetrieval: true,
 		});
 
 		const response: DBUser = (

@@ -17,8 +17,7 @@ const cytaty = [
 	"\"za zero\" ~ Helix 2022",
 	"\"nie działa\" ~ Helix 2021",
 	"\"Zabij sie\" ~ Kubamaz 2021",
-	"\"no co?\" ~ Kaliberek 2022",
-	"\"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac\" ~ Kubamaz 2020",
+	"\"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac\" ~ Kubamaz 2019/20",
 	"\"Litwo, Ojczyzno moja! ty jesteś jak zdrowie, Ile cię trzeba cenić, ten tylko się dowie, Kto cię stracił. Dziś piękność twą w całej ozdobie Widzę i opisuję, bo tęsknię po tobie.\" ~ Adam Mickiewicz 1834",
 ];
 
@@ -43,7 +42,6 @@ const Footer: FC = () => {
 					<Link to="/">Strona główna</Link>
 					<Link to="/articles">Artykuły</Link>
 					<Link to="/administration">Administracja</Link>
-					<Link to="/applications">Podania</Link>
 					<Link to="/dashboard">Panel użytkownika</Link>
 				</div>
 				<div className="footer-author buttons">

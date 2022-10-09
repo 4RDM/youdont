@@ -1,34 +1,26 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { badRequest, internalError, notFound, unauthorized } from "../errors";
 const router = Router();
 
 const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { userid } = req.session;
 
-	if (!userid) return res.send("500");
+	if (!userid)
+		return unauthorized(res);
 
 	const settings = req.core.database.settings;
 	const fetchedUser = settings.getUser(userid);
 
 	if (!fetchedUser)
-		return res.status(401).json({
-			code: 401,
-			message: "Unauthorized",
-		});
-	else {
+		return unauthorized(res);
+	else
 		if (settings.hasPermission(userid, "MANAGE_ARTICLES")) next();
-		else {
-			res.status(401).json({
-				code: 5001,
-				message: "You dont have permissions to this",
-			});
-		}
-	}
+		else return unauthorized(res);
 };
 
 router.get("/", async (req, res) => {
 	res.json({
 		code: 200,
-		message: "Ok!",
 		articles: await req.core.database.articles.getAll()
 	});
 });
@@ -37,30 +29,23 @@ router.get("/:id", async (req, res) => {
 	const { id } = req.params;
 	const article = await req.core.database.articles.get(id);
 
-	if (!article) return res.status(404).json({
-		code: 404,
-		message: "Not found article"
-	});
+	if (!article)
+		return notFound(res);
 
-	res.json({
-		code: 200,
-		message: "Ok!",
-		article
-	});
+	res.json({ code: 200, article });
 });
 
 router.post("/create", adminCheck, async (req, res) => {
 	const { title, description, content, id } = req.body;
 
-	if (!title || !description || !content || !id) return res.status(400).json({
-		code: 400,
-		message: "Missing body",
-	});
+	if (!title || !description || !content || !id)
+		return badRequest(res, "Missing body");
 
-	if (!req.session.username || !req.session.avatar) return res.status(400).json({
-		code: 400,
-		message: "Missing avatar or nickname",
-	});
+	if (!req.session.username || !req.session.avatar) {
+		req.session.destroy(() => {});
+
+		return badRequest(res, "Invalid session, destroying");
+	}
 
 	const article = await req.core.database.articles.create({
 		title,
@@ -75,11 +60,7 @@ router.post("/create", adminCheck, async (req, res) => {
 		views: 0
 	});
 
-	res.json({
-		code: 200,
-		message: "Ok!",
-		article
-	});
+	res.json({ code: 200, article });
 });
 
 router.post("/update", adminCheck, async (req, res) => {
@@ -94,26 +75,23 @@ router.post("/update", adminCheck, async (req, res) => {
 		},
 	});
 
-	if (!update) return res.json({ code: 500, message: "Can't update" });
+	if (!update)
+		return internalError(res);
 
-	res.json({
-		code: 200,
-		message: "Ok!",
-	});
+	res.json({ code: 200 });
 });
 
 router.delete("/delete", adminCheck, async (req, res) => {
 	const { id } = req.body;
-	if (!id) return res.json({ code: 500, message: "Can't delete" });
+	if (!id)
+		return internalError(res);
 
 	const update = await req.core.database.articles.delete(id);
 
-	if (!update) return res.json({ code: 500, message: "Can't delete" });
+	if (!update)
+		return internalError(res);
 
-	res.json({
-		code: 200,
-		message: "Ok!",
-	});
+	res.json({ code: 200 });
 });
 
 export default router;

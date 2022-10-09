@@ -56,11 +56,11 @@ export class Core {
 
 	async tops() {
 		const status = await refreshTops(this);
-		if (!status) logger.error("core::tops::ERR_CANNOT_GET_TOPS");
+		if (!status) logger.error("Cannot estabilish first connection with FiveM");
 
 		setInterval(async () => {
 			const status = await refreshTops(this);
-			if (!status) logger.error("core::tops::ERR_CANNOT_GET_TOPS");
+			if (!status) logger.error("FiveM statisctics cannot be updated");
 		}, 120000); // 2m
 	}
 }

@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { Core } from "../";
 import config from "../config";
 import logger from "../utils/logger";
-import { DocsManager } from "./managers/docs.manager";
 import { UsersManager } from "./managers/users.manager";
 import { DonatesManager } from "./managers/donates.manager";
 import { ShortsManager } from "./managers/shorts.manager";
@@ -13,7 +12,6 @@ import { ArticleManager } from "./managers/articles.manager";
 export default class Database {
 	public readonly donates: DonatesManager;
 	public readonly users: UsersManager;
-	public readonly docs: DocsManager;
 	public readonly shorts: ShortsManager;
 	public readonly settings: SettingManager;
 	public readonly playerData: PlayerDataManager;
@@ -22,7 +20,6 @@ export default class Database {
 	constructor(core: Core) {
 		this.donates = new DonatesManager(core);
 		this.users = new UsersManager();
-		this.docs = new DocsManager(core);
 		this.shorts = new ShortsManager(core);
 		this.settings = new SettingManager(core);
 		this.playerData = new PlayerDataManager();
@@ -39,6 +36,9 @@ export default class Database {
 				}
 			)
 			.then(() => logger.ready("Database connection has been established"))
-			.catch(err => logger.error(`Cannot connect to database, ${err}`));
+			.catch(err => {
+				logger.error(`Cannot connect to database, ${err}`)
+				process.exit(1);
+			});
 	}
 }

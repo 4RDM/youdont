@@ -6,9 +6,6 @@ import logger from "../utils/logger";
 import { Embed, ErrorEmbed } from "../utils/discordEmbed";
 import config from "../config";
 import { Core } from "../";
-import { join } from "path";
-import generateCaptcha from "../utils/generateCaptcha";
-import { unlinkSync } from "fs";
 import { checkMessage } from "./handlers/automoderator.handler";
 
 const wordlist = [

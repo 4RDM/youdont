@@ -1,13 +1,18 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useContext, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { Article } from "../Articles/Article";
 import * as marked from "marked";
+import { UserContext, isAdmin } from "../../App";
 
 // Assets
 import { Cross } from "@styled-icons/entypo/Cross";
 import "../Styles/AdminArticles.scss";
 
+import Container from "../../Components/ContainerComponent";
+import LoginComponent from "../../Components/LoginComponent";
+
 const AdminArticles: FC = () => {
+	const session = useContext(UserContext);
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [article, setArticle] = useState<Article | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -139,8 +144,8 @@ const AdminArticles: FC = () => {
 		);
 	};
 
-	return (
-		<>
+	return (session?.user == undefined || !isAdmin(session)) ? <Container><LoginComponent /></Container> : (
+		<Container>
 			<Editor />
 			<div id="admin-articles">
 				<h1>Artykuły</h1>
@@ -163,7 +168,7 @@ const AdminArticles: FC = () => {
 					{articles.map((article) => <Card key={article.title} article={article} />)}
 				</div>
 			</div>
-		</>
+		</Container>
 	);
 };
 

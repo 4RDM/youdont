@@ -28,6 +28,10 @@ $card-background: #1f1f1f;
 			& {
 				align-items: center;
 				justify-content: center;
+				height: 115px !important;
+			}
+			#dashboard-header-sub {
+				align-items: center;
 			}
 		}
 		img {
@@ -38,6 +42,7 @@ $card-background: #1f1f1f;
 		#dashboard-header-sub {
 			display: flex;
 			flex-direction: column;
+			margin-left: 20px;
 			h1 {
 				font-size: 30px;
 			}

@@ -10,17 +10,17 @@ import Loading from "./Components/LoadingComponent";
 
 // Pages
 const HomePage = lazy(() => import("./Pages/HomePage"));
-const Dashboard = lazy(() => import("./Pages/Dashboard/Index"));
-const AdminDashboard = lazy(() => import("./Pages/Dashboard/Admin"));
 const Articles = lazy(() => import("./Pages/Articles/Index"));
 const Article = lazy(() => import("./Pages/Articles/Article"));
-// const Applications = lazy(() => import("./Pages/Applications"));
 const Administration = lazy(() => import("./Pages/Administration"));
+
+const Dashboard = lazy(() => import("./Pages/Dashboard/Index"));
+const AdminShorts = lazy(() => import("./Pages/Dashboard/AdminShorts"));
+const AdminArticles = lazy(() => import("./Pages/Dashboard/AdminArticles"));
 
 export type Permission =
 	| "MANAGE_USERS"
 	| "MANAGE_SHORTS"
-	| "MANAGE_DOCS"
 	| "MANAGE_FILES"
 	| "MANAGE_ARTICLES"
 	| "ADMINISTRATOR"
@@ -33,7 +33,6 @@ interface IUserContext {
 		email: string
 		avatar: string
 		role: string
-		applicationState: boolean
 	}
 	permissions?: Permission[]
 }
@@ -45,7 +44,6 @@ export const UserContext = createContext<State>({});
 export const isAdmin = (user: IUserContext) => {
 	if (!user.permissions) return false;
 	return	hasPermissions(user, "ADMINISTRATOR")   ||
-			hasPermissions(user, "MANAGE_DOCS")     ||
 			hasPermissions(user, "MANAGE_FILES")    ||
 			hasPermissions(user, "MANAGE_SHORTS")   ||
 			hasPermissions(user, "MANAGE_ARTICLES") ||
@@ -80,13 +78,19 @@ const App: FC = () => {
 							<Route index element={<HomePage />} />
 							<Route path="dashboard">
 								<Route index element={<Dashboard />} />
+								<Route path="admin">
+									<Route index element={<AdminArticles />} />
+									<Route path="articles" element={<AdminArticles />} />
+									<Route path="shorts" element={<AdminShorts />} />
+								</Route>
+							</Route>
+							<Route path="/administration">
+								<Route index element={<Administration />} />
 							</Route>
 							<Route path="articles">
 								<Route index element={<Articles />} />
 								<Route path=":id" element={<Article />} />
 							</Route>
-							{/* <Route path="applications" element={<Applications />} /> */}
-							<Route path="administration" element={<Administration />} />
 						</Routes>
 					</Suspense>
 				</UserContext.Provider>

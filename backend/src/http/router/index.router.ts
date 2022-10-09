@@ -40,8 +40,7 @@ router.get(
 		"/dashboard",
 		"/dashboard/admin*",
 		"/articles",
-		"/articles/:id",
-		"/applications",
+		"/articles/:id"
 	],
 	spaHandler
 );
