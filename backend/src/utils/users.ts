@@ -9,38 +9,53 @@ export interface AdministratorRole {
 export const RolesObject = [
 	{
 		name: "Właściciel",
-		rarity: 10,
+		rarity: 13,
 		id: "876529651919519794",
 	},
 	{
 		name: "Zarząd",
-		rarity: 9,
+		rarity: 12,
 		id: "843444626726584370",
 	},
 	{
 		name: "Head Admin",
-		rarity: 8,
+		rarity: 11,
 		id: "843444636793176064",
 	},
 	{
+		name: "Senior Admin",
+		rarity: 10,
+		id: "1013520114865414195",
+	},
+	{
 		name: "Admin",
-		rarity: 7,
+		rarity: 9,
 		id: "843444637565321236",
 	},
 	{
+		name: "Junior Admin",
+		rarity: 8,
+		id: "1013519805518708778",
+	},
+	{
 		name: "Developer",
-		rarity: 6,
+		rarity: 7,
 		id: "883475949964906516",
 	},
 	{
-		name: "Community Moderator",
-		rarity: 5,
-		id: "923243118860570674",
+		name: "Senior Moderator",
+		rarity: 6,
+		id: "1013519589277192362",
 	},
 	{
 		name: "Moderator",
-		rarity: 4,
+		rarity: 5,
 		id: "843444638219370497",
+	},
+	{
+		name: "Junior Moderator",
+		rarity: 4,
+		id: "1013519449489428491",
 	},
 	{
 		name: "Support",
