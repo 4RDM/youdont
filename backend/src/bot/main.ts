@@ -83,6 +83,12 @@ export class Client extends Cl {
 			if (channel?.isText()) {
 				await channel.messages.fetch();
 			}
+
+			const reloadStats = () => {
+
+			}
+
+			setInterval(reloadStats, 10000);
 		});
 
 		this.on("messageReactionAdd", async (reaction, user) => {
