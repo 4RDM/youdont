@@ -35,18 +35,15 @@ export class PlayerDataManager {
 
 	constructor() {
 		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
-		this.players = json.players.map(({ license, playTime }) => ({
-			license,
-			playTime,
-		}));
+		
+		if (json.players) this.players = json.players.map(({ license, playTime }) => ({ license, playTime }));
+		else this.players = [];
 
 		// prettier-ignore
 		setInterval(() => {
 			const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
-			this.players = json.players.map(({ license, playTime }) => ({
-				license,
-				playTime,
-			}));
+			if (json.players) this.players = json.players.map(({ license, playTime }) => ({ license, playTime }));
+			else this.players = [];
 		}, 1000 * 60 * 15);
 	}
 

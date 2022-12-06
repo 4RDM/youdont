@@ -73,7 +73,7 @@ export class UsersManager {
 			host: config.mysql.host,
 			user: config.mysql.user,
 			password: config.mysql.password,
-			port: 3306,
+			port: config.mysql.port,
 			connectTimeout: 20000,
 			database: "rdm",
 			// allowPublicKeyRetrieval: true,

@@ -15,3 +15,4 @@ backend/dist
 temp
 playersDB.json
 backend/.env
+.yarn
