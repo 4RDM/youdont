@@ -49,6 +49,6 @@ export const execute = async function({ message }: CommandArgs) {
 };
 
 export const info = {
-	triggers: ["serverinfo", "server"],
+	triggers: ["serverinfo"],
 	description: "Sprawdź informacje o serwerze",
 };
