@@ -35,9 +35,11 @@ export default class Database {
 					autoCreate: true,
 				}
 			)
-			.then(() => logger.ready("Database connection has been established"))
+			.then(() =>
+				logger.ready("Database connection has been established")
+			)
 			.catch(err => {
-				logger.error(`Cannot connect to database, ${err}`)
+				logger.error(`Cannot connect to database, ${err}`);
 				process.exit(1);
 			});
 	}

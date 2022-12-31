@@ -13,10 +13,10 @@ const schema = new Schema(
 );
 
 export interface Short extends Document {
-	shortID: string
-	url: string
-	author: string // id ex. 364056796932997121
-	views: number
+	shortID: string;
+	url: string;
+	author: string; // id ex. 364056796932997121
+	views: number;
 }
 
 const ShortModel = model<Short>("shorts", schema);

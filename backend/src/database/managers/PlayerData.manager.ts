@@ -2,28 +2,28 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 export interface PlayerElement {
-	license: string
-	name: string
-	playTime: number
-	tsJoined: number
-	tsLastConnection: number
-	notes: Notes
+	license: string;
+	name: string;
+	playTime: number;
+	tsJoined: number;
+	tsLastConnection: number;
+	notes: Notes;
 }
 
 export interface Players {
-	version: number
-	players: PlayerElement[]
+	version: number;
+	players: PlayerElement[];
 }
 
 export interface Notes {
-	text: string
-	lastAdmin: string
-	tsLastEdit: number
+	text: string;
+	lastAdmin: string;
+	tsLastEdit: number;
 }
 
 export interface PlayerShort {
-	license: string
-	playTime: number
+	license: string;
+	playTime: number;
 }
 
 // prettier-ignore
@@ -34,9 +34,18 @@ export class PlayerDataManager {
 	public players: PlayerShort[];
 
 	constructor() {
-		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
-		
-		if (json.players) this.players = json.players.map(({ license, playTime }) => ({ license, playTime }));
+		const json: Players = JSON.parse(
+			readFileSync(
+				process.env.NODE_ENV == "production" ? prodPath : devPath,
+				{ encoding: "utf-8" }
+			).toString()
+		);
+
+		if (json.players)
+			this.players = json.players.map(({ license, playTime }) => ({
+				license,
+				playTime,
+			}));
 		else this.players = [];
 
 		// prettier-ignore

@@ -8,23 +8,23 @@ export type Permission =
 	| "MANAGE_DOCS"
 	| "MANAGE_FILES"
 	| "MANAGE_ARTICLES"
-	| "ADMINISTRATOR"
+	| "ADMINISTRATOR";
 
 export interface User {
-	discordID: string
-	nickname: string
-	avatar: string
-	userID: string
-	permissions: Permission[]
+	discordID: string;
+	nickname: string;
+	avatar: string;
+	userID: string;
+	permissions: Permission[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Settings extends Array<any> {
-	users: User[]
-	docsOpen: boolean
-	verificationChannel: string
-	verificationRole: string
-	donateWebhook: string
+	users: User[];
+	docsOpen: boolean;
+	verificationChannel: string;
+	verificationRole: string;
+	donateWebhook: string;
 }
 
 export class SettingManager {
@@ -43,7 +43,9 @@ export class SettingManager {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		this.settings[key] = value;
-		await promises.writeFile(this.path, JSON.stringify(this.settings), { encoding: "utf-8" });
+		await promises.writeFile(this.path, JSON.stringify(this.settings), {
+			encoding: "utf-8",
+		});
 	}
 
 	get<T = string>(key: string): Promise<T | undefined> {
@@ -57,10 +59,16 @@ export class SettingManager {
 	}
 
 	hasPermission(discordID: string, permission: Permission): boolean {
-		const user = this.settings.users.find(user => user.discordID === discordID);
+		const user = this.settings.users.find(
+			user => user.discordID === discordID
+		);
 
 		if (!user) return false;
-		else if (user.permissions.includes("ADMINISTRATOR") || user.permissions.includes(permission)) return true;
+		else if (
+			user.permissions.includes("ADMINISTRATOR") ||
+			user.permissions.includes(permission)
+		)
+			return true;
 		else return false;
 	}
 }

@@ -6,7 +6,7 @@ const schema = new Schema({
 	content: String,
 	author: {
 		nickname: String,
-		avatar: String
+		avatar: String,
 	},
 	id: String,
 	views: Number,
@@ -14,16 +14,16 @@ const schema = new Schema({
 });
 
 export interface Article extends Document {
-	title: string
-	description: string
-	content: string
+	title: string;
+	description: string;
+	content: string;
 	author: {
-		nickname: string
-		avatar: string
-	}
-	id: string
-	views: number
-	createDate: Date
+		nickname: string;
+		avatar: string;
+	};
+	id: string;
+	views: number;
+	createDate: Date;
 }
 
 const ArticleModel = model<Article>("articles", schema);
@@ -44,16 +44,19 @@ export class ArticleManager {
 	async delete(id: string) {
 		return await ArticleModel.deleteOne({ id });
 	}
-	async update(id: string, document: {
-		title: string
-		description: string
-		content: string
-		author: {
-			nickname: string
-			avatar: string
+	async update(
+		id: string,
+		document: {
+			title: string;
+			description: string;
+			content: string;
+			author: {
+				nickname: string;
+				avatar: string;
+			};
+			id: string;
 		}
-		id: string
-	}): Promise<Article | null> {
+	): Promise<Article | null> {
 		const article = await ArticleModel.findOne({ id });
 		if (!article) return null;
 
@@ -67,16 +70,16 @@ export class ArticleManager {
 		return article;
 	}
 	async create(document: {
-		title: string
-		description: string
-		content: string
+		title: string;
+		description: string;
+		content: string;
 		author: {
-			nickname: string
-			avatar: string
-		}
-		id: string
-		views: number
-		createDate: Date
+			nickname: string;
+			avatar: string;
+		};
+		id: string;
+		views: number;
+		createDate: Date;
 	}): Promise<Article> {
 		return await ArticleModel.create(document);
 	}

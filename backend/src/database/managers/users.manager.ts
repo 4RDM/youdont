@@ -14,29 +14,33 @@ interface IUser {
 }
 
 interface User {
-	userID: string
-	role: string
-	total: number
+	userID: string;
+	role: string;
+	total: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	donates: any
+	donates: any;
 }
 
 interface UUser extends Document {
-	userID: string
-	role: string
-	total: number
+	userID: string;
+	role: string;
+	total: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	donates: any
+	donates: any;
 }
 
-const UserModel = model<UUser>("users", new Schema<UUser>(
-	{
-		userID: { type: String, required: true, unique: true },
-		role: { type: String, required: true },
-		total: { type: Number, required: true },
-		donates: { type: Array, required: true }
-	}, { timestamps: true }
-));
+const UserModel = model<UUser>(
+	"users",
+	new Schema<UUser>(
+		{
+			userID: { type: String, required: true, unique: true },
+			role: { type: String, required: true },
+			total: { type: Number, required: true },
+			donates: { type: Array, required: true },
+		},
+		{ timestamps: true }
+	)
+);
 
 export class UsersManager {
 	async get(userID: string): Promise<UUser | null> {
@@ -47,13 +51,21 @@ export class UsersManager {
 	async approve(userID: string, donate: Donate): Promise<UUser | null> {
 		let user = await UserModel.findOne({ userID });
 		if (!user) return null;
-		user = await UserModel.findOneAndUpdate({ userID }, { total: user.total + (donate.amount || 0 ) }).exec();
+		user = await UserModel.findOneAndUpdate(
+			{ userID },
+			{ total: user.total + (donate.amount || 0) }
+		).exec();
 		user = await UserModel.findOne({ userID });
 		return user;
 	}
 
 	async create(userID: string): Promise<UUser> {
-		const document = new UserModel({ userID, total: 0, role: "Członek", donates: {} });
+		const document = new UserModel({
+			userID,
+			total: 0,
+			role: "Członek",
+			donates: {},
+		});
 		await document.save();
 
 		return document;
