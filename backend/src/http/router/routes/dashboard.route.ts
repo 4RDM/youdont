@@ -88,15 +88,17 @@ router.get("/admins", async (req, res) => {
 					"810848781414432798",
 					"971821280942780487",
 					"913946327254183947",
-					"697869913884196926"
+					"697869913884196926",
 				];
-				users.forEach(async (member) => {
+				users.forEach(async member => {
 					try {
-						const mem = await req.core.bot.guilds.cache.get("843444305149427713")?.members.fetch(member);
+						const mem = await req.core.bot.guilds.cache
+							.get("843444305149427713")
+							?.members.fetch(member);
 						if (!mem) return;
 						members.push(mem);
 						if (users.length == members.length) resolve("");
-					} catch(err) {
+					} catch (err) {
 						resolve("");
 					}
 				});
@@ -122,16 +124,16 @@ router.get("/admins", async (req, res) => {
 			message: "OK",
 			admins: {
 				roles: {
-					"Właściciel": AdminCache.roles["Właściciel"],
-					"Zarząd": AdminCache.roles["Zarząd"],
+					Właściciel: AdminCache.roles["Właściciel"],
+					Zarząd: AdminCache.roles["Zarząd"],
 					"Head Admin": AdminCache.roles["Head Admin"],
 					"Senior Admin": AdminCache.roles["Senior Admin"],
-					"Admin": AdminCache.roles["Admin"],
+					Admin: AdminCache.roles["Admin"],
 					"Junior Admin": AdminCache.roles["Junior Admin"],
 					"Senior Moderator": AdminCache.roles["Senior Moderator"],
-					"Moderator": AdminCache.roles["Moderator"],
+					Moderator: AdminCache.roles["Moderator"],
 					"Junior Moderator": AdminCache.roles["Junior Moderator"],
-					"Support": AdminCache.roles["Support"],
+					Support: AdminCache.roles["Support"],
 					"Trial Support": AdminCache.roles["Trial Support"],
 				},
 			},
@@ -145,7 +147,9 @@ router.get("/admins", async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-	res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`);
+	res.redirect(
+		`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`
+	);
 });
 
 router.get("/reply", (req, res) => {
@@ -163,30 +167,59 @@ router.get("/reply", (req, res) => {
 	fetch("https://discord.com/api/oauth2/token", {
 		method: "POST",
 		body: form,
-	}).then(a => a.json()).then(json => {
-		fetch("https://discord.com/api/users/@me", {
-			method: "GET",
-			headers: { authorization: `${json.token_type} ${json.access_token}` },
-		}).then(b => b.json()).then(async ures => {
-			const { email, avatar, discriminator, username, id } = ures;
-			if (!email || !avatar || !discriminator || !username || !id) return res.send("Missing auth field");
-			if (ures.code == 0) return res.json({ code: 401, message: "Discord returned an error" });
+	})
+		.then(a => a.json())
+		.then(json => {
+			fetch("https://discord.com/api/users/@me", {
+				method: "GET",
+				headers: {
+					authorization: `${json.token_type} ${json.access_token}`,
+				},
+			})
+				.then(b => b.json())
+				.then(async ures => {
+					const { email, avatar, discriminator, username, id } = ures;
+					if (!email || !avatar || !discriminator || !username || !id)
+						return res.send("Missing auth field");
+					if (ures.code == 0)
+						return res.json({
+							code: 401,
+							message: "Discord returned an error",
+						});
 
-			fetch(`https://discord.com/api/guilds/${mainGuild}/members/${id}`, {
-				body: JSON.stringify({ "access_token": json.access_token }),
-				headers: { authorization: `Bot ${config.discord.token}`, "Content-Type": "application/json" },
-				method: "PUT"
-			}).catch(() => {});
+					fetch(
+						`https://discord.com/api/guilds/${mainGuild}/members/${id}`,
+						{
+							body: JSON.stringify({
+								access_token: json.access_token,
+							}),
+							headers: {
+								authorization: `Bot ${config.discord.token}`,
+								"Content-Type": "application/json",
+							},
+							method: "PUT",
+						}
+					).catch(() => {});
 
-			req.session.username = username;
-			req.session.userid = id;
-			req.session.tag = discriminator;
-			req.session.email = email;
-			req.session.avatar = avatar;
+					req.session.username = username;
+					req.session.userid = id;
+					req.session.tag = discriminator;
+					req.session.email = email;
+					req.session.avatar = avatar;
 
-			res.redirect("/");
-		}).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route)"));
-	}).catch(() => logger.error("Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route)"));
+					res.redirect("/");
+				})
+				.catch(() =>
+					logger.error(
+						"Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route)"
+					)
+				);
+		})
+		.catch(() =>
+			logger.error(
+				"Unable to handshake with https://discord.com (src/http/router/routes/dashboard.route)"
+			)
+		);
 });
 
 // prettier-ignore
@@ -196,7 +229,8 @@ router.get("/session", userCheck, async (req, res) => {
 	const { userid, tag, username, email, avatar } = req.session;
 
 	if (!userid) return;
-	const permissions = req.core.database.settings.getUser(userid)?.permissions || [];
+	const permissions =
+		req.core.database.settings.getUser(userid)?.permissions || [];
 
 	const role = (await req.core.database.users.get(userid))?.role;
 
@@ -221,7 +255,9 @@ router.get("/stats", userCheck, async (req, res) => {
 	if (!userid) return;
 
 	if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
-		const response = await req.core.database.users.getUserFromServer(userid);
+		const response = await req.core.database.users.getUserFromServer(
+			userid
+		);
 
 		if (response) {
 			const { discord, identifier, license, kills, deaths, heady } =

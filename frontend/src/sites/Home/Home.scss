@@ -1,0 +1,22 @@
+#home-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	flex-direction: column;
+	color: white;
+	h1 {
+		font-size: 100px;
+	}
+	#home-gradient {
+		// -webkit-background-clip: text;
+		// -webkit-text-fill-color: transparent;
+		// -moz-background-clip: text;
+		// -moz-text-fill-color: transparent;
+		// background-image: -webkit-linear-gradient(
+		// 	61.82deg,
+		// 	#7000ff 0%,
+		// 	#eb00ff 40.91%
+		// );
+	}
+}

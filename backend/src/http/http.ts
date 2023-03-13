@@ -32,7 +32,7 @@ export default class HTTP {
 				saveUninitialized: false,
 			})
 		);
-	
+
 		this.server.use(compression());
 		this.server.set("view engine", "ejs");
 
@@ -42,7 +42,7 @@ export default class HTTP {
 			next();
 		});
 
-		this.server.ws("/api/docs", async (ws) => {
+		this.server.ws("/api/docs", async ws => {
 			this.wssclients.push(ws);
 			ws.on("close", () => {
 				this.wssclients.splice(this.wssclients.indexOf(ws), 1);
@@ -52,6 +52,8 @@ export default class HTTP {
 		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
 
-		this.server.listen(port, () => logger.ready(`Website is listening to port ${port}`));
+		this.server.listen(port, () =>
+			logger.ready(`Website is listening to port ${port}`)
+		);
 	}
 }

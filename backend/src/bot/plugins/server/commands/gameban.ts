@@ -1,7 +1,7 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
 
-export const execute = async function({ client, message, args }: CommandArgs) {
+export const execute = async function ({ client, message, args }: CommandArgs) {
 	if (!args[0])
 		return message.channel.send({
 			embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.gameban <id>`")],
@@ -16,7 +16,8 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon.send(args.join(`ban ${args[0]}`),
+	client.Core.rcon.send(
+		args.join(`ban ${args[0]}`),
 		() => {
 			msg.edit({
 				embeds: [
@@ -27,8 +28,11 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 					}),
 				],
 			});
-		}, () => {
-			msg.edit({ embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")] });
+		},
+		() => {
+			msg.edit({
+				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+			});
 		}
 	);
 };

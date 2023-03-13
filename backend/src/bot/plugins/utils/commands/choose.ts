@@ -1,6 +1,6 @@
 import { CommandArgs } from "../../../../types";
 
-export const execute = async function({ message, args }: CommandArgs) {
+export const execute = async function ({ message, args }: CommandArgs) {
 	const tochoose = args
 		.join(" ")
 		.split(" ")

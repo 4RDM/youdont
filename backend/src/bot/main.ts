@@ -1,4 +1,10 @@
-import { Client as Cl, ClientOptions, MessageEmbed, TextChannel, User } from "discord.js";
+import {
+	Client as Cl,
+	ClientOptions,
+	MessageEmbed,
+	TextChannel,
+	User,
+} from "discord.js";
 import PluginHandler from "./handlers/plugin.handler";
 import CommandHandler from "./handlers/command.handler";
 import isSimilar from "../utils/isSimilar";
@@ -47,7 +53,7 @@ const wordlist = [
 	},
 	{
 		msg: "Kiedy wyniki podań?",
-		res: "Wyniki podań publikujemy max do tygodnia po ich zamknięciu"
+		res: "Wyniki podań publikujemy max do tygodnia po ich zamknięciu",
 	},
 	{
 		msg: "Kiedy gotowe auto",
@@ -71,22 +77,22 @@ export class Client extends Cl {
 		this.PluginHandler = new PluginHandler();
 		this.CommandHandler = new CommandHandler(this);
 
-		const verificationRole = core.database.settings.settings.verificationRole;
+		const verificationRole =
+			core.database.settings.settings.verificationRole;
 
 		// TODO: przenieść eventy do handlera
 		this.on("ready", async () => {
 			logger.ready("Bot is ready!");
 
-			const channelID = core.database.settings.settings.verificationChannel;
+			const channelID =
+				core.database.settings.settings.verificationChannel;
 			const channel = await this.channels.fetch(channelID);
 
 			if (channel?.isText()) {
 				await channel.messages.fetch();
 			}
 
-			const reloadStats = () => {
-
-			}
+			const reloadStats = () => {};
 
 			setInterval(reloadStats, 10000);
 		});
@@ -94,13 +100,22 @@ export class Client extends Cl {
 		this.on("messageReactionAdd", async (reaction, user) => {
 			if (!reaction.message.guild) return;
 
-			if (reaction.message.channelId == core.database.settings.settings.verificationChannel && user.id !== this.user?.id && reaction.emoji.name == "❤️") {
-				const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
+			if (
+				reaction.message.channelId ==
+					core.database.settings.settings.verificationChannel &&
+				user.id !== this.user?.id &&
+				reaction.emoji.name == "❤️"
+			) {
+				const userReactions = reaction.message.reactions.cache.filter(
+					reaction => reaction.users.cache.has(user.id)
+				);
 				for (const reaction of userReactions.values()) {
 					await reaction.users.remove(user.id);
 				}
 
-				reaction.message.guild.members.cache.get(user.id)?.roles.add(verificationRole);
+				reaction.message.guild.members.cache
+					.get(user.id)
+					?.roles.add(verificationRole);
 			}
 		});
 
@@ -109,97 +124,125 @@ export class Client extends Cl {
 
 			core.database.users.createIfNotExists(message.author.id);
 
-			if (!message.content.startsWith(config.discord.prefix) && message.guild) {
+			if (
+				!message.content.startsWith(config.discord.prefix) &&
+				message.guild
+			) {
 				checkMessage(message.content).then(s => {
 					if (!s) return;
-					message.member?.timeout(120 * 60 * 1000, "Phishing / scam URL"); // for 2 hours
+					message.member?.timeout(
+						120 * 60 * 1000,
+						"Phishing / scam URL"
+					); // for 2 hours
 					message.delete();
 				});
 
-				wordlist.forEach(word => (isSimilar(message.content, word.msg)) && message.reply(word.res));
+				// Autoreply
+				wordlist.forEach(
+					word =>
+						isSimilar(message.content, word.msg) &&
+						message.reply(word.res)
+				);
 				return;
 			}
 
 			if (message.guild) {
-				const [commandName, ...args] = message.content.slice(config.discord.prefix.length).split(/ +/g);
+				const [commandName, ...args] = message.content
+					.slice(config.discord.prefix.length)
+					.split(/ +/g);
 				const command = this.CommandHandler.get(commandName);
 				if (command) {
-					if ((command.info.role && message.member?.roles.cache.has(command.info.role)) || message.member?.permissions.has(command.info.permissions || [])) command.execute({ client: this, message, args });
+					if (
+						(command.info.role &&
+							message.member?.roles.cache.has(
+								command.info.role
+							)) ||
+						message.member?.permissions.has(
+							command.info.permissions || []
+						)
+					)
+						command.execute({ client: this, message, args });
 					else message.react("❌");
 				}
 			} else {
 				const content = message.content.split("\n");
-				const [commandName, ...args] = message.content.split(/ +/g)
+				const [commandName, ...args] = message.content.split(/ +/g);
 
 				if (commandName == "donate") {
 					if (args[0] == "tipply") {
-						const document = await this.Core.database.donates.create({
-							userID: message.author.id,
-							type: "tipply",
-							timestamp: new Date(),
-						});
+						const document =
+							await this.Core.database.donates.create({
+								userID: message.author.id,
+								type: "tipply",
+								timestamp: new Date(),
+							});
 
-						;(<TextChannel>(
-							await this.channels.fetch(
-								'843586192879517776'
-							)
+						(<TextChannel>(
+							await this.channels.fetch("843586192879517776")
 						)).send(
 							`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
 						);
 
 						message.channel.send({
-							embeds: [Embed({
-								title: "Donate",
-								description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://tipply.pl/u/4RDM)**`,
-								color: "#ffffff",
-								user: message.author
-							})]
+							embeds: [
+								Embed({
+									title: "Donate",
+									description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://tipply.pl/u/4RDM)**`,
+									color: "#ffffff",
+									user: message.author,
+								}),
+							],
 						});
 					} else if (args[0] == "paypal") {
-						const document = await this.Core.database.donates.create({
-							userID: message.author.id,
-							type: "paypal",
-							timestamp: new Date(),
-						});
+						const document =
+							await this.Core.database.donates.create({
+								userID: message.author.id,
+								type: "paypal",
+								timestamp: new Date(),
+							});
 
-						;(<TextChannel>(
-							await this.channels.fetch(
-								'843586192879517776'
-							)
+						(<TextChannel>(
+							await this.channels.fetch("843586192879517776")
 						)).send(
 							`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
 						);
 
 						message.channel.send({
-							embeds: [Embed({
-								title: "Donate",
-								description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://paypal.me/fourxrdm)**`,
-								color: "#ffffff",
-								user: message.author
-							})]
+							embeds: [
+								Embed({
+									title: "Donate",
+									description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://paypal.me/fourxrdm)**`,
+									color: "#ffffff",
+									user: message.author,
+								}),
+							],
 						});
 					} else if (args[0] == "psc") {
-						if (!args[1] || (args[1].length !== 16 && args[1].length !== 19)) {
+						if (
+							!args[1] ||
+							(args[1].length !== 16 && args[1].length !== 19)
+						) {
 							message.channel.send({
-								embeds: [ErrorEmbed(
-									message,
-									'Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`',
-								)],
+								embeds: [
+									ErrorEmbed(
+										message,
+										"Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`"
+									),
+								],
 							});
 
 							return;
 						}
 
-						const document = await this.Core.database.donates.create({
-							userID: message.author.id,
-							type: "psc",
-							timestamp: new Date(),
-						});
+						const document =
+							await this.Core.database.donates.create({
+								userID: message.author.id,
+								type: "psc",
+								timestamp: new Date(),
+							});
 
-						;(<TextChannel>(
-							await this.channels.fetch(
-								'843586192879517776'
-							)
+						(<TextChannel>(
+							await this.channels.fetch("843586192879517776")
 						)).send(
 							`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
 						);
@@ -213,25 +256,14 @@ export class Client extends Cl {
 					return;
 				}
 
-				if (message.content == "69") {
-					message.reply("```46,22769732530488 ^ 2 :)```");
-					return;
-				}
-
-				if (message.content == "2137") {
-					message.reply("```1388404274 / 2 :)```");
-					return;
-				}
-
-				if (message.content == "694202137") {
-					message.reply("```uggcf://jjj.lbhghor.pbz/jngpu?i=qDj4j9JtKpD```");
-					return
-				}
-
 				message.channel.send({
 					embeds: [
 						Embed({
-							description: `${content.map((x: string) => `> ${x}`).join("\n")}\n\nNie mogę zrozumieć co chcesz mi przekazać! Spróbuj \`help\` aby uzyskać dostępne polecenia!`,
+							description: `${content
+								.map((x: string) => `> ${x}`)
+								.join(
+									"\n"
+								)}\n\nNie mogę zrozumieć co chcesz mi przekazać! Spróbuj \`help\` aby uzyskać dostępne polecenia!`,
 							color: "#f54242",
 							user: message.author,
 						}),

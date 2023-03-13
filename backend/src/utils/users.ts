@@ -1,9 +1,9 @@
 import { Collection, Role } from "discord.js";
 
 export interface AdministratorRole {
-	name: string
-	rarity: number
-	id: string
+	name: string;
+	rarity: number;
+	id: string;
 }
 
 export const RolesObject = [

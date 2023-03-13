@@ -2,7 +2,7 @@ import { Embed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
 import { EmbedFieldData } from "discord.js";
 
-export const execute = async function({ client, message, args }: CommandArgs) {
+export const execute = async function ({ client, message, args }: CommandArgs) {
 	if (args[0]) {
 		const command = client.CommandHandler.get(args[0]);
 		const cat = client.PluginHandler.get(args[0]);
@@ -15,7 +15,9 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 				fields: [
 					{
 						name: "Komendy",
-						value: `\`${cat.commands.map(com => com.info.triggers[0]).join(", ")}\``,
+						value: `\`${cat.commands
+							.map(com => com.info.triggers[0])
+							.join(", ")}\``,
 					},
 				],
 				user: message.author,
@@ -52,15 +54,15 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 
 		message.channel.send({ embeds: [embed] });
 	} else {
-		const fields: EmbedFieldData[] = []
+		const fields: EmbedFieldData[] = [];
 
 		client.PluginHandler.plugins.forEach(plugin => {
 			fields.push({
 				name: `${plugin.name}`,
 				value: `**ID:** ${plugin.id}\n\`\`\`${plugin.description}\`\`\``,
 				inline: true,
-			})
-		})
+			});
+		});
 
 		const embed = Embed({
 			title: "Kategorie",
@@ -75,5 +77,6 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 
 export const info = {
 	triggers: ["help"],
-	description: "Sprawdź wszystkie dostępne komendy bota oraz ich zastosowanie",
+	description:
+		"Sprawdź wszystkie dostępne komendy bota oraz ich zastosowanie",
 };

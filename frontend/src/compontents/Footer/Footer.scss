@@ -1,0 +1,45 @@
+#footer-container {
+	min-height: 300px;
+	background: #171717;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr;
+	gap: 0px 10px;
+	grid-template-areas: '. . . .';
+	padding: 15px;
+	color: white;
+	border-top: 2px solid #2f2f2f;
+	@media (max-width: 900px) {
+		& {
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: 1fr;
+			grid-template-areas: '. .' '. .';
+		}
+	}
+	@media (max-width: 720px) {
+		& {
+			display: flex;
+			flex-direction: column;
+			gap: 25px;
+		}
+	}
+	div {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+	a {
+		&:hover {
+			color: #fabfff;
+		}
+		text-decoration: none;
+		color: white;
+		transition: 0.2s color;
+	}
+	h1 {
+		font-size: 30px;
+	}
+	#footer-author {
+		color: #595959;
+	}
+}

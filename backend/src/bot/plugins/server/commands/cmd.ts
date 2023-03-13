@@ -1,10 +1,12 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
 
-export const execute = async function({ client, message, args }: CommandArgs) {
+export const execute = async function ({ client, message, args }: CommandArgs) {
 	if (!args[0])
 		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.cmd <polecenie>`")],
+			embeds: [
+				ErrorEmbed(message, "Prawidłowe użycie: `.cmd <polecenie>`"),
+			],
 		});
 
 	const msg = await message.channel.send({
@@ -16,20 +18,25 @@ export const execute = async function({ client, message, args }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon.send(args.join(" "), () =>
-	{
-		msg.edit({
-			embeds: [
-				Embed({
-					color: "#1F8B4C",
-					description: "**Wysłano!**",
-					user: message.author,
-				}),
-			],
-		});
-	}, () => {
-		msg.edit({ embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")] });
-	});
+	client.Core.rcon.send(
+		args.join(" "),
+		() => {
+			msg.edit({
+				embeds: [
+					Embed({
+						color: "#1F8B4C",
+						description: "**Wysłano!**",
+						user: message.author,
+					}),
+				],
+			});
+		},
+		() => {
+			msg.edit({
+				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+			});
+		}
+	);
 };
 
 export const info = {

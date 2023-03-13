@@ -10,8 +10,7 @@ const adminCheck = (req: Request, res: Response, next: NextFunction) => {
 	const settings = req.core.database.settings;
 	const fetchedUser = settings.getUser(userid);
 
-	if (!fetchedUser)
-		return unauthorized(res);
+	if (!fetchedUser) return unauthorized(res);
 	else {
 		if (settings.hasPermission(userid, "MANAGE_SHORTS")) next();
 		else unauthorized(res);
@@ -24,8 +23,7 @@ router.post("/create", adminCheck, async (req, res) => {
 
 	if (!userid) return res.send("500");
 
-	if (!url)
-		return badRequest(res, "Bad request, missing 'url' field.");
+	if (!url) return badRequest(res, "Bad request, missing 'url' field.");
 
 	const document = await req.core.database.shorts.create({
 		author: userid,

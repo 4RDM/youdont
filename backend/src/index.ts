@@ -56,7 +56,8 @@ export class Core {
 
 	async tops() {
 		const status = await refreshTops(this);
-		if (!status) logger.error("Cannot estabilish first connection with FiveM");
+		if (!status)
+			logger.error("Cannot estabilish first connection with FiveM");
 
 		setInterval(async () => {
 			const status = await refreshTops(this);

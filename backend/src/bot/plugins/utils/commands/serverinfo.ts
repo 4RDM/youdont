@@ -1,14 +1,13 @@
 import { Embed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
 
-export const execute = async function({ message }: CommandArgs) {
+export const execute = async function ({ message }: CommandArgs) {
 	const embed = Embed({
 		title: message.guild?.name,
 		fields: [
 			{
 				name: "Użytkownicy",
-				value:
-					`\`${message.guild?.memberCount.toString()}\`` || "`0`",
+				value: `\`${message.guild?.memberCount.toString()}\`` || "`0`",
 				inline: true,
 			},
 			{
@@ -36,8 +35,7 @@ export const execute = async function({ message }: CommandArgs) {
 			{
 				name: "Data utworzenia",
 				value: `<t:${Math.floor(
-					(message.guild?.createdAt.getTime() || Date.now()) /
-						1000
+					(message.guild?.createdAt.getTime() || Date.now()) / 1000
 				)}:R>`,
 				inline: true,
 			},

@@ -11,33 +11,48 @@ export default class Handler {
 		this.init();
 	}
 
-	init = async() => {
+	init = async () => {
 		const pluginsFolder = await promises.readdir(this.pluginsPath);
 		for (const pluginName of pluginsFolder) {
 			const pluginPath = join(this.pluginsPath, pluginName);
 
-			const configContent = await promises.readFile(join(pluginPath, "config.json"));
-			const commandsFolder = await promises.readdir(join(pluginPath, "commands"));
+			const configContent = await promises.readFile(
+				join(pluginPath, "config.json")
+			);
+			const commandsFolder = await promises.readdir(
+				join(pluginPath, "commands")
+			);
 
-			const { name, description, id } = JSON.parse(configContent.toString());
+			const { name, description, id } = JSON.parse(
+				configContent.toString()
+			);
 			const commands: Command[] = [];
 			let hasErrored = false;
 
 			for (const commandName of commandsFolder) {
-				const { info, execute } = await import(join(pluginPath, "commands", commandName));
+				const { info, execute } = await import(
+					join(pluginPath, "commands", commandName)
+				);
 				if (!info) {
 					hasErrored = true;
-					logger.error(`Could not load the command ${commandName}, the info export is missing`);
+					logger.error(
+						`Could not load the command ${commandName}, the info export is missing`
+					);
 				}
 				if (!execute) {
 					hasErrored = true;
-					logger.error(`Could not load the command ${commandName}, the execute() export is missing`);
+					logger.error(
+						`Could not load the command ${commandName}, the execute() export is missing`
+					);
 				}
 				if (hasErrored) continue;
 				commands.push({ info, execute });
 			}
 
-			if (hasErrored) logger.warn(`Some commands were not loaded in plugin "${name}" due to an error`);
+			if (hasErrored)
+				logger.warn(
+					`Some commands were not loaded in plugin "${name}" due to an error`
+				);
 			this.plugins.push({ name, description, id, commands });
 		}
 		logger.ready(`Loaded ${this.plugins.length} plugins`);

@@ -15,7 +15,9 @@ export default class Handler {
 
 		if (!plugin) return;
 		else {
-			return plugin.commands.find(cmd => cmd.info.triggers.includes(name));
+			return plugin.commands.find(cmd =>
+				cmd.info.triggers.includes(name)
+			);
 		}
 	}
 }

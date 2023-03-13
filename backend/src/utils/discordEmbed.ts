@@ -1,14 +1,20 @@
-import { EmbedFieldData, HexColorString, Message, MessageEmbed, User } from "discord.js";
+import {
+	EmbedFieldData,
+	HexColorString,
+	Message,
+	MessageEmbed,
+	User,
+} from "discord.js";
 
 export interface EmbedStructure {
-	title?: string
-	description?: string
-	color?: HexColorString
-	fields?: EmbedFieldData[]
-	footer?: boolean
-	thumbnail?: string
-	image?: string
-	user: User
+	title?: string;
+	description?: string;
+	color?: HexColorString;
+	fields?: EmbedFieldData[];
+	footer?: boolean;
+	thumbnail?: string;
+	image?: string;
+	user: User;
 }
 
 export const Embed = ({
@@ -41,7 +47,10 @@ export const Embed = ({
 export const ErrorEmbed = (message: Message, reason: string) =>
 	Embed({
 		title: "Błąd",
-		description: `${message.content.split("\n").map((x: string) => `> ${x}`).join("\n")}\n\n**${reason}**`,
+		description: `${message.content
+			.split("\n")
+			.map((x: string) => `> ${x}`)
+			.join("\n")}\n\n**${reason}**`,
 		color: "#f54242",
 		user: message.author,
 	});

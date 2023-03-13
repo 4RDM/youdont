@@ -1,7 +1,7 @@
 import { Embed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
 
-export const execute = async function({ message }: CommandArgs) {
+export const execute = async function ({ message }: CommandArgs) {
 	const user = message.mentions.members?.first() || message.member;
 	if (!user) return;
 
