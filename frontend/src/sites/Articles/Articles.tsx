@@ -40,7 +40,7 @@ export default () => {
 			<h1>Artykuły</h1>
 			<div id="articles-list">
 				{articles.map((article, i) => (
-					<Link to={article.id}>
+					<Link to={article.id} key={i}>
 						<div
 							className="article-card"
 							style={{
