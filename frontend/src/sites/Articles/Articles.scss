@@ -2,10 +2,12 @@
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+//	width: 100%;
 	#articles-list {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
+		width: 100%;
 	}
 	.article-card {
 		display: grid;
@@ -14,7 +16,8 @@
 		gap: 5px;
 		padding: 10px;
 		height: 300px;
-		width: 450px;
+//		width: 100%;
+		max-width: 450px;
 		background: #1a1a1a;
 		border-radius: 5px;
 		cursor: pointer;
