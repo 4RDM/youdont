@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AccountState } from '../../atoms/AccountState'
 
@@ -9,6 +9,7 @@ export default () => {
 	const [{ loggedIn }] = useRecoilState(AccountState)
 	const [isMobile, setIsMobile] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
+	const location = useLocation()
 
 	const handleResize = () => {
 		if (window.innerWidth <= 720) setIsMobile(true)
@@ -22,6 +23,10 @@ export default () => {
 
 		return () => window.removeEventListener('resize', handleResize)
 	})
+
+	useEffect(() => {
+		setIsOpen(false)
+	}, [location])
 
 	const desktopNavbar = (
 		<div id="navbar-container">
