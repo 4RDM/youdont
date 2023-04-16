@@ -19,6 +19,7 @@ interface User {
 	total: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	donates: any;
+	notatki: any;
 }
 
 interface UUser extends Document {
@@ -27,6 +28,7 @@ interface UUser extends Document {
 	total: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	donates: any;
+	notatki: any;
 }
 
 const UserModel = model<UUser>(
@@ -37,6 +39,7 @@ const UserModel = model<UUser>(
 			role: { type: String, required: true },
 			total: { type: Number, required: true },
 			donates: { type: Array, required: true },
+			notatki: { type: Array, required: true },
 		},
 		{ timestamps: true }
 	)

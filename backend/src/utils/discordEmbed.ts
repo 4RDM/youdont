@@ -1,4 +1,5 @@
 import {
+	EmbedAuthorData,
 	EmbedFieldData,
 	HexColorString,
 	Message,
@@ -15,6 +16,7 @@ export interface EmbedStructure {
 	thumbnail?: string;
 	image?: string;
 	user: User;
+	author?: EmbedAuthorData;
 }
 
 export const Embed = ({
@@ -26,9 +28,11 @@ export const Embed = ({
 	thumbnail,
 	image,
 	user,
+	author,
 }: EmbedStructure): MessageEmbed => {
 	const embed = new MessageEmbed();
 
+	if (author) embed.setAuthor(author);
 	if (title) embed.setTitle(title);
 	if (color) embed.setColor(color);
 	else embed.setColor("#fcbe03");

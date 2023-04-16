@@ -66,7 +66,6 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 
 		const embed = Embed({
 			title: "Kategorie",
-			color: "#d900ff",
 			fields: fields,
 			user: message.author,
 		});
