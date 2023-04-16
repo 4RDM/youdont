@@ -49,51 +49,67 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 			],
 		});
 	} else {
-		if (args.length < 3) {
-			const id = parseInt(args[1]);
-			const notatka = dbUser?.notatki.find((x: any) => x.id == id);
+		// prettier-ignore
+		if (
+			!["dodaj", "add", "usun", "usuń", "remove"].includes(
+				args[1].toLowerCase()
+			)
+		)
+			{
+				const id = parseInt(args[1]);
 
-			if (!notatka)
-				return message.channel.send({
+				if (isNaN(id))
+					return message.channel.send({
+						embeds: [ErrorEmbed(message, "ID notatki nie może być puste")],
+					});
+
+				const notatka = dbUser?.notatki.find((x: any) => x.id == id);
+
+				if (!notatka)
+					return message.channel.send({
+						embeds: [
+							ErrorEmbed(
+								message,
+								`Nie znaleziono notatki od id ${id || "brak"}`
+							),
+						],
+					});
+
+				message.channel.send({
 					embeds: [
-						ErrorEmbed(
-							message,
-							`Nie znaleziono notatki od id ${id}`
-						),
+						Embed({
+							author: {
+								name: member.nickname || member.user.tag,
+								iconURL: member.displayAvatarURL(),
+							},
+							user: message.author,
+							title: `Notatka #${notatka.id}`,
+							description: `\`\`\`${notatka.content}\`\`\``,
+						}),
 					],
 				});
 
-			message.channel.send({
-				embeds: [
-					Embed({
-						author: {
-							name: member.nickname || member.user.tag,
-							iconURL: member.displayAvatarURL(),
-						},
-						user: message.author,
-						title: `Notatka #${notatka.id}`,
-						description: `\`\`\`${notatka.content}\`\`\``,
-					}),
-				],
-			});
-
-			return;
-		}
-
-		// prettier-ignore
-		if (!["dodaj", "add", "usun", "usuń", "remove"].includes(args[1].toLowerCase())) 
-			return message.channel.send({
-				embeds: [
-					ErrorEmbed(message, "Dostępne metody to: `dodaj, add, usun, usuń, remove`")
-				]
-			});
+				return;
+			}
 
 		if (["dodaj", "add"].includes(args[1].toLowerCase())) {
 			const content = args.slice(2).join(" ");
 
+			if (content.length < 2)
+				return message.channel.send({
+					embeds: [
+						ErrorEmbed(
+							message,
+							`Notatka nie może mieć mniej niż 2 znaki`
+						),
+					],
+				});
+
 			const notatka = {
 				id: (
-					parseInt(dbUser.notatki[dbUser.notatki.length - 1].id) + 1
+					parseInt(
+						dbUser.notatki[dbUser.notatki.length - 1]?.id || 0
+					) + 1
 				).toString(),
 				content,
 			};
@@ -116,7 +132,10 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 			if (isNaN(id))
 				return message.channel.send({
 					embeds: [
-						ErrorEmbed(message, "ID notatki nie może być NaN"),
+						ErrorEmbed(
+							message,
+							"ID notatki do usunięcia nie może być puste"
+						),
 					],
 				});
 
