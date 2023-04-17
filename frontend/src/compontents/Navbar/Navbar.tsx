@@ -37,7 +37,7 @@ export default () => {
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				{loggedIn ? (
-					<a>Nimplex#1010</a>
+					<span className="a">Nimplex#1010</span>
 				) : (
 					<a href="/login">Zaloguj się</a>
 				)}
@@ -52,27 +52,27 @@ export default () => {
 				id="navbar-mobile-navigator"
 				style={{ display: isOpen ? 'flex' : 'none' }}
 			>
-				<a
-					className="navbar-mobile-toggle"
+				<span
+					className="navbar-mobile-toggle a"
 					onClick={() => setIsOpen(!isOpen)}
 				>
 					×
-				</a>
+				</span>
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				{loggedIn ? (
-					<a>Nimplex#1010</a>
+					<span className="a">Nimplex#1010</span>
 				) : (
 					<a href="/login">Zaloguj się</a>
 				)}
 			</div>
 			{!isOpen && (
-				<a
-					className="navbar-mobile-toggle"
+				<span
+					className="navbar-mobile-toggle a"
 					onClick={() => setIsOpen(!isOpen)}
 				>
 					≡
-				</a>
+				</span>
 			)}
 		</div>
 	)

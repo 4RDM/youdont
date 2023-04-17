@@ -12,7 +12,9 @@
 		font-weight: 700;
 	}
 	p,
-	a {
+	a,
+	.a {
+		cursor: pointer;
 		&:hover {
 			color: #fabfff;
 		}
