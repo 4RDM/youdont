@@ -8,6 +8,7 @@ import Home from './sites/Home/Home'
 import Articles from './sites/Articles/Articles'
 import NotFound from './sites/NotFound/NotFound'
 import './index.scss'
+import Article from './sites/Articles/Article'
 
 const App = () => {
 	const location = useLocation()
@@ -27,7 +28,10 @@ const App = () => {
 					<Routes>
 						<Route path="/">
 							<Route index element={<Home />} />
-							<Route path="articles" element={<Articles />} />
+							<Route path="articles">
+								<Route index element={<Articles />} />
+								<Route path=":id" element={<Article />} />
+							</Route>
 							{/* <Route path="about" element={<About />} /> */}
 							{/* <Route path="dashboard" element={<Dashboard />} /> */}
 							<Route path="*" element={<NotFound />} />
