@@ -14,6 +14,11 @@
 			align-items: center;
 			gap: 5px 5px;
 			height: 40px;
+			@media (max-width: 720px) {
+				align-items: flex-start;
+				flex-direction: column;
+				padding-bottom: 10px;
+			}
 			p {
 				font-size: 15px;
 			}
