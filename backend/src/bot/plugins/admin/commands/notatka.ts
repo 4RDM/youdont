@@ -155,8 +155,8 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 			const description: string[] = [];
 
 			// prettier-ignore
-			notatki.forEach((x: any) => {
-				description.push(`**#${x.id}** | \`${x.content.substring(0, 20)}...\` ${x.authorID && `- <@${x.authorID}> -`} ${x.date && `<t:${x.date}>`}`);
+			dbUser?.notatki.forEach((notatka: any) => {
+				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
 			});
 
 			message.channel.send({
