@@ -12,6 +12,7 @@ backend/dist
 **/dist/**/*.mp4
 **/dist/**/*.svg
 **/dist/**/*.json
+!frontend/dist/assets/*
 temp
 playersDB.json
 backend/.env
