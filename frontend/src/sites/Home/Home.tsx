@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import './Home.scss'
 
 export default () => {
+	useDocumentTitle('Strona główna')
+
 	return (
 		<div id="home-container">
 			<h1>

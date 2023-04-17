@@ -24,6 +24,12 @@ export default () => {
 	const content = useRef<HTMLDivElement>(null)
 	const { id } = useParams()
 
+	const [title, setTitle] = useState('Artykuł')
+
+	useEffect(() => {
+		document.title = title
+	}, [title])
+
 	useEffect(() => {
 		fetch(`/api/articles/${id}`)
 			.then((x) => x.json())
@@ -32,6 +38,12 @@ export default () => {
 				if (json.code !== 200) return alert('BŁĄD')
 				setArticle(json.article)
 				setLoading(false)
+
+				setTitle(json.article.title)
+			})
+			.catch((err) => {
+				console.error(err)
+				alert('BŁĄD')
 			})
 	}, [])
 

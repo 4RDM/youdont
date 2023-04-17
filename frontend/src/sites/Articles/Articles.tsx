@@ -4,6 +4,7 @@ import { Eye } from '@styled-icons/entypo'
 
 import './Articles.scss'
 import Loading from '../../compontents/Loading/Loading'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 interface Article {
 	title: string
@@ -23,6 +24,8 @@ export default () => {
 	const [isLoading, setLoading] = useState(true)
 	const [articles, setArticles] = useState<Article[]>([])
 
+	useDocumentTitle('Artykuły')
+
 	useEffect(() => {
 		fetch('/api/articles')
 			.then((x) => x.json())
@@ -30,6 +33,10 @@ export default () => {
 				if (json.code !== 200) return alert('BŁĄD')
 				setArticles(json.articles)
 				setLoading(false)
+			})
+			.catch((err) => {
+				console.error(err)
+				alert('BŁĄD')
 			})
 	}, [])
 
