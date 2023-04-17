@@ -1,4 +1,5 @@
 node_modules
 dist
+!dist/public
 yarn.lock
 dist/index.html
