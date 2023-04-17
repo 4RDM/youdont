@@ -31,7 +31,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 
 		// prettier-ignore
 		dbUser?.notatki.forEach((notatka: any) => {
-			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` - ${notatka.authorID ? `<@${notatka.authorID}>` : "BRAK"}`);
+			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
 		});
 
 		message.channel.send({
@@ -108,6 +108,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 				).toString(),
 				content,
 				authorID: message.author.id,
+				date: Math.floor(Date.now() / 1000),
 			};
 
 			dbUser?.notatki.push(notatka);
@@ -155,7 +156,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 
 			// prettier-ignore
 			dbUser?.notatki.forEach((notatka: any) => {
-				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` - ${notatka.authorID ? `<@${notatka.authorID}>` : "BRAK"}`);
+				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID && `- <@${notatka.authorID}> -`} ${notatka.date && `<t:${notatka.date}>`}`);
 			});
 
 			message.channel.send({
