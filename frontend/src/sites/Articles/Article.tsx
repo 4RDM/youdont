@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as marked from 'marked'
 
@@ -36,10 +36,11 @@ export default () => {
 			.then((json) => {
 				// TODO: handle error
 				if (json.code !== 200) return alert('BŁĄD')
-				setArticle(json.article)
-				setLoading(false)
 
+				setArticle(json.article)
 				setTitle(json.article.title)
+
+				setLoading(false)
 			})
 			.catch((err) => {
 				console.error(err)

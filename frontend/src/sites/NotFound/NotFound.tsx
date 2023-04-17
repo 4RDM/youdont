@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import './NotFound.scss'
 import PepeShrug from '../../public/pepeshrug.gif'

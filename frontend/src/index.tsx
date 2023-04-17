@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RecoilRoot } from 'recoil'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+
+import Loading from './compontents/Loading/Loading'
 import Navbar from './compontents/Navbar/Navbar'
 import Footer from './compontents/Footer/Footer'
-import Home from './sites/Home/Home'
-import Articles from './sites/Articles/Articles'
-import NotFound from './sites/NotFound/NotFound'
+
+const Home = lazy(() => import('./sites/Home/Home'))
+const Articles = lazy(() => import('./sites/Articles/Articles'))
+const NotFound = lazy(() => import('./sites/NotFound/NotFound'))
+const Article = lazy(() => import('./sites/Articles/Article'))
+
 import './index.scss'
-import Article from './sites/Articles/Article'
-import Loading from './compontents/Loading/Loading'
 
 const App = () => {
 	const location = useLocation()
@@ -61,7 +64,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<RecoilRoot>
-				<App />
+				<Suspense fallback={<Loading />}>
+					<App />
+				</Suspense>
 			</RecoilRoot>
 		</BrowserRouter>
 	</React.StrictMode>

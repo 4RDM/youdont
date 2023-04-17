@@ -31,7 +31,9 @@ export default () => {
 			.then((x) => x.json())
 			.then((json) => {
 				if (json.code !== 200) return alert('BŁĄD')
+
 				setArticles(json.articles)
+
 				setLoading(false)
 			})
 			.catch((err) => {

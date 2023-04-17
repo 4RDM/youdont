@@ -79,7 +79,13 @@ module.exports = () => {
 				new UglifyJsPlugin({ parallel: 3 }),
 				new TerserPlugin({ parallel: 3 }),
 			],
+			runtimeChunk: 'single',
+			splitChunks: {
+				chunks: 'all',
+			},
 		}
+
+		config.devServer = {}
 	} else {
 		config.mode = 'development'
 	}
