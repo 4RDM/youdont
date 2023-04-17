@@ -1,5 +1,4 @@
 node_modules
-dist
-!dist/public/*
-yarn.lock
+dist/public
 dist/index.html
+yarn.lock
