@@ -31,7 +31,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 
 		// prettier-ignore
 		dbUser?.notatki.forEach((notatka: any) => {
-			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\``);
+			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` - ${notatka.authorID ? `<@${notatka.authorID}>` : "BRAK"}`);
 		});
 
 		message.channel.send({
@@ -50,12 +50,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 		});
 	} else {
 		// prettier-ignore
-		if (
-			!["dodaj", "add", "usun", "usuń", "remove"].includes(
-				args[1].toLowerCase()
-			)
-		)
-			{
+		if (!["dodaj", "add", "usun", "usuń", "remove"].includes(args[1].toLowerCase())) {
 				const id = parseInt(args[1]);
 
 				if (isNaN(id))
@@ -112,6 +107,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 					) + 1
 				).toString(),
 				content,
+				authorID: message.author.id,
 			};
 
 			dbUser?.notatki.push(notatka);
@@ -155,12 +151,20 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 			dbUser.notatki = notatki;
 			await dbUser.save();
 
+			const description: string[] = [];
+
+			// prettier-ignore
+			dbUser?.notatki.forEach((notatka: any) => {
+				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` - ${notatka.authorID ? `<@${notatka.authorID}>` : "BRAK"}`);
+			});
+
 			message.channel.send({
 				embeds: [
 					Embed({
 						title: ":coffin: | Usunięto notatke!",
 						color: "#f54242",
 						user: message.author,
+						description: `Pozostałe notatki:\n${description}`,
 					}),
 				],
 			});
