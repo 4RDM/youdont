@@ -155,7 +155,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 			const description: string[] = [];
 
 			// prettier-ignore
-			dbUser?.notatki.forEach((notatka: any) => {
+			notatki.forEach((notatka: any) => {
 				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID && `- <@${notatka.authorID}> -`} ${notatka.date && `<t:${notatka.date}>`}`);
 			});
 
@@ -165,7 +165,9 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 						title: ":coffin: | Usunięto notatke!",
 						color: "#f54242",
 						user: message.author,
-						description: `Pozostałe notatki:\n${description}`,
+						description: `Pozostałe notatki:\n${description.join(
+							"\n"
+						)}`,
 					}),
 				],
 			});
