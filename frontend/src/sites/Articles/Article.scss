@@ -3,6 +3,9 @@
 	padding: 20px 70px;
 	display: flex;
 	flex-direction: column;
+	@media (max-width: 720px) {
+		padding: 20px 0;
+	}
 	#article-header {
 		display: flex;
 		flex-direction: column;
