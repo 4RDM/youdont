@@ -7,7 +7,7 @@ import { refreshTops } from "./utils/serverStatus";
 import logger from "./utils/logger";
 
 import dotenv from "dotenv";
-import { Collection, Intents } from "discord.js";
+import { Collection, GatewayIntentBits, Partials } from "discord.js";
 import { Session } from "express-session";
 
 dotenv.config();
@@ -38,14 +38,20 @@ export class Core {
 		this.database = new Database(this);
 		this.bot = new Client(this, {
 			intents: [
-				Intents.FLAGS.GUILDS,
-				Intents.FLAGS.GUILD_MEMBERS,
-				Intents.FLAGS.GUILD_MESSAGES,
-				Intents.FLAGS.DIRECT_MESSAGES,
-				Intents.FLAGS.GUILD_VOICE_STATES,
-				Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+				GatewayIntentBits.MessageContent,
+				GatewayIntentBits.Guilds,
+				GatewayIntentBits.GuildMembers,
+				GatewayIntentBits.GuildMessages,
+				GatewayIntentBits.DirectMessages,
+				GatewayIntentBits.GuildVoiceStates,
+				GatewayIntentBits.GuildMessageReactions,
 			],
-			partials: ["CHANNEL", "GUILD_MEMBER", "USER"],
+			partials: [
+				Partials.Channel,
+				Partials.GuildMember,
+				Partials.User,
+				Partials.Message,
+			],
 			presence: {
 				status: "idle",
 			},

@@ -5,6 +5,7 @@ import { CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args, client }: CommandArgs) {
 	const mention = message.mentions.users?.first();
+
 	if (args.length < 3 || !mention)
 		return message.channel.send({
 			embeds: [

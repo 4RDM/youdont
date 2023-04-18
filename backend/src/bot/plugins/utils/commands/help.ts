@@ -1,6 +1,6 @@
 import { Embed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
-import { EmbedFieldData } from "discord.js";
+import { EmbedField } from "discord.js";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
 	if (args[0]) {
@@ -18,6 +18,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 						value: `\`${cat.commands
 							.map(com => com.info.triggers[0])
 							.join(", ")}\``,
+						inline: false,
 					},
 				],
 				user: message.author,
@@ -40,6 +41,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 				{
 					name: "Aliasy",
 					value: `\`${command.info.triggers.join(", ")}\``,
+					inline: false,
 				},
 				{
 					name: "Poziom dostępu",
@@ -48,13 +50,14 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 							? ` bądź <@&${command.info.role}>`
 							: ""
 					}`,
+					inline: false,
 				},
 			],
 		});
 
 		message.channel.send({ embeds: [embed] });
 	} else {
-		const fields: EmbedFieldData[] = [];
+		const fields: EmbedField[] = [];
 
 		client.PluginHandler.plugins.forEach(plugin => {
 			fields.push({

@@ -1,9 +1,9 @@
 import {
 	EmbedAuthorData,
-	EmbedFieldData,
+	EmbedField,
 	HexColorString,
 	Message,
-	MessageEmbed,
+	EmbedBuilder,
 	User,
 } from "discord.js";
 
@@ -11,7 +11,7 @@ export interface EmbedStructure {
 	title?: string;
 	description?: string;
 	color?: HexColorString;
-	fields?: EmbedFieldData[];
+	fields?: EmbedField[];
 	footer?: boolean;
 	thumbnail?: string;
 	image?: string;
@@ -29,8 +29,8 @@ export const Embed = ({
 	image,
 	user,
 	author,
-}: EmbedStructure): MessageEmbed => {
-	const embed = new MessageEmbed();
+}: EmbedStructure): EmbedBuilder => {
+	const embed = new EmbedBuilder();
 
 	if (author) embed.setAuthor(author);
 	if (title) embed.setTitle(title);

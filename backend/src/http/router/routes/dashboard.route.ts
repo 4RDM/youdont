@@ -112,9 +112,9 @@ router.get("/admins", async (req, res) => {
 					nickname: member.user.tag,
 					id: member.user.id,
 					avatar: member.user.displayAvatarURL({
-						dynamic: true,
+						forceStatic: false,
 						size: 1024,
-						format: "webp",
+						extension: "webp",
 					}),
 				});
 			});

@@ -50,11 +50,11 @@ export const execute = async function ({ message }: CommandArgs) {
 		],
 		image:
 			user.user.bannerURL({
-				dynamic: true,
+				forceStatic: false,
 				size: 1024,
-				format: "png",
+				extension: "png",
 			}) || "",
-		thumbnail: user.displayAvatarURL({ dynamic: true }),
+		thumbnail: user.displayAvatarURL({ forceStatic: false }),
 		user: message.author,
 	});
 

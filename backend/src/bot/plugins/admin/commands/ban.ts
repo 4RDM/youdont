@@ -24,7 +24,10 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		)
 			return message.react("🖕");
 		await message.guild?.members
-			.ban(args[0], { reason: reason ? reason : "", days: 7 })
+			.ban(args[0], {
+				reason: reason ? reason : "",
+				deleteMessageSeconds: 7 * 24 * 60 * 60,
+			})
 			.then((user: User | string | GuildMember) => {
 				message.channel.send({
 					embeds: [
@@ -43,7 +46,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					],
 				});
 			})
-			.catch(() =>
+			.catch(() => {
 				message.channel.send({
 					embeds: [
 						ErrorEmbed(
@@ -51,8 +54,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 							"Nie udało się zbanować tego użytkownika!"
 						),
 					],
-				})
-			);
+				});
+			});
 		return;
 	} else {
 		if (!mention.bannable)
@@ -69,7 +72,10 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		)
 			return message.react("🖕");
 		await mention
-			.ban({ reason: reason ? reason : "", days: 7 })
+			.ban({
+				reason: reason ? reason : "",
+				deleteMessageSeconds: 7 * 24 * 60 * 60,
+			})
 			.then(() => {
 				message.channel.send({
 					embeds: [
@@ -88,7 +94,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					],
 				});
 			})
-			.catch(() =>
+			.catch(() => {
 				message.channel.send({
 					embeds: [
 						ErrorEmbed(
@@ -96,8 +102,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 							"Prawidłowe użycie: `.ban <użytkownik> [powód]`"
 						),
 					],
-				})
-			);
+				});
+			});
 	}
 };
 

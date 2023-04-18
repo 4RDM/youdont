@@ -43,14 +43,17 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 					{
 						name: "Administrator",
 						value: `\`${message.author.tag} (${message.author.id})\``,
+						inline: false,
 					},
 					{
 						name: "ID wpłaty",
 						value: `\`${donate.dID?.toString()}\``,
+						inline: false,
 					},
 					{
 						name: "Powód",
 						value: `\`${args.join(" ")}\``,
+						inline: false,
 					},
 				],
 				color: "#f54242",

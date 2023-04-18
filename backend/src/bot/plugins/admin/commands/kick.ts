@@ -60,7 +60,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					],
 				});
 			})
-			.catch(() =>
+			.catch(() => {
 				message.channel.send({
 					embeds: [
 						ErrorEmbed(
@@ -68,8 +68,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 							"Nie udało się wyrzucić tego użytkownika!"
 						),
 					],
-				})
-			);
+				});
+			});
 	}
 };
 

@@ -40,7 +40,7 @@ export const execute = async function ({ message }: CommandArgs) {
 				inline: true,
 			},
 		],
-		thumbnail: message.guild?.iconURL({ dynamic: true }) || "",
+		thumbnail: message.guild?.iconURL({ forceStatic: false }) || "",
 		user: message.author,
 	});
 	message.channel.send({ embeds: [embed] });

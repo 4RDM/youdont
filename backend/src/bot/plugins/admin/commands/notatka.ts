@@ -43,7 +43,6 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 					},
 					user: message.author,
 					title: "Notatki dla użytkownika",
-					color: "#d900ff",
 					description: description.join("\n"),
 				}),
 			],
