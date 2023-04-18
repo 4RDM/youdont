@@ -52,7 +52,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<RecoilRoot>
-				<Suspense>
+				<Suspense fallback={<Loading />}>
 					<App />
 				</Suspense>
 			</RecoilRoot>
