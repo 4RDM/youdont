@@ -15,8 +15,6 @@ export const execute = async function ({ client, message }: CommandArgs) {
 		],
 	});
 
-	// console.log(rcon);
-
 	const rconClient = new rcon(
 		config.rcon.host,
 		config.rcon.port,
@@ -29,8 +27,8 @@ export const execute = async function ({ client, message }: CommandArgs) {
 
 	rconClient.send("exec permisje.cfg");
 
-	// @ts-ignore
-	rcon.on("response", () => {
+	// Listen to the response event
+	rconClient.on("response", str => {
 		msg.edit({
 			embeds: [
 				Embed({
@@ -42,8 +40,8 @@ export const execute = async function ({ client, message }: CommandArgs) {
 		});
 	});
 
-	// @ts-ignore
-	rcon.on("error", () => {
+	// Listen to the error event
+	rconClient.on("error", err => {
 		msg.edit({
 			embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 		});
