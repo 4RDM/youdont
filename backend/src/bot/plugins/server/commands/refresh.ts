@@ -1,6 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
-import logger from "../../../../utils/logger";
 
 import rcon from "ts-rcon";
 import config from "../../../../config";
