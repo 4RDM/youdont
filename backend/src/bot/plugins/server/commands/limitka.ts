@@ -88,6 +88,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 
 		if (response.length > 1) {
 			const identifiers: any[] = response;
+			let currentHex = "";
 
 			message.channel.send(
 				`\`\`\`Znalezione identyfikatory:\n${identifiers
@@ -95,7 +96,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					.join("\n")}\`\`\`\nKtóry z nich użyć?`
 			);
 
-			message.channel
+			await message.channel
 				.awaitMessages({
 					filter: msg => msg.author.id === message.author.id,
 					max: 1,
@@ -121,48 +122,49 @@ export const execute = async function ({ message, args }: CommandArgs) {
 
 					index--;
 
-					const currentHex: string = identifiers[index].identifier;
+					currentHex = identifiers[index].identifier;
 
 					if (!currentHex)
 						// prettier-ignore
 						return message.channel.send({
 							embeds: [ErrorEmbed(message, "Wybrano błędny hex!")],
 						}).then();
-
-					if (!(<any>userJson)[currentHex])
-						(<any>userJson)[currentHex] = [];
-
-					const vehicleName = args.slice(2).join(" ");
-
-					(<any>userJson)[currentHex].push([args[1], vehicleName]);
-
-					writeFileSync(path, JSON.stringify(userJson), {
-						encoding: "utf-8",
-					});
-
-					message.channel.send({
-						embeds: [
-							Embed({
-								title: ":white_check_mark: | Dodano limitkę!",
-								color: "#1F8B4C",
-								author: {
-									name:
-										mention?.nickname ||
-										mention?.user.tag ||
-										"Brak",
-									iconURL: mention?.displayAvatarURL(),
-								},
-								description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${args[1]}\`\n**Display name**: \`${vehicleName}\``,
-								user: message.author,
-							}),
-						],
-					});
 				})
 				.catch(() => {
 					message.channel.send({
 						embeds: [ErrorEmbed(message, "Nie wybrano hexa!")],
 					});
 				});
+
+			if (!currentHex || currentHex == "") return;
+
+			if (!(<any>userJson)[currentHex]) (<any>userJson)[currentHex] = [];
+
+			const vehicleName = args.slice(2).join(" ");
+
+			(<any>userJson)[currentHex].push([args[1], vehicleName]);
+
+			writeFileSync(path, JSON.stringify(userJson), {
+				encoding: "utf-8",
+			});
+
+			message.channel.send({
+				embeds: [
+					Embed({
+						title: ":white_check_mark: | Dodano limitkę!",
+						color: "#1F8B4C",
+						author: {
+							name:
+								mention?.nickname ||
+								mention?.user.tag ||
+								"Brak",
+							iconURL: mention?.displayAvatarURL(),
+						},
+						description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${args[1]}\`\n**Display name**: \`${vehicleName}\``,
+						user: message.author,
+					}),
+				],
+			});
 		}
 	}
 };
