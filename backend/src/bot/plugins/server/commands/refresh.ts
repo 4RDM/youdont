@@ -1,6 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
-import logger from "src/utils/logger";
+import logger from "../../../../utils/logger";
 
 export const execute = async function ({ client, message }: CommandArgs) {
 	const msg = await message.channel.send({
