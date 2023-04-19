@@ -2,6 +2,9 @@ import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
 import logger from "../../../../utils/logger";
 
+import rcon from "ts-rcon";
+import config from "../../../../config";
+
 export const execute = async function ({ client, message }: CommandArgs) {
 	const msg = await message.channel.send({
 		embeds: [
@@ -12,27 +15,31 @@ export const execute = async function ({ client, message }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon.send(
-		"exec permisje.cfg",
-		() => {
-			msg.edit({
-				embeds: [
-					Embed({
-						color: "#1F8B4C",
-						description: "**Wysłano!**",
-						user: message.author,
-					}),
-				],
-			});
-		},
-		err => {
-			logger.error(err);
+	// console.log(rcon);
 
-			msg.edit({
-				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
-			});
+	const rconClient = new rcon(
+		config.rcon.host,
+		config.rcon.port,
+		config.rcon.pass,
+		{
+			tcp: false,
+			challenge: false,
 		}
 	);
+
+	rconClient.send("exec permisje.cfg");
+
+	// rcon.on("", () => {
+	// 	msg.edit({
+	// 		embeds: [
+	// 			Embed({
+	// 				color: "#1F8B4C",
+	// 				description: "**Wysłano!**",
+	// 				user: message.author,
+	// 			}),
+	// 		],
+	// 	});
+	// });
 };
 
 export const info = {
