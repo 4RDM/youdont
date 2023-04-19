@@ -31,10 +31,9 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 		}
 	);
 
-	rconClient.send("exec permisje.cfg");
-
 	// Listen to the response event
 	rconClient.on("response", str => {
+		console.log(str);
 		msg.edit({
 			embeds: [
 				Embed({
@@ -48,10 +47,13 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 
 	// Listen to the error event
 	rconClient.on("error", err => {
+		console.log(err);
 		msg.edit({
 			embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 		});
 	});
+
+	rconClient.send(args.join(" "));
 };
 
 export const info = {
