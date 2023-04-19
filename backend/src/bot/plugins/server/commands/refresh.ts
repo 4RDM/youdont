@@ -29,17 +29,25 @@ export const execute = async function ({ client, message }: CommandArgs) {
 
 	rconClient.send("exec permisje.cfg");
 
-	// rcon.on("", () => {
-	// 	msg.edit({
-	// 		embeds: [
-	// 			Embed({
-	// 				color: "#1F8B4C",
-	// 				description: "**Wysłano!**",
-	// 				user: message.author,
-	// 			}),
-	// 		],
-	// 	});
-	// });
+	// @ts-ignore
+	rcon.on("response", () => {
+		msg.edit({
+			embeds: [
+				Embed({
+					color: "#1F8B4C",
+					description: "**Wysłano!**",
+					user: message.author,
+				}),
+			],
+		});
+	});
+
+	// @ts-ignore
+	rcon.on("error", () => {
+		msg.edit({
+			embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+		});
+	});
 };
 
 export const info = {
