@@ -26,7 +26,7 @@ export class RCON {
 	async send(
 		cmd: string,
 		resolve?: () => void,
-		reject?: () => void
+		reject?: (reason: string) => void
 	): Promise<void> {
 		const connection = dgram.createSocket("udp4");
 		const connBuffer = Buffer.alloc(
@@ -48,7 +48,7 @@ export class RCON {
 		const connectionout = setTimeout(() => {
 			// connection.close()
 			logger.error("RCON Connection timeout");
-			if (reject) reject();
+			if (reject) reject("Timeout");
 		}, this.timeout);
 
 		connection.on("message", () => {
@@ -61,7 +61,7 @@ export class RCON {
 			);
 			messageout = setTimeout(() => {
 				connection.close();
-				if (reject) reject();
+				if (reject) reject("Timeout");
 				clearTimeout(resolveTimeout);
 			}, this.timeout);
 		});

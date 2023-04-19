@@ -1,5 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs } from "../../../../types";
+import logger from "src/utils/logger";
 
 export const execute = async function ({ client, message }: CommandArgs) {
 	const msg = await message.channel.send({
@@ -10,6 +11,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 			}),
 		],
 	});
+
 	client.Core.rcon.send(
 		"exec permisje.cfg",
 		() => {
@@ -23,7 +25,9 @@ export const execute = async function ({ client, message }: CommandArgs) {
 				],
 			});
 		},
-		() => {
+		err => {
+			logger.error(err);
+
 			msg.edit({
 				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 			});
