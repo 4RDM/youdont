@@ -114,7 +114,6 @@ export class Client extends Cl {
 		});
 
 		this.on("messageCreate", async message => {
-			console.log("ALIVE", message.content);
 			if (message.author.bot) return;
 
 			core.database.users.createIfNotExists(message.author.id);
