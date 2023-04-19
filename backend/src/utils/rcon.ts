@@ -17,7 +17,7 @@ export interface config {
 
 export class RCON {
 	private config: config;
-	public timeout = 1500;
+	public timeout = 10000;
 
 	constructor(config: config) {
 		this.config = config;
