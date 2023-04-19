@@ -61,7 +61,6 @@ export class RCON {
 			);
 			messageout = setTimeout(() => {
 				connection.close();
-				if (reject) reject("Timeout");
 				clearTimeout(resolveTimeout);
 			}, this.timeout);
 		});
@@ -72,7 +71,9 @@ export class RCON {
 			connBuffer.length,
 			this.config.port,
 			this.config.host,
-			(error: Error | null, _: number) => {}
+			(error: Error | null, _: number) => {
+				if (error && reject) reject(error.message);
+			}
 		);
 	}
 }
