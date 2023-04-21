@@ -6,9 +6,9 @@ import { getUserHex } from "./hex";
 import { Message } from "discord.js";
 
 const path = join(
-	__dirname,
-	"vehicles.json"
-	// "/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/vehicles.json"
+	// __dirname,
+	// "vehicles.json"
+	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/vehicles.json"
 );
 
 const awaitMessage = (message: Message): Promise<string> => {
