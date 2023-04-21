@@ -43,7 +43,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 					}),
 				],
 			});
-			client.Core.rcon.send("reload");
+			client.Core.rcon("reload");
 		})
 		.catch(() => {
 			msg.edit({

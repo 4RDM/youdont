@@ -18,9 +18,8 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon.send(
-		args.join(`unban ${parseInt(args[0])}`),
-		function () {
+	client.Core.rcon(args.join(`unban ${parseInt(args[0])}`))
+		.then(() => {
 			msg.edit({
 				embeds: [
 					Embed({
@@ -30,13 +29,12 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 					}),
 				],
 			});
-		},
-		function () {
+		})
+		.then(() => {
 			msg.edit({
 				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 			});
-		}
-	);
+		});
 };
 
 export const info = {
