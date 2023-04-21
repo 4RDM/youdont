@@ -1,5 +1,5 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message }: CommandArgs) {
 	const user = message.mentions.members?.first() || message.member;
@@ -61,7 +61,7 @@ export const execute = async function ({ message }: CommandArgs) {
 	message.channel.send({ embeds: [embed] });
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["userinfo", "user"],
 	description: "Sprawdź informacje na temat użytkownika",
 };

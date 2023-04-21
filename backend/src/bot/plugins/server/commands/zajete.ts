@@ -1,5 +1,5 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message }: CommandArgs) {
 	message.channel.send({
@@ -14,7 +14,7 @@ export const execute = async function ({ message }: CommandArgs) {
 	});
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["zajete"],
 	description:
 		"Wyślij wiadomość informującą o duplikacie pojazdu na serwerze",

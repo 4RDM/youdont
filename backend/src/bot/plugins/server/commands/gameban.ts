@@ -1,5 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
 	if (!args[0])
@@ -35,9 +35,9 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 		});
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["gameban"],
 	description: "Zbanuj osobę na serwerze",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 	role: "843444642539110400", // TEAM 4RDM
 };

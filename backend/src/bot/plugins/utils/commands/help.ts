@@ -1,5 +1,5 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 import { EmbedField } from "discord.js";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
@@ -77,7 +77,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["help"],
 	description:
 		"Sprawdź wszystkie dostępne komendy bota oraz ich zastosowanie",

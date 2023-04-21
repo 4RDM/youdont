@@ -1,7 +1,7 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args, client }: CommandArgs) {
 	const mention = message.mentions.users?.first();
@@ -52,9 +52,9 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 		});
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["dodaj"],
 	description: "Dodaj użytkownika do konfiguracji",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
 };

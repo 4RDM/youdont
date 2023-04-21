@@ -1,4 +1,4 @@
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message }: CommandArgs) {
 	const document = await client.Core.database.donates.create({
@@ -13,8 +13,8 @@ export const execute = async function ({ client, message }: CommandArgs) {
 	);
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["testwplata"],
 	description: "Zaakceptuj donate o danym ID",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 };

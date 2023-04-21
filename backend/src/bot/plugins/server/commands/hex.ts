@@ -1,6 +1,6 @@
 import mariadb from "mariadb";
 import config from "../../../../config";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const getUserHex = async function (discordId: string) {
@@ -48,7 +48,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	);
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["hex"],
 	description: "Sprawdź hex użytkownika",
 };

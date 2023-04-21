@@ -1,4 +1,4 @@
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	const tochoose = args
@@ -14,7 +14,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["choose"],
 	description: "Wybiera losowy argument",
 };

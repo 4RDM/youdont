@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
@@ -75,8 +75,8 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	});
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["odrzuc", "odrzuć"],
 	description: "Odrzuć donate o danym ID",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 };

@@ -1,5 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	if (!args[0])
@@ -73,8 +73,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["kick"],
 	description: "Wyrzuć osobę",
-	permissions: ["BAN_MEMBERS", "KICK_MEMBERS"],
+	permissions: ["BanMembers", "KickMembers"],
 };

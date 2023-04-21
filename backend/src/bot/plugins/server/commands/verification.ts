@@ -1,6 +1,6 @@
 import logger from "../../../../utils/logger";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
 	const role = message.mentions.roles.first();
@@ -35,8 +35,8 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	logger.log(`Verification role is now ${verRole}`);
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["setupver"],
 	description: "Stwórz wiadomość do weryfikacji",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 };

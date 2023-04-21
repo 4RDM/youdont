@@ -1,5 +1,5 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message }: CommandArgs) {
 	const embed = Embed({
@@ -13,7 +13,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 	message.channel.send({ embeds: [embed] });
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["ping"],
 	description: "Sprawdź opóźnienie API bota",
 };

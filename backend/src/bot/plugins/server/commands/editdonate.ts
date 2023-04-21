@@ -1,4 +1,4 @@
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
@@ -47,8 +47,8 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	});
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["editdonate"],
 	description: "Zmień właściwości donate",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 };

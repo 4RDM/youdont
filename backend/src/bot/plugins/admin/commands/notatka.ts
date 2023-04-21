@@ -1,5 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args, client }: CommandArgs) {
 	const member = message.mentions.members?.first();
@@ -174,8 +174,8 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["notatka", "note", "n"],
 	description: "Notatki",
-	permissions: ["BAN_MEMBERS", "KICK_MEMBERS"],
+	permissions: ["BanMembers", "KickMembers"],
 };

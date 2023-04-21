@@ -1,6 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { GuildMember, User } from "discord.js";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	if (!args[0])
@@ -107,8 +107,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["ban"],
 	description: "Zbanuj osobę",
-	permissions: ["BAN_MEMBERS", "KICK_MEMBERS"],
+	permissions: ["BanMembers", "KickMembers"],
 };

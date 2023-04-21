@@ -1,6 +1,6 @@
 import { TextChannel } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	const parsedNumber = parseInt(args[0]);
@@ -50,8 +50,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["clear", "purge", "wyczysc"],
 	description: "Usuwa określoną ilość wiadomości",
-	permissions: ["MANAGE_MESSAGES"],
+	permissions: ["ManageMessages"],
 };

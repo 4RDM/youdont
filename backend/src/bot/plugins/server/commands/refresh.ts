@@ -1,5 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message }: CommandArgs) {
 	const msg = await message.channel.send({
@@ -30,9 +30,9 @@ export const execute = async function ({ client, message }: CommandArgs) {
 		});
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["refresh"],
 	description: "Przeładuj uprawnienia na serwerze",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
 };

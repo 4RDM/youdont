@@ -1,5 +1,5 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message }: CommandArgs) {
 	const embed = Embed({
@@ -46,7 +46,7 @@ export const execute = async function ({ message }: CommandArgs) {
 	message.channel.send({ embeds: [embed] });
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["serverinfo"],
 	description: "Sprawdź informacje o serwerze",
 };

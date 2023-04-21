@@ -1,4 +1,4 @@
-import { CommandArgs } from "../../../../types";
+import { Command, CommandArgs } from "../../../../types";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
 import { User, WebhookClient } from "discord.js";
@@ -147,8 +147,8 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	}
 };
 
-export const info = {
+export const info: Command["info"] = {
 	triggers: ["zaakceptuj"],
 	description: "Zaakceptuj donate o danym ID",
-	permissions: ["ADMINISTRATOR"],
+	permissions: ["Administrator"],
 };
