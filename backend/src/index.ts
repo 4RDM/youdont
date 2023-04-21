@@ -1,5 +1,5 @@
 import { Client } from "./bot/main";
-import { RCON } from "./utils/rcon";
+import RCON from "./utils/rcon";
 import Database from "./database/database";
 import HTTP from "./http/http";
 import config from "./config";
@@ -29,11 +29,11 @@ export class Core {
 	public httpServer: HTTP;
 	public database: Database;
 	public bot: Client;
-	public rcon: RCON;
+	public rcon;
 	public cache = new Collection();
 
 	constructor() {
-		this.rcon = new RCON(config.rcon);
+		this.rcon = RCON;
 		this.httpServer = new HTTP(this);
 		this.database = new Database(this);
 		this.bot = new Client(this, {

@@ -28,6 +28,7 @@
 		"mongoose": "^6.1.6",
 		"nanoid": "^3.2.0",
 		"node-fetch": "2.6.7",
+		"quake3-rcon": "^1.0.2",
 		"ts-rcon": "^1.2.1",
 		"utf-8-validate": "^5.0.8",
 		"zlib-sync": "^0.1.7"
