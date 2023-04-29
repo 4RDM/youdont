@@ -35,7 +35,10 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 			],
 		});
 
-	const response = await getUserHex(message.author.id);
+	const response = await getUserHex(
+		message.mentions.users.first()?.id ||
+			args[0].replace("<@!", "").replace(">", "")
+	);
 
 	if (!response[0])
 		return message.channel.send({
