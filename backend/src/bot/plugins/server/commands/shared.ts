@@ -11,7 +11,7 @@ const path = join(
 	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/shared.json"
 );
 
-const awaitMessage = (message: Message): Promise<string> => {
+export const awaitMessage = (message: Message): Promise<string> => {
 	const promise = new Promise<string>((resolve, reject) => {
 		message.channel
 			.awaitMessages({
@@ -189,6 +189,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		});
 	}
 };
+
 export const info: Command["info"] = {
 	triggers: ["shared"],
 	description: "Zarządzanie autami współdzielonymi graczy",

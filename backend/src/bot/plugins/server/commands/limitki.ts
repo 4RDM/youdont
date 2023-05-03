@@ -3,36 +3,13 @@ import { join } from "path";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { CommandArgs, Command } from "../../../../types";
 import { getUserHex } from "./hex";
-import { Message } from "discord.js";
+import { awaitMessage } from "./shared";
 
 const path = join(
 	// __dirname,
 	// "vehicles.json"
 	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/vehicles.json"
 );
-
-const awaitMessage = (message: Message): Promise<string> => {
-	const promise = new Promise<string>((resolve, reject) => {
-		message.channel
-			.awaitMessages({
-				filter: msg => msg.author.id === message.author.id,
-				max: 1,
-				time: 60000,
-				errors: ["time"],
-			})
-			.then(collected => {
-				if (!collected || !collected.first())
-					return reject("Nie wprowadzono odpowiedzi");
-
-				resolve(collected.first()?.content || "");
-			})
-			.catch(() => {
-				reject("Nie wprowadzono odpowiedzi");
-			});
-	});
-
-	return promise;
-};
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	const mention = message.mentions.members?.first();
@@ -189,6 +166,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		});
 	}
 };
+
 export const info: Command["info"] = {
 	triggers: ["limitki"],
 	description: "Zarządzanie limitkami graczy",
