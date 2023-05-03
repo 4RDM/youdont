@@ -27,24 +27,20 @@ export const execute = async function ({ message }: CommandArgs) {
 			},
 			{
 				name: "Dołączył",
-				value: `<t:${Math.floor(
-					(user.joinedAt?.getTime() || 0) / 1000
-				)}:R>`,
+				// prettier-ignore
+				value: `<t:${Math.floor((user.joinedAt?.getTime() || 0) / 1000)}:R>`,
 				inline: true,
 			},
 			{
 				name: "Utworzył konto",
-				value: `<t:${Math.floor(
-					(user.user.createdAt?.getTime() || 0) / 1000
-				)}:R>`,
+				// prettier-ignore
+				value: `<t:${Math.floor((user.user.createdAt?.getTime() || 0) / 1000)}:R>`,
 				inline: true,
 			},
 			{
 				name: "Booster od",
-				value: `${
-					// prettier-ignore
-					user.premiumSince ? `<t:${Math.floor((user.premiumSince.getTime() || 0) / 1000)}:R>` : "`Brak`"
-				}`,
+				// prettier-ignore
+				value: `${user.premiumSince ? `<t:${Math.floor((user.premiumSince.getTime() || 0) / 1000)}:R>` : "`Brak`"}`,
 				inline: true,
 			},
 		],
