@@ -108,11 +108,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 			embeds: [
 				Embed({
 					title: "Nowa dotacja",
-					description: `Dziękujemy **${
-						user.tag
-					}** za wpłatę \`${parseInt(
-						args[1]
-					)}zł\` na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/article-wplata-na-serwer))`,
+					description: `Dziękujemy **${user.tag}** na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/article-wplata-na-serwer))`,
 					thumbnail: user.displayAvatarURL(),
 					color: "#ffffff",
 					user: <User>client.user,

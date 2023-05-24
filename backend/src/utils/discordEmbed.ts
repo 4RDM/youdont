@@ -12,7 +12,7 @@ export interface EmbedStructure {
 	description?: string;
 	color?: HexColorString;
 	fields?: EmbedField[];
-	footer?: boolean;
+	footer?: string;
 	thumbnail?: string;
 	image?: string;
 	user: User;
@@ -24,7 +24,7 @@ export const Embed = ({
 	description,
 	color,
 	fields,
-	footer = true,
+	footer,
 	thumbnail,
 	image,
 	user,
@@ -38,7 +38,8 @@ export const Embed = ({
 	else embed.setColor("#fcbe03");
 	if (description) embed.setDescription(description);
 	if (fields) embed.addFields(fields);
-	if (footer)
+	if (footer) embed.setFooter({ text: footer }).setTimestamp(new Date());
+	else
 		embed
 			.setFooter({ text: `${user.tag} (${user.id})` })
 			.setTimestamp(new Date());
