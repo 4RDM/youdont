@@ -22,9 +22,9 @@ export const execute = async function ({ message, args }: CommandArgs) {
 
 	const fetchedMessage = await fetchedChannel.messages
 		.fetch(args[1])
-		.catch(() => false);
+		.catch(err => false);
 
-	if (!fetchedMessage)
+	if (!fetchedMessage || typeof fetchedMessage == "boolean")
 		return message.channel.send({
 			embeds: [ErrorEmbed(message, "Nieznaleziono wiadomości")],
 		});
