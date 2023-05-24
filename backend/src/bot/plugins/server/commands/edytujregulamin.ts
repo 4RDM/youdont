@@ -20,7 +20,9 @@ export const execute = async function ({ message, args }: CommandArgs) {
 			embeds: [ErrorEmbed(message, "Kanał nie jest tekstowy")],
 		});
 
-	const fetchedMessage = await fetchedChannel.messages.fetch(args[1]);
+	const fetchedMessage = await fetchedChannel.messages
+		.fetch(args[1])
+		.catch(() => false);
 
 	if (!fetchedMessage)
 		return message.channel.send({
