@@ -7,8 +7,8 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		return message.channel.send({ embeds: [ErrorEmbed(message, "Prawidłowe użycie komendy: <ID kanału> <ID wiadomości>")] });
 
 	const fetchedChannel =
-		(await message.guild?.channels.fetch(args[0])) ||
-		message.mentions.channels.first();
+		message.mentions.channels.first() ||
+		(await message.guild?.channels.fetch(args[0]));
 
 	if (!fetchedChannel)
 		return message.channel.send({
