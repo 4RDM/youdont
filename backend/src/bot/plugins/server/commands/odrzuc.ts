@@ -57,7 +57,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 					},
 				],
 				color: "#f54242",
-				footer: false,
+				footer: "",
 				user: <User>client.user,
 			}),
 		],
