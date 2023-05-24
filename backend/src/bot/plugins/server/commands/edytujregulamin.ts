@@ -51,16 +51,26 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
 				}) as any;
 
-			fetchedMessage.edit({
-				embeds: [
-					Embed({
-						title: "Regulamin serwera 4RDM",
-						description: collectedMessages.first()?.content,
-						footer: `© 2020-${new Date().getUTCFullYear()}`,
-						user: message.author,
-					}),
-				],
-			});
+			console.log(fetchedMessage.embeds[0].color);
+
+			fetchedMessage
+				.edit({
+					embeds: [
+						Embed({
+							title: "Regulamin serwera 4RDM",
+							color: "#6f42c1",
+							description: collectedMessages.first()?.content,
+							footer: `© 2020-${new Date().getUTCFullYear()}`,
+							user: message.author,
+						}),
+					],
+				})
+				.catch(
+					err =>
+						message.channel.send({
+							embeds: [ErrorEmbed(message, err)],
+						}) as any
+				);
 		})
 		.catch(
 			() =>
