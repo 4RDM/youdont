@@ -51,8 +51,6 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
 				}) as any;
 
-			console.log(fetchedMessage.embeds[0].color);
-
 			fetchedMessage
 				.edit({
 					embeds: [
