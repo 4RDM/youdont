@@ -1,4 +1,3 @@
-import { Command } from "../../types";
 import { Client } from "../main";
 
 export default class Handler {

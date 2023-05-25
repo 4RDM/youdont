@@ -1,5 +1,3 @@
-import { Command, CommandArgs } from "../../../../types";
-
 export const execute = async function ({ client, message }: CommandArgs) {
 	const document = await client.Core.database.donates.create({
 		userID: message.author.id,

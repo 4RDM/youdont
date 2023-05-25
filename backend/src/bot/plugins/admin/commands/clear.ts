@@ -1,6 +1,5 @@
 import { TextChannel } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	const parsedNumber = parseInt(args[0]);

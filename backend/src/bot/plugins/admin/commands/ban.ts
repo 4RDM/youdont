@@ -1,6 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { GuildMember, User } from "discord.js";
-import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args }: CommandArgs) {
 	if (!args[0])

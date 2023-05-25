@@ -1,6 +1,5 @@
 import logger from "../../../../utils/logger";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
-import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {
 	const role = message.mentions.roles.first();

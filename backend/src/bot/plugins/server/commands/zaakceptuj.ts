@@ -1,7 +1,6 @@
-import { Command, CommandArgs } from "../../../../types";
+import { User, WebhookClient } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
-import { User, WebhookClient } from "discord.js";
 
 export interface Benefit {
 	amount: number;

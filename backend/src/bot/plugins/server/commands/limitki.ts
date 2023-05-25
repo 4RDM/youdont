@@ -1,7 +1,6 @@
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { CommandArgs, Command } from "../../../../types";
 import { getUserHex } from "./hex";
 import { awaitMessage } from "./shared";
 

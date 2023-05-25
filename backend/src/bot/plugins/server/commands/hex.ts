@@ -1,6 +1,5 @@
 import mariadb from "mariadb";
 import config from "../../../../config";
-import { Command, CommandArgs } from "../../../../types";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const getUserHex = async function (discordId: string) {

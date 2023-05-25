@@ -1,5 +1,5 @@
 import { promises } from "fs";
-import { Plugin, Command } from "../../types";
+import { Plugin } from "../../types";
 import { join } from "path";
 import logger from "../../utils/logger";
 

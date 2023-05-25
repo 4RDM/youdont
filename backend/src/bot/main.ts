@@ -7,6 +7,7 @@ import { Embed, ErrorEmbed } from "../utils/discordEmbed";
 import config from "../config";
 import { Core } from "../";
 import { checkMessage } from "./handlers/automoderator.handler";
+import { Message, PermissionResolvable } from "discord.js";
 
 const wordlist = [
 	{
@@ -59,6 +60,32 @@ const wordlist = [
 	},
 ];
 
+declare global {
+	interface CommandArgs {
+		client: Client;
+		message: Message;
+		args: any[];
+	}
+
+	interface Command {
+		info: {
+			triggers: string[];
+			description: string;
+			role?: string;
+			permissions?: PermissionResolvable[];
+		};
+		execute({
+			client,
+			message,
+			args,
+		}: {
+			client: Client;
+			message: Message;
+			args: string[];
+		}): Promise<void>;
+	}
+}
+
 export class Client extends Cl {
 	public readonly PluginHandler: PluginHandler;
 	public readonly CommandHandler: CommandHandler;
@@ -78,39 +105,9 @@ export class Client extends Cl {
 		this.on("ready", async () => {
 			logger.ready("Bot is ready!");
 
-			const channelID =
-				core.database.settings.settings.verificationChannel;
-			const channel = await this.channels.fetch(channelID);
-
-			if (channel?.isTextBased()) {
-				await channel.messages.fetch();
-			}
-
 			const reloadStats = () => {};
 
 			setInterval(reloadStats, 10000);
-		});
-
-		this.on("messageReactionAdd", async (reaction, user) => {
-			if (!reaction.message.guild) return;
-
-			if (
-				reaction.message.channelId ==
-					core.database.settings.settings.verificationChannel &&
-				user.id !== this.user?.id &&
-				reaction.emoji.name == "❤️"
-			) {
-				const userReactions = reaction.message.reactions.cache.filter(
-					reaction => reaction.users.cache.has(user.id)
-				);
-				for (const reaction of userReactions.values()) {
-					await reaction.users.remove(user.id);
-				}
-
-				reaction.message.guild.members.cache
-					.get(user.id)
-					?.roles.add(verificationRole);
-			}
 		});
 
 		this.on("messageCreate", async message => {
@@ -118,43 +115,26 @@ export class Client extends Cl {
 
 			core.database.users.createIfNotExists(message.author.id);
 
-			if (
-				!message.content.startsWith(config.discord.prefix) &&
-				message.guild
-			) {
+			// prettier-ignore
+			if (!message.content.startsWith(config.discord.prefix) && message.guild) {
 				checkMessage(message.content).then(s => {
 					if (!s) return;
-					message.member?.timeout(
-						120 * 60 * 1000,
-						"Phishing / scam URL"
-					); // for 2 hours
+					message.member?.timeout(120 * 60 * 1000, "Phishing / scam URL"); // for 2 hours
 					message.delete();
 				});
 
 				// Autoreply
-				wordlist.forEach(
-					word =>
-						isSimilar(message.content, word.msg) &&
-						message.reply(word.res)
-				);
+				wordlist.forEach(word => isSimilar(message.content, word.msg) && message.reply(word.res));
 				return;
 			}
 
+			// prettier-ignore
 			if (message.guild) {
-				const [commandName, ...args] = message.content
-					.slice(config.discord.prefix.length)
-					.split(/ +/g);
+				const [commandName, ...args] = message.content.slice(config.discord.prefix.length).split(/ +/g);
 				const command = this.CommandHandler.get(commandName);
+
 				if (command) {
-					if (
-						(command.info.role &&
-							message.member?.roles.cache.has(
-								command.info.role
-							)) ||
-						message.member?.permissions.has(
-							command.info.permissions || []
-						)
-					)
+					if ((command.info.role && message.member?.roles.cache.has(command.info.role)) || message.member?.permissions.has(command.info.permissions || []))
 						command.execute({ client: this, message, args });
 					else message.react("❌");
 				}
@@ -172,10 +152,8 @@ export class Client extends Cl {
 							});
 
 						(<TextChannel>(
-							await this.channels.fetch("843586192879517776")
-						)).send(
-							`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
-						);
+							await this.channels.fetch("843586192879517776") // donate channel
+						)).send(`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`);
 
 						message.channel.send({
 							embeds: [
@@ -197,9 +175,7 @@ export class Client extends Cl {
 
 						(<TextChannel>(
 							await this.channels.fetch("843586192879517776")
-						)).send(
-							`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
-						);
+						)).send(`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`);
 
 						message.channel.send({
 							embeds: [
@@ -212,19 +188,10 @@ export class Client extends Cl {
 							],
 						});
 					} else if (args[0] == "psc") {
-						if (
-							!args[1] ||
-							(args[1].length !== 16 && args[1].length !== 19)
-						) {
+						if (!args[1] || (args[1].length !== 16 && args[1].length !== 19)) {
 							message.channel.send({
-								embeds: [
-									ErrorEmbed(
-										message,
-										"Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`"
-									),
-								],
+								embeds: [ ErrorEmbed(message, "Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`") ],
 							});
-
 							return;
 						}
 
@@ -237,18 +204,14 @@ export class Client extends Cl {
 
 						(<TextChannel>(
 							await this.channels.fetch("843586192879517776")
-						)).send(
-							`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
-						);
+						)).send(`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`);
 					}
 
 					return;
 				}
 
-				if (commandName == "help") {
-					message.channel.send("`donate`, `69`");
-					return;
-				}
+				if (commandName == "help") return 
+					message.channel.send("Dostępne komendy: `donate`");
 
 				message.channel.send({
 					embeds: [
@@ -257,7 +220,7 @@ export class Client extends Cl {
 								.map((x: string) => `> ${x}`)
 								.join(
 									"\n"
-								)}\n\nNie mogę zrozumieć co chcesz mi przekazać! Spróbuj \`help\` aby uzyskać dostępne polecenia!`,
+								)}\n\nNie rozumiem co chcesz mi przekazać! Spróbuj \`help\` aby uzyskać dostępne polecenia!`,
 							color: "#f54242",
 							user: message.author,
 						}),

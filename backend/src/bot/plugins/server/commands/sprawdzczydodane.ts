@@ -1,4 +1,3 @@
-import { CommandArgs, Command } from "../../../../types";
 import { join } from "path";
 import { existsSync } from "fs";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";

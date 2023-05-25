@@ -1,4 +1,3 @@
-import { Command, CommandArgs } from "../../../../types";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const execute = async function ({ client, message, args }: CommandArgs) {

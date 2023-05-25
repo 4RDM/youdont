@@ -1,7 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
-import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ message, args, client }: CommandArgs) {
 	const mention = message.mentions.users?.first();

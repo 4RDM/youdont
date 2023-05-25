@@ -1,5 +1,4 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { Command, CommandArgs } from "../../../../types";
 
 export const execute = async function ({ client, message }: CommandArgs) {
 	const embed = Embed({
