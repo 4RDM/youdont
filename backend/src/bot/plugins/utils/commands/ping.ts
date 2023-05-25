@@ -12,7 +12,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 	message.channel.send({ embeds: [embed] });
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["ping"],
 	description: "Sprawdź opóźnienie API bota",
 };

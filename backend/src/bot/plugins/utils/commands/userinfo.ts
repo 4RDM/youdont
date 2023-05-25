@@ -56,7 +56,7 @@ export const execute = async function ({ message }: CommandArgs) {
 	message.channel.send({ embeds: [embed] });
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["userinfo", "user"],
 	description: "Sprawdź informacje na temat użytkownika",
 };

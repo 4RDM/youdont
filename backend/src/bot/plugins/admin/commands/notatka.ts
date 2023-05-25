@@ -173,7 +173,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 	}
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["notatka", "note", "n"],
 	description: "Notatki",
 	permissions: ["BanMembers", "KickMembers"],

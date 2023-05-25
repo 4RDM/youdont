@@ -13,7 +13,7 @@ export const execute = async function ({ message }: CommandArgs) {
 	});
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["zajete"],
 	description:
 		"Wyślij wiadomość informującą o duplikacie pojazdu na serwerze",

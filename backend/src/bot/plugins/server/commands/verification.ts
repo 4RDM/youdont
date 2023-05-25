@@ -34,7 +34,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	logger.log(`Verification role is now ${verRole}`);
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["setupver"],
 	description: "Stwórz wiadomość do weryfikacji",
 	permissions: ["Administrator"],

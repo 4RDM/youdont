@@ -36,7 +36,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 		});
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["cmd", "command"],
 	description: "Wyślij polecenie do konsoli",
 	permissions: ["Administrator"],

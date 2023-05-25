@@ -67,13 +67,15 @@ declare global {
 		args: any[];
 	}
 
+	interface CommandInfo {
+		triggers: string[];
+		description: string;
+		role?: string;
+		permissions?: PermissionResolvable[];
+	}
+
 	interface Command {
-		info: {
-			triggers: string[];
-			description: string;
-			role?: string;
-			permissions?: PermissionResolvable[];
-		};
+		info: CommandInfo;
 		execute({
 			client,
 			message,

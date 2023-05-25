@@ -74,7 +74,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	});
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["odrzuc", "odrzuć"],
 	description: "Odrzuć donate o danym ID",
 	permissions: ["Administrator"],

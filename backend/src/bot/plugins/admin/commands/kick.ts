@@ -72,7 +72,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["kick"],
 	description: "Wyrzuć osobę",
 	permissions: ["BanMembers", "KickMembers"],

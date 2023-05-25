@@ -189,7 +189,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["shared"],
 	description: "Zarządzanie autami współdzielonymi graczy",
 	permissions: ["Administrator"],

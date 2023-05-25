@@ -50,7 +50,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	);
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["hex"],
 	description: "Sprawdź hex użytkownika",
 };

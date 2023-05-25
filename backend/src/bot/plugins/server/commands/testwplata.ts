@@ -11,7 +11,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 	);
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["testwplata"],
 	description: "Zaakceptuj donate o danym ID",
 	permissions: ["Administrator"],

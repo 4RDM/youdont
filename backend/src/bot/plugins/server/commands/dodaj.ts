@@ -51,7 +51,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 		});
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["dodaj"],
 	description: "Dodaj użytkownika do konfiguracji",
 	permissions: ["Administrator"],

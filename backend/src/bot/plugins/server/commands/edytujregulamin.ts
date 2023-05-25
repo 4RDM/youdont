@@ -77,7 +77,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		);
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["edytujregulamin"],
 	description: "Edytuje regulamin",
 	permissions: ["Administrator"],

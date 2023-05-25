@@ -29,7 +29,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 		});
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["refresh"],
 	description: "Przeładuj uprawnienia na serwerze",
 	permissions: ["Administrator"],

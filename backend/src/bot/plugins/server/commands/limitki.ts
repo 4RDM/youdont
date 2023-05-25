@@ -166,7 +166,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["limitki"],
 	description: "Zarządzanie limitkami graczy",
 	permissions: ["Administrator"],

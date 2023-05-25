@@ -49,7 +49,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 	}
 };
 
-export const info: Command["info"] = {
+export const info: CommandInfo = {
 	triggers: ["clear", "purge", "wyczysc"],
 	description: "Usuwa określoną ilość wiadomości",
 	permissions: ["ManageMessages"],
