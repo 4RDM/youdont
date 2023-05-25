@@ -1,6 +1,6 @@
 import { Embed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ client, message }: CommandArgs) {
+export default async function ({ client, message }: CommandArgs) {
 	const embed = Embed({
 		title: "Ping bota",
 		description: `\`\`\`API: ${Math.floor(client.ws.ping)}ms\nWiadomość: ${
@@ -10,7 +10,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 	});
 
 	message.channel.send({ embeds: [embed] });
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["ping"],

@@ -1,6 +1,6 @@
 import { Embed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ message }: CommandArgs) {
+export default async function ({ message }: CommandArgs) {
 	const embed = Embed({
 		title: message.guild?.name,
 		fields: [
@@ -43,7 +43,7 @@ export const execute = async function ({ message }: CommandArgs) {
 		user: message.author,
 	});
 	message.channel.send({ embeds: [embed] });
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["serverinfo"],

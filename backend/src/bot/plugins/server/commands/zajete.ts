@@ -1,6 +1,6 @@
 import { Embed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ message }: CommandArgs) {
+export default async function ({ message }: CommandArgs) {
 	message.channel.send({
 		embeds: [
 			Embed({
@@ -11,7 +11,7 @@ export const execute = async function ({ message }: CommandArgs) {
 			}),
 		],
 	});
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["zajete"],

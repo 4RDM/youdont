@@ -10,7 +10,7 @@ const path = join(
 	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/vehicles.json"
 );
 
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	const mention = message.mentions.members?.first();
 
 	// prettier-ignore
@@ -164,7 +164,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 			],
 		});
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["limitki"],

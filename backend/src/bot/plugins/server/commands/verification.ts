@@ -1,7 +1,7 @@
 import logger from "../../../../utils/logger";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ client, message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	const role = message.mentions.roles.first();
 
 	if (!role)
@@ -32,7 +32,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	logger.log("Verification is set!");
 	logger.log(`Verification channel is now ${verChannel}`);
 	logger.log(`Verification role is now ${verRole}`);
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["setupver"],

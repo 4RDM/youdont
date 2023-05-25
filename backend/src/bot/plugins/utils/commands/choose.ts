@@ -1,4 +1,4 @@
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	const tochoose = args
 		.join(" ")
 		.split(" ")
@@ -10,7 +10,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 		const random = Math.floor(Math.random() * tochoose.length);
 		message.channel.send({ content: tochoose[random] });
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["choose"],

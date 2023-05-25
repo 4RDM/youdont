@@ -1,7 +1,7 @@
 import { Embed } from "../../../../utils/discordEmbed";
 import { EmbedField } from "discord.js";
 
-export const execute = async function ({ client, message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	if (args[0]) {
 		const command = client.CommandHandler.get(args[0]);
 		const cat = client.PluginHandler.get(args[0]);
@@ -74,7 +74,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 
 		message.channel.send({ embeds: [embed] });
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["help"],

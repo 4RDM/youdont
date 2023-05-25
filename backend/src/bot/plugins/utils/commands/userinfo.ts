@@ -1,6 +1,6 @@
 import { Embed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ message }: CommandArgs) {
+export default async function ({ message }: CommandArgs) {
 	const user = message.mentions.members?.first() || message.member;
 	if (!user) return;
 
@@ -54,7 +54,7 @@ export const execute = async function ({ message }: CommandArgs) {
 	});
 
 	message.channel.send({ embeds: [embed] });
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["userinfo", "user"],

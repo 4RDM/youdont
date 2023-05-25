@@ -1,7 +1,7 @@
 import { User } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ client, message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	if (!args[0] || !args[1])
 		return message.channel.send({
 			embeds: [
@@ -72,7 +72,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 			}),
 		],
 	});
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["odrzuc", "odrzuć"],

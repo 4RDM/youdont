@@ -2,7 +2,7 @@ import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
 
-export const execute = async function ({ message, args, client }: CommandArgs) {
+export default async function ({ message, args, client }: CommandArgs) {
 	const mention = message.mentions.users?.first();
 
 	if (args.length < 3 || !mention)
@@ -49,7 +49,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 			});
 		});
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["dodaj"],

@@ -1,6 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	// prettier-ignore
 	if (!args[0] || !args[1])
 		return message.channel.send({ embeds: [ErrorEmbed(message, "Prawidłowe użycie komendy: <ID kanału> <ID wiadomości>")] });
@@ -75,7 +75,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 					embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
 				}) as any
 		);
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["edytujregulamin"],

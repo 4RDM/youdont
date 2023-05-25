@@ -23,7 +23,7 @@ export const getUserHex = async function (discordId: string) {
 	return response;
 };
 
-export const execute = async function ({ client, message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	if (!args[0] || !message.mentions.users.first())
 		return message.channel.send({
 			embeds: [
@@ -48,7 +48,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	return message.channel.send(
 		`\`\`\`Znalezione identyfikatory:\n${identifiers.join("\n")}\`\`\``
 	);
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["hex"],

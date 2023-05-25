@@ -1,4 +1,4 @@
-export const execute = async function ({ client, message }: CommandArgs) {
+export default async function ({ client, message }: CommandArgs) {
 	const document = await client.Core.database.donates.create({
 		userID: message.author.id,
 		timestamp: new Date(),
@@ -9,7 +9,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 			Date.now() - message.createdTimestamp
 		}ms\n\`\`\`${JSON.stringify(document)}\`\`\``
 	);
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["testwplata"],

@@ -47,7 +47,7 @@ const findClosest = (value: number): Benefit =>
 		return a;
 	});
 
-export const execute = async function ({ client, message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	if (!args[0] || !args[1])
 		return message.channel.send({
 			embeds: [
@@ -140,7 +140,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 			embeds: [ErrorEmbed(message, "Nie znaleziono donate")],
 		});
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["zaakceptuj"],

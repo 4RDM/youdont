@@ -6,7 +6,7 @@ const path = join(
 	"/home/rdm/server/data/resources/[optymalizacja kurwa]/auta/stream"
 );
 
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	// prettier-ignore
 	if (!existsSync(path))
 		return message.channel.send({ embeds: [ ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!") ] });
@@ -36,7 +36,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 				}),
 			],
 		});
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["sprawdz", "sprawdź"],

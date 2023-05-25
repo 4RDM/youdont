@@ -1,7 +1,7 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { GuildMember, User } from "discord.js";
 
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	if (!args[0])
 		return message.channel.send({
 			embeds: [
@@ -104,7 +104,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 				});
 			});
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["ban"],

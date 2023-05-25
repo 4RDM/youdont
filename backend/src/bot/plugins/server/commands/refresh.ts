@@ -1,6 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ client, message }: CommandArgs) {
+export default async function ({ client, message }: CommandArgs) {
 	const msg = await message.channel.send({
 		embeds: [
 			Embed({
@@ -27,7 +27,7 @@ export const execute = async function ({ client, message }: CommandArgs) {
 				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 			});
 		});
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["refresh"],

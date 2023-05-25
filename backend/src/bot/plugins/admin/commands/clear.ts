@@ -1,7 +1,7 @@
 import { TextChannel } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	const parsedNumber = parseInt(args[0]);
 	if (
 		!args[0] ||
@@ -47,7 +47,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 			],
 		});
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["clear", "purge", "wyczysc"],

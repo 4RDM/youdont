@@ -1,6 +1,6 @@
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ client, message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	if (!args[0])
 		return message.channel.send({
 			embeds: [
@@ -44,7 +44,7 @@ export const execute = async function ({ client, message, args }: CommandArgs) {
 	message.channel.send({
 		content: `**Zapisano!**\n\`\`\`${JSON.stringify(donate)}\`\`\``,
 	});
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["editdonate"],

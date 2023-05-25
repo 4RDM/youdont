@@ -1,6 +1,6 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
-export const execute = async function ({ message, args, client }: CommandArgs) {
+export default async function ({ message, args, client }: CommandArgs) {
 	const member = message.mentions.members?.first();
 
 	if (!member)
@@ -171,7 +171,7 @@ export const execute = async function ({ message, args, client }: CommandArgs) {
 			});
 		}
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["notatka", "note", "n"],

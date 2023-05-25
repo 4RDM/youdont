@@ -33,7 +33,7 @@ export const awaitMessage = (message: Message): Promise<string> => {
 	return promise;
 };
 
-export const execute = async function ({ message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	const mention = message.mentions.members?.first();
 
 	// prettier-ignore
@@ -187,7 +187,7 @@ export const execute = async function ({ message, args }: CommandArgs) {
 			],
 		});
 	}
-};
+}
 
 export const info: CommandInfo = {
 	triggers: ["shared"],
