@@ -1,5 +1,5 @@
 export const execute = async function () {};
 
-export const info = {
-	eventName: "",
+export const info: EventInfo = {
+	eventName: "ready",
 };

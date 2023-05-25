@@ -86,6 +86,14 @@ declare global {
 			args: string[];
 		}): Promise<void>;
 	}
+
+	interface EventInfo {
+		eventName: string;
+	}
+
+	interface Event {
+		info: EventInfo;
+	}
 }
 
 export class Client extends Cl {
