@@ -1,1 +1,36 @@
-export default class Handler {}
+import { promises } from "fs";
+import { join } from "path";
+import { Client } from "../main";
+import logger from "../../utils/logger";
+
+// prettier-ignore
+export default class Handler {
+	private client: Client;
+	public readonly eventsPath: string = join(__dirname, "..", "events");
+
+	constructor(client: Client) {
+		this.client = client;
+		this.init();
+	}
+
+	init = async () => {
+		const eventsFolder = await promises.readdir(this.eventsPath);
+		for (const eventName of eventsFolder) {
+			const eventPath = join(this.eventsPath, eventName);
+			const file = await import(join(eventPath));
+			let hasErrored = false;
+
+			if (!file.info) {
+				hasErrored = true;
+				logger.error(`Could not load the event ${eventName}, the info export is missing`);
+			}
+
+			if (!file.default) {
+				hasErrored = true;
+				logger.error(`Could not load the event ${eventName}, the default export is missing`);
+			}
+
+			if (!hasErrored) this.client.on(file.info.eventName, (...props) => file.default({ client: this.client, props: props }))
+		}
+	};
+}

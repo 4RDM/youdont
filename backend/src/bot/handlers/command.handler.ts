@@ -1,22 +1,17 @@
-import { Client } from "../main";
+import PluginHandler from "../handlers/plugin.handler";
 
+// prettier-ignore
 export default class Handler {
-	private client: Client;
+	private PluginHandler: PluginHandler;
 
-	constructor(client: Client) {
-		this.client = client;
+	constructor(pluginHandler: PluginHandler) {
+		this.PluginHandler = pluginHandler;
 	}
 
 	get(name: string): Command | undefined {
-		const plugin = this.client.PluginHandler.plugins.find(plugin =>
-			plugin.commands.find(cmd => cmd.info.triggers.includes(name))
-		);
+		const plugin = this.PluginHandler.plugins.find(plugin => plugin.commands.find(cmd => cmd.info.triggers.includes(name)));
 
 		if (!plugin) return;
-		else {
-			return plugin.commands.find(cmd =>
-				cmd.info.triggers.includes(name)
-			);
-		}
+		else return plugin.commands.find(cmd => cmd.info.triggers.includes(name));
 	}
 }

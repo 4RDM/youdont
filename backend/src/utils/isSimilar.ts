@@ -23,7 +23,7 @@ const count = (xs: any) =>
 	xs.reduce((a: any, x: any) => ((a[x] = (a[x] || 0) + 1), a), {});
 const uniq = (xs: any) => [...new Set(xs)];
 
-export default function (input: string, compareTo: string): boolean {
+export function isSimilar(input: string, compareTo: string): boolean {
 	if (stringSimilarity(input, compareTo) > 0.79) return true;
 	return false;
 }

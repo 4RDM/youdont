@@ -1,6 +1,6 @@
 import { promises } from "fs";
-import { Plugin } from "../../types";
 import { join } from "path";
+import { Plugin } from "../../types";
 import logger from "../../utils/logger";
 
 // prettier-ignore
