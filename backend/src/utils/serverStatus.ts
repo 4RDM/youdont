@@ -39,8 +39,6 @@ export const getTops = async (core: Core) => {
 	delete deathsTop["meta"];
 	delete kdrTop["meta"];
 
-	console.log(killTop, deathsTop, kdrTop);
-
 	connection.end();
 
 	const kills: User[] = killTop.map(user => {
