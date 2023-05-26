@@ -42,17 +42,17 @@ export default async function ({ client }: { client: ClientType }) {
 		}
 
 		killTopMessage.edit({
-			embeds: [Embed({ timestamp: new Date(), title: ":bar_chart: | Topka killi", description: stats.kills.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} killi)`).join("\n") })],
+			embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka killi", description: stats.kills.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} killi)`).join("\n") })],
 			content: "",
 		}).catch((err) => client.logger.error(`Error occured while edditing kill message: ${err} (src/bot/events/ready.event.ts)`));
 
 		deathsTopMessage.edit({
-			embeds: [Embed({ timestamp: new Date(), title: ":bar_chart: | Topka śmierci", description: stats.deaths.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} śmierci)`).join("\n") })],
+			embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka śmierci", description: stats.deaths.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} śmierci)`).join("\n") })],
 			content: "",
 		}).catch((err) => client.logger.error(`Error occured while edditing death message: ${err} (src/bot/events/ready.event.ts)`));
 
 		kdrTopMessage.edit({
-			embeds: [Embed({ timestamp: new Date(), title: ":bar_chart: | Topka KDR", description: stats.kdr.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} kdr)`).join("\n") })],
+			embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka KDR", description: stats.kdr.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} kdr)`).join("\n") })],
 			content: "",
 		}).catch((err) => client.logger.error(`Error occured while edditing kdr message: ${err} (src/bot/events/ready.event.ts)`));
 	};
