@@ -67,7 +67,7 @@ export class Core {
 
 		setInterval(async () => {
 			const status = await refreshTops(this);
-			if (!status) logger.error("FiveM statisctics cannot be updated");
+			if (!status) logger.error("FiveM statistics cannot be updated");
 		}, 120000); // 2m
 	}
 }
