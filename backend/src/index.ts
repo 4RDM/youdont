@@ -2,8 +2,6 @@ import { Client } from "./bot/main";
 import RCON from "./utils/rcon";
 import Database from "./database/database";
 import HTTP from "./http/http";
-import { getTops } from "./utils/serverStatus";
-import logger from "./utils/logger";
 
 import dotenv from "dotenv";
 import { Collection, GatewayIntentBits, Partials } from "discord.js";
