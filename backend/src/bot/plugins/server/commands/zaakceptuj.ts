@@ -1,7 +1,6 @@
 import { User, WebhookClient } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
-import config from "../../../../config";
 
 export interface Benefit {
 	amount: number;
@@ -89,7 +88,7 @@ export default async function ({ client, message, args }: CommandArgs) {
 		);
 		const user = await client.users.fetch(dbUser?.userID || "");
 		const webhook = new WebhookClient({
-			url: config.donateWebhook,
+			url: client.config.donateWebhook,
 		});
 
 		try {
