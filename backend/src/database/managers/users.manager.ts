@@ -37,8 +37,8 @@ const UserModel = model<UUser>(
 			userID: { type: String, required: true, unique: true },
 			role: { type: String, required: true },
 			total: { type: Number, required: true },
-			donates: { type: Array, required: true },
-			notatki: { type: Schema.Types.Mixed, required: true },
+			donates: { type: Array, required: true, default: {} },
+			notatki: { type: Schema.Types.Mixed, required: true, default: [] },
 		},
 		{ timestamps: true }
 	)
@@ -73,6 +73,7 @@ export class UsersManager {
 			total: 0,
 			role: "Członek",
 			donates: {},
+			notatki: [],
 		});
 		await document.save();
 
