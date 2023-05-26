@@ -17,6 +17,7 @@ export interface EmbedStructure {
 	image?: string;
 	user?: User;
 	author?: EmbedAuthorData;
+	timestamp?: Date;
 }
 
 export const Embed = ({
@@ -29,6 +30,7 @@ export const Embed = ({
 	image,
 	user,
 	author,
+	timestamp,
 }: EmbedStructure): EmbedBuilder => {
 	const embed = new EmbedBuilder();
 
@@ -39,6 +41,7 @@ export const Embed = ({
 	if (description) embed.setDescription(description);
 	if (fields) embed.addFields(fields);
 	if (footer) embed.setFooter({ text: footer }).setTimestamp(new Date());
+	if (timestamp) embed.setTimestamp(timestamp);
 	else if (user)
 		embed
 			.setFooter({ text: `${user.tag} (${user.id})` })
