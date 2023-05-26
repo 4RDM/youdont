@@ -23,44 +23,52 @@ export interface kdrTopResponse
 }
 
 export const getTops = async (core: Core) => {
-	const connection = await core.database.mariadb.getConnection();
+	try {
+		if (!core.database.mariadb) return null;
 
-	const killTop: killTopResponse = await connection.query(
-		"SELECT (@counter := @counter + 1) AS position, users.name, kdr.kills FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY kills DESC LIMIT 10"
-	);
-	const deathsTop: deathsTopResponse = await connection.query(
-		"SELECT (@counter := @counter + 1) AS position, users.name, kdr.deaths FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY deaths DESC LIMIT 10"
-	);
-	const kdrTop: kdrTopResponse = await connection.query(
-		"SELECT (@counter := @counter + 1) AS position, users.name, ROUND(kdr.kills/kdr.deaths, 2) as KDR FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) as dummy WHERE kdr.kills > 500 AND kdr.deaths > 1 ORDER BY kdr.kills/kdr.deaths DESC LIMIT 10"
-	);
+		const connection = await core.database.mariadb.getConnection();
 
-	delete killTop["meta"];
-	delete deathsTop["meta"];
-	delete kdrTop["meta"];
+		const killTop: killTopResponse = await connection.query(
+			"SELECT (@counter := @counter + 1) AS position, users.name, kdr.kills FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY kills DESC LIMIT 10"
+		);
+		const deathsTop: deathsTopResponse = await connection.query(
+			"SELECT (@counter := @counter + 1) AS position, users.name, kdr.deaths FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY deaths DESC LIMIT 10"
+		);
+		const kdrTop: kdrTopResponse = await connection.query(
+			"SELECT (@counter := @counter + 1) AS position, users.name, ROUND(kdr.kills/kdr.deaths, 2) as KDR FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) as dummy WHERE kdr.kills > 500 AND kdr.deaths > 1 ORDER BY kdr.kills/kdr.deaths DESC LIMIT 10"
+		);
 
-	connection.end();
+		delete killTop["meta"];
+		delete deathsTop["meta"];
+		delete kdrTop["meta"];
 
-	const kills: User[] = killTop.map(user => {
-		return {
-			value: user.kills,
-			name: user.name,
-		};
-	});
-	const deaths: User[] = deathsTop.map(user => {
-		return {
-			value: user.deaths,
-			name: user.name,
-		};
-	});
-	const kdr = kdrTop.map(user => {
-		return {
-			value: user.KDR,
-			name: user.name,
-		};
-	});
+		connection.end();
 
-	return { kills, deaths, kdr };
+		const kills: User[] = killTop.map(user => {
+			return {
+				value: user.kills,
+				name: user.name,
+			};
+		});
+		const deaths: User[] = deathsTop.map(user => {
+			return {
+				value: user.deaths,
+				name: user.name,
+			};
+		});
+		const kdr = kdrTop.map(user => {
+			return {
+				value: user.KDR,
+				name: user.name,
+			};
+		});
+
+		return { kills, deaths, kdr };
+	} catch (err) {
+		logger.error(`MariaDB returned an error: ${err}`);
+
+		return null;
+	}
 };
 
 export const refreshUsers = async () => {

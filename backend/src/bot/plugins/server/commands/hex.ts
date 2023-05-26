@@ -1,36 +1,35 @@
-import mariadb from "mariadb";
-import config from "../../../../config";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Client } from "../../../main";
 
-export const getUserHex = async function (discordId: string) {
-	const connection = await mariadb.createConnection({
-		host: config.mysql.host,
-		user: config.mysql.user,
-		password: config.mysql.password,
-		port: config.mysql.port,
-		connectTimeout: 20000,
-		database: "rdm",
-	});
+export const getUserHex = async function (client: Client, discordId: string) {
+	try {
+		if (!client.Core.database.mariadb) return null;
 
-	const response = await connection.query(
-		`SELECT * FROM kdr WHERE \`discord\` = '${discordId}'`
-	);
+		const connection = await client.Core.database.mariadb.getConnection();
 
-	delete response.meta;
+		const response = await connection.query(
+			`SELECT * FROM kdr WHERE \`discord\` = '${discordId}'`
+		);
 
-	connection.end();
+		delete response.meta;
 
-	return response as {
-		identifier: string;
-		kills: number;
-		deaths: number;
-		heady: number;
-		discord: string;
-		license: string;
-	}[];
+		connection.end();
+
+		return response as {
+			identifier: string;
+			kills: number;
+			deaths: number;
+			heady: number;
+			discord: string;
+			license: string;
+		}[];
+	} catch (err) {
+		client.logger.error(`MariaDB returned an error: ${err}`);
+		return null;
+	}
 };
 
-export default async function ({ message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	if (!args[0] || !message.mentions.users.first())
 		return message.channel.send({
 			embeds: [
@@ -42,9 +41,15 @@ export default async function ({ message, args }: CommandArgs) {
 		});
 
 	const response = await getUserHex(
+		client,
 		message.mentions.users.first()?.id ||
 			args[0].replace("<@!", "").replace(">", "")
 	);
+
+	if (!response)
+		return message.channel.send({
+			embeds: [ErrorEmbed(message, "Wystąpił błąd bazy danych")],
+		});
 
 	if (!response[0])
 		return message.channel.send({

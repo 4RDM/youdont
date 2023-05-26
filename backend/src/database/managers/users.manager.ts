@@ -1,7 +1,7 @@
-import config from "../../config";
 import { model, Schema, Document } from "mongoose";
 import { Donate } from "./donates.manager";
 import Database from "../database";
+import logger from "../../utils/logger";
 
 type DBUser = null | IUser;
 
@@ -89,16 +89,23 @@ export class UsersManager {
 	}
 
 	async getUserFromServer(discord: string): Promise<DBUser | null> {
-		const connection = await this.manager.mariadb.getConnection();
+		try {
+			if (!this.manager.mariadb) return null;
 
-		const response: DBUser = (
-			await connection.query(
-				`SELECT * FROM kdr WHERE \`discord\` = '${discord}'`
-			)
-		)[0];
+			const connection = await this.manager.mariadb.getConnection();
 
-		connection.end();
+			const response: DBUser = (
+				await connection.query(
+					`SELECT * FROM kdr WHERE \`discord\` = '${discord}'`
+				)
+			)[0];
 
-		return response;
+			connection.end();
+
+			return response;
+		} catch (err) {
+			logger.error(`MariaDB returned an error: ${err}`);
+			return null;
+		}
 	}
 }

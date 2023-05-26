@@ -30,7 +30,6 @@ export default class Database {
 			user: config.mysql.user,
 			password: config.mysql.password,
 			port: config.mysql.port,
-			connectTimeout: 20000,
 			database: "rdm",
 		});
 

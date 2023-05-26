@@ -10,7 +10,7 @@ const path = join(
 	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/vehicles.json"
 );
 
-export default async function ({ message, args }: CommandArgs) {
+export default async function ({ client, message, args }: CommandArgs) {
 	const mention = message.mentions.members?.first();
 
 	// prettier-ignore
@@ -22,7 +22,12 @@ export default async function ({ message, args }: CommandArgs) {
 		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie wprowadzono ID użytkownika / nie spingowano")] });
 
 	const userJson = (await import(path)).default;
-	const userHexes = await getUserHex(mention?.id || args[0]);
+	const userHexes = await getUserHex(client, mention?.id || args[0]);
+
+	if (!userHexes)
+		return message.channel.send({
+			embeds: [ErrorEmbed(message, "Wystąpił błąd bazy danych")],
+		});
 
 	// prettier-ignore
 	if (!userHexes[0])
