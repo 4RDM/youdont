@@ -22,6 +22,14 @@ export interface kdrTopResponse
 	meta: unknown;
 }
 
+export interface playerResponse {
+	endpoint: string;
+	id: number;
+	identifiers?: string[] | null;
+	name: string;
+	ping: number;
+}
+
 export const getTops = async (core: Core) => {
 	try {
 		if (!core.database.mariadb) return null;
@@ -71,21 +79,18 @@ export const getTops = async (core: Core) => {
 	}
 };
 
-export const refreshUsers = async () => {
-	const res = await fetch(
-		`http:/${config.rcon.host}:${config.rcon.port}/players.json`
-	).catch(err => {
-		logger.error(`Cannot fetch players. ${err}`);
-		return null;
-	});
+export const getPlayers = async () => {
+	try {
+		const res = await fetch(
+			`http://${config.rcon.host}:${config.rcon.port}/players.json`
+		);
 
-	if (!res) {
-		logger.error("Cannot fetch players.");
+		if (!res) return null;
+
+		const json = await res.json();
+
+		return json as playerResponse[];
+	} catch (err) {
 		return null;
 	}
-	const json = await res.json();
-
-	console.log(json);
-
-	return json;
 };
