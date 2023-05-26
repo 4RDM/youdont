@@ -8,7 +8,6 @@ import {
 } from "express";
 
 import dashboardRouter from "./routes/dashboard.route";
-import shortsRouter from "./routes/shorts.route";
 import articleRouter from "./routes/article.route";
 
 const router = Router();
@@ -26,7 +25,6 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 router.use(json());
 router.use(urlencoded({ extended: true }));
 
-router.use("/shorts", userCheck, shortsRouter);
 router.use("/articles", articleRouter);
 router.use("/dashboard", dashboardRouter);
 

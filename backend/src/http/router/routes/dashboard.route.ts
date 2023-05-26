@@ -229,8 +229,6 @@ router.get("/session", userCheck, async (req, res) => {
 	const { userid, tag, username, email, avatar } = req.session;
 
 	if (!userid) return;
-	const permissions =
-		req.core.database.settings.getUser(userid)?.permissions || [];
 
 	const role = (await req.core.database.users.get(userid))?.role;
 
@@ -245,7 +243,6 @@ router.get("/session", userCheck, async (req, res) => {
 			avatar,
 			role: role || "Członek",
 		},
-		permissions,
 	});
 });
 
