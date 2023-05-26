@@ -1,7 +1,19 @@
+import { getTops } from "../../utils/serverStatus";
+
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
-	const reloadStats = () => {};
+	const status = await getTops(client.Core);
+	if (!status)
+		client.logger.error("Cannot estabilish first connection with FiveM");
+
+	const reloadStats = () => {
+		setInterval(async () => {
+			const status = await getTops(client.Core);
+			if (!status)
+				client.logger.error("FiveM statistics cannot be updated");
+		}, 120000); // 2m
+	};
 
 	setInterval(reloadStats, 10000);
 }

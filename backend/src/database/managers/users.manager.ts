@@ -1,7 +1,7 @@
-import mariadb from "mariadb";
 import config from "../../config";
 import { model, Schema, Document } from "mongoose";
 import { Donate } from "./donates.manager";
+import Database from "../database";
 
 type DBUser = null | IUser;
 
@@ -45,6 +45,12 @@ const UserModel = model<UUser>(
 );
 
 export class UsersManager {
+	private manager: Database;
+
+	constructor(manager: Database) {
+		this.manager = manager;
+	}
+
 	async get(userID: string): Promise<UUser | null> {
 		const user = await UserModel.findOne({ userID });
 		return user;
@@ -83,15 +89,7 @@ export class UsersManager {
 	}
 
 	async getUserFromServer(discord: string): Promise<DBUser | null> {
-		const connection = await mariadb.createConnection({
-			host: config.mysql.host,
-			user: config.mysql.user,
-			password: config.mysql.password,
-			port: config.mysql.port,
-			connectTimeout: 20000,
-			database: "rdm",
-			// allowPublicKeyRetrieval: true,
-		});
+		const connection = await this.manager.mariadb.getConnection();
 
 		const response: DBUser = (
 			await connection.query(

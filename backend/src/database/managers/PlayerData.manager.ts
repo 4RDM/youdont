@@ -34,12 +34,8 @@ export class PlayerDataManager {
 	public players: PlayerShort[];
 
 	constructor() {
-		const json: Players = JSON.parse(
-			readFileSync(
-				process.env.NODE_ENV == "production" ? prodPath : devPath,
-				{ encoding: "utf-8" }
-			).toString()
-		);
+		// prettier-ignore
+		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
 
 		if (json.players)
 			this.players = json.players.map(({ license, playTime }) => ({
@@ -59,11 +55,7 @@ export class PlayerDataManager {
 	getUser(license: string): PlayerShort {
 		const player = this.players.find(user => user.license == license);
 
-		if (!player)
-			return {
-				license,
-				playTime: 0,
-			};
+		if (!player) return { license, playTime: 0 };
 
 		return player;
 	}

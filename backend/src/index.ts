@@ -2,7 +2,7 @@ import { Client } from "./bot/main";
 import RCON from "./utils/rcon";
 import Database from "./database/database";
 import HTTP from "./http/http";
-import { refreshTops } from "./utils/serverStatus";
+import { getTops } from "./utils/serverStatus";
 import logger from "./utils/logger";
 
 import dotenv from "dotenv";
@@ -55,19 +55,6 @@ export class Core {
 				status: "idle",
 			},
 		});
-
-		this.tops();
-	}
-
-	async tops() {
-		const status = await refreshTops(this);
-		if (!status)
-			logger.error("Cannot estabilish first connection with FiveM");
-
-		setInterval(async () => {
-			const status = await refreshTops(this);
-			if (!status) logger.error("FiveM statistics cannot be updated");
-		}, 120000); // 2m
 	}
 }
 
