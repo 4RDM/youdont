@@ -17,16 +17,10 @@ export default class Handler {
 		for (const pluginName of pluginsFolder) {
 			const pluginPath = join(this.pluginsPath, pluginName);
 
-			const configContent = await promises.readFile(
-				join(pluginPath, "config.json")
-			);
-			const commandsFolder = await promises.readdir(
-				join(pluginPath, "commands")
-			);
+			const configContent = await promises.readFile(join(pluginPath, "config.json"));
+			const commandsFolder = await promises.readdir(join(pluginPath, "commands"));
 
-			const { name, description, id } = JSON.parse(
-				configContent.toString()
-			);
+			const { name, description, id } = JSON.parse(configContent.toString());
 			const commands: Command[] = [];
 			let hasErrored = false;
 
