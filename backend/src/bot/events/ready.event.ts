@@ -57,6 +57,12 @@ export default async function ({ client }: { client: ClientType }) {
 		}).catch((err) => client.logger.error(`Error occured while edditing kdr message: ${err} (src/bot/events/ready.event.ts)`));
 	};
 
+	let statsInterval = setInterval(reloadStats, 10000);
+
+	const statusChannel = client.channels.cache.get(client.config.discord.statusChannel);
+	if (!statusChannel?.isTextBased() || !statusChannel)
+		return client.logger.error("Status channel is not text based or not found");
+
 	const reloadPlayers = async () => {
 		const players = await getPlayers();
 
@@ -69,10 +75,36 @@ export default async function ({ client }: { client: ClientType }) {
 			return;
 		}
 
+		const statusMessage = await statusChannel?.messages.fetch(client.config.discord.statusMessage);
+		if (!statusMessage)
+			return client.logger.error("Status message not found");
+
+		if (!players) {
+			statusMessage.edit({
+				embeds: [
+					Embed({
+						title: ":x: | 4RDM jest offline!",
+						color: "#f54242",
+						timestamp: new Date(),
+					}),
+				],
+			}).catch((err) => client.logger.error(`Error occured while edditing kdr message: ${err} (src/bot/events/ready.event.ts)`));
+		} else {
+			statusMessage.edit({
+				embeds: [
+					Embed({
+						title: ":white_check_mark: | 4RDM jest online!",
+						description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}\n\n${players.map(x => `${x.id}. ${x.name}`).join("\n")}`,
+						color: "#1F8B4C",
+						timestamp: new Date(),
+					}),
+				],
+			}).catch((err) => client.logger.error(`Error occured while edditing kdr message: ${err} (src/bot/events/ready.event.ts)`));
+		}
+
 		client.user?.setActivity(`${players.length} / ${client.config.maxPlayers} 👥`, { type: ActivityType.Watching });
 	};
 
-	let statsInterval = setInterval(reloadStats, 10000);
 	let playersInterval = setInterval(reloadPlayers, 10000);
 }
 
