@@ -29,7 +29,7 @@ export default async function ({ client, message, args }: CommandArgs) {
 				],
 			});
 		})
-		.catch(err => {
+		.catch(() => {
 			msg.edit({
 				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
 			});

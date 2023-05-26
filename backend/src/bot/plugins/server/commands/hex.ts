@@ -1,6 +1,6 @@
 import mariadb from "mariadb";
 import config from "../../../../config";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export const getUserHex = async function (discordId: string) {
 	const connection = await mariadb.createConnection({

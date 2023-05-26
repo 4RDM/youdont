@@ -6,7 +6,6 @@ import { WebSocket } from "ws";
 import { Core } from "../";
 import logger from "../utils/logger";
 
-import helmet from "helmet";
 import compression from "compression";
 import MemoryStore from "memorystore";
 
