@@ -1,4 +1,4 @@
-import { User } from "discord.js";
+import { SlashCommandBuilder, User } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ client, message, args }: CommandArgs) {
@@ -78,4 +78,9 @@ export const info: CommandInfo = {
 	triggers: ["odrzuc", "odrzuć"],
 	description: "Odrzuć donate o danym ID",
 	permissions: ["Administrator"],
+	builder: new SlashCommandBuilder()
+		.addIntegerOption(option =>
+			option.setName("id").setDescription("ID wpłaty").setRequired(true)
+		)
+		.setName("odrzuc"),
 };

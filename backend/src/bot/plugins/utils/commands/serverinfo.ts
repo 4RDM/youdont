@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message }: CommandArgs) {
@@ -48,4 +49,5 @@ export default async function ({ message }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["serverinfo"],
 	description: "Sprawdź informacje o serwerze",
+	builder: new SlashCommandBuilder().setName("serverinfo"),
 };

@@ -1,3 +1,5 @@
+import { SlashCommandBuilder } from "discord.js";
+
 export default async function ({ message, args }: CommandArgs) {
 	const tochoose = args
 		.join(" ")
@@ -15,4 +17,12 @@ export default async function ({ message, args }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["choose"],
 	description: "Wybiera losowy argument",
+	builder: new SlashCommandBuilder()
+		.addStringOption(option =>
+			option
+				.setName("argumenty")
+				.setDescription("Argumenty do wyboru oddzielone przecinkami")
+				.setRequired(true)
+		)
+		.setName("choose"),
 };

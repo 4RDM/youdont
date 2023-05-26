@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Core } from "../";
+import { Core } from "../core";
 import config from "../config";
 import logger from "../utils/logger";
 import { UsersManager } from "./managers/users.manager";

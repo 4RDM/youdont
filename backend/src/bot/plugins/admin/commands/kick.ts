@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message, args }: CommandArgs) {
@@ -76,4 +77,18 @@ export const info: CommandInfo = {
 	triggers: ["kick"],
 	description: "Wyrzuć osobę",
 	permissions: ["BanMembers", "KickMembers"],
+	builder: new SlashCommandBuilder()
+		.addUserOption(option =>
+			option
+				.setName("mention")
+				.setDescription("Użytkownik do wyrzucenia")
+				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option
+				.setName("reason")
+				.setDescription("Powód wyrzucenia")
+				.setRequired(false)
+		)
+		.setName("kick"),
 };

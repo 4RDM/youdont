@@ -2,7 +2,7 @@ import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
-import { Message } from "discord.js";
+import { Message, SlashCommandBuilder } from "discord.js";
 
 const path = join(
 	// __dirname,
@@ -199,4 +199,57 @@ export const info: CommandInfo = {
 	description: "Zarządzanie autami współdzielonymi graczy",
 	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
+	builder: new SlashCommandBuilder()
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("dodaj")
+				.setDescription("Dodaje współdzielone auto")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName("spawn-name")
+						.setDescription("Spawn name")
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName("display-name")
+						.setDescription("Nazwa wyświetlana limitki")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("usun")
+				.setDescription("Usuwa współdzielone auto")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName("spawn-name")
+						.setDescription("Spawn name")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("lista")
+				.setDescription("Lista współdzielonych aut")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+		)
+		.setName("shared"),
 };

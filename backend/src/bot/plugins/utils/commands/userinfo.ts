@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message }: CommandArgs) {
@@ -59,4 +60,12 @@ export default async function ({ message }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["userinfo", "user"],
 	description: "Sprawdź informacje na temat użytkownika",
+	builder: new SlashCommandBuilder()
+		.addUserOption(option =>
+			option
+				.setName("mention")
+				.setDescription("Użytkownik")
+				.setRequired(true)
+		)
+		.setName("userinfo"),
 };

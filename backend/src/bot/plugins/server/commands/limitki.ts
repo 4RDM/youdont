@@ -3,6 +3,7 @@ import { join } from "path";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
 import { awaitMessage } from "./shared";
+import { SlashCommandBuilder } from "discord.js";
 
 const path = join(
 	// __dirname,
@@ -174,4 +175,82 @@ export const info: CommandInfo = {
 	description: "Zarządzanie limitkami graczy",
 	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
+	builder: new SlashCommandBuilder()
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("dodaj")
+				.setDescription("Dodaje limitkę")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName("spawn-name")
+						.setDescription("Spawn name")
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName("display-name")
+						.setDescription("Nazwa wyświetlana limitki")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("usun")
+				.setDescription("Usuwa limitkę")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+				.addStringOption(option =>
+					option
+						.setName("spawn-name")
+						.setDescription("Spawn name")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("lista")
+				.setDescription("Lista współdzielonych aut")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+		)
+		.setName("limitki"),
 };
+
+/*
+.addStringOption(option =>
+			option
+				.setName("tryb")
+				.setDescription("Tryb")
+				.setRequired(true)
+				.addChoices(
+					{ name: "Dodaj", value: "dodaj" },
+					{ name: "Usuń", value: "usun" }
+				)
+		)
+		.addStringOption(option =>
+			option
+				.setName("nazwa")
+				.setDescription("Nazwa limitki")
+				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option
+				.setName("nazwa wyświetlana")
+				.setDescription("Nazwa wyświetlana limitki")
+				.setRequired(false)
+		)
+		*/

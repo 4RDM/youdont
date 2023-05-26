@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ client, message, args }: CommandArgs) {
@@ -41,4 +42,12 @@ export const info: CommandInfo = {
 	description: "Wyślij polecenie do konsoli",
 	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
+	builder: new SlashCommandBuilder()
+		.addStringOption(option =>
+			option
+				.setName("command")
+				.setDescription("Polecenie do wykonania")
+				.setRequired(true)
+		)
+		.setName("cmd"),
 };

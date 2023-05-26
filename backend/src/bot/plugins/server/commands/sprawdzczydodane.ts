@@ -1,6 +1,7 @@
 import { join } from "path";
 import { existsSync } from "fs";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { SlashCommandBuilder } from "discord.js";
 
 const path = join(
 	"/home/rdm/server/data/resources/[optymalizacja kurwa]/auta/stream"
@@ -43,4 +44,12 @@ export const info: CommandInfo = {
 	description: "Sprawdź czy auto jest dodane na serwer",
 	permissions: ["KickMembers"],
 	role: "843444626726584370", // ZARZĄD
+	builder: new SlashCommandBuilder()
+		.addStringOption(option =>
+			option
+				.setName("resp-name")
+				.setDescription("Nazwa pojazdu")
+				.setRequired(true)
+		)
+		.setName("sprawdz"),
 };

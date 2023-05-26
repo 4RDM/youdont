@@ -1,5 +1,5 @@
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { GuildMember, User } from "discord.js";
+import { GuildMember, SlashCommandBuilder, User } from "discord.js";
 
 export default async function ({ message, args }: CommandArgs) {
 	if (!args[0])
@@ -110,4 +110,18 @@ export const info: CommandInfo = {
 	triggers: ["ban"],
 	description: "Zbanuj osobę",
 	permissions: ["BanMembers", "KickMembers"],
+	builder: new SlashCommandBuilder()
+		.addUserOption(option =>
+			option
+				.setName("mention")
+				.setDescription("Użytkownik do zbanowania")
+				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option
+				.setName("reason")
+				.setDescription("Powód zbanowania")
+				.setRequired(false)
+		)
+		.setName("ban"),
 };

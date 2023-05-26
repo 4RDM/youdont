@@ -1,5 +1,5 @@
 import { Embed } from "../../../../utils/discordEmbed";
-import { EmbedField } from "discord.js";
+import { EmbedField, SlashCommandBuilder } from "discord.js";
 
 export default async function ({ client, message, args }: CommandArgs) {
 	if (args[0]) {
@@ -80,4 +80,5 @@ export const info: CommandInfo = {
 	triggers: ["help"],
 	description:
 		"Sprawdź wszystkie dostępne komendy bota oraz ich zastosowanie",
+	builder: new SlashCommandBuilder().setName("help"),
 };

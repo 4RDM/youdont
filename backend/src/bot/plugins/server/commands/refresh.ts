@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ client, message }: CommandArgs) {
@@ -34,4 +35,5 @@ export const info: CommandInfo = {
 	description: "Przeładuj uprawnienia na serwerze",
 	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
+	builder: new SlashCommandBuilder().setName("refresh"),
 };

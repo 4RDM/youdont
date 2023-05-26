@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ client, message, args }: CommandArgs) {
@@ -41,4 +42,12 @@ export const info: CommandInfo = {
 	description: "Odbanuj osobę na serwerze",
 	permissions: ["Administrator"],
 	role: "843444642539110400", // TEAM 4RDM
+	builder: new SlashCommandBuilder()
+		.addIntegerOption(option =>
+			option
+				.setName("id")
+				.setDescription("ID bana do odbanowania")
+				.setRequired(true)
+		)
+		.setName("unban"),
 };

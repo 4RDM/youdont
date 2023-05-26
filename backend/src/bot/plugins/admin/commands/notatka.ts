@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message, args, client }: CommandArgs) {
@@ -172,4 +173,36 @@ export const info: CommandInfo = {
 	triggers: ["notatka", "note", "n"],
 	description: "Notatki",
 	permissions: ["BanMembers", "KickMembers"],
+	builder: new SlashCommandBuilder()
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("dodaj")
+				.setDescription("Dodaj notatkę")
+				.addUserOption(option =>
+					option.setName("mention").setDescription("Użytkownik")
+				)
+				.addStringOption(option =>
+					option.setName("content").setDescription("Treść notatki")
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("usun")
+				.setDescription("Usuń notatkę")
+				.addUserOption(option =>
+					option.setName("mention").setDescription("Użytkownik")
+				)
+				.addIntegerOption(option =>
+					option.setName("id").setDescription("ID notatki")
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("lista")
+				.setDescription("Lista notatek")
+				.addUserOption(option =>
+					option.setName("mention").setDescription("Użytkownik")
+				)
+		)
+		.setName("notatka"),
 };

@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message }: CommandArgs) {
@@ -18,4 +19,5 @@ export const info: CommandInfo = {
 	description:
 		"Wyślij wiadomość informującą o duplikacie pojazdu na serwerze",
 	role: "883475949964906516", // developer
+	builder: new SlashCommandBuilder().setName("zajete"),
 };

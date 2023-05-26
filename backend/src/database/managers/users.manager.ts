@@ -38,7 +38,7 @@ const UserModel = model<UUser>(
 			role: { type: String, required: true },
 			total: { type: Number, required: true },
 			donates: { type: Array, required: true, default: {} },
-			notatki: { type: Schema.Types.Mixed, required: true, default: [] },
+			notatki: { type: Schema.Types.Mixed, required: false, default: [] },
 		},
 		{ timestamps: true }
 	)

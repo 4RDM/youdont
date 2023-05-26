@@ -1,5 +1,11 @@
-import { Client as Cl, ClientEvents, ClientOptions } from "discord.js";
-import { Core } from "../";
+import {
+	Client as Cl,
+	ClientEvents,
+	ClientOptions,
+	SlashCommandBuilder,
+	SlashCommandSubcommandBuilder,
+} from "discord.js";
+import { Core } from "../core";
 import { Message, PermissionResolvable } from "discord.js";
 import config from "../config";
 import logger from "../utils/logger";
@@ -19,6 +25,7 @@ declare global {
 		description: string;
 		role?: string;
 		permissions?: PermissionResolvable[];
+		builder: SlashCommandBuilder | SlashCommandSubcommandBuilder;
 	}
 
 	interface Command {

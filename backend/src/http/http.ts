@@ -3,7 +3,7 @@ import session from "express-session";
 import expressWs, { Application } from "express-ws";
 import { WebSocket } from "ws";
 
-import { Core } from "../";
+import { Core } from "../core";
 import logger from "../utils/logger";
 
 import compression from "compression";

@@ -1,4 +1,4 @@
-import { Core } from "../index";
+import { Core } from "../core";
 import config from "../config";
 import logger from "./logger";
 

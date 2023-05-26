@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
@@ -56,4 +57,21 @@ export const info: CommandInfo = {
 	description: "Dodaj użytkownika do konfiguracji",
 	permissions: ["Administrator"],
 	role: "843444626726584370", // ZARZĄD
+	builder: new SlashCommandBuilder()
+		.addStringOption(option =>
+			option
+				.setName("hex")
+				.setDescription("SteamID w hex")
+				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option.setName("role").setDescription("Ranga").setRequired(true)
+		)
+		.addUserOption(option =>
+			option
+				.setName("user")
+				.setDescription("Użytkownik")
+				.setRequired(true)
+		)
+		.setName("dodaj"),
 };

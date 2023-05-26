@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message, args }: CommandArgs) {
@@ -77,4 +78,18 @@ export const info: CommandInfo = {
 	triggers: ["edytujregulamin"],
 	description: "Edytuje regulamin",
 	permissions: ["Administrator"],
+	builder: new SlashCommandBuilder()
+		.addChannelOption(option =>
+			option
+				.setName("channel")
+				.setDescription("Kanał, w którym znajduje się wiadomość")
+				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option
+				.setName("message")
+				.setDescription("ID wiadomości")
+				.setRequired(true)
+		)
+		.setName("edytujregulamin"),
 };

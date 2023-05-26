@@ -1,5 +1,5 @@
 import { Schema, model, Document } from "mongoose";
-import { Core } from "../../";
+import { Core } from "../../core";
 import logger from "../../utils/logger";
 
 export interface Donate {

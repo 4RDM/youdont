@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "discord.js";
 import { ErrorEmbed } from "../../../../utils/discordEmbed";
 import { Client } from "../../../main";
 
@@ -65,4 +66,12 @@ export default async function ({ client, message, args }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["hex"],
 	description: "Sprawdź hex użytkownika",
+	builder: new SlashCommandBuilder()
+		.addUserOption(option =>
+			option
+				.setName("użytkownik")
+				.setDescription("Użytkownik, którego hex chcesz sprawdzić")
+				.setRequired(true)
+		)
+		.setName("hex"),
 };

@@ -1,4 +1,4 @@
-import { TextChannel } from "discord.js";
+import { SlashCommandBuilder, TextChannel } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message, args }: CommandArgs) {
@@ -53,4 +53,14 @@ export const info: CommandInfo = {
 	triggers: ["clear", "purge", "wyczysc"],
 	description: "Usuwa określoną ilość wiadomości",
 	permissions: ["ManageMessages"],
+	builder: new SlashCommandBuilder()
+		.addIntegerOption(option =>
+			option
+				.setName("amount")
+				.setDescription("Ilość wiadomości do usunięcia")
+				.setRequired(true)
+				.setMinValue(1)
+				.setMaxValue(100)
+		)
+		.setName("clear"),
 };

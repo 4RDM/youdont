@@ -1,5 +1,5 @@
 import { Schema, Document, model } from "mongoose";
-import { Core } from "../../";
+import { Core } from "../../core";
 import { nanoid } from "nanoid";
 
 const schema = new Schema(

@@ -1,5 +1,6 @@
 import { getPlayers } from "../../../../utils/serverStatus";
 import { Embed } from "../../../../utils/discordEmbed";
+import { SlashCommandBuilder } from "discord.js";
 
 // prettier-ignore
 export default async function ({ client, message }: CommandArgs) {
@@ -25,4 +26,5 @@ export default async function ({ client, message }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["status"],
 	description: "Wyświetla status serwera",
+	builder: new SlashCommandBuilder().setName("status"),
 };

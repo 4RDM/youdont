@@ -1,4 +1,4 @@
-import { User, WebhookClient } from "discord.js";
+import { SlashCommandBuilder, User, WebhookClient } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
 
@@ -146,4 +146,15 @@ export const info: CommandInfo = {
 	triggers: ["zaakceptuj"],
 	description: "Zaakceptuj donate o danym ID",
 	permissions: ["Administrator"],
+	builder: new SlashCommandBuilder()
+		.addIntegerOption(option =>
+			option.setName("id").setDescription("ID donate").setRequired(true)
+		)
+		.addIntegerOption(option =>
+			option
+				.setName("kwota")
+				.setDescription("Kwota donate")
+				.setRequired(true)
+		)
+		.setName("zaakceptuj"),
 };
