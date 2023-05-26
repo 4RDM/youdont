@@ -67,12 +67,10 @@ export default async function ({
 
 	client.Core.database.users.createIfNotExists(message.author.id);
 
-	console.log("h");
-
-	// prettier-ignore
-	if (!message.content.startsWith(client.config.discord.prefix) && message.guild) {
-		console.log("h2");
-
+	if (
+		!message.content.startsWith(client.config.discord.prefix) &&
+		message.guild
+	) {
 		checkMessage(message.content).then(s => {
 			if (!s) return;
 			message.member?.timeout(120 * 60 * 1000, "Phishing / scam URL"); // for 2 hours
@@ -80,7 +78,10 @@ export default async function ({
 		});
 
 		// Autoreply
-		wordlist.forEach(word => isSimilar(message.content, word.msg) && message.reply(word.res));
+		wordlist.forEach(
+			word =>
+				isSimilar(message.content, word.msg) && message.reply(word.res)
+		);
 		return;
 	}
 
