@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Rcon from "quake3-rcon";
 import config from "../config";
@@ -11,7 +12,7 @@ export default (command: string): Promise<void> => {
 				port: config.rcon.port,
 				password: config.rcon.pass,
 			});
-			rcon.send(command, (res: string) => resolve());
+			rcon.send(command, () => resolve());
 		} catch (err) {
 			logger.error(<string>err);
 			reject();

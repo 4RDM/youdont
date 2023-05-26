@@ -22,6 +22,8 @@ export default class Database {
 		this.playerData = new PlayerDataManager();
 		this.articles = new ArticleManager();
 
+		mongoose.set("strictQuery", false);
+
 		mongoose
 			.connect(
 				`mongodb://${config.mongodb.ip}:${config.mongodb.port}/${config.mongodb.database}`,

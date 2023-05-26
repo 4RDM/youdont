@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { parse, resolve as res } from "path";
+import { resolve as res } from "path";
 
 export const addFile = (str: string, path: string): Promise<void> => {
 	return new Promise((resolve, reject) => {

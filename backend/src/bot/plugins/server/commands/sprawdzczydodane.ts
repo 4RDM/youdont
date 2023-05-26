@@ -9,11 +9,11 @@ const path = join(
 export default async function ({ message, args }: CommandArgs) {
 	// prettier-ignore
 	if (!existsSync(path))
-		return message.channel.send({ embeds: [ ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!") ] });
+		return message.channel.send({ embeds: [ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!")] });
 
 	// prettier-ignore
 	if (!args[0])
-		return message.channel.send({ embeds: [ ErrorEmbed(message, "Nie wprowadzono resp-name pojazdu") ] });
+		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie wprowadzono resp-name pojazdu")] });
 
 	// prettier-ignore
 	if (!existsSync(join(path, args[0])))

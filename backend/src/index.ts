@@ -2,7 +2,6 @@ import { Client } from "./bot/main";
 import RCON from "./utils/rcon";
 import Database from "./database/database";
 import HTTP from "./http/http";
-import config from "./config";
 import { refreshTops } from "./utils/serverStatus";
 import logger from "./utils/logger";
 

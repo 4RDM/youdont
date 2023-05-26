@@ -38,11 +38,11 @@ export default async function ({ message, args }: CommandArgs) {
 
 	// prettier-ignore
 	if (!existsSync(path))
-		return message.channel.send({ embeds: [ ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!") ] });
+		return message.channel.send({ embeds: [ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!")] });
 
 	// prettier-ignore
 	if ((!mention && !args[0]) || (mention && mention.id != args[0]?.replace(/[<@>]/gm, "")))
-		return message.channel.send({ embeds: [ ErrorEmbed(message, "Nie wprowadzono ID użytkownika / nie spingowano") ] });
+		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie wprowadzono ID użytkownika / nie spingowano")] });
 
 	const userJson = (await import(path)).default;
 	const userHexes = await getUserHex(mention?.id || args[0]);
@@ -52,7 +52,7 @@ export default async function ({ message, args }: CommandArgs) {
 		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie znaleziono użytkownika")] });
 
 	if (args.length == 1) {
-		const limitki: any = {};
+		const limitki: { [key: string]: string[][] } = {};
 		const description: string[] = [];
 		let userIdentifiers = [];
 
@@ -94,18 +94,18 @@ export default async function ({ message, args }: CommandArgs) {
 
 		// prettier-ignore
 		if (!args[0] || !args[1] || (!removeMode && !args[2]))
-			return message.channel.send({ embeds: [ ErrorEmbed(message, "Prawidłowe użycie: `.shared <@ping> <spawn/usun> <nazwa wyświetlana>`") ] });
+			return message.channel.send({ embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.shared <@ping> <spawn/usun> <nazwa wyświetlana>`")] });
 
 		let currentHex;
 		const vehicleName = args.slice(2).join(" ") || "Brak";
 		const respName = removeMode ? args[2] : args[1];
 
 		if (userHexes.length > 1) {
-			const identifiers: any[] = userHexes;
+			const identifiers: { identifier: string }[] = userHexes;
 			let awaitedMessage;
 
 			// prettier-ignore
-			message.channel.send(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x: any, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+			message.channel.send(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 
 			try {
 				awaitedMessage = await awaitMessage(message);
@@ -119,7 +119,7 @@ export default async function ({ message, args }: CommandArgs) {
 
 			// prettier-ignore
 			if (isNaN(index)) 
-				return message.channel.send({ embeds: [ErrorEmbed(message, "Wprowadzono błędny index, nie jest cyfrą!")] })
+				return message.channel.send({ embeds: [ErrorEmbed(message, "Wprowadzono błędny index, nie jest cyfrą!")] });
 
 			currentHex = identifiers[--index]?.identifier;
 
@@ -133,13 +133,13 @@ export default async function ({ message, args }: CommandArgs) {
 
 		if (removeMode) {
 			// prettier-ignore
-			const index = (<any>userJson)[currentHex].findIndex((x: string[]) => x[0] == respName);
+			const index = userJson[currentHex].findIndex((x: string[]) => x[0] == respName);
 
 			// prettier-ignore
 			if (index == -1)
-				return message.channel.send({ embeds: [ ErrorEmbed(message, `Nie znaleziono aut współdzielonych o nazwie \`${respName}\`!`) ] });
+				return message.channel.send({ embeds: [ErrorEmbed(message, `Nie znaleziono aut współdzielonych o nazwie \`${respName}\`!`)] });
 
-			(<any>userJson)[currentHex].splice(index, 1);
+			userJson[currentHex].splice(index, 1);
 
 			// prettier-ignore
 			writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
@@ -166,8 +166,8 @@ export default async function ({ message, args }: CommandArgs) {
 		// ======================
 		// Write vehicles to file
 		// ======================
-		if (!(<any>userJson)[currentHex]) (<any>userJson)[currentHex] = [];
-		(<any>userJson)[currentHex].push([respName, vehicleName]);
+		if (!userJson[currentHex]) userJson[currentHex] = [];
+		userJson[currentHex].push([respName, vehicleName]);
 
 		// prettier-ignore
 		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });

@@ -30,7 +30,7 @@ export default class Handler {
 				logger.error(`Could not load the event ${eventName}, the default export is missing`);
 			}
 
-			if (!hasErrored) this.client.on(file.info.eventName, (...props) => file.default({ client: this.client, props: props }))
+			if (!hasErrored) this.client.on(file.info.eventName, (...props) => file.default({ client: this.client, props: props }));
 		}
 	};
 }

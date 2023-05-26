@@ -29,7 +29,7 @@ export default async function ({ message, args, client }: CommandArgs) {
 		const description: string[] = [];
 
 		// prettier-ignore
-		dbUser?.notatki.forEach((notatka: any) => {
+		dbUser?.notatki.forEach((notatka) => {
 			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
 		});
 
@@ -49,41 +49,41 @@ export default async function ({ message, args, client }: CommandArgs) {
 	} else {
 		// prettier-ignore
 		if (!["dodaj", "add", "usun", "usuń", "remove"].includes(args[1].toLowerCase())) {
-				const id = parseInt(args[1]);
+			const id = args[1];
 
-				if (isNaN(id))
-					return message.channel.send({
-						embeds: [ErrorEmbed(message, "ID notatki nie może być puste")],
-					});
+			if (isNaN(parseInt(id)))
+				return message.channel.send({
+					embeds: [ErrorEmbed(message, "ID notatki nie może być puste")],
+				});
 
-				const notatka = dbUser?.notatki.find((x: any) => x.id == id);
+			const notatka = dbUser?.notatki.find((x) => x.id == id);
 
-				if (!notatka)
-					return message.channel.send({
-						embeds: [
-							ErrorEmbed(
-								message,
-								`Nie znaleziono notatki od id ${id || "brak"}`
-							),
-						],
-					});
-
-				message.channel.send({
+			if (!notatka)
+				return message.channel.send({
 					embeds: [
-						Embed({
-							author: {
-								name: member.nickname || member.user.tag,
-								iconURL: member.displayAvatarURL(),
-							},
-							user: message.author,
-							title: `Notatka #${notatka.id}`,
-							description: `\`\`\`${notatka.content}\`\`\``,
-						}),
+						ErrorEmbed(
+							message,
+							`Nie znaleziono notatki od id ${id || "brak"}`
+						),
 					],
 				});
 
-				return;
-			}
+			message.channel.send({
+				embeds: [
+					Embed({
+						author: {
+							name: member.nickname || member.user.tag,
+							iconURL: member.displayAvatarURL(),
+						},
+						user: message.author,
+						title: `Notatka #${notatka.id}`,
+						description: `\`\`\`${notatka.content}\`\`\``,
+					}),
+				],
+			});
+
+			return;
+		}
 
 		if (["dodaj", "add"].includes(args[1].toLowerCase())) {
 			const content = args.slice(2).join(" ");
@@ -93,17 +93,14 @@ export default async function ({ message, args, client }: CommandArgs) {
 					embeds: [
 						ErrorEmbed(
 							message,
-							`Notatka nie może mieć mniej niż 2 znaki`
+							"Notatka nie może mieć mniej niż 2 znaki"
 						),
 					],
 				});
 
+			// prettier-ignore
 			const notatka = {
-				id: (
-					parseInt(
-						dbUser.notatki[dbUser.notatki.length - 1]?.id || 0
-					) + 1
-				).toString(),
+				id: (parseInt(dbUser.notatki[dbUser.notatki.length - 1]?.id || "0") + 1).toString(),
 				content,
 				authorID: message.author.id,
 				date: Math.floor(Date.now() / 1000),
@@ -134,18 +131,16 @@ export default async function ({ message, args, client }: CommandArgs) {
 					],
 				});
 
-			const notatka = dbUser?.notatki.find(
-				(x: any) => x.id.toString() === id.toString()
-			);
+			// prettier-ignore
+			const notatka = dbUser?.notatki.find(x => x.id.toString() === id.toString());
 
 			if (!notatka)
 				return message.channel.send({
 					embeds: [ErrorEmbed(message, "Nie znaleziono notatki")],
 				});
 
-			const notatki = dbUser?.notatki.filter(
-				(x: any) => x.id.toString() !== id.toString()
-			);
+			// prettier-ignore
+			const notatki = dbUser?.notatki.filter(x => x.id.toString() !== id.toString());
 
 			dbUser.notatki = notatki;
 			await dbUser.save();
@@ -153,7 +148,7 @@ export default async function ({ message, args, client }: CommandArgs) {
 			const description: string[] = [];
 
 			// prettier-ignore
-			dbUser?.notatki.forEach((notatka: any) => {
+			dbUser?.notatki.forEach((notatka) => {
 				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
 			});
 

@@ -20,10 +20,17 @@ export const getUserHex = async function (discordId: string) {
 
 	connection.end();
 
-	return response;
+	return response as {
+		identifier: string;
+		kills: number;
+		deaths: number;
+		heady: number;
+		discord: string;
+		license: string;
+	}[];
 };
 
-export default async function ({ client, message, args }: CommandArgs) {
+export default async function ({ message, args }: CommandArgs) {
 	if (!args[0] || !message.mentions.users.first())
 		return message.channel.send({
 			embeds: [
@@ -44,7 +51,7 @@ export default async function ({ client, message, args }: CommandArgs) {
 			embeds: [ErrorEmbed(message, "Nie znaleziono użytkownika")],
 		});
 
-	const identifiers = response.map((x: any) => x.identifier);
+	const identifiers = response.map(x => x.identifier);
 	return message.channel.send(
 		`\`\`\`Znalezione identyfikatory:\n${identifiers.join("\n")}\`\`\``
 	);

@@ -28,6 +28,7 @@ export default async function ({ client, message, args }: CommandArgs) {
 		});
 
 	if (!isNaN(parseInt(args[2])) && args[1] !== "userID")
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		donate[args[1]] = parseInt(args[2]);
 

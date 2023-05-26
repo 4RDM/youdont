@@ -37,7 +37,7 @@ export class DonatesManager {
 
 	async get(
 		donateID: number
-	): Promise<(Document<unknown, any, Donate> & Donate) | null> {
+	): Promise<(Document<unknown, unknown, Donate> & Donate) | null> {
 		return await DonateModel.findOne({ dID: donateID });
 	}
 

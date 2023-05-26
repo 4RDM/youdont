@@ -4,6 +4,7 @@ import { model, Schema, Document } from "mongoose";
 import { Donate } from "./donates.manager";
 
 type DBUser = null | IUser;
+
 interface IUser {
 	identifier: string;
 	license: string;
@@ -13,13 +14,11 @@ interface IUser {
 	kills: number;
 }
 
-interface User {
-	userID: string;
-	role: string;
-	total: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	donates: any;
-	notatki: any;
+interface Notatka {
+	id: string;
+	content: string;
+	authorID: string;
+	date: number;
 }
 
 interface UUser extends Document {
@@ -28,7 +27,7 @@ interface UUser extends Document {
 	total: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	donates: any;
-	notatki: any;
+	notatki: Array<Notatka>;
 }
 
 const UserModel = model<UUser>(
@@ -39,7 +38,7 @@ const UserModel = model<UUser>(
 			role: { type: String, required: true },
 			total: { type: Number, required: true },
 			donates: { type: Array, required: true },
-			notatki: { type: Array, required: true },
+			notatki: { type: Schema.Types.Mixed, required: true },
 		},
 		{ timestamps: true }
 	)

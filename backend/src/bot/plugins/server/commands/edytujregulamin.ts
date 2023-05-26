@@ -48,7 +48,7 @@ export default async function ({ message, args }: CommandArgs) {
 			if (!collectedMessages.first()?.content)
 				return message.channel.send({
 					embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
-				}) as any;
+				}) as unknown;
 
 			fetchedMessage
 				.edit({
@@ -62,19 +62,17 @@ export default async function ({ message, args }: CommandArgs) {
 						}),
 					],
 				})
-				.catch(
-					err =>
-						message.channel.send({
-							embeds: [ErrorEmbed(message, err)],
-						}) as any
-				);
+				.catch(err => {
+					message.channel.send({
+						embeds: [ErrorEmbed(message, err)],
+					});
+				});
 		})
-		.catch(
-			() =>
-				message.channel.send({
-					embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
-				}) as any
-		);
+		.catch(() => {
+			message.channel.send({
+				embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
+			});
+		});
 }
 
 export const info: CommandInfo = {
