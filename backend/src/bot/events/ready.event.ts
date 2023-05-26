@@ -94,7 +94,7 @@ export default async function ({ client }: { client: ClientType }) {
 				embeds: [
 					Embed({
 						title: ":white_check_mark: | 4RDM jest online!",
-						description: `**Graczy online:** ${players.length}/${client.config.maxPlayers}\n\n${players.map(x => `${x.id}. ${x.name}`).join("\n")}`,
+						description: `**Graczy online:** ${players.length}/${client.config.maxPlayers}\n\n${players.map(x => `${x.id}. \`${x.name.replace(/`/gm, "")}\``).join("\n")}`,
 						color: "#1F8B4C",
 						timestamp: new Date(),
 					}),
