@@ -5,7 +5,6 @@ import logger from "../utils/logger";
 import { UsersManager } from "./managers/users.manager";
 import { DonatesManager } from "./managers/donates.manager";
 import { ShortsManager } from "./managers/shorts.manager";
-import { SettingManager } from "./managers/settings.manager";
 import { PlayerDataManager } from "./managers/PlayerData.manager";
 import { ArticleManager } from "./managers/articles.manager";
 
@@ -13,7 +12,6 @@ export default class Database {
 	public readonly donates: DonatesManager;
 	public readonly users: UsersManager;
 	public readonly shorts: ShortsManager;
-	public readonly settings: SettingManager;
 	public readonly playerData: PlayerDataManager;
 	public readonly articles: ArticleManager;
 
@@ -21,7 +19,6 @@ export default class Database {
 		this.donates = new DonatesManager(core);
 		this.users = new UsersManager();
 		this.shorts = new ShortsManager(core);
-		this.settings = new SettingManager(core);
 		this.playerData = new PlayerDataManager();
 		this.articles = new ArticleManager();
 

@@ -108,9 +108,6 @@ export class Client extends Cl {
 		this.PluginHandler = new PluginHandler();
 		this.CommandHandler = new CommandHandler(this);
 
-		const verificationRole =
-			core.database.settings.settings.verificationRole;
-
 		// TODO: przenieść eventy do handlera
 		this.on("ready", async () => {
 			logger.ready("Bot is ready!");
