@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { ErrorEmbed } from "../../../../utils/discordEmbed";
+import { ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { Client } from "../../../main";
 
 export const getUserHex = async function (client: Client, discordId: string) {
@@ -30,37 +30,25 @@ export const getUserHex = async function (client: Client, discordId: string) {
 	}
 };
 
-export default async function ({ client, message, args }: CommandArgs) {
-	if (!args[0] || !message.mentions.users.first())
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(
-					message,
-					"Nie wprowadzono ID użytkownika / nie spingowano"
-				),
-			],
-		});
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	const response = await getUserHex(
-		client,
-		message.mentions.users.first()?.id ||
-			args[0].replace("<@!", "").replace(">", "")
-	);
+	const mention = interaction.options.getUser("mention", true);
+	const response = await getUserHex(client, mention.id);
 
 	if (!response)
-		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Wystąpił błąd bazy danych")],
+		return interaction.reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 		});
 
 	if (!response[0])
-		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Nie znaleziono użytkownika")],
+		return interaction.reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono użytkownika")],
 		});
 
 	const identifiers = response.map(x => x.identifier);
-	return message.channel.send(
-		`\`\`\`Znalezione identyfikatory:\n${identifiers.join("\n")}\`\`\``
-	);
+	return interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.join("\n")}\`\`\``);
 }
 
 export const info: CommandInfo = {
@@ -69,7 +57,7 @@ export const info: CommandInfo = {
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option
-				.setName("użytkownik")
+				.setName("mention")
 				.setDescription("Użytkownik, którego hex chcesz sprawdzić")
 				.setRequired(true)
 		)

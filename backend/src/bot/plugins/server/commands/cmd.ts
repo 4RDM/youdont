@@ -1,38 +1,36 @@
 import { SlashCommandBuilder } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ client, message, args }: CommandArgs) {
-	if (!args[0])
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(message, "Prawidłowe użycie: `.cmd <polecenie>`"),
-			],
-		});
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	const msg = await message.channel.send({
+	const command = interaction.options.getString("command", true);
+
+	const interactionReply = await interaction.reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",
-				user: message.author,
+				user: interaction.user,
 			}),
 		],
 	});
 
-	client.Core.rcon("exec permisje.cfg")
+	client.Core.rcon(command)
 		.then(() => {
-			msg.edit({
+			interactionReply.edit({
 				embeds: [
 					Embed({
 						color: "#1F8B4C",
 						description: "**Wysłano!**",
-						user: message.author,
+						user: interaction.user,
 					}),
 				],
 			});
 		})
 		.catch(() => {
-			msg.edit({
-				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+			interactionReply.edit({
+				embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia")],
 			});
 		});
 }
@@ -41,7 +39,6 @@ export const info: CommandInfo = {
 	triggers: ["cmd", "command"],
 	description: "Wyślij polecenie do konsoli",
 	permissions: ["Administrator"],
-	role: "843444626726584370", // ZARZĄD
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option

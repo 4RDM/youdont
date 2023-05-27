@@ -1,49 +1,41 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
-export default async function ({ message }: CommandArgs) {
+// prettier-ignore
+export default async function ({ interaction }: CommandArgs) {
 	const embed = Embed({
-		title: message.guild?.name,
+		title: interaction.guild?.name,
 		fields: [
 			{
 				name: "Użytkownicy",
-				value: `\`${message.guild?.memberCount.toString()}\`` || "`0`",
+				value: `\`${interaction.guild?.memberCount.toString()}\`` || "`0`",
 				inline: true,
 			},
 			{
 				name: "Bany",
-				value:
-					`\`${(
-						await message.guild?.bans.fetch()
-					)?.size.toString()}\`` || "`0`",
+				value: `\`${(await interaction.guild?.bans.fetch())?.size.toString()}\`` || "`0`",
 				inline: true,
 			},
 			{
 				name: "Ilość kanałów",
-				value:
-					`\`${message.guild?.channels.cache.size.toString()}\`` ||
-					"`0`",
+				value: `\`${interaction.guild?.channels.cache.size.toString()}\`` || "`0`",
 				inline: true,
 			},
 			{
 				name: "Ilość ról",
-				value:
-					`\`${message.guild?.roles.cache.size.toString()}\`` ||
-					"`0`",
+				value: `\`${interaction.guild?.roles.cache.size.toString()}\`` || "`0`",
 				inline: true,
 			},
 			{
 				name: "Data utworzenia",
-				value: `<t:${Math.floor(
-					(message.guild?.createdAt.getTime() || Date.now()) / 1000
-				)}:R>`,
+				value: `<t:${Math.floor((interaction.guild?.createdAt.getTime() || Date.now()) / 1000)}:R>`,
 				inline: true,
 			},
 		],
-		thumbnail: message.guild?.iconURL({ forceStatic: false }) || "",
-		user: message.author,
+		thumbnail: interaction.guild?.iconURL({ forceStatic: false }) || "",
+		user: interaction.user,
 	});
-	message.channel.send({ embeds: [embed] });
+	interaction.reply({ embeds: [embed] });
 }
 
 export const info: CommandInfo = {

@@ -1,38 +1,41 @@
 import { SlashCommandBuilder } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ client, message, args }: CommandArgs) {
-	if (!args[0])
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(message, "Prawidłowe użycie: `.unban <id-bana>`"),
-			],
-		});
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	const msg = await message.channel.send({
+	const id = interaction.options.getInteger("id", true);
+
+	const interactionReply = await interaction.reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",
-				user: message.author,
+				user: interaction.user,
 			}),
 		],
 	});
 
-	client.Core.rcon(args.join(`unban ${parseInt(args[0])}`))
+	client.Core.rcon(`unban ${id}`)
 		.then(() => {
-			msg.edit({
+			interactionReply.edit({
 				embeds: [
 					Embed({
 						color: "#1F8B4C",
 						description: "**Wysłano!**",
-						user: message.author,
+						user: interaction.user,
 					}),
 				],
 			});
 		})
 		.then(() => {
-			msg.edit({
-				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+			interactionReply.edit({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Nie udało się wysłać polecenia"
+					),
+				],
 			});
 		});
 }

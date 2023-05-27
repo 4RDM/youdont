@@ -1,49 +1,35 @@
-import { SlashCommandBuilder, TextChannel } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { SlashCommandBuilder } from "discord.js";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ message, args }: CommandArgs) {
-	const parsedNumber = parseInt(args[0]);
-	if (
-		!args[0] ||
-		isNaN(parsedNumber) ||
-		parsedNumber > 100 ||
-		parsedNumber < 0
-	)
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(
-					message,
-					"Prawidłowe użycie: `.clear <ilosc-wiadomosci>`"
-				),
-			],
-		});
+// prettier-ignore
+export default async function ({ interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand() || !interaction.channel || !interaction.channel.isTextBased() || !interaction.inGuild()) return;
 
-	const messages = await message.channel.messages.fetch({
-		limit: parsedNumber,
+	const amount = interaction.options.getInteger("amount", true);
+
+	const messages = await interaction.channel.messages.fetch({
+		limit: amount,
 	});
 
 	try {
-		await (<TextChannel>message.channel).bulkDelete(messages);
-		message.channel.send({
+		await interaction.channel.bulkDelete(messages);
+		interaction.reply({
 			embeds: [
 				Embed({
 					color: "#1F8B4C",
 					title: ":broom: Brooooom",
-					description: `Usunięto **${parsedNumber}** wiadomości!`,
-					user: message.author,
+					description: `Usunięto **${amount}** wiadomości!`,
+					user: interaction.user,
 				}),
 			],
 		});
 	} catch (err) {
-		message.channel.send({
+		interaction.reply({
 			embeds: [
-				Embed({
-					color: "#E74C3C",
-					title: ":broom: Brooooom",
-					description:
-						"**Wystąpił błąd podczas usuwania wiadomości**",
-					user: message.author,
-				}),
+				ErrorEmbedInteraction(
+					interaction,
+					"**Wystąpił błąd podczas usuwania wiadomości**"
+				),
 			],
 		});
 	}

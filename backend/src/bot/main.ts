@@ -4,9 +4,10 @@ import {
 	ClientOptions,
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
+	PermissionResolvable,
+	CommandInteraction,
 } from "discord.js";
 import { Core } from "../core";
-import { Message, PermissionResolvable } from "discord.js";
 import config from "../config";
 import logger from "../utils/logger";
 import PluginHandler from "./handlers/plugin.handler";
@@ -14,10 +15,9 @@ import CommandHandler from "./handlers/command.handler";
 import EventHandler from "./handlers/event.handler";
 
 declare global {
-	interface CommandArgs {
+	interface CommandArgs<T = CommandInteraction> {
 		client: Client;
-		message: Message;
-		args: string[];
+		interaction: T;
 	}
 
 	interface CommandInfo {
@@ -30,7 +30,7 @@ declare global {
 
 	interface Command {
 		info: CommandInfo;
-		execute({ client, message, args }: CommandArgs): Promise<void>;
+		execute({ client, interaction }: CommandArgs): Promise<void>;
 	}
 
 	interface EventInfo {

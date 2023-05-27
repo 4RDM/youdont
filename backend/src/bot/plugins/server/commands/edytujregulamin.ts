@@ -1,52 +1,39 @@
 import { ChannelType, SlashCommandBuilder } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ message, args }: CommandArgs) {
-	// prettier-ignore
-	if (!args[0] || !args[1])
-		return message.channel.send({ embeds: [ErrorEmbed(message, "Prawidłowe użycie komendy: <ID kanału> <ID wiadomości>")] });
+// prettier-ignore
+export default async function ({ interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	const fetchedChannel =
-		message.mentions.channels.first() ||
-		(await message.guild?.channels.fetch(args[0]));
+	const channel = interaction.options.getChannel<ChannelType.GuildText>("channel", true);
+	const message = interaction.options.getString("message", true);
 
-	if (!fetchedChannel)
-		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Nieznaleziono kanału")],
+	const fetchedMessage = await channel.messages.fetch(message).catch();
+
+	if (!fetchedMessage)
+		return interaction.reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Nieznaleziono wiadomości")],
 		});
 
-	if (!fetchedChannel.isTextBased())
-		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Kanał nie jest tekstowy")],
-		});
-
-	const fetchedMessage = await fetchedChannel.messages.fetch(args[1]).catch();
-
-	if (!fetchedMessage || typeof fetchedMessage == "boolean")
-		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Nieznaleziono wiadomości")],
-		});
-
-	message.channel.send({
+	interaction.reply({
 		embeds: [
 			Embed({
 				title: ":hourglass: | Wprowadź wiadomość",
-				user: message.author,
+				user: interaction.user,
 			}),
 		],
 	});
 
-	await message.channel
-		.awaitMessages({
-			filter: msg => msg.author.id === message.author.id,
-			max: 1,
-			time: 60000,
-			errors: ["time"],
-		})
+	await interaction.channel?.awaitMessages({
+		filter: msg => msg.author.id === interaction.user.id,
+		max: 1,
+		time: 60000,
+		errors: ["time"],
+	})
 		.then(collectedMessages => {
 			if (!collectedMessages.first()?.content)
-				return message.channel.send({
-					embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
+				return interaction.followUp({
+					embeds: [ErrorEmbedInteraction(interaction, "Niewprowadzono wiadomości!")],
 				}) as unknown;
 
 			fetchedMessage
@@ -57,19 +44,18 @@ export default async function ({ message, args }: CommandArgs) {
 							color: "#6f42c1",
 							description: collectedMessages.first()?.content,
 							footer: `© 2020-${new Date().getUTCFullYear()}`,
-							user: message.author,
 						}),
 					],
 				})
 				.catch(err => {
-					message.channel.send({
-						embeds: [ErrorEmbed(message, err)],
+					interaction.followUp({
+						embeds: [ErrorEmbedInteraction(interaction, err)],
 					});
 				});
 		})
 		.catch(() => {
-			message.channel.send({
-				embeds: [ErrorEmbed(message, "Niewprowadzono wiadomości!")],
+			interaction.followUp({
+				embeds: [ErrorEmbedInteraction(interaction, "Niewprowadzono wiadomości!")],
 			});
 		});
 }

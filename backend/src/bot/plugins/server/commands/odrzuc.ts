@@ -1,36 +1,31 @@
 import { SlashCommandBuilder, User } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ client, message, args }: CommandArgs) {
-	if (!args[0] || !args[1])
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(
-					message,
-					"Nie wprowadzono ID wpłaty bądź powodu odrzucenia"
-				),
-			],
-		});
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	const donate = await client.Core.database.donates.get(parseInt(args[0]));
+	const id = interaction.options.getInteger("id", true);
+	const donate = await client.Core.database.donates.get(id);
+
 	if (!donate)
-		return message.channel.send({
+		return interaction.reply({
 			embeds: [
-				ErrorEmbed(
-					message,
+				ErrorEmbedInteraction(
+					interaction,
 					"Nie znaleziono zarejestrowanej wpłaty o takim ID"
 				),
 			],
 		});
 
 	if (donate.approved)
-		return message.channel.send({
+		return interaction.reply({
 			embeds: [
-				ErrorEmbed(message, "Wpłata została wcześniej zaakceptowana"),
+				ErrorEmbedInteraction(
+					interaction,
+					"Wpłata została wcześniej zaakceptowana"
+				),
 			],
 		});
-
-	args.shift();
 
 	(await client.users.createDM(donate.userID)).send({
 		embeds: [
@@ -41,7 +36,7 @@ export default async function ({ client, message, args }: CommandArgs) {
 				fields: [
 					{
 						name: "Administrator",
-						value: `\`${message.author.tag} (${message.author.id})\``,
+						value: `\`${interaction.user.tag} (${interaction.user.id})\``,
 						inline: false,
 					},
 					{
@@ -49,26 +44,21 @@ export default async function ({ client, message, args }: CommandArgs) {
 						value: `\`${donate.dID?.toString()}\``,
 						inline: false,
 					},
-					{
-						name: "Powód",
-						value: `\`${args.join(" ")}\``,
-						inline: false,
-					},
 				],
 				color: "#f54242",
 				footer: "",
-				user: <User>client.user,
+				user: interaction.user,
 			}),
 		],
 	});
 
-	message.channel.send({
+	interaction.reply({
 		embeds: [
 			Embed({
 				title: ":x: | Odrzucono wpłatę",
 				color: "#f54242",
 				description: `Odrzucono wpłatę o ID \`${donate.dID}\``,
-				user: message.author,
+				user: interaction.user,
 			}),
 		],
 	});

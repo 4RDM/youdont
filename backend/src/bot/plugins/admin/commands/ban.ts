@@ -1,109 +1,52 @@
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
-import { GuildMember, SlashCommandBuilder, User } from "discord.js";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
+import { GuildMember, SlashCommandBuilder } from "discord.js";
 
-export default async function ({ message, args }: CommandArgs) {
-	if (!args[0])
-		return message.channel.send({
+// prettier-ignore
+export default async function ({ interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
+
+	const mention = interaction.options.getMember("mention") as GuildMember;
+	const reason = interaction.options.getString("reason", false);
+
+	if (!mention.bannable)
+		return interaction.reply({
 			embeds: [
-				ErrorEmbed(
-					message,
-					"Prawidłowe użycie: `.ban <użytkownik> [powód]`"
+				ErrorEmbedInteraction(
+					interaction,
+					"Nie udało się zbanować tego użytkownika!"
 				),
 			],
 		});
 
-	const mention = message.mentions.members?.first();
-	const reason = args.join(" ").replace(args[0], "").replace(" ", "");
-	if (!mention) {
-		if (
-			(args[0] == "594526434526101527" &&
-				message.author.id !== "364056796932997121") ||
-			(args[0] == "364056796932997121" &&
-				message.author.id !== "594526434526101527")
-		)
-			return message.react("🖕");
-		await message.guild?.members
-			.ban(args[0], {
-				reason: reason ? reason : "",
-				deleteMessageSeconds: 7 * 24 * 60 * 60,
-			})
-			.then((user: User | string | GuildMember) => {
-				message.channel.send({
-					embeds: [
-						Embed({
-							title: ":hammer: Banhammer",
-							color: "#1F8B4C",
-							description: `Zbanowany: \`${
-								typeof user !== "string" ? user.id : user
-							}\` (\`${args[0]}\`)\nModerator: \`${
-								message.author.tag
-							}\` (\`${message.author.id}\`)\nPowód: \`${
-								reason || "Brak"
-							}\``,
-							user: message.author,
-						}),
-					],
-				});
-			})
-			.catch(() => {
-				message.channel.send({
-					embeds: [
-						ErrorEmbed(
-							message,
-							"Nie udało się zbanować tego użytkownika!"
-						),
-					],
-				});
-			});
-		return;
-	} else {
-		if (!mention.bannable)
-			return message.channel.send({
+	if (
+		(mention.id == "594526434526101527" && interaction.user.id !== "364056796932997121") ||
+		(mention.id == "364056796932997121" && interaction.user.id !== "594526434526101527")
+	) return interaction.reply("🖕");
+
+	await mention
+		.ban({ reason: reason ? reason : "", deleteMessageSeconds: 12 * 60 * 60 })
+		.then(user => {
+			interaction.reply({
 				embeds: [
-					ErrorEmbed(message, "Nie można zbanować tego użytkownika!"),
+					Embed({
+						title: ":hammer: Banhammer",
+						color: "#1F8B4C",
+						description: `Zbanowany: \`${typeof user !== "string" ? user.id : user}\` (\`${mention.id}\`)\nModerator: \`${interaction.user.tag}\` (\`${interaction.user.id}\`)\nPowód: \`${reason || "Brak"}\``,
+						user: interaction.user,
+					}),
 				],
 			});
-		if (
-			(mention.id == "594526434526101527" &&
-				message.author.id !== "364056796932997121") ||
-			(mention.id == "364056796932997121" &&
-				message.author.id !== "594526434526101527")
-		)
-			return message.react("🖕");
-		await mention
-			.ban({
-				reason: reason ? reason : "",
-				deleteMessageSeconds: 7 * 24 * 60 * 60,
-			})
-			.then(() => {
-				message.channel.send({
-					embeds: [
-						Embed({
-							title: ":hammer: Banhammer",
-							color: "#1F8B4C",
-							description: `Zbanowany: \`${
-								mention.user.tag
-							}\` (\`${mention.id}\`)\nModerator: \`${
-								message.author.tag
-							}\` (\`${message.author.id}\`)\nPowód: \`${
-								reason || "Brak"
-							}\``,
-							user: message.author,
-						}),
-					],
-				});
-			})
-			.catch(() => {
-				message.channel.send({
-					embeds: [
-						ErrorEmbed(
-							message,
-							"Prawidłowe użycie: `.ban <użytkownik> [powód]`"
-						),
-					],
-				});
+		})
+		.catch(() => {
+			interaction.reply({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Nie udało się zbanować tego użytkownika!"
+					),
+				],
 			});
-	}
+		});
 }
 
 export const info: CommandInfo = {

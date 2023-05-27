@@ -1,8 +1,8 @@
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
-import { Message, SlashCommandBuilder } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 
 const path = join(
 	// __dirname,
@@ -10,11 +10,13 @@ const path = join(
 	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/shared.json"
 );
 
-export const awaitMessage = (message: Message): Promise<string> => {
+export const awaitMessage = (
+	interaction: CommandInteraction
+): Promise<string> => {
 	const promise = new Promise<string>((resolve, reject) => {
-		message.channel
-			.awaitMessages({
-				filter: msg => msg.author.id === message.author.id,
+		interaction.channel
+			?.awaitMessages({
+				filter: msg => msg.author.id === interaction.user.id,
 				max: 1,
 				time: 60000,
 				errors: ["time"],
@@ -33,161 +35,189 @@ export const awaitMessage = (message: Message): Promise<string> => {
 	return promise;
 };
 
-export default async function ({ client, message, args }: CommandArgs) {
-	const mention = message.mentions.members?.first();
-
-	// prettier-ignore
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
 	if (!existsSync(path))
-		return message.channel.send({ embeds: [ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!")] });
+		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
-	// prettier-ignore
-	if ((!mention && !args[0]) || (mention && mention.id != args[0]?.replace(/[<@>]/gm, "")))
-		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie wprowadzono ID użytkownika / nie spingowano")] });
+	if (!interaction.isChatInputCommand()) return;
 
+	const subcommand = interaction.options.getSubcommand();
 	const userJson = (await import(path)).default;
-	const userHexes = await getUserHex(client, mention?.id || args[0]);
+	let reply;
 
-	if (!userHexes)
-		return message.channel.send({
-			embeds: [ErrorEmbed(message, "Wystąpił błąd bazy danych")],
+	if (subcommand === "dodaj") {
+		const mention = interaction.options.getUser("mention", true);
+		const spawnName = interaction.options.getString("spawn-name", true);
+		const displayName = interaction.options.getString("display-name", true);
+		const userHexes = await getUserHex(client, mention.id);
+		let currentHex;
+
+		if (!userHexes)
+			return interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+			});
+
+		if (!userHexes[0])
+			return interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
+			});
+		
+		if (userHexes.length > 1) {
+			const identifiers: { identifier: string }[] = userHexes;
+			let awaitedMessage;
+
+			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+		
+			try {
+				awaitedMessage = await awaitMessage(interaction);
+			} catch (e) {
+				return interaction.reply({
+					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
+				});
+			}
+
+			let index = parseInt(awaitedMessage);
+
+			if (isNaN(index))
+				return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
+
+			currentHex = identifiers[--index]?.identifier;
+
+			if (!currentHex)
+				return interaction.reply({
+					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
+				});
+		} else {
+			currentHex = userHexes[0].identifier;
+		}
+
+		if (!userJson[currentHex]) userJson[currentHex] = [];
+		userJson[currentHex].push([spawnName, displayName]);
+
+		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+
+		const embed = Embed({
+			title: ":white_check_mark: | Dodano auto współdzielone!",
+			color: "#1F8B4C",
+			author: {
+				name: mention.tag,
+				iconURL: mention.displayAvatarURL(),
+			},
+			description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\`\n**Display name**: \`${displayName}\``,
+			user: interaction.user,
 		});
 
-	// prettier-ignore
-	if (!userHexes[0])
-		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie znaleziono użytkownika")] });
+		if (reply) interaction.followUp({ embeds: [embed] });
+		else interaction.reply({ embeds: [embed] });
+	} else if (subcommand === "usun") {
+		const mention = interaction.options.getUser("mention", true);
+		const spawnName = interaction.options.getString("spawn-name", true);
+		const userHexes = await getUserHex(client, mention.id);
+		let currentHex;
 
-	if (args.length == 1) {
+		if (!userHexes)
+			return interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+			});
+
+		if (!userHexes[0])
+			return interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
+			});
+		
+		if (userHexes.length > 1) {
+			const identifiers: { identifier: string }[] = userHexes;
+			let awaitedMessage;
+
+			interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+		
+			try {
+				awaitedMessage = await awaitMessage(interaction);
+			} catch (e) {
+				return interaction.reply({
+					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
+				});
+			}
+
+			let index = parseInt(awaitedMessage);
+
+			if (isNaN(index))
+				return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
+
+			currentHex = identifiers[--index]?.identifier;
+
+			if (!currentHex)
+				return interaction.reply({
+					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
+				});
+		} else {
+			currentHex = userHexes[0].identifier;
+		}
+
+		const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
+		if (index == -1)
+			return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, `Nie znaleziono aut współdzielonych o nazwie \`${spawnName}\`!`)] });
+
+		userJson[currentHex].splice(index, 1);
+
+		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+
+		return interaction.reply({
+			embeds: [
+				Embed({
+					title: ":x: | Usunięto auto współdzielone!",
+					color: "#f54242",
+					author: {
+						name: mention.tag,
+						iconURL: mention.displayAvatarURL(),
+					},
+					description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\``,
+					user: interaction.user,
+				}),
+			],
+		});
+	} else if (subcommand === "lista") {
+		const mention = interaction.options.getUser("mention", true);
+
+		const userHexes = await getUserHex(client, mention.id);
+
+		if (!userHexes)
+			return interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+			});
+
+		if (!userHexes[0])
+			return interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
+			});
+
 		const limitki: { [key: string]: string[][] } = {};
 		const description: string[] = [];
-		let userIdentifiers = [];
 
-		userHexes.forEach((x: { identifier: string }) => {
+		userHexes.forEach((x) => {
 			limitki[x.identifier] = userJson[x.identifier];
 		});
 
-		userIdentifiers = Object.keys(limitki);
-
-		Array.from(userIdentifiers).forEach((hex: string) => {
+		Array.from(Object.keys(limitki)).forEach((hex) => {
 			if (limitki[hex]) {
 				description.push(`**${hex}**:`);
-
 				limitki[hex].forEach((limitka: string[]) => {
 					description.push(`\`${limitka[0]}\`: \`${limitka[1]}\``);
 				});
 			}
 		});
 
-		message.channel.send({
+		interaction.reply({
 			embeds: [
 				Embed({
 					author: {
-						name: mention?.nickname || mention?.user.tag || "Brak",
-						iconURL: mention?.displayAvatarURL(),
+						name: mention.username,
+						iconURL: mention.displayAvatarURL(),
 					},
-					user: message.author,
+					user: interaction.user,
 					title: "Auta współdzielone użytkownika",
 					description: description.join("\n"),
-				}),
-			],
-		});
-	} else {
-		// ======================
-		// Get user hex
-		// ======================
-
-		const removeMode = args[1] && ["usun", "usuń"].includes(args[1]);
-
-		// prettier-ignore
-		if (!args[0] || !args[1] || (!removeMode && !args[2]))
-			return message.channel.send({ embeds: [ErrorEmbed(message, "Prawidłowe użycie: `.shared <@ping> <spawn/usun> <nazwa wyświetlana>`")] });
-
-		let currentHex;
-		const vehicleName = args.slice(2).join(" ") || "Brak";
-		const respName = removeMode ? args[2] : args[1];
-
-		if (userHexes.length > 1) {
-			const identifiers: { identifier: string }[] = userHexes;
-			let awaitedMessage;
-
-			// prettier-ignore
-			message.channel.send(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
-
-			try {
-				awaitedMessage = await awaitMessage(message);
-			} catch (e) {
-				return message.channel.send({
-					embeds: [ErrorEmbed(message, "Nie wprowadzono odpowiedzi")],
-				});
-			}
-
-			let index = parseInt(awaitedMessage);
-
-			// prettier-ignore
-			if (isNaN(index)) 
-				return message.channel.send({ embeds: [ErrorEmbed(message, "Wprowadzono błędny index, nie jest cyfrą!")] });
-
-			currentHex = identifiers[--index]?.identifier;
-
-			if (!currentHex)
-				return message.channel.send({
-					embeds: [ErrorEmbed(message, "Wybrano błędny hex!")],
-				});
-		} else {
-			currentHex = userHexes[0].identifier;
-		}
-
-		if (removeMode) {
-			// prettier-ignore
-			const index = userJson[currentHex].findIndex((x: string[]) => x[0] == respName);
-
-			// prettier-ignore
-			if (index == -1)
-				return message.channel.send({ embeds: [ErrorEmbed(message, `Nie znaleziono aut współdzielonych o nazwie \`${respName}\`!`)] });
-
-			userJson[currentHex].splice(index, 1);
-
-			// prettier-ignore
-			writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
-
-			return message.channel.send({
-				embeds: [
-					Embed({
-						title: ":x: | Usunięto auto współdzielone!",
-						color: "#f54242",
-						author: {
-							name:
-								mention?.nickname ||
-								mention?.user.tag ||
-								"Brak",
-							iconURL: mention?.displayAvatarURL(),
-						},
-						description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${respName}\``,
-						user: message.author,
-					}),
-				],
-			});
-		}
-
-		// ======================
-		// Write vehicles to file
-		// ======================
-		if (!userJson[currentHex]) userJson[currentHex] = [];
-		userJson[currentHex].push([respName, vehicleName]);
-
-		// prettier-ignore
-		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
-
-		message.channel.send({
-			embeds: [
-				Embed({
-					title: ":white_check_mark: | Dodano auto współdzielone!",
-					color: "#1F8B4C",
-					author: {
-						name: mention?.nickname || mention?.user.tag || "Brak",
-						iconURL: mention?.displayAvatarURL(),
-					},
-					description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${respName}\`\n**Display name**: \`${vehicleName}\``,
-					user: message.author,
 				}),
 			],
 		});

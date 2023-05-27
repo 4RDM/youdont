@@ -1,39 +1,38 @@
 import { join } from "path";
 import { existsSync } from "fs";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { SlashCommandBuilder } from "discord.js";
 
 const path = join(
 	"/home/rdm/server/data/resources/[optymalizacja kurwa]/auta/stream"
 );
 
-export default async function ({ message, args }: CommandArgs) {
-	// prettier-ignore
+// prettier-ignore
+export default async function ({ interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
+	
 	if (!existsSync(path))
-		return message.channel.send({ embeds: [ErrorEmbed(message, "Funkcja niedostępna na tym komputerze!")] });
+		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
-	// prettier-ignore
-	if (!args[0])
-		return message.channel.send({ embeds: [ErrorEmbed(message, "Nie wprowadzono resp-name pojazdu")] });
+	const respName = interaction.options.getString("resp-name", true);
 
-	// prettier-ignore
-	if (!existsSync(join(path, args[0])))
-		return message.channel.send({
+	if (!existsSync(join(path, respName)))
+		return interaction.reply({
 			embeds: [
 				Embed({
 					title: ":x: | Nie znaleziono pojazdu!",
 					color: "#f54242",
-					user: message.author,
+					user: interaction.user,
 				}),
 			],
 		});
 	else
-		return message.channel.send({
+		return interaction.reply({
 			embeds: [
 				Embed({
 					title: ":white_check_mark: | Pojazd jest już na serwerze",
 					color: "#1F8B4C",
-					user: message.author,
+					user: interaction.user,
 				}),
 			],
 		});

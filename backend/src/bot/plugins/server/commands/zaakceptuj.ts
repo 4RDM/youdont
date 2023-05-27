@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, User, WebhookClient } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
 
 export interface Benefit {
@@ -47,60 +47,47 @@ const findClosest = (value: number): Benefit =>
 		return a;
 	});
 
-export default async function ({ client, message, args }: CommandArgs) {
-	if (!args[0] || !args[1])
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(
-					message,
-					"Prawidłowe użycie: `.zaakceptuj <ID> <kwota>`"
-				),
-			],
-		});
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	const donate = await client.Core.database.donates.get(parseInt(args[0]));
+	const id = interaction.options.getInteger("id", true);
+	const amount = interaction.options.getInteger("kwota", true);
+	const donate = await client.Core.database.donates.get(id);
 
 	if (donate && donate.dID && !donate.approved) {
 		const don = await client.Core.database.donates.approve(
 			donate.dID,
-			message.author.tag,
-			args[1]
+			interaction.user.tag,
+			amount.toString()
 		);
 
 		if (!don) return;
 
-		message.channel.send({
+		interaction.reply({
 			content: don.userID,
 			embeds: [
 				Embed({
 					title: "Zaakceptowano wpłatę",
-					description: `Zaakceptowano wpłatę o ID: \`${args[0]}\`, na kwotę: \`${args[1]}zł\``,
+					description: `Zaakceptowano wpłatę o ID: \`${id}\`, na kwotę: \`${amount}zł\`, Osoba dokonująca płatność: \`${interaction.user.id}\``,
 					color: "#1F8B4C",
-					user: message.author,
+					user: interaction.user,
 				}),
 			],
 		});
 
 		const dmUser = await client.users.createDM(donate.userID);
-		const dbUser = await client.Core.database.users.approve(
-			donate.userID,
-			don
-		);
+		const dbUser = await client.Core.database.users.approve(donate.userID, don);
 		const user = await client.users.fetch(dbUser?.userID || "");
-		const webhook = new WebhookClient({
-			url: client.config.donateWebhook,
-		});
+		const webhook = new WebhookClient({ url: client.config.donateWebhook });
 
 		try {
-			await client.guilds.cache
-				.get("843444305149427713")
-				?.members.cache.get(user.id)
-				?.roles.add(findClosest(dbUser?.total || 0).roleID);
+			await client.guilds.cache.get("843444305149427713")?.members.cache.get(user.id)?.roles.add(findClosest(dbUser?.total || 0).roleID);
 		} catch (err) {
 			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
-			message.channel.send(
-				`An error occurred while adding role: \`${err}\`, check console for more details!`
-			);
+			interaction.reply({
+				embeds: [ErrorEmbedInteraction(interaction, `An error occurred while adding role: \`${err}\`, check console for more details!`)]
+			});
 		}
 
 		webhook.send({
@@ -119,25 +106,19 @@ export default async function ({ client, message, args }: CommandArgs) {
 			embeds: [
 				Embed({
 					title: "Donate",
-					description: `Twoja wpłata o ID \`${
-						donate.dID
-					}\` została zaakceptowana przez \`${
-						message.author.tag
-					}\`. Suma wpłaconych donate: \`${
-						dbUser?.total || 0
-					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
+					description: `Twoja wpłata o ID \`${donate.dID}\` została zaakceptowana przez \`${interaction.user.tag}\`. Suma wpłaconych donate: \`${dbUser?.total || 0}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
 					color: "#1F8B4C",
-					user: message.author,
+					user: interaction.user,
 				}),
 			],
 		});
 	} else if (donate && donate.approved) {
-		message.channel.send({
-			embeds: [ErrorEmbed(message, "Wpłata została już zaakceptowana")],
+		interaction.reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Wpłata została już zaakceptowana")],
 		});
 	} else {
-		message.channel.send({
-			embeds: [ErrorEmbed(message, "Nie znaleziono donate")],
+		interaction.reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono donate")],
 		});
 	}
 }

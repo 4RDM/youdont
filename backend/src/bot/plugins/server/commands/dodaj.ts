@@ -1,53 +1,52 @@
 import { SlashCommandBuilder } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
+import { join } from "path";
+import { existsSync } from "fs";
 
-export default async function ({ message, args, client }: CommandArgs) {
-	const mention = message.mentions.users?.first();
+const path = join("/home/rdm/server/data/permisje.cfg");
 
-	if (args.length < 3 || !mention)
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(
-					message,
-					"Prawidłowe użycie: `.dodaj <hex> <ranga> <@ping>`"
-				),
-			],
-		});
+// prettier-ignore
+export default async function ({ interaction, client }: CommandArgs) {
+	if (!existsSync(path))
+		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
-	const msg = await message.channel.send({
+	if (!interaction.isChatInputCommand()) return;
+
+	const mention = interaction.options.getUser("mention", true);
+	const hex = interaction.options.getString("hex", true);
+	const role = interaction.options.getString("role", true);
+
+	const interactionReply = await interaction.reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",
-				user: message.author,
+				user: interaction.user,
 			}),
 		],
 	});
 
 	addFile(
-		`add_principal identifier.steam:${args[0]} group.${args[1]} # ${
-			mention.tag
-		} (${mention.id}) https://steamcommunity.com/profiles/${hexToDec(
-			args[0]
-		)} ${new Date().toLocaleDateString()}`,
-		"/home/rdm/server/data/permisje.cfg"
+		`add_principal identifier.steam:${hex} group.${role} # ${mention.tag} (${mention.id}) https://steamcommunity.com/profiles/${hexToDec(hex)} ${new Date().toLocaleDateString()}`,
+		path
 	)
 		.then(() => {
-			msg.edit({
+			interactionReply.edit({
 				embeds: [
 					Embed({
 						color: "#1F8B4C",
 						description: "**Wysłano!**",
-						user: message.author,
+						user: interaction.user,
 					}),
 				],
 			});
+
 			client.Core.rcon("reload");
 		})
 		.catch(() => {
-			msg.edit({
-				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+			interactionReply.edit({
+				embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia")],
 			});
 		});
 }

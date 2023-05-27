@@ -1,31 +1,32 @@
 import { SlashCommandBuilder } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ client, message }: CommandArgs) {
-	const msg = await message.channel.send({
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
+	const inter = await interaction.reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",
-				user: message.author,
+				user: interaction.user,
 			}),
 		],
 	});
 
 	client.Core.rcon("exec permisje.cfg")
 		.then(() => {
-			msg.edit({
+			inter.edit({
 				embeds: [
 					Embed({
 						color: "#1F8B4C",
 						description: "**Wysłano!**",
-						user: message.author,
+						user: interaction.user,
 					}),
 				],
 			});
 		})
 		.catch(() => {
-			msg.edit({
-				embeds: [ErrorEmbed(message, "Nie udało się wysłać polecenia")],
+			inter.edit({
+				embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia")],
 			});
 		});
 }

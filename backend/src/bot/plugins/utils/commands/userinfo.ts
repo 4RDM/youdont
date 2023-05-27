@@ -1,11 +1,10 @@
-import { SlashCommandBuilder } from "discord.js";
+import { GuildMember, SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
-export default async function ({ message }: CommandArgs) {
-	const user = message.mentions.members?.first() || message.member;
-	if (!user) return;
+export default async function ({ interaction }: CommandArgs) {
+	const user = interaction.options.getMember("mention") as GuildMember | null;
 
-	await user.user.fetch(true);
+	if (!user) return;
 
 	const embed = Embed({
 		title: user.nickname || user.user.tag,
@@ -51,10 +50,10 @@ export default async function ({ message }: CommandArgs) {
 				extension: "png",
 			}) || "",
 		thumbnail: user.displayAvatarURL({ forceStatic: false }),
-		user: message.author,
+		user: interaction.user,
 	});
 
-	message.channel.send({ embeds: [embed] });
+	interaction.reply({ embeds: [embed] });
 }
 
 export const info: CommandInfo = {

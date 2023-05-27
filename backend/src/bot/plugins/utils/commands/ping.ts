@@ -1,16 +1,15 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
-export default async function ({ client, message }: CommandArgs) {
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
 	const embed = Embed({
 		title: "Ping bota",
-		description: `\`\`\`API: ${Math.floor(client.ws.ping)}ms\nWiadomość: ${
-			Date.now() - message.createdTimestamp
-		}ms\`\`\``,
-		user: message.author,
+		description: `\`\`\`API: ${Math.floor(client.ws.ping)}ms\nWiadomość: ${Date.now() - interaction.createdTimestamp}ms\`\`\``,
+		user: interaction.user,
 	});
 
-	message.channel.send({ embeds: [embed] });
+	interaction.reply({ embeds: [embed] });
 }
 
 export const info: CommandInfo = {

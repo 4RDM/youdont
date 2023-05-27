@@ -1,32 +1,80 @@
 import { SlashCommandBuilder } from "discord.js";
-import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ message, args, client }: CommandArgs) {
-	const member = message.mentions.members?.first();
+export default async function ({ interaction, client }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
 
-	if (!member)
-		return message.channel.send({
+	const subcommand = interaction.options.getSubcommand();
+
+	if (subcommand === "dodaj") {
+		const mention = interaction.options.getUser("mention", true);
+		const content = interaction.options.getString("content", true);
+		const dbUser = await client.Core.database.users.get(mention.id);
+
+		if (!dbUser)
+			return interaction.reply({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Nieznaleziono użytkownika w bazie danych!"
+					),
+				],
+			});
+
+		// prettier-ignore
+		const notatka = {
+			id: (parseInt(dbUser.notatki[dbUser.notatki.length - 1]?.id || "0") + 1).toString(),
+			content,
+			authorID: interaction.user.id,
+			date: Math.floor(Date.now() / 1000),
+		};
+
+		dbUser.notatki.push(notatka);
+		await dbUser.save();
+
+		interaction.reply({
 			embeds: [
-				ErrorEmbed(
-					message,
-					"Prawidłowe użycie: `.notatka <użytkownik> [dodaj/usun] <dodaj:tresc notatki/usun:id notatki>`"
-				),
+				Embed({
+					title: ":pencil: | Dodano notatkę!",
+					color: "#1F8B4C",
+					user: interaction.user,
+				}),
 			],
 		});
+	} else if (subcommand === "usun") {
+		const mention = interaction.options.getUser("mention", true);
+		const id = interaction.options.getInteger("id", true);
+		const dbUser = await client.Core.database.users.get(mention.id);
 
-	const dbUser = await client.Core.database.users.get(member.id);
+		if (!dbUser)
+			return interaction.reply({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Nieznaleziono użytkownika w bazie danych!"
+					),
+				],
+			});
 
-	if (!dbUser)
-		return message.channel.send({
-			embeds: [
-				ErrorEmbed(
-					message,
-					"Nieznaleziono użytkownika w bazie danych!"
-				),
-			],
-		});
+		// prettier-ignore
+		const notatka = dbUser?.notatki.find(x => x.id.toString() === id.toString());
 
-	if (args.length < 2) {
+		if (!notatka)
+			return interaction.reply({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Nie znaleziono notatki"
+					),
+				],
+			});
+
+		// prettier-ignore
+		const notatki = dbUser?.notatki.filter(x => x.id.toString() !== id.toString());
+
+		dbUser.notatki = notatki;
+		await dbUser.save();
+
 		const description: string[] = [];
 
 		// prettier-ignore
@@ -34,138 +82,92 @@ export default async function ({ message, args, client }: CommandArgs) {
 			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
 		});
 
-		message.channel.send({
+		interaction.reply({
+			embeds: [
+				Embed({
+					title: ":coffin: | Usunięto notatke!",
+					color: "#f54242",
+					user: interaction.user,
+					description: `Pozostałe notatki:\n${description.join(
+						"\n"
+					)}`,
+				}),
+			],
+		});
+	} else if (subcommand === "lista") {
+		const mention = interaction.options.getUser("mention", true);
+		const dbUser = await client.Core.database.users.get(mention.id);
+
+		if (!dbUser)
+			return interaction.reply({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Nieznaleziono użytkownika w bazie danych!"
+					),
+				],
+			});
+
+		const description: string[] = [];
+
+		// prettier-ignore
+		dbUser.notatki.forEach((notatka) => {
+			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
+		});
+
+		interaction.reply({
 			embeds: [
 				Embed({
 					author: {
-						name: member.nickname || member.user.tag,
-						iconURL: member.displayAvatarURL(),
+						name: mention.tag,
+						iconURL: mention.displayAvatarURL(),
 					},
-					user: message.author,
+					user: interaction.user,
 					title: "Notatki dla użytkownika",
 					description: description.join("\n"),
 				}),
 			],
 		});
-	} else {
-		// prettier-ignore
-		if (!["dodaj", "add", "usun", "usuń", "remove"].includes(args[1].toLowerCase())) {
-			const id = args[1];
+	} else if (subcommand === "wyswietl") {
+		const mention = interaction.options.getUser("mention", true);
+		const id = interaction.options.getInteger("id", true);
+		const dbUser = await client.Core.database.users.get(mention.id);
 
-			if (isNaN(parseInt(id)))
-				return message.channel.send({
-					embeds: [ErrorEmbed(message, "ID notatki nie może być puste")],
-				});
-
-			const notatka = dbUser?.notatki.find((x) => x.id == id);
-
-			if (!notatka)
-				return message.channel.send({
-					embeds: [
-						ErrorEmbed(
-							message,
-							`Nie znaleziono notatki od id ${id || "brak"}`
-						),
-					],
-				});
-
-			message.channel.send({
+		if (!dbUser)
+			return interaction.reply({
 				embeds: [
-					Embed({
-						author: {
-							name: member.nickname || member.user.tag,
-							iconURL: member.displayAvatarURL(),
-						},
-						user: message.author,
-						title: `Notatka #${notatka.id}`,
-						description: `\`\`\`${notatka.content}\`\`\``,
-					}),
+					ErrorEmbedInteraction(
+						interaction,
+						"Nieznaleziono użytkownika w bazie danych!"
+					),
 				],
 			});
 
-			return;
-		}
+		const notatka = dbUser.notatki.find(x => x.id == id.toString());
 
-		if (["dodaj", "add"].includes(args[1].toLowerCase())) {
-			const content = args.slice(2).join(" ");
-
-			if (content.length < 2)
-				return message.channel.send({
-					embeds: [
-						ErrorEmbed(
-							message,
-							"Notatka nie może mieć mniej niż 2 znaki"
-						),
-					],
-				});
-
-			// prettier-ignore
-			const notatka = {
-				id: (parseInt(dbUser.notatki[dbUser.notatki.length - 1]?.id || "0") + 1).toString(),
-				content,
-				authorID: message.author.id,
-				date: Math.floor(Date.now() / 1000),
-			};
-
-			dbUser?.notatki.push(notatka);
-			await dbUser?.save();
-
-			message.channel.send({
+		if (!notatka)
+			return interaction.reply({
 				embeds: [
-					Embed({
-						title: ":pencil: | Dodano notatkę!",
-						color: "#1F8B4C",
-						user: message.author,
-					}),
+					ErrorEmbedInteraction(
+						interaction,
+						`Nie znaleziono notatki od id ${id || "brak"}`
+					),
 				],
 			});
-		} else if (["usun", "usuń", "remove"].includes(args[1].toLowerCase())) {
-			const id = parseInt(args[2]);
 
-			if (isNaN(id))
-				return message.channel.send({
-					embeds: [
-						ErrorEmbed(
-							message,
-							"ID notatki do usunięcia nie może być puste"
-						),
-					],
-				});
-
-			// prettier-ignore
-			const notatka = dbUser?.notatki.find(x => x.id.toString() === id.toString());
-
-			if (!notatka)
-				return message.channel.send({
-					embeds: [ErrorEmbed(message, "Nie znaleziono notatki")],
-				});
-
-			// prettier-ignore
-			const notatki = dbUser?.notatki.filter(x => x.id.toString() !== id.toString());
-
-			dbUser.notatki = notatki;
-			await dbUser.save();
-
-			const description: string[] = [];
-
-			// prettier-ignore
-			dbUser?.notatki.forEach((notatka) => {
-				description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
-			});
-
-			message.channel.send({
-				embeds: [
-					Embed({
-						title: ":coffin: | Usunięto notatke!",
-						color: "#f54242",
-						user: message.author,
-						description: `Pozostałe notatki:\n${description.join(
-							"\n"
-						)}`,
-					}),
-				],
-			});
-		}
+		interaction.reply({
+			embeds: [
+				Embed({
+					author: {
+						name: mention.tag,
+						iconURL: mention.displayAvatarURL(),
+					},
+					user: interaction.user,
+					title: `Notatka #${notatka.id}`,
+					description: `\`\`\`${notatka.content}\`\`\``,
+				}),
+			],
+		});
 	}
 }
 
@@ -189,6 +191,8 @@ export const info: CommandInfo = {
 						.setName("content")
 						.setDescription("Treść notatki")
 						.setRequired(true)
+						.setMinLength(2)
+						.setMaxLength(500)
 				)
 		)
 		.addSubcommand(subcommand =>
@@ -216,6 +220,23 @@ export const info: CommandInfo = {
 					option
 						.setName("mention")
 						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+		)
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName("wyswietl")
+				.setDescription("Wyswietl notatkę")
+				.addUserOption(option =>
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
+				)
+				.addIntegerOption(option =>
+					option
+						.setName("id")
+						.setDescription("ID notatki")
 						.setRequired(true)
 				)
 		)

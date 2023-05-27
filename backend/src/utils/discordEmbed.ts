@@ -5,6 +5,8 @@ import {
 	Message,
 	EmbedBuilder,
 	User,
+	Interaction,
+	CommandInteraction,
 } from "discord.js";
 
 export interface EmbedStructure {
@@ -61,4 +63,15 @@ export const ErrorEmbed = (message: Message, reason: string) =>
 			.join("\n")}\n\n**${reason}**`,
 		color: "#f54242",
 		user: message.author,
+	});
+
+export const ErrorEmbedInteraction = (
+	interaction: CommandInteraction,
+	reason: string
+) =>
+	Embed({
+		title: "Błąd",
+		description: `**${reason}**`,
+		color: "#f54242",
+		user: interaction.user,
 	});
