@@ -249,7 +249,7 @@ export const info: CommandInfo = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("lista")
-				.setDescription("Lista współdzielonych aut")
+				.setDescription("Lista limitek gracza")
 				.addUserOption(option =>
 					option
 						.setName("mention")
