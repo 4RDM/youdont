@@ -23,17 +23,22 @@ export default class Handler {
 			const { name, description, id } = JSON.parse(configContent.toString());
 			const commands: Command[] = [];
 			let hasErrored = false;
-
+			let hasErrored2 = false;
+			
 			for (const commandName of commandsFolder) {
+				hasErrored = false;
+
 				const file = await import(join(pluginPath, "commands", commandName));
 
 				if (!file.info) {
 					hasErrored = true;
+					hasErrored2 = true;
 					logger.error(`Could not load the command ${commandName}, the info export is missing`);
 				}
 
 				if (!file.default) {
 					hasErrored = true;
+					hasErrored2 = true;
 					logger.error(`Could not load the command ${commandName}, the default export is missing`);
 				}
 
@@ -42,7 +47,7 @@ export default class Handler {
 				commands.push({ info: file.info, execute: file.default });
 			}
 
-			if (hasErrored) logger.warn(`Some commands were not loaded in plugin "${name}" due to an error`);
+			if (hasErrored2) logger.warn(`Some commands were not loaded in plugin "${name}" due to an error`);
 
 			logger.log(`Loaded ${id} plugin`);
 			this.plugins.push({ name, description, id, commands });
