@@ -6,6 +6,8 @@ import { Embed } from "../../utils/discordEmbed";
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
+	if (process.env.NODE_ENV !== "production") return;
+
 	const stats = await getTops(client.Core);
 	if (!stats)
 		return client.logger.error("Cannot estabilish first connection with FiveM");
