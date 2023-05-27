@@ -12,7 +12,7 @@ export default async function ({ client }: { client: ClientType }) {
 	if (!stats)
 		return client.logger.error("Cannot estabilish first connection with FiveM");
 
-	const statsChannel = await client.channels.fetch(client.config.discord.statsChannel);
+	const statsChannel = await client.channels.fetch(client.config.discord.statsChannel, { force: true });
 	if (!statsChannel || !statsChannel.isTextBased())
 		return client.logger.error("Stats channel is not text based or not found");
 
@@ -28,9 +28,9 @@ export default async function ({ client }: { client: ClientType }) {
 			return;
 		}
 
-		const killTopMessage = await statsChannel?.messages.fetch(client.config.discord.killMessage);
-		const deathsTopMessage = await statsChannel?.messages.fetch(client.config.discord.deathsMessage);
-		const kdrTopMessage = await statsChannel?.messages.fetch(client.config.discord.kdrMessage);
+		const killTopMessage = await statsChannel.messages.fetch(client.config.discord.killMessage);
+		const deathsTopMessage = await statsChannel.messages.fetch(client.config.discord.deathsMessage);
+		const kdrTopMessage = await statsChannel.messages.fetch(client.config.discord.kdrMessage);
 
 		if (!killTopMessage) {
 			clearInterval(statsInterval);
@@ -43,17 +43,17 @@ export default async function ({ client }: { client: ClientType }) {
 			return client.logger.error("KDR top message not found");
 		}
 
-		killTopMessage.edit({
+		statsChannel.messages.edit(killTopMessage, {
 			embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka killi", description: stats.kills.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} killi)`).join("\n") })],
 			content: "",
 		}).catch((err) => client.logger.error(`Error occured while edditing kill message: ${err} (src/bot/events/ready.event.ts)`));
 
-		deathsTopMessage.edit({
+		statsChannel.messages.edit(deathsTopMessage, {
 			embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka śmierci", description: stats.deaths.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} śmierci)`).join("\n") })],
 			content: "",
 		}).catch((err) => client.logger.error(`Error occured while edditing death message: ${err} (src/bot/events/ready.event.ts)`));
 
-		kdrTopMessage.edit({
+		statsChannel.messages.edit(kdrTopMessage, {
 			embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka KDR", description: stats.kdr.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} kdr)`).join("\n") })],
 			content: "",
 		}).catch((err) => client.logger.error(`Error occured while edditing kdr message: ${err} (src/bot/events/ready.event.ts)`));
