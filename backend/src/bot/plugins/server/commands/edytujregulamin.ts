@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { ChannelType, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbed } from "../../../../utils/discordEmbed";
 
 export default async function ({ message, args }: CommandArgs) {
@@ -81,6 +81,7 @@ export const info: CommandInfo = {
 	builder: new SlashCommandBuilder()
 		.addChannelOption(option =>
 			option
+				.addChannelTypes(ChannelType.GuildText)
 				.setName("channel")
 				.setDescription("Kanał, w którym znajduje się wiadomość")
 				.setRequired(true)
