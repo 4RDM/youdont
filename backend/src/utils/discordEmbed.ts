@@ -5,7 +5,6 @@ import {
 	Message,
 	EmbedBuilder,
 	User,
-	Interaction,
 	CommandInteraction,
 } from "discord.js";
 

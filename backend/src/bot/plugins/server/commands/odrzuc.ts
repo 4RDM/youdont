@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, User } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 export default async function ({ client, interaction }: CommandArgs) {
