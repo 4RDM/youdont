@@ -170,13 +170,23 @@ export default async function ({
 						)).send(
 					`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
 				);
+			} else {
+				message.channel.send({
+					embeds: [
+						Embed({
+							title: "Donate",
+							description: "Dostępne metody wpłat: `tipply`, `paypal`, `psc`",
+							color: "#ffffff",
+							user: message.author,
+						}),
+					],
+				});
 			}
 
 			return;
 		}
 
-		if (commandName == "help") return; 
-		message.channel.send("Dostępne komendy: `donate`");
+		if (commandName == "help") return message.channel.send("Dostępne komendy: `donate`");
 
 		message.channel.send({
 			embeds: [
