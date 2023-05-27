@@ -179,10 +179,16 @@ export const info: CommandInfo = {
 				.setName("dodaj")
 				.setDescription("Dodaj notatkę")
 				.addUserOption(option =>
-					option.setName("mention").setDescription("Użytkownik")
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
 				)
 				.addStringOption(option =>
-					option.setName("content").setDescription("Treść notatki")
+					option
+						.setName("content")
+						.setDescription("Treść notatki")
+						.setRequired(true)
 				)
 		)
 		.addSubcommand(subcommand =>
@@ -190,10 +196,16 @@ export const info: CommandInfo = {
 				.setName("usun")
 				.setDescription("Usuń notatkę")
 				.addUserOption(option =>
-					option.setName("mention").setDescription("Użytkownik")
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
 				)
 				.addIntegerOption(option =>
-					option.setName("id").setDescription("ID notatki")
+					option
+						.setName("id")
+						.setDescription("ID notatki")
+						.setRequired(true)
 				)
 		)
 		.addSubcommand(subcommand =>
@@ -201,7 +213,10 @@ export const info: CommandInfo = {
 				.setName("lista")
 				.setDescription("Lista notatek")
 				.addUserOption(option =>
-					option.setName("mention").setDescription("Użytkownik")
+					option
+						.setName("mention")
+						.setDescription("Użytkownik")
+						.setRequired(true)
 				)
 		)
 		.setName("notatka"),
