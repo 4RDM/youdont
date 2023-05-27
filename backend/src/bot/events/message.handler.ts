@@ -86,18 +86,7 @@ export default async function ({
 	}
 
 	// prettier-ignore
-	if (message.guild) {
-		const [commandName, ...args] = message.content
-			.slice(client.config.discord.prefix.length)
-			.split(/ +/g);
-		const command = client.CommandHandler.get(commandName);
-
-		if (command) {
-			if ((command.info.role && message.member?.roles.cache.has(command.info.role)) || message.member?.permissions.has(command.info.permissions || []))
-				command.execute({ client, message, args });
-			else message.react("❌");
-		}
-	} else {
+	if (!message.guild) {
 		const content = message.content.split("\n");
 		const [commandName, ...args] = message.content.split(/ +/g);
 
@@ -170,6 +159,17 @@ export default async function ({
 						)).send(
 					`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
 				);
+
+				message.channel.send({
+					embeds: [
+						Embed({
+							title: "Donate",
+							description: "Wysłano kod do administracji!\nWeryfikacja kodu w dni wolne może trwać dłużej niż zazwyczaj.",
+							color: "#ffffff",
+							user: message.author,
+						}),
+					],
+				});
 			} else {
 				message.channel.send({
 					embeds: [
