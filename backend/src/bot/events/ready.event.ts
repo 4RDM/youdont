@@ -10,8 +10,8 @@ export default async function ({ client }: { client: ClientType }) {
 	if (!stats)
 		return client.logger.error("Cannot estabilish first connection with FiveM");
 
-	const statsChannel = client.channels.cache.get(client.config.discord.statsChannel);
-	if (!statsChannel?.isTextBased() || !statsChannel)
+	const statsChannel = await client.channels.fetch(client.config.discord.statsChannel);
+	if (!statsChannel || !statsChannel.isTextBased())
 		return client.logger.error("Stats channel is not text based or not found");
 
 	const reloadStats = async () => {
