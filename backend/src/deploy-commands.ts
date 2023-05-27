@@ -36,7 +36,9 @@ setTimeout(() => {
 			);
 
 			logger.ready(
-				`Successfully registered ${data} application commands.`
+				`Successfully registered ${
+					(data as []).length
+				} application commands.`
 			);
 		} catch (error) {
 			logger.error(error);
