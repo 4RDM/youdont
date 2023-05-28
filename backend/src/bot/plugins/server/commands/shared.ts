@@ -130,7 +130,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			const identifiers: { identifier: string }[] = userHexes;
 			let awaitedMessage;
 
-			interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 		
 			try {
 				awaitedMessage = await awaitMessage(interaction);
@@ -163,20 +163,19 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
 
-		return interaction.reply({
-			embeds: [
-				Embed({
-					title: ":x: | Usunięto auto współdzielone!",
-					color: "#f54242",
-					author: {
-						name: mention.tag,
-						iconURL: mention.displayAvatarURL(),
-					},
-					description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\``,
-					user: interaction.user,
-				}),
-			],
+		const embed = Embed({
+			title: ":x: | Usunięto auto współdzielone!",
+			color: "#f54242",
+			author: {
+				name: mention.tag,
+				iconURL: mention.displayAvatarURL(),
+			},
+			description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\``,
+			user: interaction.user,
 		});
+
+		if (reply) interaction.followUp({ embeds: [embed] });
+		else interaction.reply({ embeds: [embed] });
 	} else if (subcommand === "lista") {
 		const mention = interaction.options.getUser("mention", true);
 
