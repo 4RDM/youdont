@@ -9,36 +9,23 @@ const reloadStats = async (client: ClientType, statsChannel: TextChannel) => {
 	if (!stats)
 		return client.logger.error("Cannot estabilish connection with database");
 
-	const killTopMessage = await statsChannel.messages.fetch(client.config.discord.killMessage);
-	const deathsTopMessage = await statsChannel.messages.fetch(client.config.discord.deathsMessage);
-	const kdrTopMessage = await statsChannel.messages.fetch(client.config.discord.kdrMessage);
+	const topsMessage = await statsChannel.messages.fetch(client.config.discord.topsMessage);
+	if (!topsMessage)
+		return client.logger.error("Tops message not found");
 
-	if (!killTopMessage)
-		return client.logger.error("Kill top message not found");
-	else if (!deathsTopMessage)
-		return client.logger.error("Deaths top message not found");
-	else if (!kdrTopMessage)
-		return client.logger.error("KDR top message not found");
-
-	statsChannel.messages.edit(killTopMessage, {
-		embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka killi", description: stats.kills.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} killi)`).join("\n") })],
+	const killEmbed = Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka killi", description: stats.kills.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} killi)`).join("\n") });
+	const deathsEmbed = Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka śmierci", description: stats.deaths.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} śmierci)`).join("\n") });
+	const kdrEmbed = Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka KDR", description: stats.kdr.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} kdr)`).join("\n") });
+	
+	statsChannel.messages.edit(topsMessage, {
+		embeds: [killEmbed, deathsEmbed, kdrEmbed],
 		content: "",
-	}).catch((err) => client.logger.error(`Error occured while edditing kill message: ${err} (src/bot/events/ready.event.ts)`));
-
-	statsChannel.messages.edit(deathsTopMessage, {
-		embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka śmierci", description: stats.deaths.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} śmierci)`).join("\n") })],
-		content: "",
-	}).catch((err) => client.logger.error(`Error occured while edditing death message: ${err} (src/bot/events/ready.event.ts)`));
-
-	statsChannel.messages.edit(kdrTopMessage, {
-		embeds: [Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka KDR", description: stats.kdr.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} kdr)`).join("\n") })],
-		content: "",
-	}).catch((err) => client.logger.error(`Error occured while edditing kdr message: ${err} (src/bot/events/ready.event.ts)`));
+	}).catch((err) => client.logger.error(`Error occured while edditing stats message: ${err} (src/bot/events/ready.event.ts)`));
 };
 
 // prettier-ignore
 const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
-	const statusMessage = await statusChannel?.messages.fetch(client.config.discord.statusMessage);
+	const statusMessage = await statusChannel.messages.fetch(client.config.discord.statusMessage);
 	if (!statusMessage)
 		return client.logger.error("Status message not found");
 
@@ -74,8 +61,8 @@ const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
-	if (process.env.NODE_ENV !== "production")
-		return client.logger.warn("Bot is running in development mode!");
+	// if (process.env.NODE_ENV !== "production")
+	// 	return client.logger.warn("Bot is running in development mode!");
 
 	const statsChannel = await client.channels.fetch(client.config.discord.statsChannel, { force: true });
 	if (statsChannel && statsChannel.isTextBased()) setInterval(() => reloadStats(client, statsChannel as TextChannel), 12000);
