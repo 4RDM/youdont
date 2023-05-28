@@ -132,8 +132,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 		}
 
 		const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
-		if (index == -1)
-			return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, `Nie znaleziono aut współdzielonych o nazwie \`${spawnName}\`!`)] });
+		if (index == -1) {
+			const embed = ErrorEmbedInteraction(interaction, `Nie znaleziono limitki o nazwie \`${spawnName}\`!`);
+
+			if (reply) return interaction.followUp({ embeds: [embed] });
+			else return interaction.reply({ embeds: [embed] });
+		}
 
 		userJson[currentHex].splice(index, 1);
 
