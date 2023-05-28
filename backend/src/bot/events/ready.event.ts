@@ -6,7 +6,8 @@ import { Embed } from "../../utils/discordEmbed";
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
-	if (process.env.NODE_ENV !== "production") return;
+	if (process.env.NODE_ENV !== "production")
+		return client.logger.warn("Bot is running in development mode!");
 
 	const stats = await getTops(client.Core);
 	if (!stats)
