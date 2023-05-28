@@ -1,5 +1,6 @@
 import { GuildMemberRoleManager, Interaction } from "discord.js";
 
+// prettier-ignore
 export default async function ({
 	client,
 	props,
@@ -13,7 +14,6 @@ export default async function ({
 
 	const command = client.CommandHandler.get(interaction.commandName);
 
-	// prettier-ignore
 	if (command) {
 		if ((command.info.role && (interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role)) || interaction.memberPermissions.has(command.info.permissions || []))
 			command.execute({ client, interaction });
@@ -23,12 +23,6 @@ export default async function ({
 				ephemeral: true,
 			});
 	}
-
-	// const command = client.CommandHandler.get(interaction.commandName);
-
-	// if (command) {
-	// 	command.execute({ client, interaction });
-	// }
 }
 
 export const info: EventInfo = {
