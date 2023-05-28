@@ -68,7 +68,7 @@ export const info: CommandInfo = {
 		)
 		.addUserOption(option =>
 			option
-				.setName("user")
+				.setName("mention")
 				.setDescription("Użytkownik")
 				.setRequired(true)
 		)
