@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  discordID String    @id @unique
+  donates   Donate[]
+  notatki   Notatka[]
+  total     Int       @default(0)
+}
+
+model Notatka {
+  id        Int      @id @unique @default(autoincrement())
+  user      User     @relation(fields: [discordID], references: [discordID])
+  discordID String
+  notatkaID Int      @default(1)
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Donate {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [discordID], references: [discordID])
+  discordID String
+  amount    Int
+  approved  Boolean  @default(false)
+  approver  String?
+  type      String
+  createdAt DateTime @default(now())
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
