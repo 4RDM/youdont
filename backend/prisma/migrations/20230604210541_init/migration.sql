@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `notatka` MODIFY `notatkaID` INTEGER NOT NULL DEFAULT 1;

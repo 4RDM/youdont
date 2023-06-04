@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
-import { Core } from "../../core";
-import logger from "../../utils/logger";
+import { Core } from "../../../core";
+import logger from "../../../utils/logger";
 
 export interface Donate {
 	dID?: number;

@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-import { Core } from "../core";
-import config from "../config";
-import logger from "../utils/logger";
-import { UsersManager } from "./managers/users.manager";
-import { DonatesManager } from "./managers/donates.manager";
-import { ShortsManager } from "./managers/shorts.manager";
-import { PlayerDataManager } from "./managers/PlayerData.manager";
-import { ArticleManager } from "./managers/articles.manager";
+import { Core } from "../../../core";
+import config from "../../../config";
+import logger from "../../../utils/logger";
+import { UsersManager } from "./users.manager";
+import { DonatesManager } from "./donates.manager";
+import { ShortsManager } from "./shorts.manager";
+import { PlayerDataManager } from "./PlayerData.manager";
+import { ArticleManager } from "./articles.manager";
 import mariadb from "mariadb";
 
 export default class Database {

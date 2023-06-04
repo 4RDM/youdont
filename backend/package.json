@@ -11,6 +11,7 @@
 		"prod-linux": "export NODE_ENV=production && /bin/env ts-node src/index.ts"
 	},
 	"dependencies": {
+		"@prisma/client": "^4.15.0",
 		"bufferutil": "^4.0.6",
 		"chalk": "4.1.0",
 		"compression": "^1.7.4",

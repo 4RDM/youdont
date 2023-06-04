@@ -1,7 +1,7 @@
 import { model, Schema, Document } from "mongoose";
 import { Donate } from "./donates.manager";
-import Database from "../database";
-import logger from "../../utils/logger";
+import Database from "./database";
+import logger from "../../../utils/logger";
 
 type DBUser = null | IUser;
 
