@@ -2,8 +2,6 @@ import { Message, TextChannel } from "discord.js";
 import { checkMessage } from "../handlers/automoderator.handler";
 import { Embed, ErrorEmbed } from "../../utils/discordEmbed";
 import { isSimilar } from "../../utils/isSimilar";
-import { Users } from "../../database/managers/users";
-import { Notatki } from "../../database/managers/notatka";
 
 const wordlist = [
 	{
@@ -76,52 +74,68 @@ export default async function ({
 
 	client.Core.database.users.createIfNotExists(message.author.id);
 
-	if (commandName == "test") {
-		const users = new Users(client.Core);
-		const use = await users.createIfNotExists(message.author.id);
-		console.log(use);
-	}
+	// if (commandName == "test") {
+	// 	const users = new Users(client.Core);
+	// 	const use = await users.createIfNotExists(message.author.id);
+	// 	console.log(use);
+	// }
 
-	if (commandName == "test2") {
-		const notatki = new Notatki(client.Core);
-		const notatka = await notatki.create({
-			discordID: message.author.id,
-			content: "test",
-		});
+	// if (commandName == "test2") {
+	// 	const notatki = new Notatki(client.Core);
+	// 	const notatka = await notatki.create({
+	// 		discordID: message.author.id,
+	// 		authorID: message.author.id,
+	// 		content: "test",
+	// 	});
 
-		console.log(notatka);
-	}
+	// 	console.log(notatka);
+	// }
 
-	if (commandName == "test3") {
-		const notatki = new Notatki(client.Core);
-		const notatka = await notatki.delete(
-			message.author.id,
-			parseInt(args[0])
-		);
-		console.log(notatka);
-	}
+	// if (commandName == "test3") {
+	// 	const notatki = new Notatki(client.Core);
+	// 	const notatka = await notatki.delete(
+	// 		message.author.id,
+	// 		parseInt(args[0])
+	// 	);
+	// 	console.log(notatka);
+	// }
 
-	if (commandName == "test4") {
-		const notatki = new Notatki(client.Core);
+	// if (commandName == "test4") {
+	// 	const notatki = new Notatki(client.Core);
 
-		const uzyszkodnik = await client.Core.database.users.get(
-			message.author.id
-		);
+	// 	const uzyszkodnik = await client.Core.database.users.get(
+	// 		message.author.id
+	// 	);
 
-		if (!uzyszkodnik) return;
+	// 	if (!uzyszkodnik) return;
 
-		// go through all notes and create prisma model for them
+	// 	// go through all notes and create prisma model for them
 
-		for (const notatka of uzyszkodnik.notatki) {
-			console.log(notatka);
-			const res = await notatki.create({
-				discordID: message.author.id,
-				content: notatka.content,
-				createdAt: new Date(notatka.date * 1000),
-			});
-			console.log(res);
-		}
-	}
+	// 	const users = await client.Core.database.users.getAll();
+
+	// 	for (const user of users) {
+	// 		const users = new Users(client.Core);
+	// 		const use = await users.createIfNotExists(user.userID);
+
+	// 		console.log(use);
+
+	// 		for (const notatka of user.notatki) {
+	// 			if (!notatka.authorID || !notatka.date || !user.userID)
+	// 				continue;
+	// 			console.log(notatka);
+	// 			const res = await notatki.create({
+	// 				discordID: user.userID,
+	// 				content: notatka.content,
+	// 				authorID: notatka.authorID,
+	// 				createdAt: new Date(notatka.date * 1000),
+	// 			});
+	// 			console.log(res);
+	// 			console.log("=".repeat(20));
+	// 		}
+	// 	}
+
+	// 	console.log("imported " + users.length + " users");
+	// }
 
 	if (
 		!message.content.startsWith(client.config.discord.prefix) &&

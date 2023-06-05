@@ -7,5 +7,21 @@
 			"path": "frontend"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"sqltools.connections": [
+			{
+				"mysqlOptions": {
+					"authProtocol": "default"
+				},
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 3306,
+				"driver": "MySQL",
+				"name": "rdmbot",
+				"database": "rdmbot",
+				"username": "root",
+				"password": ""
+			}
+		]
+	}
 }

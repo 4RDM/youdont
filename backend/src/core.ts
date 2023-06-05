@@ -1,7 +1,7 @@
 import { Client } from "./bot/main";
 import RCON from "./utils/rcon";
-import Database from "./database/managers/mariadb/database";
-import { Database as Database2 } from "./database/managers/database";
+import Database from "./database/managers/przed-mariadb/database";
+import { DatabaseCore as Database2 } from "./database/managers/database";
 import HTTP from "./http/http";
 
 import dotenv from "dotenv";
@@ -37,8 +37,8 @@ export class Core {
 		if (!options?.disableHTTP) this.httpServer = new HTTP(this);
 		else this.httpServer = null;
 
-		this.databaseBeta = new Database2(this);
 		this.database = new Database(this);
+		this.databaseBeta = new Database2(this);
 		this.bot = new Client(this, {
 			intents: [
 				GatewayIntentBits.MessageContent,

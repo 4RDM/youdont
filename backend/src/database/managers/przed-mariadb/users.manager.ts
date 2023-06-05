@@ -56,6 +56,11 @@ export class UsersManager {
 		return user;
 	}
 
+	async getAll(): Promise<UUser[]> {
+		const users = await UserModel.find();
+		return users;
+	}
+
 	async approve(userID: string, donate: Donate): Promise<UUser | null> {
 		let user = await UserModel.findOne({ userID });
 		if (!user) return null;

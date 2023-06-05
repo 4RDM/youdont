@@ -1,48 +1,54 @@
-import { PrismaClient } from "@prisma/client";
-import type { User } from "@prisma/client";
-import { Core } from "../../core";
+import { DatabaseCore } from "./database";
 
-const prisma = new PrismaClient();
+export interface UserDatabaseResult {
+	[k: number]: {
+		discordID: string;
+		total: number;
+		createdAt: Date;
+	};
+	meta: unknown;
+}
 
-export class Users {
-	constructor(private core: Core) {}
+// prettier-ignore
+export class UsersManager {
+	constructor(private databaseCore: DatabaseCore) {}
 
 	async get(discordID: string) {
-		const user = await prisma.user.findUnique({
-			where: { discordID },
-			include: { notatki: true, donates: true },
-		});
-		return user;
+		try {
+			const user: (UserDatabaseResult | null) = await this.databaseCore.botpool.query("SELECT * FROM users WHERE discordID = ?", [discordID]);
+
+			if (!user) return null;
+
+			delete user["meta"];
+
+			const donates = (await this.databaseCore.donates.getAll(discordID)) || [];
+			const notes = (await this.databaseCore.notes.getAll(discordID)) || [];
+
+			if (!user[0]) return null;
+
+			const finalUser = Object.assign({ donates: [], notes: [] }, { ...user[0], donates, notes });
+
+			return finalUser;
+		} catch (err) {
+			this.databaseCore.core.bot.logger.error(`UsersSQL Error: ${err}`);
+
+			return null;
+		}
 	}
 
-	async create(discordID: string) {
-		const document = await prisma.user.create({
-			data: { discordID },
-			include: { donates: true, notatki: true },
-		});
-		return document;
-	}
+	async create(discordID: string, total?: number) {
+		try {
+			const user = await this.get(discordID);
 
-	async createIfNotExists(discordID: string) {
-		let user = await this.get(discordID);
+			if (user) return user;
 
-		if (user) return user;
-		else user = await this.create(discordID);
+			await this.databaseCore.botpool.query("INSERT INTO users (discordID, total) VALUES (?, ?)", [discordID, total || 0]);
 
-		return user;
-	}
+			return await this.get(discordID);
+		} catch (err) {
+			this.databaseCore.core.bot.logger.error(`UsersSQL Error: ${err}`);
 
-	async update(discordID: string, data: Partial<User>) {
-		const user = await prisma.user.update({
-			where: {
-				discordID,
-			},
-			include: {
-				donates: true,
-				notatki: true,
-			},
-			data,
-		});
-		return user;
+			return null;
+		}
 	}
 }

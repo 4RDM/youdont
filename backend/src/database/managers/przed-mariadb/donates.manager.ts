@@ -41,6 +41,10 @@ export class DonatesManager {
 		return await DonateModel.findOne({ dID: donateID });
 	}
 
+	async getAll(): Promise<Donate[]> {
+		return await DonateModel.find();
+	}
+
 	async create({ userID, timestamp, type }: Donate): Promise<Donate> {
 		if (!(await this.core.database.users.get(userID)))
 			await this.core.database.users.create(userID);
