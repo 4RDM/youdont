@@ -117,8 +117,6 @@ router.get("/session", userCheck, async (req, res) => {
 
 	if (!userid) return;
 
-	const role = (await req.core.database.users.get(userid))?.role;
-
 	res.json({
 		code: 200,
 		message: "OK",
@@ -128,7 +126,6 @@ router.get("/session", userCheck, async (req, res) => {
 			username,
 			email,
 			avatar,
-			role: role || "Członek",
 		},
 	});
 });

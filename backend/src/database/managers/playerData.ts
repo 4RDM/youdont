@@ -52,10 +52,10 @@ export class PlayerDataManager {
 		}, 1000 * 60 * 15);
 	}
 
-	getUser(license: string): PlayerShort {
-		const player = this.players.find(user => user.license == license);
+	getUser(discordID: string): PlayerShort {
+		const player = this.players.find(user => user.license == discordID);
 
-		if (!player) return { license, playTime: 0 };
+		if (!player) return { license: discordID, playTime: 0 };
 
 		return player;
 	}

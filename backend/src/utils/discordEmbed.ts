@@ -36,7 +36,10 @@ export const Embed = ({
 	const embed = new EmbedBuilder();
 
 	if (author) embed.setAuthor(author);
-	if (title) embed.setTitle(title);
+	if (title)
+		embed.setTitle(
+			title + (process.env.NODE_ENV !== "production" ? " (dev)" : "")
+		);
 	if (color) embed.setColor(color);
 	else embed.setColor("#fcbe03");
 	if (description) embed.setDescription(description);

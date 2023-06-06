@@ -61,8 +61,11 @@ const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
-	if (process.env.NODE_ENV !== "production")
-		return client.logger.warn("Bot is running in development mode!");
+	if (process.env.NODE_ENV !== "production") {
+		client.user?.setActivity("DEV MODE", { type: ActivityType.Listening });
+		client.logger.warn("Bot is running in development mode!");
+		return;
+	}
 
 	const statsChannel = await client.channels.fetch(client.config.discord.statsChannel, { force: true });
 	if (statsChannel && statsChannel.isTextBased()) setInterval(() => reloadStats(client, statsChannel as TextChannel), 12000);

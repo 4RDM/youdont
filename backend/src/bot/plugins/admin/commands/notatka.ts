@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
+// prettier-ignore
 export default async function ({ interaction, client }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -21,21 +22,23 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		// prettier-ignore
-		const notatka = {
-			id: (parseInt(dbUser.notatki[dbUser.notatki.length - 1]?.id || "0") + 1).toString(),
-			content,
-			authorID: interaction.user.id,
-			date: Math.floor(Date.now() / 1000),
-		};
+		const note = await client.Core.database.notes.create(mention.id, interaction.user.id, content);
 
-		dbUser.notatki.push(notatka);
-		await dbUser.save();
+		if (!note)
+			return interaction.reply({
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						"Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_ADD_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!"
+					),
+				],
+			});
 
 		interaction.reply({
 			embeds: [
 				Embed({
 					title: ":pencil: | Dodano notatkę!",
+					description: `ID utworzonej notatki: ${note.noteID}`,
 					color: "#1F8B4C",
 					user: interaction.user,
 				}),
@@ -56,31 +59,17 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		// prettier-ignore
-		const notatka = dbUser?.notatki.find(x => x.id.toString() === id.toString());
+		const response = await client.Core.database.notes.delete(mention.id, id);
 
-		if (!notatka)
+		if (!response)
 			return interaction.reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
-						"Nie znaleziono notatki"
+						"Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_DELETE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!"
 					),
 				],
 			});
-
-		// prettier-ignore
-		const notatki = dbUser?.notatki.filter(x => x.id.toString() !== id.toString());
-
-		dbUser.notatki = notatki;
-		await dbUser.save();
-
-		const description: string[] = [];
-
-		// prettier-ignore
-		dbUser?.notatki.forEach((notatka) => {
-			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
-		});
 
 		interaction.reply({
 			embeds: [
@@ -88,9 +77,6 @@ export default async function ({ interaction, client }: CommandArgs) {
 					title: ":coffin: | Usunięto notatke!",
 					color: "#f54242",
 					user: interaction.user,
-					description: `Pozostałe notatki:\n${description.join(
-						"\n"
-					)}`,
 				}),
 			],
 		});
@@ -111,8 +97,8 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const description: string[] = [];
 
 		// prettier-ignore
-		dbUser.notatki.forEach((notatka) => {
-			description.push(`**#${notatka.id}** | \`${notatka.content.substring(0, 20)}...\` ${notatka.authorID ? `- <@${notatka.authorID}>` : ""} ${notatka.date ? `- <t:${notatka.date}>` : ""}`);
+		dbUser.notes.forEach((note) => {
+			description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.authorID ? `- <@${note.authorID}>` : ""} ${note.createdAt ? `- <t:${note.createdAt}>` : "" }`);
 		});
 
 		interaction.reply({
@@ -143,7 +129,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		const notatka = dbUser.notatki.find(x => x.id == id.toString());
+		const notatka = dbUser.notes.find(x => x.noteID == id);
 
 		if (!notatka)
 			return interaction.reply({

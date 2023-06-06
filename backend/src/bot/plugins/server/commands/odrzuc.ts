@@ -27,7 +27,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			],
 		});
 
-	(await client.users.createDM(donate.userID)).send({
+	(await client.users.createDM(donate.discordID)).send({
 		embeds: [
 			Embed({
 				title: ":x: | Wpłata na serwer",
@@ -41,7 +41,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 					},
 					{
 						name: "ID wpłaty",
-						value: `\`${donate.dID?.toString()}\``,
+						value: `\`${donate.id}\``,
 						inline: false,
 					},
 				],
@@ -57,7 +57,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			Embed({
 				title: ":x: | Odrzucono wpłatę",
 				color: "#f54242",
-				description: `Odrzucono wpłatę o ID \`${donate.dID}\``,
+				description: `Odrzucono wpłatę o ID \`${donate.id}\``,
 				user: interaction.user,
 			}),
 		],

@@ -32,9 +32,7 @@ export interface playerResponse {
 
 export const getTops = async (core: Core) => {
 	try {
-		if (!core.database.mariadb) return null;
-
-		const connection = await core.database.mariadb.getConnection();
+		const connection = await core.database.serverpool.getConnection();
 
 		const killTop: killTopResponse = await connection.query(
 			"SELECT (@counter := @counter + 1) AS position, users.name, kdr.kills FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY kills DESC LIMIT 10"
