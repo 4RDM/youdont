@@ -1,7 +1,6 @@
 import { Client } from "./bot/main";
+import { DatabaseCore } from "./database/managers/database";
 import RCON from "./utils/rcon";
-import Database from "./database/managers/przed-mariadb/database";
-import { DatabaseCore as Database2 } from "./database/managers/database";
 import HTTP from "./http/http";
 
 import dotenv from "dotenv";
@@ -25,9 +24,8 @@ declare module "express-serve-static-core" {
 
 export class Core {
 	public httpServer: HTTP | null;
-	public database: Database;
+	public database: DatabaseCore;
 	public bot: Client;
-	public databaseBeta: Database2;
 	public rcon;
 	public cache = new Collection();
 
@@ -37,8 +35,8 @@ export class Core {
 		if (!options?.disableHTTP) this.httpServer = new HTTP(this);
 		else this.httpServer = null;
 
-		this.database = new Database(this);
-		this.databaseBeta = new Database2(this);
+		this.database = new DatabaseCore(this);
+
 		this.bot = new Client(this, {
 			intents: [
 				GatewayIntentBits.MessageContent,
