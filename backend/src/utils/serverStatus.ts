@@ -44,10 +44,6 @@ export const getTops = async (core: Core) => {
 			"SELECT (@counter := @counter + 1) AS position, users.name, ROUND(kdr.kills/kdr.deaths, 2) as KDR FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) as dummy WHERE kdr.kills > 500 AND kdr.deaths > 1 ORDER BY kdr.kills/kdr.deaths DESC LIMIT 10"
 		);
 
-		delete killTop["meta"];
-		delete deathsTop["meta"];
-		delete kdrTop["meta"];
-
 		connection.end();
 
 		const kills: User[] = killTop.map(user => {
