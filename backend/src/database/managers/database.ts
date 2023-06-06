@@ -41,57 +41,5 @@ export class DatabaseCore {
 		this.notes = new NotesManager(this);
 		this.donates = new DonatesManager(this);
 		this.users = new UsersManager(this);
-
-		this.init();
-	}
-
-	async init() {
-		const users = await this.core.database.users.getAll();
-
-		for (const user of users) {
-			await this.users.create(user.userID, user.total);
-
-			for (const notatka of user.notatki) {
-				if (
-					!(await this.notes.create(
-						user.userID,
-						notatka.authorID || "0",
-						notatka.content
-					))
-				)
-					return;
-			}
-
-			this.core.bot.logger.log("Database", `Created user ${user.userID}`);
-		}
-
-		const donates = await this.core.database.donates.getAll();
-
-		for (const donate of donates) {
-			const donate2 = await this.donates.create(
-				donate.userID,
-				donate.type
-			);
-
-			if (!donate2) {
-				this.core.bot.logger.error(
-					"Database",
-					`Donate ${donate.dID} is null`
-				);
-				return;
-			}
-
-			if (donate.approved)
-				await this.donates.approve(
-					donate2.id,
-					donate.amount || 0,
-					donate.approver || ""
-				);
-
-			this.core.bot.logger.log(
-				"Database",
-				`Created donate ${donate.dID}`
-			);
-		}
 	}
 }
