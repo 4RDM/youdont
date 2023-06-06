@@ -19,7 +19,7 @@ export class ArticlesManager {
 
 	async getByURL(articleURL: string): Promise<ArticleDatabaseResult | null> {
 		try {
-			const article: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Articles WHERE articleURL = ? LIMIT 1", [articleURL]);
+			const article: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM articles WHERE articleURL = ? LIMIT 1", [articleURL]);
 
 			if (!article[0]) return null;
 
@@ -35,7 +35,7 @@ export class ArticlesManager {
 
 	async get(id: number): Promise<ArticleDatabaseResult | null> {
 		try {
-			const article: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Articles WHERE id = ? LIMIT 1", [id]);
+			const article: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM articles WHERE id = ? LIMIT 1", [id]);
 
 			if (!article[0]) return null;
 
@@ -51,7 +51,7 @@ export class ArticlesManager {
 
 	async getAll(): Promise<ArticleDatabaseResult | null> {
 		try {
-			const articles: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Articles");
+			const articles: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM articles");
 
 			if (!articles[0]) return null;
 

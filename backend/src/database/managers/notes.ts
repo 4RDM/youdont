@@ -20,7 +20,7 @@ export class NotesManager {
 
 	async get(discordID: string, noteID: number) {
 		try {
-			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ? AND noteID = ? LIMIT 1", [discordID, noteID]);
+			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ? AND noteID = ? LIMIT 1", [discordID, noteID]);
 
 			if (!notes[0]) return null;
 
@@ -34,7 +34,7 @@ export class NotesManager {
 
 	async getAll(discordID: string) {
 		try {
-			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ?", [discordID]);
+			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ?", [discordID]);
 
 			if (!notes[0]) return null;
 
@@ -48,7 +48,7 @@ export class NotesManager {
 
 	async getLast(discordID: string) {
 		try {
-			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ? ORDER BY createdAt DESC LIMIT 1", [discordID]);
+			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ? ORDER BY createdAt DESC LIMIT 1", [discordID]);
 
 			if (!notes[0]) return null;
 
