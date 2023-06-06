@@ -98,7 +98,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 
 		// prettier-ignore
 		dbUser.notes.forEach((note) => {
-			description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.authorID ? `- <@${note.authorID}>` : ""} ${note.createdAt ? `- <t:${note.createdAt}>` : "" }`);
+			description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.authorID ? `- <@${note.authorID}>` : ""} ${note.createdAt ? `- <t:${new Date(note.createdAt)}>` : "" }`);
 		});
 
 		interaction.reply({
