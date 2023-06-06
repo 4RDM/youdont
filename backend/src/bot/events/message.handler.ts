@@ -1,4 +1,4 @@
-import { Message, TextChannel } from "discord.js";
+import { Channel, Message, TextChannel } from "discord.js";
 import { checkMessage } from "../handlers/automoderator.handler";
 import { Embed, ErrorEmbed } from "../../utils/discordEmbed";
 import { isSimilar } from "../../utils/isSimilar";
@@ -54,181 +54,88 @@ const wordlist = [
 	},
 ];
 
-export default async function ({
-	client,
-	props,
-}: {
-	client: ClientType;
-	props: { "0": Message };
-}) {
+let donateChannel: Channel | null = null;
+let afterInit = false;
+
+export async function init(client: ClientType) {
+	donateChannel = await client.channels.fetch("843586192879517776");
+	afterInit = true;
+}
+
+// prettier-ignore
+export default async function ({ client, props, }: { client: ClientType; props: { "0": Message } }) {
+	if (!afterInit) await init(client);
+
 	const message = props["0"];
-
-	const [commandName, ...args] = message.content
-		.slice(client.config.discord.prefix.length)
-		.trim()
-		.split(/ +/g);
-
-	console.log(commandName, args);
 
 	if (message.author.bot) return;
 
-	client.Core.database.users.createIfNotExists(message.author.id);
+	await client.Core.database.users.create(message.author.id);
 
-	// if (commandName == "test") {
-	// 	const users = new Users(client.Core);
-	// 	const use = await users.createIfNotExists(message.author.id);
-	// 	console.log(use);
-	// }
-
-	// if (commandName == "test2") {
-	// 	const notatki = new Notatki(client.Core);
-	// 	const notatka = await notatki.create({
-	// 		discordID: message.author.id,
-	// 		authorID: message.author.id,
-	// 		content: "test",
-	// 	});
-
-	// 	console.log(notatka);
-	// }
-
-	// if (commandName == "test3") {
-	// 	const notatki = new Notatki(client.Core);
-	// 	const notatka = await notatki.delete(
-	// 		message.author.id,
-	// 		parseInt(args[0])
-	// 	);
-	// 	console.log(notatka);
-	// }
-
-	// if (commandName == "test4") {
-	// 	const notatki = new Notatki(client.Core);
-
-	// 	const uzyszkodnik = await client.Core.database.users.get(
-	// 		message.author.id
-	// 	);
-
-	// 	if (!uzyszkodnik) return;
-
-	// 	// go through all notes and create prisma model for them
-
-	// 	const users = await client.Core.database.users.getAll();
-
-	// 	for (const user of users) {
-	// 		const users = new Users(client.Core);
-	// 		const use = await users.createIfNotExists(user.userID);
-
-	// 		console.log(use);
-
-	// 		for (const notatka of user.notatki) {
-	// 			if (!notatka.authorID || !notatka.date || !user.userID)
-	// 				continue;
-	// 			console.log(notatka);
-	// 			const res = await notatki.create({
-	// 				discordID: user.userID,
-	// 				content: notatka.content,
-	// 				authorID: notatka.authorID,
-	// 				createdAt: new Date(notatka.date * 1000),
-	// 			});
-	// 			console.log(res);
-	// 			console.log("=".repeat(20));
-	// 		}
-	// 	}
-
-	// 	console.log("imported " + users.length + " users");
-	// }
-
-	if (
-		!message.content.startsWith(client.config.discord.prefix) &&
-		message.guild
-	) {
+	if (message.guild) {
 		checkMessage(message.content).then(s => {
 			if (!s) return;
 			message.member?.timeout(120 * 60 * 1000, "Phishing / scam URL"); // for 2 hours
 			message.delete();
 		});
 
-		// Autoreply
-		wordlist.forEach(
-			word =>
-				isSimilar(message.content, word.msg) && message.reply(word.res)
-		);
-		return;
-	}
+		wordlist.forEach(word => isSimilar(message.content, word.msg) && message.reply(word.res));
 
-	// prettier-ignore
-	if (!message.guild) {
+		return;
+	} else {
 		const content = message.content.split("\n");
 		const [commandName, ...args] = message.content.split(/ +/g);
 
+		if (!donateChannel || !donateChannel.isTextBased())
+			return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: CHANNEL_NOT_FOUND). Spróbuj ponownie później / skontaktuj się z administracją!")] });
+
 		if (commandName == "donate") {
 			if (args[0] == "tipply") {
-				const document =
-							await client.Core.database.donates.create({
-								userID: message.author.id,
-								type: "tipply",
-								timestamp: new Date(),
-							});
+				const donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "tipply" });
 
-				(<TextChannel>(
-							await client.channels.fetch("843586192879517776") // donate channel
-						)).send(
-					`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
-				);
+				if (!donate)
+					return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
+
+				donateChannel.send(`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`/zaakceptuj ${donate.id}\` / \`/odrzuc ${donate.id}\`)`);
 
 				message.channel.send({
 					embeds: [
 						Embed({
 							title: "Donate",
-							description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://tipply.pl/u/4RDM)**`,
+							description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${donate.id}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://tipply.pl/u/4RDM)**`,
 							color: "#ffffff",
 							user: message.author,
 						}),
 					],
 				});
 			} else if (args[0] == "paypal") {
-				const document =
-							await client.Core.database.donates.create({
-								userID: message.author.id,
-								type: "paypal",
-								timestamp: new Date(),
-							});
+				const donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "paypal" });
 
-				(<TextChannel>(
-							await client.channels.fetch("843586192879517776")
-						)).send(
-					`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
-				);
+				if (!donate)
+					return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
+
+				donateChannel.send(`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`/zaakceptuj ${donate.id}\` / \`/odrzuc ${donate.id}\`)`);
 
 				message.channel.send({
 					embeds: [
 						Embed({
 							title: "Donate",
-							description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${document.dID}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://paypal.me/fourxrdm)**`,
+							description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${donate.id}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://paypal.me/fourxrdm)**`,
 							color: "#ffffff",
 							user: message.author,
 						}),
 					],
 				});
 			} else if (args[0] == "psc") {
-				if (!args[1] || (args[1].length !== 16 && args[1].length !== 19)) {
-					message.channel.send({
-						embeds: [ErrorEmbed(message, "Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`")],
-					});
-					return;
-				}
+				if (!args[1] || (args[1].length !== 16 && args[1].length !== 19))
+					return message.channel.send({ embeds: [ErrorEmbed(message, "Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`")] });
 
-				const document =
-							await client.Core.database.donates.create({
-								userID: message.author.id,
-								type: "psc",
-								timestamp: new Date(),
-							});
+				const donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "psc" });
+				
+				if (!donate)
+					return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
-				(<TextChannel>(
-							await client.channels.fetch("843586192879517776")
-						)).send(
-					`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${document.dID}\` / \`!odrzuć ${document.dID}\`)`
-				);
+				donateChannel.send(`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${donate.id}\` / \`!odrzuć ${donate.id}\`)`);
 
 				message.channel.send({
 					embeds: [
