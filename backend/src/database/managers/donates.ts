@@ -47,9 +47,9 @@ export class DonatesManager {
 		}
 	}
 
-	async create(discordID: string, type: "psc" | "paypal" | "tipply"): Promise<Donate | null> {
+	async create({ discordID, type, timestamp }: { discordID: string, type: "psc" | "paypal" | "tipply", timestamp?: Date }): Promise<Donate | null> {
 		try {
-			const donate: OkPacketInterface = await this.databaseCore.botpool.query("INSERT INTO donates (discordID, donationType) VALUES (?, ?)", [discordID, type]);
+			const donate: OkPacketInterface = await this.databaseCore.botpool.query("INSERT INTO Donates (discordID, donationType, createdAt) VALUES (?, ?, ?)", [discordID, type, timestamp]);
 
 			if (!donate.insertId) return null;
 
@@ -63,7 +63,7 @@ export class DonatesManager {
 
 	async approve(donateID: number, amount: number, approver: string): Promise<Donate | null> {
 		try {
-			const response: OkPacketInterface = await this.databaseCore.botpool.query("UPDATE donates SET approved = true, amount = ?, approver = ? WHERE id = ?", [amount, approver, donateID]);
+			const response: OkPacketInterface = await this.databaseCore.botpool.query("UPDATE Donates SET approved = true, amount = ?, approver = ? WHERE id = ?", [amount, approver, donateID]);
 
 			if (!response.insertId) return null;
 
