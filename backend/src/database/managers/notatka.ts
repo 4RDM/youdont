@@ -76,4 +76,16 @@ export class NotesManager {
 			return null;
 		}
 	}
+
+	async delete(discordID: string, noteID: number) {
+		try {
+			await this.databaseCore.botpool.query("DELETE FROM Notes WHERE discordID = ? AND noteID = ?", [discordID, noteID]);
+
+			return true;
+		} catch (err) {
+			this.databaseCore.core.bot.logger.error(`NotesSQL DELETE Error: ${err}`);
+
+			return false;
+		}
+	}
 }
