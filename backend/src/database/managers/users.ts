@@ -6,7 +6,6 @@ export interface UserDatabaseResult {
 		total: number;
 		createdAt: Date;
 	};
-	meta: unknown;
 }
 
 // prettier-ignore
@@ -15,22 +14,18 @@ export class UsersManager {
 
 	async get(discordID: string) {
 		try {
-			const user: (UserDatabaseResult | null) = await this.databaseCore.botpool.query("SELECT * FROM users WHERE discordID = ?", [discordID]);
+			const user: UserDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM users WHERE discordID = ?", [discordID]);
 
-			if (!user) return null;
-
-			delete user["meta"];
+			if (!user[0]) return null;
 
 			const donates = (await this.databaseCore.donates.getAll(discordID)) || [];
 			const notes = (await this.databaseCore.notes.getAll(discordID)) || [];
-
-			if (!user[0]) return null;
 
 			const finalUser = Object.assign({ donates: [], notes: [] }, { ...user[0], donates, notes });
 
 			return finalUser;
 		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`UsersSQL Error: ${err}`);
+			this.databaseCore.core.bot.logger.error(`UsersSQL GET Error: ${err}`);
 
 			return null;
 		}
@@ -46,7 +41,7 @@ export class UsersManager {
 
 			return await this.get(discordID);
 		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`UsersSQL Error: ${err}`);
+			this.databaseCore.core.bot.logger.error(`UsersSQL CREATE Error: ${err}`);
 
 			return null;
 		}

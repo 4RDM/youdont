@@ -1,4 +1,5 @@
 import { DatabaseCore } from "./database";
+import mariadb from "mariadb";
 
 export interface NoteDatabaseResult {
 	[k: number]: {
@@ -18,17 +19,13 @@ export class NotesManager {
 
 	async get(discordID: string, noteID: number) {
 		try {
-			const notes: (NoteDatabaseResult | null) = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ? AND noteID = ?", [discordID, noteID]);
-
-			if (!notes) return null;
-
-			delete notes["meta"];
+			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ? AND noteID = ? LIMIT 1", [discordID, noteID]);
 
 			if (!notes[0]) return null;
 
 			return notes[0];
 		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL Error: ${err}`);
+			this.databaseCore.core.bot.logger.error(`NotesSQL GET Error: ${err}`);
 
 			return null;
 		}
@@ -36,17 +33,13 @@ export class NotesManager {
 
 	async getAll(discordID: string) {
 		try {
-			const notes: (NoteDatabaseResult | null) = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ?", [discordID]);
-
-			if (!notes) return null;
-
-			delete notes["meta"];
+			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ?", [discordID]);
 
 			if (!notes[0]) return null;
 
 			return notes;
 		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL Error: ${err}`);
+			this.databaseCore.core.bot.logger.error(`NotesSQL GETALL Error: ${err}`);
 
 			return null;
 		}
@@ -54,17 +47,13 @@ export class NotesManager {
 
 	async getLast(discordID: string) {
 		try {
-			const notes: (NoteDatabaseResult | null) = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ? ORDER BY createdAt DESC LIMIT 1", [discordID]);
-
-			if (!notes) return null;
-
-			delete notes["meta"];
+			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM Notes WHERE discordID = ? ORDER BY createdAt DESC LIMIT 1", [discordID]);
 
 			if (!notes[0]) return null;
 
 			return notes[0];
 		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL Error: ${err}`);
+			this.databaseCore.core.bot.logger.error(`NotesSQL GETLAST Error: ${err}`);
 
 			return null;
 		}
@@ -82,7 +71,7 @@ export class NotesManager {
 
 			return await this.get(discordID, newID);
 		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL Error: ${err}`);
+			this.databaseCore.core.bot.logger.error(`NotesSQL CREATE Error: ${err}`);
 
 			return null;
 		}

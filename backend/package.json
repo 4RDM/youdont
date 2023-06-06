@@ -24,7 +24,7 @@
 		"express-ws": "^5.0.2",
 		"form-data": "^4.0.0",
 		"helmet": "^5.0.1",
-		"mariadb": "^2.5.5",
+		"mariadb": "^3.1.2",
 		"memorystore": "^1.6.7",
 		"mongoose": "^6.1.6",
 		"nanoid": "^3.2.0",
