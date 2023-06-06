@@ -1,16 +1,17 @@
 import { DatabaseCore } from "./database";
 import mariadb from "mariadb";
 
-export interface NoteDatabaseResult {
-	[k: number]: {
-		id: number;
-		discordID: string;
-		authorID: string;
-		noteID: number;
-		content: string;
-		createdAt: Date;
-	};
-	meta: unknown;
+export interface Note {
+	id: number;
+	discordID: string;
+	authorID: string;
+	noteID: number;
+	content: string;
+	createdAt: Date;
+}
+
+export interface NoteDatabaseResult extends Array<Note> {
+	[k: number]: Note;
 }
 
 // prettier-ignore

@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
 	const { id } = req.params;
-	const article = await req.core.database.articles.get(id);
+	const article = await req.core.database.articles.getByURL(id);
 
 	if (!article) return notFound(res);
 

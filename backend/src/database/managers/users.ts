@@ -1,12 +1,27 @@
 import { DatabaseCore } from "./database";
+import { DonateDatabaseResult } from "./donates";
+import { NoteDatabaseResult } from "./notes";
 
-export interface UserDatabaseResult {
-	[k: number]: {
-		discordID: string;
-		total: number;
-		createdAt: Date;
-	};
+export interface User {
+	discordID: string;
+	total: number;
+	createdAt: Date;
 }
+
+export interface UserDatabaseResult extends Array<User> {
+	[k: number]: User;
+}
+
+interface IUser {
+	identifier: string;
+	license: string;
+	discord: string;
+	deaths: number;
+	heady: number;
+	kills: number;
+}
+
+type DBUser = null | IUser;
 
 // prettier-ignore
 export class UsersManager {
@@ -18,10 +33,10 @@ export class UsersManager {
 
 			if (!user[0]) return null;
 
-			const donates = (await this.databaseCore.donates.getAll(discordID)) || [];
-			const notes = (await this.databaseCore.notes.getAll(discordID)) || [];
+			const donates = (await this.databaseCore.donates.getAll(discordID)) || [] as DonateDatabaseResult;
+			const notes = (await this.databaseCore.notes.getAll(discordID)) || [] as NoteDatabaseResult;
 
-			const finalUser = Object.assign({ donates: [], notes: [] }, { ...user[0], donates, notes });
+			const finalUser = Object.assign({ donates: [] as DonateDatabaseResult, notes: [] as NoteDatabaseResult }, { ...user[0], donates, notes });
 
 			return finalUser;
 		} catch (err) {
@@ -42,6 +57,32 @@ export class UsersManager {
 			return await this.get(discordID);
 		} catch (err) {
 			this.databaseCore.core.bot.logger.error(`UsersSQL CREATE Error: ${err}`);
+
+			return null;
+		}
+	}
+
+	async getUserFromServer(discordID: string): Promise<DBUser | null> {
+		try {
+			const response: DBUser = (await this.databaseCore.serverpool.query(`SELECT * FROM kdr WHERE \`discord\` = '${discordID}' LIMIT 1`))[0];
+
+			return response;
+		} catch (err) {
+			this.databaseCore.core.bot.logger.error(`ServerSQL GET Error: ${err}`);
+
+			return null;
+		}
+	}
+
+	async getUsersFromServer(discordID: string): Promise<DBUser[] | null> {
+		try {
+			const response: DBUser[] = (await this.databaseCore.serverpool.query(`SELECT * FROM kdr WHERE \`discord\` = '${discordID}'`));
+
+			if (!response[0]) return null;
+
+			return response;
+		} catch (err) {
+			this.databaseCore.core.bot.logger.error(`ServerSQL GET Error: ${err}`);
 
 			return null;
 		}

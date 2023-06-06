@@ -55,17 +55,17 @@ export default async function ({ client, interaction }: CommandArgs) {
 	const amount = interaction.options.getInteger("kwota", true);
 	const donate = await client.Core.database.donates.get(id);
 
-	if (donate && donate.dID && !donate.approved) {
+	if (donate && !donate.approved) {
 		const don = await client.Core.database.donates.approve(
-			donate.dID,
+			donate.id,
+			amount,
 			interaction.user.tag,
-			amount.toString()
 		);
 
 		if (!don) return;
 
 		interaction.reply({
-			content: don.userID,
+			content: don.discordID,
 			embeds: [
 				Embed({
 					title: "Zaakceptowano wpłatę",
@@ -76,13 +76,24 @@ export default async function ({ client, interaction }: CommandArgs) {
 			],
 		});
 
-		const dmUser = await client.users.createDM(donate.userID);
-		const dbUser = await client.Core.database.users.approve(donate.userID, don);
-		const user = await client.users.fetch(dbUser?.userID || "");
+		const dmUser = await client.users.createDM(donate.discordID);
+		const fetchedUser = await client.Core.database.users.get(donate.discordID);
+		const user = await client.users.fetch(fetchedUser?.discordID || "");
 		const webhook = new WebhookClient({ url: client.config.donateWebhook });
 
+		if (!user)
+			return interaction.followUp({
+				embeds: [
+					Embed({
+						title: "Nieznaleziono użytkownika",
+						color: "#f54242",
+						user: interaction.user,
+					}),
+				],
+			});
+
 		try {
-			await client.guilds.cache.get("843444305149427713")?.members.cache.get(user.id)?.roles.add(findClosest(dbUser?.total || 0).roleID);
+			await client.guilds.cache.get(client.Core.bot.config.discord.mainGuild)?.members.cache.get(user.id)?.roles.add(findClosest(fetchedUser?.total || 0).roleID);
 		} catch (err) {
 			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
 			interaction.reply({
@@ -106,7 +117,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			embeds: [
 				Embed({
 					title: "Donate",
-					description: `Twoja wpłata o ID \`${donate.dID}\` została zaakceptowana przez \`${interaction.user.tag}\`. Suma wpłaconych donate: \`${dbUser?.total || 0}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
+					description: `Twoja wpłata o ID \`${donate.id}\` została zaakceptowana przez \`${interaction.user.tag}\`. Suma wpłaconych donate: \`${fetchedUser?.total || 0}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
 					color: "#1F8B4C",
 					user: interaction.user,
 				}),

@@ -12,7 +12,6 @@ export interface Donate {
 
 export interface DonateDatabaseResult {
 	[k: number]: Donate;
-	meta: unknown;
 }
 
 // prettier-ignore
@@ -49,11 +48,11 @@ export class DonatesManager {
 
 	async create({ discordID, type, timestamp }: { discordID: string, type: "psc" | "paypal" | "tipply", timestamp?: Date }): Promise<Donate | null> {
 		try {
-			const donate: OkPacketInterface = await this.databaseCore.botpool.query("INSERT INTO Donates (discordID, donationType, createdAt) VALUES (?, ?, ?)", [discordID, type, timestamp]);
+			const donate: OkPacketInterface = await this.databaseCore.botpool.query(`INSERT INTO Donates (discordID, donationType${timestamp ? ", createdAt" : ""}) VALUES (?, ?${timestamp ? ", ?": ""})`, [discordID, type, timestamp]);
 
 			if (!donate.insertId) return null;
 
-			return await this.get(donate.insertId);
+			return await this.get(donate.insertId as number);
 		} catch (err) {
 			this.databaseCore.core.bot.logger.error(`DonatesSQL CREATE Error: ${err}`);
 
@@ -63,15 +62,9 @@ export class DonatesManager {
 
 	async approve(donateID: number, amount: number, approver: string): Promise<Donate | null> {
 		try {
-			const response: OkPacketInterface = await this.databaseCore.botpool.query("UPDATE Donates SET approved = true, amount = ?, approver = ? WHERE id = ?", [amount, approver, donateID]);
+			await this.databaseCore.botpool.query("UPDATE Donates SET approved = true, amount = ?, approver = ? WHERE id = ?", [amount, approver, donateID]);
 
-			if (!response.insertId) return null;
-
-			const donate = await this.get(donateID);
-
-			if (!donate) return null;
-
-			return donate;
+			return await this.get(donateID);
 		} catch (err) {
 			this.databaseCore.core.bot.logger.error(`DonatesSQL APPROVE Error: ${err}`);
 

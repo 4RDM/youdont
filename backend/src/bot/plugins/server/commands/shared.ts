@@ -64,10 +64,10 @@ export default async function ({ client, interaction }: CommandArgs) {
 			});
 		
 		if (userHexes.length > 1) {
-			const identifiers: { identifier: string }[] = userHexes;
+			const identifiers = userHexes;
 			let awaitedMessage;
 
-			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 		
 			try {
 				awaitedMessage = await awaitMessage(interaction);
@@ -127,10 +127,10 @@ export default async function ({ client, interaction }: CommandArgs) {
 			});
 		
 		if (userHexes.length > 1) {
-			const identifiers: { identifier: string }[] = userHexes;
+			const identifiers = userHexes;
 			let awaitedMessage;
 
-			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 		
 			try {
 				awaitedMessage = await awaitMessage(interaction);
@@ -199,7 +199,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		const description: string[] = [];
 
 		userHexes.forEach((x) => {
-			limitki[x.identifier] = userJson[x.identifier];
+			limitki[x?.identifier || ""] = userJson[x?.identifier || ""];
 		});
 
 		Array.from(Object.keys(limitki)).forEach((hex) => {
