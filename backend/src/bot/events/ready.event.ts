@@ -61,6 +61,11 @@ const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
+	client.guilds.cache.filter(a => a.id !== client.config.discord.mainGuild).forEach(x => {
+x.leave();
+console.log(x.name)
+});
+
 	if (process.env.NODE_ENV !== "production") {
 		client.user?.setActivity("DEV MODE", { type: ActivityType.Listening });
 		client.logger.warn("Bot is running in development mode!");
