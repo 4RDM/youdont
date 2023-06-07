@@ -1,4 +1,9 @@
-import { SlashCommandBuilder, User, WebhookClient } from "discord.js";
+import {
+	Interaction,
+	SlashCommandBuilder,
+	User,
+	WebhookClient,
+} from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
 
@@ -48,19 +53,13 @@ const findClosest = (value: number): Benefit =>
 	});
 
 // prettier-ignore
-export default async function ({ client, interaction }: CommandArgs) {
-	if (!interaction.isChatInputCommand()) return;
+export async function accept(client: CommandArgs["client"], interaction: Interaction, id: number, amount: number) {
+	if (!interaction.isButton() && !interaction.isCommand() && !interaction.isModalSubmit()) return;
 
-	const id = interaction.options.getInteger("id", true);
-	const amount = interaction.options.getInteger("kwota", true);
 	const donate = await client.Core.database.donates.get(id);
 
 	if (donate && !donate.approved) {
-		const don = await client.Core.database.donates.approve(
-			donate.id,
-			amount,
-			interaction.user.tag,
-		);
+		const don = await client.Core.database.donates.approve(donate.id, amount, interaction.user.id);
 
 		if (!don) return;
 
@@ -78,6 +77,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 		const dmUser = await client.users.createDM(donate.discordID);
 		const fetchedUser = await client.Core.database.users.get(donate.discordID);
+
 		const user = await client.users.fetch(fetchedUser?.discordID || "");
 		const webhook = new WebhookClient({ url: client.config.donateWebhook });
 
@@ -93,11 +93,19 @@ export default async function ({ client, interaction }: CommandArgs) {
 			});
 
 		try {
-			await client.guilds.cache.get(client.Core.bot.config.discord.mainGuild)?.members.cache.get(user.id)?.roles.add(findClosest(fetchedUser?.total || 0).roleID);
+			await client.guilds.cache
+				.get(client.Core.bot.config.discord.mainGuild)
+				?.members.cache.get(user.id)
+				?.roles.add(findClosest(fetchedUser?.total || 0).roleID);
 		} catch (err) {
 			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
 			interaction.reply({
-				embeds: [ErrorEmbedInteraction(interaction, `An error occurred while adding role: \`${err}\`, check console for more details!`)]
+				embeds: [
+					ErrorEmbedInteraction(
+						interaction,
+						`An error occurred while adding role: \`${err}\`, check console for more details!`
+					),
+				],
 			});
 		}
 
@@ -117,7 +125,13 @@ export default async function ({ client, interaction }: CommandArgs) {
 			embeds: [
 				Embed({
 					title: "Donate",
-					description: `Twoja wpłata o ID \`${donate.id}\` została zaakceptowana przez \`${interaction.user.tag}\`. Suma wpłaconych donate: \`${fetchedUser?.total || 0}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
+					description: `Twoja wpłata o ID \`${
+						donate.id
+					}\` została zaakceptowana przez \`${
+						interaction.user.tag
+					}\`. Suma wpłaconych donate: \`${
+						fetchedUser?.total || 0
+					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
 					color: "#1F8B4C",
 					user: interaction.user,
 				}),
@@ -125,13 +139,30 @@ export default async function ({ client, interaction }: CommandArgs) {
 		});
 	} else if (donate && donate.approved) {
 		interaction.reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wpłata została już zaakceptowana")],
+			embeds: [
+				ErrorEmbedInteraction(
+					interaction,
+					"Wpłata została już zaakceptowana"
+				),
+			],
 		});
 	} else {
 		interaction.reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono donate")],
+			embeds: [
+				ErrorEmbedInteraction(interaction, "Nie znaleziono donate"),
+			],
 		});
 	}
+}
+
+// prettier-ignore
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
+
+	const id = interaction.options.getInteger("id", true);
+	const amount = interaction.options.getInteger("kwota", true);
+	
+	await accept(client, interaction, id, amount);
 }
 
 export const info: CommandInfo = {

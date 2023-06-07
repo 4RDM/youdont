@@ -1,7 +1,14 @@
-import { Channel, Message, TextChannel } from "discord.js";
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	Channel,
+	Message,
+} from "discord.js";
 import { checkMessage } from "../handlers/automoderator.handler";
 import { Embed, ErrorEmbed } from "../../utils/discordEmbed";
 import { isSimilar } from "../../utils/isSimilar";
+import { Donate } from "../../database/managers/donates";
 
 const wordlist = [
 	{
@@ -90,13 +97,17 @@ export default async function ({ client, props, }: { client: ClientType; props: 
 			return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: CHANNEL_NOT_FOUND). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
 		if (commandName == "donate") {
+			let type = "";
+			let kodPSC = "";
+			let donate: Donate | null = null;
+
 			if (args[0] == "tipply") {
-				const donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "tipply" });
+				donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "tipply" });
 
 				if (!donate)
 					return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
-				donateChannel.send(`Wpłata tipply od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`/zaakceptuj ${donate.id}\` / \`/odrzuc ${donate.id}\`)`);
+				type = "tipply";
 
 				message.channel.send({
 					embeds: [
@@ -109,12 +120,12 @@ export default async function ({ client, props, }: { client: ClientType; props: 
 					],
 				});
 			} else if (args[0] == "paypal") {
-				const donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "paypal" });
+				donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "paypal" });
 
 				if (!donate)
 					return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
-				donateChannel.send(`Wpłata paypal od gracza ${message.author.tag} (\`${message.author.id}\`)\n (\`/zaakceptuj ${donate.id}\` / \`/odrzuc ${donate.id}\`)`);
+				type = "paypal";
 
 				message.channel.send({
 					embeds: [
@@ -130,12 +141,13 @@ export default async function ({ client, props, }: { client: ClientType; props: 
 				if (!args[1] || (args[1].length !== 16 && args[1].length !== 19))
 					return message.channel.send({ embeds: [ErrorEmbed(message, "Kod jest nieprawidłowy, pamiętaj aby kod wpisywać w prawidłowym formacie!\n`1234-1234-1234-1234` bądź `1234123412341234`")] });
 
-				const donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "psc" });
+				donate = await client.Core.database.donates.create({ discordID: message.author.id, type: "psc" });
 				
 				if (!donate)
 					return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
-				donateChannel.send(`Wpłata psc od gracza ${message.author.tag} (\`${message.author.id}\`): ${args[1]}\n (\`!zaakceptuj ${donate.id}\` / \`!odrzuć ${donate.id}\`)`);
+				type = "psc";
+				kodPSC = args[1];
 
 				message.channel.send({
 					embeds: [
@@ -159,6 +171,19 @@ export default async function ({ client, props, }: { client: ClientType; props: 
 					],
 				});
 			}
+
+			if (type == "") return;
+			if (!donate)
+				return message.channel.send({ embeds: [ErrorEmbed(message, "Wystąpił wewnętrzny błąd bota (KOD: DONATE_GLOBAL_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
+
+			const acceptButton = new ButtonBuilder().setStyle(ButtonStyle.Success).setLabel("Akceptuj").setCustomId(`donateAccept_${donate.id}`);
+			const rejectButton = new ButtonBuilder().setStyle(ButtonStyle.Danger).setLabel("Odrzuć").setCustomId(`donateReject_${donate.id}`);
+			const row = new ActionRowBuilder<ButtonBuilder>().addComponents(acceptButton, rejectButton);
+
+			donateChannel.send({
+				content: `Wpłata ${type == "psc" ? "paysafecard" : type} od gracza ${message.author.tag} (\`${message.author.id}\`)${kodPSC !== "" ? `: ${kodPSC}` : ""}\nID wpłaty: \`${donate.id}\``,
+				components: [row]
+			});
 
 			return;
 		}

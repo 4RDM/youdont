@@ -6,6 +6,7 @@ import {
 	EmbedBuilder,
 	User,
 	CommandInteraction,
+	Interaction,
 } from "discord.js";
 
 export interface EmbedStructure {
@@ -68,7 +69,7 @@ export const ErrorEmbed = (message: Message, reason: string) =>
 	});
 
 export const ErrorEmbedInteraction = (
-	interaction: CommandInteraction,
+	interaction: Interaction | CommandInteraction,
 	reason: string
 ) =>
 	Embed({

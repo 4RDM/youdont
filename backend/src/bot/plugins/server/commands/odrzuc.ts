@@ -1,10 +1,13 @@
-import { SlashCommandBuilder } from "discord.js";
+import { Interaction, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
-export default async function ({ client, interaction }: CommandArgs) {
-	if (!interaction.isChatInputCommand()) return;
+export async function odrzuc(
+	client: CommandArgs["client"],
+	interaction: Interaction,
+	id: number
+) {
+	if (!interaction.isButton() && !interaction.isCommand()) return;
 
-	const id = interaction.options.getInteger("id", true);
 	const donate = await client.Core.database.donates.get(id);
 
 	if (!donate)
@@ -62,6 +65,14 @@ export default async function ({ client, interaction }: CommandArgs) {
 			}),
 		],
 	});
+}
+
+export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
+
+	const id = interaction.options.getInteger("id", true);
+
+	odrzuc(client, interaction, id);
 }
 
 export const info: CommandInfo = {

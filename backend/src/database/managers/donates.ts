@@ -64,6 +64,11 @@ export class DonatesManager {
 		try {
 			await this.databaseCore.botpool.query("UPDATE donates SET approved = true, amount = ?, approver = ? WHERE id = ?", [amount, approver, donateID]);
 
+			const donate = await this.get(donateID);
+			if (!donate) return null;
+
+			await this.databaseCore.botpool.query("UPDATE users SET total = total + ? WHERE discordID = ?", [amount, donate.discordID]);
+
 			return await this.get(donateID);
 		} catch (err) {
 			this.databaseCore.core.bot.logger.error(`DonatesSQL APPROVE Error: ${err}`);

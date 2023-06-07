@@ -62,9 +62,9 @@ export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 
 	client.guilds.cache.filter(a => a.id !== client.config.discord.mainGuild).forEach(x => {
-x.leave();
-console.log(x.name)
-});
+		x.leave();
+		client.logger.warn("Opuszczam: ", x.name);
+	});
 
 	if (process.env.NODE_ENV !== "production") {
 		client.user?.setActivity("DEV MODE", { type: ActivityType.Listening });
