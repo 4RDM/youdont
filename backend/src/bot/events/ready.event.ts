@@ -78,7 +78,7 @@ export default async function ({ client }: { client: ClientType }) {
 
 	const statusChannel = client.channels.cache.get(client.config.discord.statusChannel);
 	if (statusChannel && statusChannel.isTextBased()) setInterval(() => reloadStatus(client, statusChannel as TextChannel), 12000);
-	else client.logger.error("Stats channel is not text based or not found");
+	else client.logger.error("Status channel is not text based or not found");
 }
 
 export const info: EventInfo = {
