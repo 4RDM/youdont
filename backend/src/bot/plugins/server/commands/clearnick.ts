@@ -19,7 +19,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 	let reply;
 	const mention = interaction.options.getUser("mention", true);
 
-	const rolesJson: Roles | null = (await import(path)).default;
+	let rolesJson: Roles | null = (await import(path)).default;
 
 	if (!rolesJson)
 		return reply = interaction.reply({
@@ -73,7 +73,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 	}
 
 	const keys = Object.keys(rolesJson);
-	Array.from(rolesJson).filter((_, key) => keys[key] !== currentHex);
+	rolesJson = Array.from(rolesJson).filter((_, key) => keys[key] !== currentHex);
 
 	writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
