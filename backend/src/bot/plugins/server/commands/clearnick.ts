@@ -73,7 +73,10 @@ export default async function ({ client, interaction }: CommandArgs) {
 	}
 
 	const keys = Object.keys(rolesJson);
-	rolesJson = Array.from(rolesJson).filter((_, key) => keys[key] !== currentHex);
+	rolesJson = Array.from(rolesJson).filter((_, key) => {
+		if (keys[key] === currentHex) console.log(keys[key], currentHex)
+		// keys[key] !== currentHex
+	}) as Roles;
 
 	writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
