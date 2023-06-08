@@ -33,7 +33,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 	const kolor = interaction.options.getString("kolor", true);
 	const prefix = interaction.options.getString("prefix", true);
 
-	if (!kolor.startsWith("#") || kolor.length !== 6 || !kolor.match(/^[0-9a-fA-F]+$/))
+	if (!kolor.startsWith("#") || kolor.length !== 7 || !kolor.match(/^[0-9a-fA-F]+$/))
 		return reply = interaction.reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Niepoprawny format koloru")],
 		});
