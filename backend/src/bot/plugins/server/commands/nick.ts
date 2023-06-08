@@ -92,7 +92,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 	}
 
 	const { r, g, b } = hexToRGB(kolor as HexColorString);
-	rolesJson[`steam:${currentHex}`] = { tag: prefix, r, g, b, comment: `${mention.tag} (${mention.id})` };
+	rolesJson[`${currentHex as `steam:${string}`}`] = { tag: prefix, r, g, b, comment: `${mention.tag} (${mention.id})` };
 
 	writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
