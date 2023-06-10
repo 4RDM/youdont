@@ -14,7 +14,7 @@ export interface Role {
 	comment: string;
 }
 
-export interface Roles extends Array<Role> {
+export interface Roles extends Array<{ [k: `steam:${string}`]: Role }> {
 	[k: `steam:${string}`]: Role;
 }
 

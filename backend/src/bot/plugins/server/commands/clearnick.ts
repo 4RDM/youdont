@@ -19,7 +19,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 	let reply;
 	const mention = interaction.options.getUser("mention", true);
 
-	let rolesJson: Roles | null = (await import(path)).default;
+	const rolesJson: Roles | null = (await import(path)).default;
 
 	if (!rolesJson)
 		return reply = interaction.reply({
@@ -72,11 +72,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		currentHex = userHexes[0].identifier;
 	}
 
-	const keys = Object.keys(rolesJson);
-	rolesJson = Array.from(rolesJson).filter((_, key) => {
-		if (keys[key] === currentHex) console.log(keys[key], currentHex)
-		// keys[key] !== currentHex
-	}) as Roles;
+	delete rolesJson[currentHex as `steam:${string}`];
 
 	writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
