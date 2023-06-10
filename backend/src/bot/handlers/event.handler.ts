@@ -3,6 +3,12 @@ import { join } from "path";
 import { Client } from "../main";
 import logger from "../../utils/logger";
 
+const isFile = (path: string) =>
+	promises
+		.stat(path)
+		.then(stats => stats.isFile())
+		.catch(() => false);
+
 // prettier-ignore
 export default class Handler {
 	private client: Client;
@@ -17,6 +23,9 @@ export default class Handler {
 		const eventsFolder = await promises.readdir(this.eventsPath);
 		for (const eventName of eventsFolder) {
 			const eventPath = join(this.eventsPath, eventName);
+			
+			if (!(await isFile(eventPath))) continue;
+			
 			const file = await import(join(eventPath));
 			let hasErrored = false;
 

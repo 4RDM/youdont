@@ -12,6 +12,7 @@ dotenv.config();
 declare module "express-serve-static-core" {
 	interface Request {
 		core: Core;
+		skip: boolean;
 		session: Session & {
 			username?: string;
 			userid?: string;

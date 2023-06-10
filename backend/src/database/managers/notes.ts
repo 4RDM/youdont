@@ -1,5 +1,4 @@
 import { DatabaseCore } from "./database";
-import mariadb from "mariadb";
 
 export interface Note {
 	id: number;

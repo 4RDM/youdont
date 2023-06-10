@@ -1,24 +1,51 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { badRequest, internalError, notFound, unauthorized } from "../errors";
+import rateLimit from "express-rate-limit";
+
 const router = Router();
 
-// const adminCheck = (req: Request, res: Response, next: NextFunction) => {
-// 	const { userid } = req.session;
+// prettier-ignore
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 10,
+	standardHeaders: true,
+	legacyHeaders: true,
+	skip: req => {
+		if (req.skip) {
+			req.skip = false;
+			return true;
+		} else return false;
+	},
+});
 
-// 	if (!userid) return unauthorized(res);
+// prettier-ignore
+const adminCheck = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const { userid } = req.session;
+		if (!userid) return unauthorized(res, "No session found");
 
-// 	const settings = req.core.database.settings;
-// 	const fetchedUser = settings.getUser(userid);
+		const guild = await req.core.bot.guilds.fetch(req.core.bot.config.discord.mainGuild);
+		if (!guild) return internalError(res, "MainGuild not found (ERROR CODE: ARTICLE_CONFIG_MAIN_GUILD_NOT_FOUND)");
 
-// 	if (!fetchedUser) return unauthorized(res);
-// 	else if (settings.hasPermission(userid, "MANAGE_ARTICLES")) next();
-// 	else return unauthorized(res);
-// };
+		const user = await guild.members.fetch(userid);
+		if (!user) return unauthorized(res, "User not found in main guild (ERROR CODE: ARTICLE_USER_NOT_IN_MAIN_GUILD)");
+	
+		if (user.roles.cache.has("ADMINISTRATOR")) {
+			req.skip = true;
+			next();
+		}
+		else {
+			unauthorized(res);
+		}
+	} catch (err) {
+		internalError(res);
+	}
+};
 
 router.get("/", async (req, res) => {
 	res.json({
 		code: 200,
-		articles: await req.core.database.articles.getAll(),
+		articles: (await req.core.database.articles.getAll()) || [],
 	});
 });
 
@@ -31,64 +58,67 @@ router.get("/:id", async (req, res) => {
 	res.json({ code: 200, article });
 });
 
-// router.post("/create", adminCheck, async (req, res) => {
-// 	const { title, description, content, id } = req.body;
+router.post("/create", adminCheck, limiter, async (req, res) => {
+	if (!req.body) return badRequest(res, "Missing body");
+	if (!req.session) return unauthorized(res);
 
-// 	if (!title || !description || !content || !id)
-// 		return badRequest(res, "Missing body");
+	const { title, content, description, url } = req.body;
 
-// 	if (!req.session.username || !req.session.avatar) {
-// 		req.session.destroy(() => {});
+	if (!title || !content || !description || !url)
+		return res.json({
+			code: 400,
+			message:
+				"Missing parameters, { title: string, content: string, description: string, id: number, url: string }",
+			body: req.body,
+		});
 
-// 		return badRequest(res, "Invalid session, destroying");
-// 	}
+	const article = await req.core.database.articles.create({
+		title,
+		articleDescription: description,
+		content,
+		articleURL: url,
+		discordID: req.session.userid || "0",
+	});
 
-// 	const article = await req.core.database.articles.create({
-// 		title,
-// 		description,
-// 		content,
-// 		id,
-// 		createDate: new Date(),
-// 		author: {
-// 			nickname: req.session.username,
-// 			avatar: `https://cdn.discordapp.com/avatars/${req.session.userid}/${req.session.avatar}`,
-// 		},
-// 		views: 0,
-// 	});
+	res.json({ code: 200, article });
+});
 
-// 	res.json({ code: 200, article });
-// });
+router.post("/update", adminCheck, limiter, async (req, res) => {
+	if (!req.body) return badRequest(res, "Missing body");
+	if (!req.session) return unauthorized(res);
 
-// router.post("/update", adminCheck, async (req, res) => {
-// 	const { title, content, description, id, originalID } = req.body;
-// 	if (!title || !content || !description || !id || !originalID)
-// 		return res.json({ code: 500, message: "Can't update" });
+	const { title, content, description, id, url } = req.body;
 
-// 	const update = await req.core.database.articles.update(originalID, {
-// 		title,
-// 		description,
-// 		content,
-// 		id,
-// 		author: {
-// 			nickname: req.session.username || "",
-// 			avatar: `https://cdn.discordapp.com/avatars/${req.session.userid}/${req.session.avatar}`,
-// 		},
-// 	});
+	if (!title || !content || !description || !id || !url)
+		return res.json({
+			code: 500,
+			message:
+				"Missing parameters, { title: string, content: string, description: string, id: number, url: string }",
+			body: req.body,
+		});
 
-// 	if (!update) return internalError(res);
+	const update = await req.core.database.articles.update(id, {
+		title,
+		articleDescription: description,
+		content,
+		articleURL: url,
+		discordID: req.session.userid || "0",
+	});
 
-// 	res.json({ code: 200 });
-// });
+	if (!update) return internalError(res);
 
-// router.delete("/delete", adminCheck, async (req, res) => {
-// 	const { id } = req.body;
-// 	if (!id) return internalError(res);
+	res.json({ code: 200 });
+});
 
-// 	const update = await req.core.database.articles.delete(id);
+router.delete("/delete", adminCheck, limiter, async (req, res) => {
+	const { id } = req.body;
+	if (!id) return internalError(res);
 
-// 	if (!update) return internalError(res);
+	const update = await req.core.database.articles.delete(id);
 
-// 	res.json({ code: 200 });
-// });
+	if (!update) return internalError(res);
+
+	res.json({ code: 200 });
+});
 
 export default router;

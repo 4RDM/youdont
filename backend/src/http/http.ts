@@ -37,6 +37,7 @@ export default class HTTP {
 
 		this.server.use((req, res, next) => {
 			req.core = core;
+			req.skip = false;
 			res.setHeader("x-powered-by", "Nimplex's love"); // easter egg ;)
 			next();
 		});

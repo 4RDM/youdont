@@ -20,6 +20,7 @@
 		"ejs": "^3.1.6",
 		"erlpack": "^0.1.4",
 		"express": "^4.17.2",
+		"express-rate-limit": "^6.7.0",
 		"express-session": "^1.17.2",
 		"express-ws": "^5.0.2",
 		"form-data": "^4.0.0",

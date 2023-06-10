@@ -1,11 +1,13 @@
 import React, { useEffect, Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RecoilRoot } from 'recoil'
+import { RecoilRoot, useRecoilState } from 'recoil'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 
 import Loading from './compontents/Loading/Loading'
 import Navbar from './compontents/Navbar/Navbar'
 import Footer from './compontents/Footer/Footer'
+
+import { AccountState } from './atoms/AccountState'
 
 import Home from './sites/Home/Home'
 const Articles = lazy(() => import('./sites/Articles/Articles'))
@@ -16,10 +18,33 @@ import './index.scss'
 
 const App = () => {
 	const location = useLocation()
+	const [accountState, setAccountState] = useRecoilState(AccountState)
 
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [location.pathname])
+
+	useEffect(() => {
+		fetch('/api/dashboard/session')
+			.then((res) => res.json())
+			.then((data) => {
+				if (accountState.loggedIn) return
+
+				const { user } = data
+
+				if (!user.userid || !user.username || !user.avatar) return
+
+				setAccountState({
+					id: user.userid,
+					name: user.username,
+					avatar: user.avatar,
+					loggedIn: true,
+				})
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}, [])
 
 	return (
 		<>

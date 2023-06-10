@@ -1,0 +1,22 @@
+import { ButtonInteraction } from "discord.js";
+import { Client } from "../../main";
+import { odrzuc } from "../../plugins/server/commands/odrzuc";
+import { ErrorEmbedInteraction } from "../../../utils/discordEmbed";
+
+// prettier-ignore
+export const handleButtonInteraction = async (client: Client, interaction: ButtonInteraction) => {
+	if (!interaction.isButton()) return;
+
+	const [commandName, ...args] = interaction.customId.split("_");
+	
+	if (commandName == "donateAccept") {
+		const modal = client.ModalHandler.get("donateAcceptModal");
+		if (!modal) return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono modala")] });
+
+		await interaction.showModal(modal.execute(args[0]));
+	}
+
+	if (commandName == "donateReject") {
+		odrzuc(client, interaction, parseInt(args[0]));
+	}
+};
