@@ -67,7 +67,10 @@ router.get("/reply", async(req, res) => {
 		form.append("code", code);
 
 		const oauth2 = await fetch("https://discord.com/api/oauth2/token", { method: "POST", body: form }).then(res => res.json());
+		if (!oauth2) return internalError(res, "No oauth2 data provided");
+
 		const user = await fetch("https://discord.com/api/users/@me", { method: "GET", headers: { authorization: `${oauth2.token_type} ${oauth2.access_token}` } }).then(res => res.json());
+		if (!user) return internalError(res, "No user data provided");
 
 		const { email, avatar, username, id } = user;
 
