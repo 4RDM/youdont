@@ -39,8 +39,9 @@ const limiter = rateLimit({
 
 // prettier-ignore
 const userCheck = (req: Request, res: Response, next: NextFunction) => {
-	const { username, tag, userid, email } = req.session;
-	if (username && tag && userid && email) {
+	const { username, userid, email } = req.session;
+
+	if (username && userid && email) {
 		req.skip = true;
 		next();
 	}
@@ -90,6 +91,7 @@ router.get("/reply", async(req, res) => {
 		req.session.userid = id;
 		req.session.email = email;
 		req.session.avatar = avatar;
+		req.session.save();
 
 		res.redirect("/");
 	} catch (err) {
