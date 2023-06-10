@@ -45,7 +45,7 @@ const adminCheck = async (req: Request, res: Response, next: NextFunction) => {
 router.get("/", async (req, res) => {
 	res.json({
 		code: 200,
-		articles: await req.core.database.articles.getAll(),
+		articles: (await req.core.database.articles.getAll()) || [],
 	});
 });
 
