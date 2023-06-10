@@ -79,7 +79,7 @@ export class ArticlesManager {
 
 	async update(id: number, { articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResult | null> {
 		try {
-			const article: OkPacketInterface = await this.databaseCore.botpool.query("UPDATE articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?", [articleURL, discordID, title, content, articleDescription, id]);
+			await this.databaseCore.botpool.query("UPDATE articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?", [articleURL, discordID, title, content, articleDescription, id]);
 
 			return await this.get(id);
 		} catch (err) {

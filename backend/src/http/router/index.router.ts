@@ -30,9 +30,8 @@ router.use("/assets", staticFiles(join(publicPath, "assets")));
 router.get(
 	[
 		"/",
-		"/administration",
+		// "/administration",
 		"/dashboard",
-		"/dashboard/admin*",
 		"/articles",
 		"/articles/:id",
 	],
