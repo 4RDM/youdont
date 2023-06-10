@@ -10,6 +10,7 @@ export default () => {
 	const [isMobile, setIsMobile] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 	const location = useLocation()
+	const [accountState, setAccountState] = useRecoilState(AccountState)
 
 	const handleResize = () => {
 		if (window.innerWidth <= 720) setIsMobile(true)
@@ -37,9 +38,9 @@ export default () => {
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				{loggedIn ? (
-					<span className="a">Nimplex#1010</span>
+					<Link to="/dashboard">{accountState.name}</Link>
 				) : (
-					<a href="/login">Zaloguj się</a>
+					<a href="/api/dashboard/login">Zaloguj się</a>
 				)}
 			</div>
 		</div>
@@ -63,7 +64,7 @@ export default () => {
 				{loggedIn ? (
 					<span className="a">Nimplex#1010</span>
 				) : (
-					<a href="/login">Zaloguj się</a>
+					<a href="/api/dashboard/">Zaloguj się</a>
 				)}
 			</div>
 			{!isOpen && (
