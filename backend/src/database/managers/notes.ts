@@ -68,7 +68,7 @@ export class NotesManager {
 			if (!lastNote) newID = 1;
 			else newID = lastNote.noteID + 1;
 
-			await this.databaseCore.botpool.query("INSERT INTO Notes (discordID, authorID, noteID, content) VALUES (?, ?, ?, ?)", [discordID, authorID, newID, content]);
+			await this.databaseCore.botpool.query("INSERT INTO notes (discordID, authorID, noteID, content) VALUES (?, ?, ?, ?)", [discordID, authorID, newID, content]);
 
 			return await this.get(discordID, newID);
 		} catch (err) {
@@ -80,7 +80,7 @@ export class NotesManager {
 
 	async delete(discordID: string, noteID: number) {
 		try {
-			await this.databaseCore.botpool.query("DELETE FROM Notes WHERE discordID = ? AND noteID = ?", [discordID, noteID]);
+			await this.databaseCore.botpool.query("DELETE FROM notes WHERE discordID = ? AND noteID = ?", [discordID, noteID]);
 
 			return true;
 		} catch (err) {

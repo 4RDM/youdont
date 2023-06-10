@@ -23,7 +23,7 @@ export class ArticlesManager {
 
 			if (!article[0]) return null;
 
-			this.databaseCore.botpool.query("UPDATE Articles SET views = views + 1 WHERE articleURL = ?", [articleURL]);
+			this.databaseCore.botpool.query("UPDATE articles SET views = views + 1 WHERE articleURL = ?", [articleURL]);
 
 			return article[0];
 		} catch (err) {
@@ -39,7 +39,7 @@ export class ArticlesManager {
 
 			if (!article[0]) return null;
 
-			this.databaseCore.botpool.query("UPDATE Articles SET views = views + 1 WHERE id = ?", [id]);
+			this.databaseCore.botpool.query("UPDATE articles SET views = views + 1 WHERE id = ?", [id]);
 
 			return article[0];
 		} catch (err) {
@@ -65,7 +65,7 @@ export class ArticlesManager {
 
 	async create({ articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResult | null> {
 		try {
-			const article: OkPacketInterface = await this.databaseCore.botpool.query("INSERT INTO Articles (articleURL, title, content, articleDescription, discordID) VALUES (?, ?, ?, ?, ?)", [articleURL, title, content, articleDescription, discordID]);
+			const article: OkPacketInterface = await this.databaseCore.botpool.query("INSERT INTO articles (articleURL, title, content, articleDescription, discordID) VALUES (?, ?, ?, ?, ?)", [articleURL, title, content, articleDescription, discordID]);
 
 			if (!article.insertId) return null;
 
@@ -79,7 +79,7 @@ export class ArticlesManager {
 
 	async update(id: number, { articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResult | null> {
 		try {
-			const article: OkPacketInterface = await this.databaseCore.botpool.query("UPDATE Articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?", [articleURL, discordID, title, content, articleDescription, id]);
+			const article: OkPacketInterface = await this.databaseCore.botpool.query("UPDATE articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?", [articleURL, discordID, title, content, articleDescription, id]);
 
 			return await this.get(id);
 		} catch (err) {
@@ -91,7 +91,7 @@ export class ArticlesManager {
 
 	async delete(id: number): Promise<boolean> {
 		try {
-			const article: OkPacketInterface = await this.databaseCore.botpool.query("DELETE FROM Articles WHERE id = ?", [id]);
+			const article: OkPacketInterface = await this.databaseCore.botpool.query("DELETE FROM articles WHERE id = ?", [id]);
 
 			if (!article.insertId) return false;
 
