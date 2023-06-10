@@ -20,12 +20,14 @@ export class ModalHandler {
 
 	init = async () => {
 		const pluginsFolder = await promises.readdir(this.pluginsPath);
+	
 		for (const pluginName of pluginsFolder) {
 			const pluginPath = join(this.pluginsPath, pluginName);
+			const modalsPath = join(pluginPath, "modals");
 
-			if (!existsSync(pluginPath)) continue;
+			if (!existsSync(modalsPath)) continue;
 
-			const modalsFolder = await promises.readdir(join(pluginPath, "modals"));
+			const modalsFolder = await promises.readdir(modalsPath);
 
 			for (const modalName of modalsFolder) {
 				const file = await import(join(pluginPath, "modals", modalName));
@@ -35,12 +37,12 @@ export class ModalHandler {
 					continue;
 				}
 
-				if (!file.default) {
-					logger.error(`Could not load the modal ${modalName}, the default export is missing`);
+				if (!file.modal) {
+					logger.error(`Could not load the modal ${modalName}, the handler modal is missing`);
 					continue;
 				}
 
-				this.modals.set(modalName, { execute: file.default, name: modalName });
+				this.modals.set(file.info.name, { execute: file.modal, name: file.info.name });
 			}
 		}
 	};
