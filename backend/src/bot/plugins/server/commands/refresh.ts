@@ -3,6 +3,8 @@ import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 // prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
+	if (!interaction.isChatInputCommand()) return;
+
 	const inter = await interaction.reply({
 		embeds: [
 			Embed({

@@ -13,6 +13,7 @@ import logger from "../utils/logger";
 import PluginHandler from "./handlers/plugin.handler";
 import CommandHandler from "./handlers/command.handler";
 import EventHandler from "./handlers/event.handler";
+import { ModalHandler } from "./handlers/modal.handler";
 
 declare global {
 	interface CommandArgs<T = CommandInteraction> {
@@ -49,6 +50,7 @@ export class Client extends Cl {
 	public readonly PluginHandler: PluginHandler;
 	public readonly CommandHandler: CommandHandler;
 	public readonly EventHandler: EventHandler;
+	public readonly ModalHandler: ModalHandler;
 	public readonly Core: Core;
 	public readonly config = config;
 	public readonly logger = logger;
@@ -60,6 +62,7 @@ export class Client extends Cl {
 		this.PluginHandler = new PluginHandler();
 		this.CommandHandler = new CommandHandler(this.PluginHandler);
 		this.EventHandler = new EventHandler(this);
+		this.ModalHandler = new ModalHandler(this);
 
 		this.login(config.discord.token);
 	}

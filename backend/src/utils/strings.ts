@@ -5,15 +5,15 @@ export interface rgbObject {
 	g: number;
 	b: number;
 }
+
 export type hexString = `#${string}`;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type rgbString = rgbObject | `rgb(${any})`;
 
-export const hexToDec = (hex: string): string =>
-	BigInt(`0x${hex}`).toString(10);
+export const hexToDec = (hex: string): string => BigInt(`0x${hex}`).toString(10);
 export const decToHex = (dec: string): string => BigInt(dec).toString(16);
-export const octToDec = (oct: string): string =>
-	BigInt(`0o${oct}`).toString(10);
+export const octToDec = (oct: string): string => BigInt(`0o${oct}`).toString(10);
 export const decToOct = (dec: string): string => BigInt(dec).toString(8);
 export const hexToRGB = (hex: hexString): rgbObject => {
 	const ihex = hex.replace("#", "");
@@ -26,6 +26,7 @@ export const hexToRGB = (hex: hexString): rgbObject => {
 
 	return { r, g, b };
 };
+
 export const rgbToHex = (rgb: rgbString): string => {
 	let temp = "";
 
@@ -33,7 +34,6 @@ export const rgbToHex = (rgb: rgbString): string => {
 		const irgb = rgb.replace("rgb(", "").replace(")", "");
 		const ispl = irgb.split(" ").join("").split(",");
 
-		// prettier-ignore
 		const r = pI(ispl[0]), g = pI(ispl[1]), b = pI(ispl[2]);
 		const obj = [r, g, b].map(v => {
 			if (isNaN(v) || v > 255 || v < 0) return 0;
@@ -42,7 +42,6 @@ export const rgbToHex = (rgb: rgbString): string => {
 
 		obj.forEach(x => (temp += x.toString(16)));
 	} else {
-		// prettier-ignore
 		[rgb.r, rgb.g, rgb.b].forEach(v => (temp += v.toString(16)));
 	}
 

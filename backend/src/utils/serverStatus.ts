@@ -30,19 +30,14 @@ export interface playerResponse {
 	ping: number;
 }
 
+// prettier-ignore
 export const getTops = async (core: Core) => {
 	try {
 		const connection = await core.database.serverpool.getConnection();
 
-		const killTop: killTopResponse = await connection.query(
-			"SELECT (@counter := @counter + 1) AS position, users.name, kdr.kills FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY kills DESC LIMIT 10"
-		);
-		const deathsTop: deathsTopResponse = await connection.query(
-			"SELECT (@counter := @counter + 1) AS position, users.name, kdr.deaths FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY deaths DESC LIMIT 10"
-		);
-		const kdrTop: kdrTopResponse = await connection.query(
-			"SELECT (@counter := @counter + 1) AS position, users.name, ROUND(kdr.kills/kdr.deaths, 2) as KDR FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) as dummy WHERE kdr.kills > 500 AND kdr.deaths > 1 ORDER BY kdr.kills/kdr.deaths DESC LIMIT 10"
-		);
+		const killTop: killTopResponse = await connection.query("SELECT (@counter := @counter + 1) AS position, users.name, kdr.kills FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY kills DESC LIMIT 10");
+		const deathsTop: deathsTopResponse = await connection.query("SELECT (@counter := @counter + 1) AS position, users.name, kdr.deaths FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY deaths DESC LIMIT 10");
+		const kdrTop: kdrTopResponse = await connection.query("SELECT (@counter := @counter + 1) AS position, users.name, ROUND(kdr.kills/kdr.deaths, 2) as KDR FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) as dummy WHERE kdr.kills > 500 AND kdr.deaths > 1 ORDER BY kdr.kills/kdr.deaths DESC LIMIT 10");
 
 		connection.end();
 
@@ -52,12 +47,14 @@ export const getTops = async (core: Core) => {
 				name: user.name,
 			};
 		});
+
 		const deaths: User[] = deathsTop.map(user => {
 			return {
 				value: user.deaths,
 				name: user.name,
 			};
 		});
+
 		const kdr = kdrTop.map(user => {
 			return {
 				value: user.KDR,
@@ -73,11 +70,10 @@ export const getTops = async (core: Core) => {
 	}
 };
 
+// prettier-ignore
 export const getPlayers = async () => {
 	try {
-		const res = await fetch(
-			`http://${config.rcon.host}:${config.rcon.port}/players.json`
-		);
+		const res = await fetch(`http://${config.rcon.host}:${config.rcon.port}/players.json`);
 
 		if (!res) return null;
 
