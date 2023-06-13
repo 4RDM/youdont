@@ -9,7 +9,7 @@ export const handleCommandInteraction = async(client: Client, interaction: Comma
 	const command = client.commandHandler.get(interaction.commandName);
 
 	if (command) {
-		if ((command.info.role && (interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role)) || (command.info.permissions && interaction.memberPermissions.has(command.info.permissions)))
+		if ((command.info.role && (interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role)) || (interaction.memberPermissions.has(command.info.permissions || [])))
 			command.execute({ client, interaction });
 		else
 			return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
