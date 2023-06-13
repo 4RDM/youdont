@@ -20,7 +20,7 @@ export default async function ({
 		if (!interaction.isRepliable()) return;
 
 		if (interaction.hasReplied) interaction.followUp(options);
-		else interaction.Reply(options);
+		else interaction.reply(options);
 	
 		interaction.hasReplied = true;
 	};
