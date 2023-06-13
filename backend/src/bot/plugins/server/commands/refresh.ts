@@ -5,7 +5,7 @@ import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 
-	const inter = await interaction.reply({
+	const inter = await interaction.Reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",

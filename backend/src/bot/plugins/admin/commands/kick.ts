@@ -9,7 +9,7 @@ export default async function ({ interaction }: CommandArgs) {
 	const reason = interaction.options.getString("reason", false);
 
 	if (!mention.kickable)
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [
 				ErrorEmbedInteraction(
 					interaction,
@@ -21,12 +21,12 @@ export default async function ({ interaction }: CommandArgs) {
 	if (
 		(mention.id == "594526434526101527" && interaction.user.id !== "364056796932997121") ||
 		(mention.id == "364056796932997121" && interaction.user.id !== "594526434526101527")
-	) return interaction.reply("🖕");
+	) return interaction.Reply("🖕");
 	
 	await mention
 		.kick(reason ? reason : "")
 		.then(() => {
-			interaction.reply({
+			interaction.Reply({
 				embeds: [
 					Embed({
 						title: ":hammer: | Pomyślnie wyrzucono",
@@ -38,7 +38,7 @@ export default async function ({ interaction }: CommandArgs) {
 			});
 		})
 		.catch(() => {
-			interaction.reply({
+			interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,

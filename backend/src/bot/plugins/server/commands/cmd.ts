@@ -7,7 +7,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	const command = interaction.options.getString("command", true);
 
-	const interactionReply = await interaction.reply({
+	const interactionReply = await interaction.Reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",

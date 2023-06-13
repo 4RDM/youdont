@@ -19,8 +19,6 @@ export default class HTTP {
 	public wssclients: WebSocket[] = [];
 
 	constructor(core: Core) {
-		// this.server.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false }));
-
 		const memoryStore = MemoryStore(session);
 
 		this.server.use(
@@ -33,24 +31,15 @@ export default class HTTP {
 		);
 
 		this.server.use(compression());
-		this.server.set("view engine", "ejs");
 
-		this.server.use((req, res, next) => {
+		this.server.use((req, _, next) => {
 			req.core = core;
 			req.skip = false;
-			res.setHeader("x-powered-by", "Nimplex's love"); // easter egg ;)
 			next();
 		});
 
-		this.server.ws("/api/docs", async ws => {
-			this.wssclients.push(ws);
-			ws.on("close", () => {
-				this.wssclients.splice(this.wssclients.indexOf(ws), 1);
-			});
-		});
-
-		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
+		this.server.use("/api", apiRouter);
 
 		this.server.listen(port, () =>
 			logger.ready(`Website is listening to port ${port}`)

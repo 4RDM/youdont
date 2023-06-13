@@ -24,24 +24,23 @@ const path = join("/home/rdm/server/data/resources/[Nimplex]/4rdm/data/roles.jso
 // prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!existsSync(path))
-		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
+		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
 	if (!interaction.isChatInputCommand()) return;
 
-	let reply;
 	const mention = interaction.options.getUser("mention", true);
 	const kolor = interaction.options.getString("kolor", true);
 	const prefix = interaction.options.getString("prefix", true);
 
 	if (!kolor.startsWith("#") || kolor.length !== 7 || !kolor.match(/^#[0-9a-fA-F]+$/))
-		return reply = interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Niepoprawny format koloru")],
 		});
 
 	const rolesJson: Roles | null = (await import(path)).default;
 
 	if (!rolesJson)
-		return reply = interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 		});
 
@@ -49,12 +48,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 	let currentHex = "";
 
 	if (!userHexes)
-		return reply = interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 		});
 
 	if (!userHexes[0])
-		return reply = interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza")],
 		});
 	
@@ -62,12 +61,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 		const hexes = userHexes.map((hex, i) => `${i + 1}. ${hex}`).join("\n");
 		let awaitedMessage;
 
-		reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${hexes}\`\`\`\nKtóry z nich użyć?`);
+		interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${hexes}\`\`\`\nKtóry z nich użyć?`);
 
 		try {
 			awaitedMessage = await awaitMessage(interaction);
 		} catch (e) {
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
 			});
 		}
@@ -75,14 +74,14 @@ export default async function ({ client, interaction }: CommandArgs) {
 		const index = parseInt(awaitedMessage);
 
 		if (isNaN(index))
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")]
 			});
 
 		const temp = userHexes[index - 1];
 
 		if (!temp)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")]
 			});
 		
@@ -102,8 +101,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		description: `Zmieniono przedrostek gracza ${mention.tag} (${mention.id}) na ${prefix}`
 	});
 
-	if (reply) interaction.followUp({ embeds: [embed] });
-	else interaction.reply({ embeds: [embed] });
+	interaction.Reply({ embeds: [embed] });
 
 	client.core.rcon("reloadchat");
 }

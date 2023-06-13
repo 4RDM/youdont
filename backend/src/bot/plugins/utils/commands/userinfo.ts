@@ -53,7 +53,7 @@ export default async function ({ interaction }: CommandArgs) {
 		user: interaction.user,
 	});
 
-	interaction.reply({ embeds: [embed] });
+	interaction.Reply({ embeds: [embed] });
 }
 
 export const info: CommandInfo = {

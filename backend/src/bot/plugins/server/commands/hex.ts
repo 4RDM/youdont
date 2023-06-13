@@ -22,17 +22,17 @@ export default async function ({ client, interaction }: CommandArgs) {
 	const response = await getUserHex(client, mention.id);
 
 	if (!response)
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 		});
 
 	if (!response)
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono użytkownika")],
 		});
 
 	const identifiers = response.map(x => x?.identifier);
-	return interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.join("\n")}\`\`\``);
+	return interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.join("\n")}\`\`\``);
 }
 
 export const info: CommandInfo = {

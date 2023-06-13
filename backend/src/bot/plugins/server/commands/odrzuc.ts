@@ -11,7 +11,7 @@ export async function odrzuc(
 	const donate = await client.core.database.donates.get(id);
 
 	if (!donate)
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [
 				ErrorEmbedInteraction(
 					interaction,
@@ -21,7 +21,7 @@ export async function odrzuc(
 		});
 
 	if (donate.approved)
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [
 				ErrorEmbedInteraction(
 					interaction,
@@ -55,7 +55,7 @@ export async function odrzuc(
 		],
 	});
 
-	interaction.reply({
+	interaction.Reply({
 		embeds: [
 			Embed({
 				title: ":x: | Odrzucono wpłatę",

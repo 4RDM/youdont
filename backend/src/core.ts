@@ -23,6 +23,15 @@ declare module "express-serve-static-core" {
 	}
 }
 
+// prettier-ignore
+declare module "discord.js" {
+	interface BaseInteraction {
+		hasReplied: boolean;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		Reply: (options: string | MessagePayload | InteractionReplyOptions) => Promise<any>;
+	}
+}
+
 export class Core {
 	public httpServer: HTTP | null;
 	public database: DatabaseCore;

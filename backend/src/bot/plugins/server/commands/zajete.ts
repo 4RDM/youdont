@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
 export default async function ({ interaction }: CommandArgs) {
-	interaction.reply({
+	interaction.Reply({
 		embeds: [
 			Embed({
 				description:

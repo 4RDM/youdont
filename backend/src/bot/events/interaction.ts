@@ -15,6 +15,16 @@ export default async function ({
 
 	if (!interaction.inGuild() || interaction.user.bot) return;
 
+	interaction.hasReplied = false;
+	interaction.Reply = async(options) => {
+		if (!interaction.isRepliable()) return;
+
+		if (interaction.hasReplied) interaction.followUp(options);
+		else interaction.Reply(options);
+	
+		interaction.hasReplied = true;
+	};
+
 	if (interaction.isCommand())
 		handleCommandInteraction(client, interaction);
 	else if (interaction.isButton())

@@ -11,7 +11,7 @@ export const handleButtonInteraction = async (client: Client, interaction: Butto
 	
 	if (commandName == "donateAccept") {
 		const modal = client.modalHandler.get("donateAcceptModal");
-		if (!modal) return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono modala")] });
+		if (!modal) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono modala")] });
 
 		await interaction.showModal(modal.execute(args[0]));
 	}

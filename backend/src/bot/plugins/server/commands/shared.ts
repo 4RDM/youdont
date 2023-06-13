@@ -38,13 +38,12 @@ export const awaitMessage = (
 // prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!existsSync(path))
-		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
+		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
 	if (!interaction.isChatInputCommand()) return;
 
 	const subcommand = interaction.options.getSubcommand();
 	const userJson = (await import(path)).default;
-	let reply;
 
 	if (subcommand === "dodaj") {
 		const mention = interaction.options.getUser("mention", true);
@@ -54,12 +53,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 		let currentHex;
 
 		if (!userHexes)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 			});
 
 		if (!userHexes[0])
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
 			});
 		
@@ -67,12 +66,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 			const identifiers = userHexes;
 			let awaitedMessage;
 
-			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+			interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 		
 			try {
 				awaitedMessage = await awaitMessage(interaction);
 			} catch (e) {
-				return interaction.reply({
+				return interaction.Reply({
 					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
 				});
 			}
@@ -80,12 +79,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 			let index = parseInt(awaitedMessage);
 
 			if (isNaN(index))
-				return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
+				return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
 
 			currentHex = identifiers[--index]?.identifier;
 
 			if (!currentHex)
-				return interaction.reply({
+				return interaction.Reply({
 					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
 				});
 		} else {
@@ -108,8 +107,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			user: interaction.user,
 		});
 
-		if (reply) interaction.followUp({ embeds: [embed] });
-		else interaction.reply({ embeds: [embed] });
+		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand === "usun") {
 		const mention = interaction.options.getUser("mention", true);
 		const spawnName = interaction.options.getString("spawn-name", true);
@@ -117,12 +115,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 		let currentHex;
 
 		if (!userHexes)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 			});
 
 		if (!userHexes[0])
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
 			});
 		
@@ -130,12 +128,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 			const identifiers = userHexes;
 			let awaitedMessage;
 
-			reply = interaction.reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+			interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 		
 			try {
 				awaitedMessage = await awaitMessage(interaction);
 			} catch (e) {
-				return interaction.reply({
+				return interaction.Reply({
 					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
 				});
 			}
@@ -143,12 +141,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 			let index = parseInt(awaitedMessage);
 
 			if (isNaN(index))
-				return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
+				return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
 
 			currentHex = identifiers[--index]?.identifier;
 
 			if (!currentHex)
-				return interaction.reply({
+				return interaction.Reply({
 					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
 				});
 		} else {
@@ -159,8 +157,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		if (index == -1) {
 			const embed = ErrorEmbedInteraction(interaction, `Nie znaleziono aut współdzielonych o nazwie \`${spawnName}\`!`);
 
-			if (reply) return interaction.followUp({ embeds: [embed] });
-			else return interaction.reply({ embeds: [embed] });
+			return interaction.Reply({ embeds: [embed] });
 		}
 
 		userJson[currentHex].splice(index, 1);
@@ -178,20 +175,19 @@ export default async function ({ client, interaction }: CommandArgs) {
 			user: interaction.user,
 		});
 
-		if (reply) interaction.followUp({ embeds: [embed] });
-		else interaction.reply({ embeds: [embed] });
+		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand === "lista") {
 		const mention = interaction.options.getUser("mention", true);
 
 		const userHexes = await getUserHex(client, mention.id);
 
 		if (!userHexes)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
 			});
 
 		if (!userHexes[0])
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
 			});
 
@@ -211,7 +207,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			}
 		});
 
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					author: {

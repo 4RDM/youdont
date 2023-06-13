@@ -63,7 +63,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 
 		if (!don) return;
 
-		interaction.reply({
+		interaction.Reply({
 			content: don.discordID,
 			embeds: [
 				Embed({
@@ -82,7 +82,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 		const webhook = new WebhookClient({ url: client.config.donateWebhook });
 
 		if (!user)
-			return interaction.followUp({
+			return interaction.Reply({
 				embeds: [
 					Embed({
 						title: "Nieznaleziono użytkownika",
@@ -99,7 +99,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 				?.roles.add(findClosest(fetchedUser?.total || 0).roleID);
 		} catch (err) {
 			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
-			interaction.reply({
+			interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -138,7 +138,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			],
 		});
 	} else if (donate && donate.approved) {
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				ErrorEmbedInteraction(
 					interaction,
@@ -147,7 +147,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			],
 		});
 	} else {
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				ErrorEmbedInteraction(interaction, "Nie znaleziono donate"),
 			],

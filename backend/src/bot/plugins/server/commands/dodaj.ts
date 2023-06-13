@@ -10,7 +10,7 @@ const path = join("/home/rdm/server/data/permisje.cfg");
 // prettier-ignore
 export default async function ({ interaction, client }: CommandArgs) {
 	if (!existsSync(path))
-		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
+		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
 	if (!interaction.isChatInputCommand()) return;
 
@@ -18,7 +18,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 	const hex = interaction.options.getString("hex", true);
 	const role = interaction.options.getString("role", true);
 
-	const interactionReply = await interaction.reply({
+	const interactionReply = await interaction.Reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",

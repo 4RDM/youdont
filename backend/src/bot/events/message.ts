@@ -70,7 +70,7 @@ export async function init(client: ClientType) {
 }
 
 // prettier-ignore
-export default async function ({ client, props, }: { client: ClientType; props: { "0": Message } }) {
+export default async function ({ client, props }: { client: ClientType; props: { "0": Message } }) {
 	if (!afterInit) await init(client);
 
 	const message = props["0"];

@@ -13,7 +13,7 @@ export default async function ({ interaction }: CommandArgs) {
 
 	try {
 		await interaction.channel.bulkDelete(messages);
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					color: "#1F8B4C",
@@ -24,7 +24,7 @@ export default async function ({ interaction }: CommandArgs) {
 			],
 		});
 	} catch (err) {
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				ErrorEmbedInteraction(
 					interaction,

@@ -12,12 +12,12 @@ export default async function ({ interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 	
 	if (!existsSync(path))
-		return interaction.reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
+		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
 	const respName = interaction.options.getString("resp-name", true);
 
 	if (!existsSync(join(path, respName)))
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":x: | Nie znaleziono pojazdu!",
@@ -27,7 +27,7 @@ export default async function ({ interaction }: CommandArgs) {
 			],
 		});
 	else
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":white_check_mark: | Pojazd jest już na serwerze",

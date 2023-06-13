@@ -11,11 +11,11 @@ export default async function ({ interaction }: CommandArgs) {
 	const fetchedMessage = await channel.messages.fetch(message).catch();
 
 	if (!fetchedMessage)
-		return interaction.reply({
+		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Nieznaleziono wiadomości")],
 		});
 
-	interaction.reply({
+	interaction.Reply({
 		embeds: [
 			Embed({
 				title: ":hourglass: | Wprowadź wiadomość",
@@ -32,7 +32,7 @@ export default async function ({ interaction }: CommandArgs) {
 	})
 		.then(collectedMessages => {
 			if (!collectedMessages.first()?.content)
-				return interaction.followUp({
+				return interaction.Reply({
 					embeds: [ErrorEmbedInteraction(interaction, "Niewprowadzono wiadomości!")],
 				}) as unknown;
 
@@ -48,13 +48,13 @@ export default async function ({ interaction }: CommandArgs) {
 					],
 				})
 				.catch(err => {
-					interaction.followUp({
+					interaction.Reply({
 						embeds: [ErrorEmbedInteraction(interaction, err)],
 					});
 				});
 		})
 		.catch(() => {
-			interaction.followUp({
+			interaction.Reply({
 				embeds: [ErrorEmbedInteraction(interaction, "Niewprowadzono wiadomości!")],
 			});
 		});

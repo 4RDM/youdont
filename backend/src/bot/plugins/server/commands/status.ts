@@ -7,11 +7,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 	const status = await getPlayers();
 
 	if (!status)
-		interaction.reply({
+		interaction.Reply({
 			embeds: [Embed({ title: ":x: | 4RDM jest offline!", color: "#f54242", user: interaction.user })],
 		});
 	else
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":white_check_mark: | 4RDM jest online!",

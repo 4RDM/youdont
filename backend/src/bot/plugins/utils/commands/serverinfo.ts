@@ -35,7 +35,7 @@ export default async function ({ interaction }: CommandArgs) {
 		thumbnail: interaction.guild?.iconURL({ forceStatic: false }) || "",
 		user: interaction.user,
 	});
-	interaction.reply({ embeds: [embed] });
+	interaction.Reply({ embeds: [embed] });
 }
 
 export const info: CommandInfo = {

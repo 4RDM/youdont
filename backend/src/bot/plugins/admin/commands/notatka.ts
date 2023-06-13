@@ -13,7 +13,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -25,7 +25,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const note = await client.core.database.notes.create(mention.id, interaction.user.id, content);
 
 		if (!note)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -34,7 +34,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":pencil: | Dodano notatkę!",
@@ -50,7 +50,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -62,7 +62,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const response = await client.core.database.notes.delete(mention.id, id);
 
 		if (!response)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -71,7 +71,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":coffin: | Usunięto notatke!",
@@ -85,7 +85,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -101,7 +101,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 			description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.authorID ? `- <@${note.authorID}>` : ""} ${note.createdAt ? `- <t:${new Date(note.createdAt).getTime() / 1000}>` : "" }`);
 		});
 
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					author: {
@@ -120,7 +120,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -132,7 +132,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const notatka = dbUser.notes.find(x => x.noteID == id);
 
 		if (!notatka)
-			return interaction.reply({
+			return interaction.Reply({
 				embeds: [
 					ErrorEmbedInteraction(
 						interaction,
@@ -141,7 +141,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		interaction.reply({
+		interaction.Reply({
 			embeds: [
 				Embed({
 					author: {
