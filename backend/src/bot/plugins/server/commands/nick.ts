@@ -105,7 +105,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 	if (reply) interaction.followUp({ embeds: [embed] });
 	else interaction.reply({ embeds: [embed] });
 
-	client.Core.rcon("reloadchat");
+	client.core.rcon("reloadchat");
 }
 
 export const info: CommandInfo = {

@@ -8,7 +8,7 @@ export async function odrzuc(
 ) {
 	if (!interaction.isButton() && !interaction.isCommand()) return;
 
-	const donate = await client.Core.database.donates.get(id);
+	const donate = await client.core.database.donates.get(id);
 
 	if (!donate)
 		return interaction.reply({

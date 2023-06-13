@@ -15,7 +15,7 @@ setTimeout(() => {
 	const rest = new REST().setToken(config.discord.token);
 
 	(async () => {
-		client.bot.CommandHandler.all().forEach(command => {
+		client.bot.commandHandler.all().forEach(command => {
 			command.info.builder
 				.setName(command.info.triggers[0])
 				.setDescription(command.info.description);

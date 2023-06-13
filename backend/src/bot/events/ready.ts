@@ -4,7 +4,7 @@ import { Embed } from "../../utils/discordEmbed";
 
 // prettier-ignore
 const reloadStats = async (client: ClientType, statsChannel: TextChannel) => {
-	const stats = await getTops(client.Core);
+	const stats = await getTops(client.core);
 
 	if (!stats)
 		return client.logger.error("Cannot estabilish connection with database");

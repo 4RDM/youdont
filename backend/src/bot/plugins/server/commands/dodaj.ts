@@ -42,7 +42,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-			client.Core.rcon("reload");
+			client.core.rcon("reload");
 		})
 		.catch(() => {
 			interactionReply.edit({

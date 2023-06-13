@@ -8,7 +8,7 @@ export const handleCommandInteraction = async (
 	if (!interaction.inGuild()) return;
 	if (!interaction.isCommand()) return;
 
-	const command = client.CommandHandler.get(interaction.commandName);
+	const command = client.commandHandler.get(interaction.commandName);
 
 	if (command) {
 		if (

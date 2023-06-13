@@ -1,1 +1,0 @@
-[x] Dodawanie roli po wplacienei pieniedzy

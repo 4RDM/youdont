@@ -10,10 +10,10 @@ import {
 import { Core } from "../core";
 import config from "../config";
 import logger from "../utils/logger";
-import PluginHandler from "./handlers/plugin.handler";
-import CommandHandler from "./handlers/command.handler";
-import EventHandler from "./handlers/event.handler";
-import { ModalHandler } from "./handlers/modal.handler";
+import PluginHandler from "./handlers/plugin";
+import CommandHandler from "./handlers/command";
+import EventHandler from "./handlers/event";
+import { ModalHandler } from "./handlers/modal";
 
 declare global {
 	interface CommandArgs<T = CommandInteraction> {
@@ -47,22 +47,23 @@ declare global {
 }
 
 export class Client extends Cl {
-	public readonly PluginHandler: PluginHandler;
-	public readonly CommandHandler: CommandHandler;
-	public readonly EventHandler: EventHandler;
-	public readonly ModalHandler: ModalHandler;
-	public readonly Core: Core;
+	public readonly pluginHandler: PluginHandler;
+	public readonly commandHandler: CommandHandler;
+	public readonly eventHandler: EventHandler;
+	public readonly modalHandler: ModalHandler;
+
+	public readonly core: Core;
 	public readonly config = config;
 	public readonly logger = logger;
 
 	constructor(core: Core, options: ClientOptions) {
 		super(options);
 
-		this.Core = core;
-		this.PluginHandler = new PluginHandler();
-		this.CommandHandler = new CommandHandler(this.PluginHandler);
-		this.EventHandler = new EventHandler(this);
-		this.ModalHandler = new ModalHandler(this);
+		this.core = core;
+		this.pluginHandler = new PluginHandler();
+		this.commandHandler = new CommandHandler(this.pluginHandler);
+		this.eventHandler = new EventHandler(this);
+		this.modalHandler = new ModalHandler(this);
 
 		this.login(config.discord.token);
 	}

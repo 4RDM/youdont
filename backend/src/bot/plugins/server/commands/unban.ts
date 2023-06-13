@@ -16,7 +16,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon(`unban ${id}`)
+	client.core.rcon(`unban ${id}`)
 		.then(() => {
 			interactionReply.edit({
 				embeds: [

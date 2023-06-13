@@ -14,7 +14,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon("exec permisje.cfg")
+	client.core.rcon("exec permisje.cfg")
 		.then(() => {
 			inter.edit({
 				embeds: [

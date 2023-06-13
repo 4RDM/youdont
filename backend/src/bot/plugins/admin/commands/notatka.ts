@@ -10,7 +10,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 	if (subcommand === "dodaj") {
 		const mention = interaction.options.getUser("mention", true);
 		const content = interaction.options.getString("content", true);
-		const dbUser = await client.Core.database.users.get(mention.id);
+		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
 			return interaction.reply({
@@ -22,7 +22,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		const note = await client.Core.database.notes.create(mention.id, interaction.user.id, content);
+		const note = await client.core.database.notes.create(mention.id, interaction.user.id, content);
 
 		if (!note)
 			return interaction.reply({
@@ -47,7 +47,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 	} else if (subcommand === "usun") {
 		const mention = interaction.options.getUser("mention", true);
 		const id = interaction.options.getInteger("id", true);
-		const dbUser = await client.Core.database.users.get(mention.id);
+		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
 			return interaction.reply({
@@ -59,7 +59,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-		const response = await client.Core.database.notes.delete(mention.id, id);
+		const response = await client.core.database.notes.delete(mention.id, id);
 
 		if (!response)
 			return interaction.reply({
@@ -82,7 +82,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		});
 	} else if (subcommand === "lista") {
 		const mention = interaction.options.getUser("mention", true);
-		const dbUser = await client.Core.database.users.get(mention.id);
+		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
 			return interaction.reply({
@@ -117,7 +117,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 	} else if (subcommand === "wyswietl") {
 		const mention = interaction.options.getUser("mention", true);
 		const id = interaction.options.getInteger("id", true);
-		const dbUser = await client.Core.database.users.get(mention.id);
+		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
 			return interaction.reply({

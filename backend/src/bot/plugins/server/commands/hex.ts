@@ -5,7 +5,7 @@ import { Client } from "../../../main";
 // prettier-ignore
 export const getUserHex = async function (client: Client, discordId: string) {
 	try {
-		const response = await client.Core.database.users.getUsersFromServer(discordId);
+		const response = await client.core.database.users.getUsersFromServer(discordId);
 
 		return response;
 	} catch (err) {

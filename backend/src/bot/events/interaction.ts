@@ -1,7 +1,7 @@
 import { Interaction } from "discord.js";
-import { handleButtonInteraction } from "./interactions/button.interaction";
-import { handleModalInteraction } from "./interactions/modalSubmit.interaction";
-import { handleCommandInteraction } from "./interactions/command.interaction";
+import { handleButtonInteraction } from "./interactions/button";
+import { handleModalInteraction } from "./interactions/modalSubmit";
+import { handleCommandInteraction } from "./interactions/command";
 
 // prettier-ignore
 export default async function ({
@@ -13,7 +13,7 @@ export default async function ({
 }) {
 	const interaction = props["0"];
 
-	if (!interaction.inGuild()) return;
+	if (!interaction.inGuild() || interaction.user.bot) return;
 
 	if (interaction.isCommand())
 		handleCommandInteraction(client, interaction);

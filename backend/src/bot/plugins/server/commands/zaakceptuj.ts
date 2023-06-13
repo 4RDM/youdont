@@ -56,10 +56,10 @@ const findClosest = (value: number): Benefit =>
 export async function accept(client: CommandArgs["client"], interaction: Interaction, id: number, amount: number) {
 	if (!interaction.isButton() && !interaction.isCommand() && !interaction.isModalSubmit()) return;
 
-	const donate = await client.Core.database.donates.get(id);
+	const donate = await client.core.database.donates.get(id);
 
 	if (donate && !donate.approved) {
-		const don = await client.Core.database.donates.approve(donate.id, amount, interaction.user.id);
+		const don = await client.core.database.donates.approve(donate.id, amount, interaction.user.id);
 
 		if (!don) return;
 
@@ -76,7 +76,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 		});
 
 		const dmUser = await client.users.createDM(donate.discordID);
-		const fetchedUser = await client.Core.database.users.get(donate.discordID);
+		const fetchedUser = await client.core.database.users.get(donate.discordID);
 
 		const user = await client.users.fetch(fetchedUser?.discordID || "");
 		const webhook = new WebhookClient({ url: client.config.donateWebhook });
@@ -94,7 +94,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 
 		try {
 			await client.guilds.cache
-				.get(client.Core.bot.config.discord.mainGuild)
+				.get(client.core.bot.config.discord.mainGuild)
 				?.members.cache.get(user.id)
 				?.roles.add(findClosest(fetchedUser?.total || 0).roleID);
 		} catch (err) {

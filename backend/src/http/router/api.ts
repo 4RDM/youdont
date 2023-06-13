@@ -1,7 +1,7 @@
 import { Router, json, urlencoded } from "express";
 
-import dashboardRouter from "./routes/dashboard.route";
-import articleRouter from "./routes/article.route";
+import dashboardRouter from "./routes/dashboard";
+import articleRouter from "./routes/article";
 
 const router = Router();
 

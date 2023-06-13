@@ -16,7 +16,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		],
 	});
 
-	client.Core.rcon(command)
+	client.core.rcon(command)
 		.then(() => {
 			interactionReply.edit({
 				embeds: [

@@ -9,8 +9,8 @@ import logger from "../utils/logger";
 import compression from "compression";
 import MemoryStore from "memorystore";
 
-import indexRouter from "./router/index.router";
-import apiRouter from "./router/api.router";
+import indexRouter from "./router";
+import apiRouter from "./router/api";
 
 const port = 8021;
 
