@@ -28,7 +28,7 @@ declare module "discord.js" {
 	interface BaseInteraction {
 		hasReplied: boolean;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		Reply: (options: string | MessagePayload | InteractionReplyOptions) => Promise<any>;
+		Reply: (options: string | MessagePayload | InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
 	}
 }
 

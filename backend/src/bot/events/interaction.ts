@@ -19,10 +19,11 @@ export default async function ({
 	interaction.Reply = async(options) => {
 		if (!interaction.isRepliable()) return;
 
-		if (interaction.hasReplied) interaction.followUp(options);
-		else interaction.reply(options);
-	
-		interaction.hasReplied = true;
+		if (interaction.hasReplied) return interaction.followUp(options);
+		else {
+			interaction.hasReplied = true;
+			return interaction.reply(options);
+		}
 	};
 
 	if (interaction.isCommand())
