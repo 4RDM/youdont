@@ -15,6 +15,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 		],
 	});
 
+	if (!interactionReply) return;
+
 	client.core
 		.rcon(`ban ${id}`)
 		.then(() => {

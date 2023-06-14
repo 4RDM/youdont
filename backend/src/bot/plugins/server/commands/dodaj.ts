@@ -27,10 +27,9 @@ export default async function ({ interaction, client }: CommandArgs) {
 		],
 	});
 
-	addFile(
-		`add_principal identifier.steam:${hex} group.${role} # ${mention.tag} (${mention.id}) https://steamcommunity.com/profiles/${hexToDec(hex)} ${new Date().toLocaleDateString()}`,
-		path
-	)
+	if (!interactionReply) return;
+	
+	addFile(`add_principal identifier.steam:${hex} group.${role} # ${mention.tag} (${mention.id}) https://steamcommunity.com/profiles/${hexToDec(hex)} ${new Date().toLocaleDateString()}`, path)
 		.then(() => {
 			interactionReply.edit({
 				embeds: [

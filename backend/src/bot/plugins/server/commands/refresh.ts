@@ -5,7 +5,7 @@ import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 
-	const inter = await interaction.Reply({
+	const interactionReply = await interaction.Reply({
 		embeds: [
 			Embed({
 				description: "**Wysyłanie**",
@@ -14,9 +14,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 		],
 	});
 
+	if (!interactionReply) return;
+
 	client.core.rcon("exec permisje.cfg")
 		.then(() => {
-			inter.edit({
+			interactionReply.edit({
 				embeds: [
 					Embed({
 						color: "#1F8B4C",
@@ -27,7 +29,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			});
 		})
 		.catch(() => {
-			inter.edit({
+			interactionReply.edit({
 				embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia")],
 			});
 		});
