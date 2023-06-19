@@ -7,17 +7,14 @@ import Loading from '../../compontents/Loading/Loading'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 interface Article {
-	title: string
-	description: string
 	id: string
-	background?: string
-	author: {
-		nickname: string
-		avatar: string
-	}
-	tags: string[]
+	title: string
+	content: string
+	articleDescription: string
+	discordID: string
 	views: number
-	createDate: Date
+	createdAt: Date
+	editedAt: Date
 }
 
 export default () => {
@@ -53,17 +50,17 @@ export default () => {
 						<div
 							className="article-card"
 							style={{
-								backgroundImage: article.background || 'none',
+								backgroundImage: 'none',
 							}}
 						>
 							<h1 className="article-card-header">
 								{article.title}
 							</h1>
 							<p className="article-card-description">
-								{article.description}
+								{article.articleDescription}
 							</p>
 							<div className="article-card-sub">
-								<div className="article-card-author">
+								{/* <div className="article-card-author">
 									<img
 										src={article.author.avatar}
 										alt="Awatar autora"
@@ -72,7 +69,7 @@ export default () => {
 									<p className="article-author">
 										{article.author.nickname}
 									</p>
-								</div>
+								</div> */}
 								<p className="article-views">
 									<Eye size={15} /> {article.views}
 								</p>
