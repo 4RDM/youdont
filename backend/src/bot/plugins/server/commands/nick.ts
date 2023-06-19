@@ -58,7 +58,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 		});
 	
 	if (userHexes.length > 1) {
-		const hexes = userHexes.map((hex, i) => `${i + 1}. ${hex}`).join("\n");
+		const hexes = userHexes.map((hex, i) => `${i + 1}. ${hex?.identifier}`).join("\n");
 		let awaitedMessage;
 
 		interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${hexes}\`\`\`\nKtóry z nich użyć?`);
