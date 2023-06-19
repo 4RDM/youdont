@@ -4,6 +4,7 @@ import {
 	ButtonStyle,
 	Channel,
 	Message,
+	WebhookClient,
 } from "discord.js";
 import { checkMessage } from "../handlers/automoderator";
 import { Embed, ErrorEmbed } from "../../utils/discordEmbed";
@@ -61,10 +62,13 @@ const wordlist = [
 	},
 ];
 
+let propozycjeWebhook: WebhookClient | null = null;
 let donateChannel: Channel | null = null;
 let afterInit = false;
 
+// prettier-ignore
 export async function init(client: ClientType) {
+	propozycjeWebhook = new WebhookClient({ url: client.config.propozycjeWebhook });
 	donateChannel = await client.channels.fetch("843586192879517776");
 	afterInit = true;
 }
@@ -84,9 +88,40 @@ export default async function ({ client, props }: { client: ClientType; props: {
 			if (!s) return;
 			message.member?.timeout(120 * 60 * 1000, "Phishing / scam URL"); // for 2 hours
 			message.delete();
+
+			return;
 		});
 
 		wordlist.forEach(word => isSimilar(message.content, word.msg) && message.reply(word.res));
+
+		if (message.channel.id == "843444752279666728") {
+			if (!propozycjeWebhook) return;
+
+			message.delete();
+
+			const createdMessage = await propozycjeWebhook.send({
+				options: {
+					username: message.author.username,
+					avatarURL: message.author.displayAvatarURL(),
+				},
+				embeds: [
+					Embed({
+						color: "#ffffff",
+						description: message.content,
+						user: message.author,
+					}),
+				]
+			});
+
+			const fetchMessage = await message.channel.messages.fetch(createdMessage.id);
+			fetchMessage.startThread({
+				name: `Propozycja od ${message.author.username}`,
+				reason: "Propozycja",
+				autoArchiveDuration: 10080,
+			});
+
+			return;
+		}
 
 		return;
 	} else {
