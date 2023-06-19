@@ -9,6 +9,7 @@ import useDocumentTitle from '../../hooks/useDocumentTitle'
 interface Article {
 	id: string
 	title: string
+	articleURL: string
 	content: string
 	articleDescription: string
 	discordID: string
@@ -47,7 +48,7 @@ export default () => {
 			<h1>Artykuły</h1>
 			<div id="articles-list">
 				{articles.map((article, i) => (
-					<Link to={article.id} key={i}>
+					<Link to={`/articles/${article.articleURL}`} key={i}>
 						<div
 							className="article-card"
 							style={{
@@ -72,8 +73,7 @@ export default () => {
 									</p>
 								</div>
 								<p className="article-views">
-									<Eye size={15} /> {article.views} |{' '}
-									{new Date(article.createdAt).toLocaleDateString()}
+									<Eye size={15} /> {article.views}
 								</p>
 							</div>
 						</div>

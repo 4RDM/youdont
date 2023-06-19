@@ -5,6 +5,7 @@ export interface ArticleDatabaseResult {
 		id: string;
 		title: string;
 		content: string;
+		articleURL: string;
 		articleDescription: string;
 		discordID: string;
 		views: number;
