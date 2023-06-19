@@ -38,7 +38,7 @@ body {
 	background: #0f0f0f;
 	color: white;
 	#content-container {
-		height: calc(100vh - 110px);
+		min-height: calc(100vh - 110px);
 		display: flex;
 		flex-direction: column;
 		padding: 15px;
