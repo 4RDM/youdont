@@ -6,6 +6,25 @@
 	@media (max-width: 720px) {
 		padding: 20px 0;
 	}
+	table {
+		@media only screen and (max-width: 499px),
+			(min-device-width: 499px) and (max-device-width: 767px) {
+			table,
+			td,
+			tr {
+				display: block;
+			}
+			.tableHeader {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				grid-template-rows: 1fr;
+			}
+		}
+		tr {
+			border-collapse: collapse;
+			border: 1px solid #ddd;
+		}
+	}
 	#article-header {
 		display: flex;
 		flex-direction: column;
