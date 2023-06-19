@@ -100,10 +100,8 @@ export default async function ({ client, props }: { client: ClientType; props: {
 			message.delete();
 
 			const createdMessage = await propozycjeWebhook.send({
-				options: {
-					username: message.author.username,
-					avatarURL: message.author.displayAvatarURL(),
-				},
+				username: message.author.username,
+				avatarURL: message.author.displayAvatarURL(),
 				embeds: [
 					Embed({
 						color: "#ffffff",
