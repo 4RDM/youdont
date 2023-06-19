@@ -17,6 +17,7 @@ interface Article {
 	editedAt: Date
 }
 
+// prettier-ignore
 export default () => {
 	const [isLoading, setLoading] = useState(true)
 	const [articles, setArticles] = useState<Article[]>([])
@@ -60,18 +61,19 @@ export default () => {
 								{article.articleDescription}
 							</p>
 							<div className="article-card-sub">
-								{/* <div className="article-card-author">
-									<img
+								<div className="article-card-author">
+									{/* <img
 										src={article.author.avatar}
 										alt="Awatar autora"
 										crossOrigin="anonymous"
-									/>
+									/> */}
 									<p className="article-author">
-										{article.author.nickname}
+										{article.discordID}
 									</p>
-								</div> */}
+								</div>
 								<p className="article-views">
-									<Eye size={15} /> {article.views}
+									<Eye size={15} /> {article.views} |{' '}
+									{new Date(article.createdAt).toLocaleDateString()}
 								</p>
 							</div>
 						</div>
