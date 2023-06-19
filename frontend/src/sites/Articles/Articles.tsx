@@ -6,7 +6,7 @@ import './Articles.scss'
 import Loading from '../../compontents/Loading/Loading'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
-interface Article {
+export interface Article {
 	id: string
 	title: string
 	articleURL: string

@@ -2,21 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as marked from 'marked'
 
+import { Article } from './Articles'
+
 import './Article.scss'
 import Loading from '../../compontents/Loading/Loading'
 import NotFound from '../NotFound/NotFound'
-
-export interface Article {
-	title: string
-	content: string
-	author: {
-		nickname: string
-		avatar: string
-	}
-	tags: string[]
-	views: number
-	createDate: Date
-}
 
 export default () => {
 	const [isLoading, setLoading] = useState(true)
@@ -64,16 +54,16 @@ export default () => {
 				<h1>{article.title}</h1>
 				<div id="article-sub-header">
 					<div id="article-author">
-						<img
+						{/* <img
 							src={article.author.avatar}
 							alt="Awatar autora"
 							crossOrigin="anonymous"
-						/>
-						<p>{article.author.nickname},</p>
+						/> */}
+						<p>{article.discordID},</p>
 					</div>
 					<p id="article-publication-date">
 						Data publikacji:{' '}
-						{new Date(article.createDate).toLocaleDateString()}
+						{new Date(article.createdAt).toLocaleDateString()}
 					</p>
 				</div>
 			</div>
