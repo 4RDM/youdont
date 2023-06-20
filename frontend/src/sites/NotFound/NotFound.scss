@@ -5,8 +5,8 @@
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-	height: 100%;
 	gap: 10px;
+	height: calc(100vh - 110px);
 
 	@media (max-width: 720px) {
 		h1 {
