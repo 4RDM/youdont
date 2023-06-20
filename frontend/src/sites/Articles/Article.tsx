@@ -26,7 +26,7 @@ export default () => {
 			.then((x) => x.json())
 			.then((json) => {
 				// TODO: handle error
-				if (json.code !== 200) return alert('BŁĄD')
+				if (json.code !== 200) return setError(true);
 
 				setArticle(json.article)
 				setTitle(json.article.title)
