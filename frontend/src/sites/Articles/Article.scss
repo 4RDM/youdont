@@ -6,15 +6,6 @@
 	@media (max-width: 720px) {
 		padding: 20px 0;
 	}
-	table {
-		border-collapse: collapse;
-		border: 1px solid grey;
-		max-width: 50%;
-	}
-	table * {
-		padding: 10px;
-		border: 1px solid grey;
-	}
 	#article-header {
 		display: flex;
 		flex-direction: column;
@@ -56,20 +47,43 @@
 		gap: 10px 0;
 		padding-top: 20px;
 		line-height: 20px;
+		ol,
+		ul {
+			list-style-position: inside;
+		}
 		@media (max-width: 720px) {
 			text-align: justify;
+		}
+		@media (max-width: 1520px) {
+			table,
+			img {
+				max-width: 100% !important;
+			}
+		}
+		table,
+		img {
+			border-collapse: collapse;
+			border: 1px solid grey;
+			max-width: 70%;
+		}
+		table * {
+			padding: 10px;
+			border: 1px solid grey;
 		}
 		h1 {
 			font-size: 25px;
 			line-height: 30px;
+			margin-top: 10px;
 		}
 		h2 {
 			font-size: 20px;
 			line-height: 25px;
+			margin-top: 10px;
 		}
 		h3 {
 			font-size: 16px;
 			line-height: 20px;
+			margin-top: 10px;
 		}
 		a {
 			color: rgb(231, 109, 255);
