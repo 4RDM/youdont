@@ -38,8 +38,8 @@ export default class HTTP {
 			next();
 		});
 
-		this.server.use("/", indexRouter);
 		this.server.use("/api", apiRouter);
+		this.server.use("/", indexRouter);
 
 		this.server.listen(port, () =>
 			logger.ready(`Website is listening to port ${port}`)
