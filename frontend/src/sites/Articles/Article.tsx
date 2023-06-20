@@ -11,6 +11,7 @@ import NotFound from '../NotFound/NotFound'
 export default () => {
 	const [isLoading, setLoading] = useState(true)
 	const [article, setArticle] = useState<Article | null>(null)
+	const [error, setError] = useState(false)
 	const content = useRef<HTMLDivElement>(null)
 	const { id } = useParams()
 
@@ -34,7 +35,7 @@ export default () => {
 			})
 			.catch((err) => {
 				console.error(err)
-				alert('BŁĄD')
+				setError(true)
 			})
 	}, [])
 
@@ -49,26 +50,30 @@ export default () => {
 	return isLoading ? (
 		<Loading />
 	) : article ? (
-		<div id="article-container">
-			<div id="article-header">
-				<h1>{article.title}</h1>
-				<div id="article-sub-header">
-					<div id="article-author">
-						{/* <img
+		!error ? (
+			<div id="article-container">
+				<div id="article-header">
+					<h1>{article.title}</h1>
+					<div id="article-sub-header">
+						<div id="article-author">
+							{/* <img
 							src={article.author.avatar}
 							alt="Awatar autora"
 							crossOrigin="anonymous"
 						/> */}
-						<p>{article.discordID},</p>
+							<p>{article.discordID},</p>
+						</div>
+						<p id="article-publication-date">
+							Data publikacji:{' '}
+							{new Date(article.createdAt).toLocaleDateString()}
+						</p>
 					</div>
-					<p id="article-publication-date">
-						Data publikacji:{' '}
-						{new Date(article.createdAt).toLocaleDateString()}
-					</p>
 				</div>
+				<div id="article-content" ref={content}></div>
 			</div>
-			<div id="article-content" ref={content}></div>
-		</div>
+		) : (
+			<NotFound />
+		)
 	) : (
 		<NotFound />
 	)
