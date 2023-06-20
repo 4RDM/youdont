@@ -17,7 +17,7 @@ const config = {
 	entry: './src/index.tsx',
 	output: {
 		path: path.join(__dirname, 'dist', 'public'),
-		filename: 'bundle.js',
+		filename: 'bundle.[contenthash].js',
 	},
 	devServer: {
 		open: true,
