@@ -27,15 +27,6 @@ const spaHandler = async (req: Request, res: Response) => {
 router.use("/public", staticFiles(join(publicPath, "public")));
 router.use("/assets", staticFiles(join(publicPath, "assets")));
 
-router.get(
-	[
-		"/",
-		// "/administration",
-		"/dashboard",
-		"/articles",
-		"/articles/:id",
-	],
-	spaHandler
-);
+router.get(["/*"], spaHandler);
 
 export default router;
