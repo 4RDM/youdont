@@ -14,35 +14,35 @@ import { Donate } from "../../database/managers/donates";
 const wordlist = [
 	{
 		msg: "Skąd wziąść donator",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "Skąd wziąść partner",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "gdzie kupić donator",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "gdzie kupić partner",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "co daje mi partner",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "co daje mi donator",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "jak kupić partner",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "jak kupić donator",
-		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/article-wplata-na-serwer",
+		res: "Wszystkie informacje znajdziesz na: https://4rdm.pl/articles/wplata-na-serwer",
 	},
 	{
 		msg: "Kiedy otwarte podania na triala",
