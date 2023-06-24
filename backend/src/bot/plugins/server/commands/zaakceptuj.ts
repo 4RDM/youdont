@@ -157,7 +157,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 						],
 					});
 
-					client.core.rcon("exec permissions.cfg");
+					client.core.rcon("exec permisje.cfg");
 					client.core.rcon("refreshAllW0");
 				})
 				.catch(() => {
