@@ -149,8 +149,9 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 					message.edit({
 						embeds: [
 							Embed({
+								title: ":timer: | Hex",
+								description: `\`${hex}\`: <@${user.id}> dodano!`,
 								color: "#1F8B4C",
-								description: "**Wysłano!**",
 								user: interaction.user,
 							}),
 						],
