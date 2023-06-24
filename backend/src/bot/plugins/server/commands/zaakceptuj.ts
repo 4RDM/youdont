@@ -117,7 +117,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 
 			const role = findClosest(fetchedUser?.total || 0);
 
-			if (role.fivem) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie można nadać roli na serwerze FiveM!")] });
+			if (!role.fivem) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie można nadać roli na serwerze FiveM!")] });
 
 			user.roles.add(role.roleID);
 
@@ -136,15 +136,15 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			const message = await hexChannel.send({
 				embeds: [
 					Embed({
-						title: "Hex",
-						description: `\`${hex}\`: <@${user.id}> został dodany!`,
-						color: "#1F8B4C",
+						title: ":timer: | Hex",
+						description: `\`${hex}\`: <@${user.id}> wysłano polecenie`,
+						color: "#ffffff",
 						user: interaction.user,
 					}),
 				],
 			});
 
-			addFile(`add_principal identifier.${hex} group.${role} # ${user.user.tag} (${user.id}) https://steamcommunity.com/profiles/${hexToDec(hex.replace("steam:", ""))} ${new Date().toLocaleDateString()}`, path)
+			addFile(`add_principal identifier.${hex} group.${role.fivem} # ${user.user.tag} (${user.id}) https://steamcommunity.com/profiles/${hexToDec(hex.replace("steam:", ""))} ${new Date().toLocaleDateString()}`, path)
 				.then(() => {
 					message.edit({
 						embeds: [
