@@ -41,6 +41,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
+			client.core.rcon("exec permissions.cfg");
 			client.core.rcon("refreshAllW0");
 		})
 		.catch(() => {
