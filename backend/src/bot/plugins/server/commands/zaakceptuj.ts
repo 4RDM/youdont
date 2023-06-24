@@ -137,7 +137,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 				embeds: [
 					Embed({
 						title: ":timer: | Hex",
-						description: `\`${hex}\`: <@${user.id}> wysłano polecenie`,
+						description: `\`${hex}\`: \`$${role.fivem}\`:<@${user.id}> wysłano polecenie`,
 						color: "#ffffff",
 						user: interaction.user,
 					}),
