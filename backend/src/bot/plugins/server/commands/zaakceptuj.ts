@@ -157,7 +157,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 						],
 					});
 
-					client.core.rcon("reload");
+					client.core.rcon("refreshAllW0");
 				})
 				.catch(() => {
 					message.edit({
