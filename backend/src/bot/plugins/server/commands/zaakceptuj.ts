@@ -113,7 +113,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			embeds: [
 				Embed({
 					title: "Nowa dotacja",
-					description: `Dziękujemy **${user.tag}** na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/article-wplata-na-serwer))`,
+					description: `Dziękujemy **${user.tag}** na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/articles/wplata-na-serwer))`,
 					thumbnail: user.displayAvatarURL(),
 					color: "#ffffff",
 					user: <User>client.user,
@@ -131,7 +131,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 						interaction.user.tag
 					}\`. Suma wpłaconych donate: \`${
 						fetchedUser?.total || 0
-					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/article-skad-zdobyc-hexa))`,
+					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/articles/skad-zdobyc-hexa))`,
 					color: "#1F8B4C",
 					user: interaction.user,
 				}),

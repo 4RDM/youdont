@@ -12,7 +12,7 @@ import MemoryStore from "memorystore";
 import indexRouter from "./router";
 import apiRouter from "./router/api";
 
-const port = 8021;
+const port = 8020;
 
 export default class HTTP {
 	public server: Application = expressWs(express()).app;
