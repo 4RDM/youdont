@@ -129,7 +129,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			
 			if (!hexes || !hexes[0]) return hexChannel.send(`<@${user.id}> nie posiada hexa!`);
 
-			if (hexes.length > 1) return hexChannel.send(`<@${user.id}> posiada więcej niż jeden hex!\n\`\`\`${hexes.map(x => x?.identifier).join(",\n")}\`\`\``);
+			if (hexes.length > 1) return hexChannel.send(`<@&981302216692498443> <@${user.id}> posiada więcej niż jeden hex!\n\`\`\`${hexes.map(x => x?.identifier).join(",\n")}\`\`\``);
 
 			const hex = hexes[0].identifier;
 
