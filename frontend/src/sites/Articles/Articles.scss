@@ -9,6 +9,10 @@
 		flex-wrap: wrap;
 		gap: 10px;
 		width: 100%;
+		a {
+			width: 100%;
+			max-width: 450px;
+		}
 	}
 	.article-card {
 		display: grid;
@@ -17,7 +21,6 @@
 		gap: 5px;
 		padding: 10px;
 		height: 300px;
-		//		width: 100%;
 		max-width: 450px;
 		background: #1a1a1a;
 		border-radius: 5px;
