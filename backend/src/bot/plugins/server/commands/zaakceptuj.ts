@@ -93,10 +93,22 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			});
 
 		try {
-			await client.guilds.cache
-				.get(client.core.bot.config.discord.mainGuild)
-				?.members.cache.get(user.id)
-				?.roles.add(findClosest(fetchedUser?.total || 0).roleID);
+			if (!interaction.inGuild()) throw new Error("User is not in guild!");
+
+			const guild = await client.guilds.fetch(interaction.guildId);
+
+			if (!guild) throw new Error("Interaction guild not found!");
+
+			const user = await guild.members.fetch(donate.discordID);
+
+			if (!user) throw new Error("User not found!");
+
+			const role = findClosest(fetchedUser?.total || 0);
+
+			user.roles.add(role.roleID);
+
+			console.log(role);
+			
 		} catch (err) {
 			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
 			interaction.Reply({
