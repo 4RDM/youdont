@@ -54,7 +54,7 @@ export const info: CommandInfo = {
 	triggers: ["dodaj"],
 	description: "Dodaj użytkownika do konfiguracji",
 	permissions: ["Administrator"],
-	role: "843444626726584370", // ZARZĄD
+	role: "981302216692498443", // !dodaj
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option

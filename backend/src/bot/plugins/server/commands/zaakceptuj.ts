@@ -6,36 +6,46 @@ import {
 } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import logger from "../../../../utils/logger";
+import { getUserHex } from "./hex";
+import { addFile } from "../../../../utils/filesystem";
+import { hexToDec } from "../../../../utils/strings";
+import { join } from "path";
 
 export interface Benefit {
 	amount: number;
 	roleID: string;
+	fivem: string;
 	name: "Użytkownik" | "Donator" | "Donator+" | "Partner" | "Partner+";
 }
 
 export const benefits: Benefit[] = [
 	{
 		name: "Użytkownik",
+		fivem: "",
 		roleID: "843476029226221609",
 		amount: 0,
 	},
 	{
 		name: "Donator",
+		fivem: "donator",
 		roleID: "843444653042302996",
 		amount: 5,
 	},
 	{
 		name: "Donator+",
+		fivem: "donatorplus",
 		roleID: "843444652412633098",
 		amount: 20,
 	},
 	{
 		name: "Partner",
+		fivem: "partner",
 		roleID: "843444651704844318",
 		amount: 50,
 	},
 	{
 		name: "Partner+",
+		fivem: "partnerplus",
 		roleID: "843444650881581076",
 		amount: 100,
 	},
@@ -51,6 +61,8 @@ const findClosest = (value: number): Benefit =>
 
 		return a;
 	});
+
+const path = join("/home/rdm/server/data/permisje.cfg");
 
 // prettier-ignore
 export async function accept(client: CommandArgs["client"], interaction: Interaction, id: number, amount: number) {
@@ -105,10 +117,52 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 
 			const role = findClosest(fetchedUser?.total || 0);
 
+			if (role.fivem) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie można nadać roli na serwerze FiveM!")] });
+
 			user.roles.add(role.roleID);
 
-			console.log(role);
+			const hexChannel = await guild.channels.fetch(client.config.discord.hexChannel);
 			
+			if (!hexChannel || !hexChannel.isTextBased()) throw new Error("Hex channel not found!");
+
+			const hexes = await getUserHex(client, user.id);
+			
+			if (!hexes || !hexes[0]) return hexChannel.send(`<@${user.id}> nie posiada hexa!`);
+
+			if (hexes.length > 1) return hexChannel.send(`<@${user.id}> posiada więcej niż jeden hex!\n\`\`\`${hexes.map(x => x?.identifier).join(",\n")}\`\`\``);
+
+			const hex = hexes[0].identifier;
+
+			const message = await hexChannel.send({
+				embeds: [
+					Embed({
+						title: "Hex",
+						description: `\`${hex}\`: <@${user.id}> został dodany!`,
+						color: "#1F8B4C",
+						user: interaction.user,
+					}),
+				],
+			});
+
+			addFile(`add_principal identifier.${hex} group.${role} # ${user.user.tag} (${user.id}) https://steamcommunity.com/profiles/${hexToDec(hex.replace("steam:", ""))} ${new Date().toLocaleDateString()}`, path)
+				.then(() => {
+					message.edit({
+						embeds: [
+							Embed({
+								color: "#1F8B4C",
+								description: "**Wysłano!**",
+								user: interaction.user,
+							}),
+						],
+					});
+
+					client.core.rcon("reload");
+				})
+				.catch(() => {
+					message.edit({
+						embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia")],
+					});
+				});
 		} catch (err) {
 			logger.error(`[zaakceptuj.ts]: ${(err as Error).stack}`);
 			interaction.Reply({

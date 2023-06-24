@@ -69,6 +69,10 @@ export default async function ({ client }: { client: ClientType }) {
 	if (process.env.NODE_ENV !== "production") {
 		client.user?.setActivity("DEV MODE", { type: ActivityType.Listening });
 		client.logger.warn("Bot is running in development mode!");
+
+		const connectionState = await client.core.database.serverpool.getConnection().then(() => "OK").catch(() => "ERROR");
+		client.logger.warn(`MariaDB serverpool test connection: ${connectionState}`);
+
 		return;
 	}
 
