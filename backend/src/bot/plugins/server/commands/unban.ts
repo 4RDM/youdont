@@ -18,7 +18,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	if (!interactionReply) return;
 
-	client.core.rcon(`unban ${id}`)
+	client.core
+		.rcon(`unban ${id}`)
 		.then(() => {
 			interactionReply.edit({
 				embeds: [
@@ -30,7 +31,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 				],
 			});
 		})
-		.then(() => {
+		.catch(() => {
 			interactionReply.edit({
 				embeds: [
 					ErrorEmbedInteraction(
