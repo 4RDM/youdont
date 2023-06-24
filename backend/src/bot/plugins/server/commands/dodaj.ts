@@ -41,7 +41,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 				],
 			});
 
-			client.core.rcon("reload");
+			client.core.rcon("refreshAllW0");
 		})
 		.catch(() => {
 			interactionReply.edit({
