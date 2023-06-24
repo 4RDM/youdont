@@ -41,13 +41,13 @@ export const benefits: Benefit[] = [
 		name: "Partner",
 		fivem: "partner",
 		roleID: "843444651704844318",
-		amount: 50,
+		amount: 70,
 	},
 	{
 		name: "Partner+",
 		fivem: "partnerplus",
 		roleID: "843444650881581076",
-		amount: 100,
+		amount: 120,
 	},
 ];
 
