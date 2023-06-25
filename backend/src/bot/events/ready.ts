@@ -1,6 +1,7 @@
 import { ActivityType, TextChannel } from "discord.js";
 import { getTops, getPlayers } from "../../utils/serverStatus";
 import { Embed } from "../../utils/discordEmbed";
+import chalk from "chalk";
 
 // prettier-ignore
 const reloadStats = async (client: ClientType, statsChannel: TextChannel) => {
@@ -70,8 +71,11 @@ export default async function ({ client }: { client: ClientType }) {
 		client.user?.setActivity("DEV MODE", { type: ActivityType.Listening });
 		client.logger.warn("Bot is running in development mode!");
 
-		const connectionState = await client.core.database.serverpool.getConnection().then(() => "OK").catch(() => "ERROR");
-		client.logger.warn(`MariaDB serverpool test connection: ${connectionState}`);
+		let connectionState = await client.core.database.serverpool.getConnection().then(() => chalk.bgGreen("OK")).catch(() => chalk.bgRed("ERROR"));
+		client.logger.warn(`DEV MariaDB serverpool test connection: ${connectionState}`);
+
+		connectionState = await client.core.database.botpool.getConnection().then(() => chalk.bgGreen("OK")).catch(() => chalk.bgRed("ERROR"));
+		client.logger.warn(`DEV MariaDB botpool test connection: ${connectionState}`);
 
 		return;
 	}

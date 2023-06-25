@@ -14,6 +14,7 @@ import PluginHandler from "./handlers/plugin";
 import CommandHandler from "./handlers/command";
 import EventHandler from "./handlers/event";
 import { ModalHandler } from "./handlers/modal";
+import chalk from "chalk";
 
 declare global {
 	interface CommandArgs<T = CommandInteraction> {
@@ -55,12 +56,19 @@ export class Client extends Cl {
 	public readonly core: Core;
 	public readonly config = config;
 	public readonly logger = logger;
+	public noCommands = process.argv.includes("--no-commands");
 
 	constructor(core: Core, options: ClientOptions) {
 		super(options);
 
 		this.core = core;
 		this.pluginHandler = new PluginHandler();
+
+		if (this.noCommands) {
+			this.pluginHandler.plugins = [];
+			this.logger.warn(chalk.bgRedBright("Commands are disabled!"));
+		}
+
 		this.commandHandler = new CommandHandler(this.pluginHandler);
 		this.eventHandler = new EventHandler(this);
 		this.modalHandler = new ModalHandler(this);

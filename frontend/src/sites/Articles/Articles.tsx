@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Eye } from '@styled-icons/entypo'
 
 import './Articles.scss'
+import kotel from '../../public/kotel.png'
 import Loading from '../../compontents/Loading/Loading'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
@@ -45,7 +46,10 @@ export default () => {
 		<Loading />
 	) : (
 		<div id="articles-container">
-			<h1>Artykuły</h1>
+			<div id="articles-head">
+				<h1>Artykuły</h1>
+				{Math.floor(Math.random() * 500) == 420 && <img className="kotel" src={kotel}></img>}
+			</div>
 			<div id="articles-list">
 				{articles.map((article, i) => (
 					<Link to={`/articles/${article.articleURL}`} key={i}>
