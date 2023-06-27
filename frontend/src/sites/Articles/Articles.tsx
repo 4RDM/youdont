@@ -17,6 +17,8 @@ export interface Article {
 	views: number
 	createdAt: Date
 	editedAt: Date
+	discordName: string
+	discordAvatar: string
 }
 
 // prettier-ignore
@@ -67,13 +69,13 @@ export default () => {
 							</p>
 							<div className="article-card-sub">
 								<div className="article-card-author">
-									{/* <img
-										src={article.author.avatar}
+									<img
+										src={article.discordAvatar}
 										alt="Awatar autora"
 										crossOrigin="anonymous"
-									/> */}
+									/>
 									<p className="article-author">
-										{article.discordID}
+										{article.discordName}
 									</p>
 								</div>
 								<p className="article-views">

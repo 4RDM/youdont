@@ -1,6 +1,19 @@
 import { DatabaseCore, OkPacketInterface } from "./database";
 
-export interface ArticleDatabaseResult {
+interface ArticleDatabaseResultObject {
+	id: string;
+	title: string;
+	content: string;
+	articleURL: string;
+	articleDescription: string;
+	discordID: string;
+	views: number;
+	createdAt: Date;
+	editedAt: Date;
+}
+
+export interface ArticleDatabaseResult
+	extends Array<ArticleDatabaseResultObject> {
 	[k: number]: {
 		id: string;
 		title: string;
@@ -18,7 +31,7 @@ export interface ArticleDatabaseResult {
 export class ArticlesManager {
 	constructor(private databaseCore: DatabaseCore) {}
 
-	async getByURL(articleURL: string): Promise<ArticleDatabaseResult | null> {
+	async getByURL(articleURL: string): Promise<ArticleDatabaseResultObject | null> {
 		try {
 			const article: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM articles WHERE articleURL = ? LIMIT 1", [articleURL]);
 
@@ -34,7 +47,7 @@ export class ArticlesManager {
 		}
 	}
 
-	async get(id: number): Promise<ArticleDatabaseResult | null> {
+	async get(id: number): Promise<ArticleDatabaseResultObject | null> {
 		try {
 			const article: ArticleDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM articles WHERE id = ? LIMIT 1", [id]);
 
@@ -64,7 +77,7 @@ export class ArticlesManager {
 		}
 	}
 
-	async create({ articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResult | null> {
+	async create({ articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResultObject | null> {
 		try {
 			const article: OkPacketInterface = await this.databaseCore.botpool.query("INSERT INTO articles (articleURL, title, content, articleDescription, discordID) VALUES (?, ?, ?, ?, ?)", [articleURL, title, content, articleDescription, discordID]);
 
@@ -78,7 +91,7 @@ export class ArticlesManager {
 		}
 	}
 
-	async update(id: number, { articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResult | null> {
+	async update(id: number, { articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResultObject | null> {
 		try {
 			await this.databaseCore.botpool.query("UPDATE articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?", [articleURL, discordID, title, content, articleDescription, id]);
 

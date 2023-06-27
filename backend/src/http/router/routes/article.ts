@@ -3,8 +3,8 @@ import { badRequest, internalError, notFound, unauthorized } from "../errors";
 import rateLimit from "express-rate-limit";
 
 const router = Router();
+const avatarCache = new Map<string, { lastSet: Date; url: string; name: string }>();
 
-// prettier-ignore
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
 	max: 10,
@@ -18,7 +18,6 @@ const limiter = rateLimit({
 	},
 });
 
-// prettier-ignore
 const adminCheck = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { userid } = req.session;
@@ -43,19 +42,101 @@ const adminCheck = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 router.get("/", async (req, res) => {
-	res.json({
-		code: 200,
-		articles: (await req.core.database.articles.getAll()) || [],
-	});
+	let articles = await req.core.database.articles.getAll();
+	const articlesPrepared = [];
+
+	if (!articles) articles = [];
+
+	for await (const article of articles) {
+		let userCache = avatarCache.get(article.discordID);
+
+		if (userCache) {
+			if (new Date().getTime() - userCache.lastSet.getTime() > 1000 * 60 * 60 * 24) {
+				avatarCache.delete(article.discordID);
+			} else {
+				articlesPrepared.push({
+					...article,
+					discordName: userCache.name,
+					discordAvatar: userCache.url,
+				});
+
+				continue;
+			}
+		}
+
+		userCache = avatarCache.get(article.discordID);
+
+		if (!userCache) {
+			const user = await req.core.bot.users.fetch(article.discordID);
+			
+			if (!user) {
+				articlesPrepared.push({
+					...article,
+					discordName: article.discordID,
+					discordAvatar: "",
+				});
+
+				continue;
+			} else {
+				avatarCache.set(article.discordID, {
+					lastSet: new Date(),
+					url: user.avatarURL({ size: 128, extension: "png" }) || "",
+					name: user.username,
+				});
+
+				articlesPrepared.push({
+					...article,
+					discordName: user.username,
+					discordAvatar: user.avatarURL({ size: 128, extension: "png" }),
+				});
+
+				continue;
+			}
+		}
+	}
+
+	res.json({ code: 200, articles: articlesPrepared });
 });
 
 router.get("/:id", async (req, res) => {
 	const { id } = req.params;
 	const article = await req.core.database.articles.getByURL(id);
+	const articlePrepared = { ...article, discordAvatar: "", discordName: "" };
 
 	if (!article) return notFound(res);
 
-	res.json({ code: 200, article });
+	let userCache = avatarCache.get(article.discordID);
+
+	if (userCache) {
+		if (new Date().getTime() - userCache.lastSet.getTime() > 1000 * 60 * 60 * 24) {
+			avatarCache.delete(article.discordID);
+		} else {
+			articlePrepared.discordName = userCache.name;
+			articlePrepared.discordAvatar = userCache.url;
+		}
+	}
+
+	userCache = avatarCache.get(article.discordID);
+
+	if (!userCache) {
+		const user = await req.core.bot.users.fetch(article.discordID);
+
+		if (!user) {
+			articlePrepared.discordName = article.discordID;
+			articlePrepared.discordAvatar = "";
+		} else {
+			avatarCache.set(article.discordID, {
+				lastSet: new Date(),
+				url: user.avatarURL({ size: 128, extension: "png" }) || "",
+				name: user.username,
+			});
+			
+			articlePrepared.discordName = user.username;
+			articlePrepared.discordAvatar = user.avatarURL({ size: 128, extension: "png" }) || "";
+		}
+	}
+
+	res.json({ code: 200, article: articlePrepared });
 });
 
 router.post("/create", adminCheck, limiter, async (req, res) => {

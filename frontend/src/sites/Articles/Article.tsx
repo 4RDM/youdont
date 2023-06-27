@@ -29,7 +29,7 @@ export default () => {
 				if (json.code !== 200) {
 					setError(true)
 					setLoading(false)
-					return;
+					return
 				}
 
 				setArticle(json.article)
@@ -60,12 +60,12 @@ export default () => {
 					<h1>{article.title}</h1>
 					<div id="article-sub-header">
 						<div id="article-author">
-							{/* <img
-							src={article.author.avatar}
-							alt="Awatar autora"
-							crossOrigin="anonymous"
-						/> */}
-							<p>{article.discordID},</p>
+							<img
+								src={article.discordAvatar}
+								alt="Awatar autora"
+								crossOrigin="anonymous"
+							/>
+							<p>{article.discordName},</p>
 						</div>
 						<p id="article-publication-date">
 							Data publikacji:{' '}
