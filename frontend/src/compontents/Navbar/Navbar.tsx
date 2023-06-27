@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+
 import { AccountState } from '../../atoms/AccountState'
 
 import './Navbar.scss'
@@ -10,7 +11,7 @@ export default () => {
 	const [isMobile, setIsMobile] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 	const location = useLocation()
-	const [accountState, setAccountState] = useRecoilState(AccountState)
+	const [accountState, _] = useRecoilState(AccountState)
 
 	const handleResize = () => {
 		if (window.innerWidth <= 720) setIsMobile(true)

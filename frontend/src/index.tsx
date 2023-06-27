@@ -15,6 +15,7 @@ const NotFound = lazy(() => import('./sites/NotFound/NotFound'))
 const Article = lazy(() => import('./sites/Articles/Article'))
 
 import './index.scss'
+import UserHome from './sites/Dashboard/UserHome'
 
 const App = () => {
 	const location = useLocation()
@@ -60,6 +61,9 @@ const App = () => {
 							<Route path="articles">
 								<Route index element={<Articles />} />
 								<Route path=":id" element={<Article />} />
+							</Route>
+							<Route path="dashboard">
+								<Route index element={<UserHome />} />
 							</Route>
 							{/* <Route path="about" element={<About />} /> */}
 							{/* <Route path="dashboard" element={<Dashboard />} /> */}
