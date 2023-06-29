@@ -44,7 +44,7 @@ export default class Handler {
 
 				if (hasErrored) continue;
 
-				commands.push({ info: file.info, execute: file.default });
+				commands.push({ info: file.info, execute: file.default, autocomplete: file.autocomplete });
 			}
 
 			if (hasErrored2) logger.warn(`Some commands were not loaded in plugin "${name}" due to an error`);

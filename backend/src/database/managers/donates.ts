@@ -10,7 +10,7 @@ export interface Donate {
 	type: "psc" | "paypal" | "tipply";
 }
 
-export interface DonateDatabaseResult {
+export interface DonateDatabaseResult extends Array<Donate> {
 	[k: number]: Donate;
 }
 
@@ -41,6 +41,20 @@ export class DonatesManager {
 			return donates;
 		} catch (err) {
 			this.databaseCore.core.bot.logger.error(`DonatesSQL GETALL Error: ${err}`);
+
+			return null;
+		}
+	}
+	
+	async getLastManyUnaproved(howMany: number): Promise<DonateDatabaseResult | null> {
+		try {
+			const donates: DonateDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM donates WHERE donates.approved = FALSE ORDER BY donates.id DESC LIMIT ?", howMany);
+
+			if (!donates[0]) return null;
+
+			return donates;
+		} catch (err) {
+			this.databaseCore.core.bot.logger.error(`DonatesSQL getLastManyUnaproved Error: ${err}`);
 
 			return null;
 		}

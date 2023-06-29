@@ -2,6 +2,7 @@ import { Interaction } from "discord.js";
 import { handleButtonInteraction } from "./interactions/button";
 import { handleModalInteraction } from "./interactions/modalSubmit";
 import { handleCommandInteraction } from "./interactions/command";
+import { handleAutocompleteInteraction } from "./interactions/autocomplete";
 
 // prettier-ignore
 export default async function ({
@@ -32,6 +33,8 @@ export default async function ({
 		handleButtonInteraction(client, interaction);
 	else if (interaction.isModalSubmit())
 		handleModalInteraction(client, interaction);
+	else if (interaction.isAutocomplete())
+		handleAutocompleteInteraction(client, interaction);
 }
 
 export const info: EventInfo = {

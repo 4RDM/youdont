@@ -6,6 +6,7 @@ import {
 	SlashCommandSubcommandBuilder,
 	PermissionResolvable,
 	CommandInteraction,
+	AutocompleteInteraction,
 } from "discord.js";
 import { Core } from "../core";
 import config from "../config";
@@ -33,6 +34,10 @@ declare global {
 	interface Command {
 		info: CommandInfo;
 		execute({ client, interaction }: CommandArgs): Promise<void>;
+		autocomplete?(
+			client: Client,
+			interaction: AutocompleteInteraction
+		): Promise<void>;
 	}
 
 	interface EventInfo {

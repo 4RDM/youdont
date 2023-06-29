@@ -8,7 +8,8 @@
 		"build": "tsc",
 		"dev": "nodemon --ignore '*/**.json' src/index.ts",
 		"dev:nc": "nodemon --ignore '*/**.json' src/index.ts --no-commands",
-		"prod": "export NODE_ENV=production && /bin/env ts-node src/deploy-commands.ts",
+		"deploy-win": "set NODE_ENV=production && ts-node src/deploy-commands.ts",
+		"deploy-linux": "export NODE_ENV=production && /bin/env ts-node src/deploy-commands.ts",
 		"prod-linux": "export NODE_ENV=production && /bin/env ts-node src/index.ts"
 	},
 	"dependencies": {

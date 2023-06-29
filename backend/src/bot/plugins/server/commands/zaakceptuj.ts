@@ -1,4 +1,5 @@
 import {
+	AutocompleteInteraction,
 	Interaction,
 	SlashCommandBuilder,
 	User,
@@ -65,7 +66,7 @@ const findClosest = (value: number): Benefit =>
 const path = join("/home/rdm/server/data/permisje.cfg");
 
 // prettier-ignore
-export async function accept(client: CommandArgs["client"], interaction: Interaction, id: number, amount: number) {
+export async function accept(client: CommandArgs["client"], interaction: Interaction, id: number, amount: number, override?: string) {
 	if (!interaction.isButton() && !interaction.isCommand() && !interaction.isModalSubmit()) return;
 
 	const donate = await client.core.database.donates.get(id);
@@ -93,7 +94,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 		const user = await client.users.fetch(fetchedUser?.discordID || "");
 		const webhook = new WebhookClient({ url: client.config.donateWebhook });
 
-		if (!user)
+		if (!user || !fetchedUser)
 			return interaction.Reply({
 				embeds: [
 					Embed({
@@ -105,6 +106,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 			});
 
 		try {
+			if (!override && fetchedUser.total > benefits[benefits.length - 1].amount) return;
 			if (!interaction.inGuild()) throw new Error("User is not in guild!");
 
 			const guild = await client.guilds.fetch(interaction.guildId);
@@ -115,7 +117,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 
 			if (!user) throw new Error("User not found!");
 
-			const role = findClosest(fetchedUser?.total || 0);
+			const role = !override ? findClosest(fetchedUser.total) : benefits.find(x => x.name === override) as Benefit;
 
 			if (!role.fivem) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie można nadać roli na serwerze FiveM!")] });
 
@@ -224,13 +226,23 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 }
 
 // prettier-ignore
+export async function autocomplete(client: CommandArgs["client"], interaction: AutocompleteInteraction) {
+	const donates = await client.core.database.donates.getLastManyUnaproved(10);
+
+	if (!donates) return interaction.respond([]);
+
+	await interaction.respond(donates.map(x => ({ name: x.id.toString(), value: x.id })));
+}
+
+// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 
 	const id = interaction.options.getInteger("id", true);
 	const amount = interaction.options.getInteger("kwota", true);
+	const benefit = interaction.options.getString("promocja", false);
 	
-	await accept(client, interaction, id, amount);
+	await accept(client, interaction, id, amount, benefit || undefined);
 }
 
 export const info: CommandInfo = {
@@ -239,13 +251,26 @@ export const info: CommandInfo = {
 	permissions: ["Administrator"],
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
-			option.setName("id").setDescription("ID donate").setRequired(true)
+			option
+				.setName("id")
+				.setDescription("ID donate")
+				.setRequired(true)
+				.setAutocomplete(true)
 		)
 		.addIntegerOption(option =>
 			option
 				.setName("kwota")
 				.setDescription("Kwota donate")
 				.setRequired(true)
+		)
+		.addStringOption(option =>
+			option
+				.setName("promocja")
+				.setDescription("Jaką promocję dodać?")
+				.setRequired(false)
+				.addChoices(
+					...benefits.map(x => ({ name: x.name, value: x.name }))
+				)
 		)
 		.setName("zaakceptuj"),
 };
