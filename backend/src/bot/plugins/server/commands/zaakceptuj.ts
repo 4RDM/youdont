@@ -105,6 +105,35 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 				],
 			});
 
+		webhook.send({
+			embeds: [
+				Embed({
+					title: "Nowa dotacja",
+					description: `Dziękujemy **${user.tag}** na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/articles/wplata-na-serwer))`,
+					thumbnail: user.displayAvatarURL(),
+					color: "#ffffff",
+					user: <User>client.user,
+				}),
+			],
+		});
+
+		dmUser.send({
+			embeds: [
+				Embed({
+					title: "Donate",
+					description: `Twoja wpłata o ID \`${
+						donate.id
+					}\` została zaakceptowana przez \`${
+						interaction.user.tag
+					}\`. Suma wpłaconych donate: \`${
+						fetchedUser?.total || 0
+					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/articles/skad-zdobyc-hexa))`,
+					color: "#1F8B4C",
+					user: interaction.user,
+				}),
+			],
+		});
+
 		try {
 			if (!override && fetchedUser.total > benefits[benefits.length - 1].amount) return;
 			if (!interaction.inGuild()) throw new Error("User is not in guild!");
@@ -178,35 +207,6 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 				],
 			});
 		}
-
-		webhook.send({
-			embeds: [
-				Embed({
-					title: "Nowa dotacja",
-					description: `Dziękujemy **${user.tag}** na serwer :heart::heart:\nChcesz zostać donatorem? <#843444742981156896> i napisz do mnie na PW \`donate\` ([Jak wysłać donate](https://4rdm.pl/articles/wplata-na-serwer))`,
-					thumbnail: user.displayAvatarURL(),
-					color: "#ffffff",
-					user: <User>client.user,
-				}),
-			],
-		});
-
-		dmUser.send({
-			embeds: [
-				Embed({
-					title: "Donate",
-					description: `Twoja wpłata o ID \`${
-						donate.id
-					}\` została zaakceptowana przez \`${
-						interaction.user.tag
-					}\`. Suma wpłaconych donate: \`${
-						fetchedUser?.total || 0
-					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/articles/skad-zdobyc-hexa))`,
-					color: "#1F8B4C",
-					user: interaction.user,
-				}),
-			],
-		});
 	} else if (donate && donate.approved) {
 		interaction.Reply({
 			embeds: [
