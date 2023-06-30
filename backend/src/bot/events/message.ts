@@ -164,7 +164,7 @@ export default async function ({ client, props }: { client: ClientType; props: {
 					embeds: [
 						Embed({
 							title: "Donate",
-							description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${donate.id}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](https://paypal.me/fourxrdm)**`,
+							description: `Przy wypełnianiu formularza, **w okienku na wiadomość wpisz swoje ID wpłaty (\`${donate.id}\`)**. Pamiętaj że musisz być członkiem naszego **[serwera Discord](https://discord.gg/U3mm6NVdyq)**. **[Link do wpłaty](paypal.me/fourRDMofficial)**`,
 							color: "#ffffff",
 							user: message.author,
 						}),
