@@ -109,6 +109,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["nick"],
 	description: "Zmień przedrostek gracza",
+	permissions: ["Administrator"],
 	role: "981302459043577907", // !nick
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
