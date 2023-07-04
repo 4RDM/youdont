@@ -18,6 +18,7 @@ export const info: CommandInfo = {
 	triggers: ["zajete"],
 	description:
 		"Wyślij wiadomość informującą o duplikacie pojazdu na serwerze",
+	permissions: ["Administrator"],
 	role: "883475949964906516", // developer
 	builder: new SlashCommandBuilder().setName("zajete"),
 };
