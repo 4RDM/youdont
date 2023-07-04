@@ -2,7 +2,7 @@ import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { awaitMessage } from "./shared";
 
 const path = join(
@@ -200,7 +200,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["limitki"],
 	description: "Zarządzanie limitkami graczy",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	role: "843444626726584370", // ZARZĄD
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>

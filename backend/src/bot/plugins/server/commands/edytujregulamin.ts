@@ -1,4 +1,8 @@
-import { ChannelType, SlashCommandBuilder } from "discord.js";
+import {
+	ChannelType,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 // prettier-ignore
@@ -63,7 +67,7 @@ export default async function ({ interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["edytujregulamin"],
 	description: "Edytuje regulamin",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
 		.addChannelOption(option =>
 			option

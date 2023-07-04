@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 // prettier-ignore
@@ -160,7 +160,8 @@ export default async function ({ interaction, client }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["notatka", "note", "n"],
 	description: "Notatki",
-	permissions: ["BanMembers", "KickMembers"],
+	permissions:
+		PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers,
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand

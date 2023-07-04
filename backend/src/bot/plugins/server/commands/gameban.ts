@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 export default async function ({ client, interaction }: CommandArgs) {
@@ -45,7 +45,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["gameban"],
 	description: "Zbanuj osobę na serwerze",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	role: "843444642539110400", // TEAM 4RDM
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>

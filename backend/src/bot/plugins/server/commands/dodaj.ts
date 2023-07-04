@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
@@ -54,7 +54,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["dodaj"],
 	description: "Dodaj użytkownika do konfiguracji",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	role: "981302216692498443", // !dodaj
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>

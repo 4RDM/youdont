@@ -1,6 +1,7 @@
 import {
 	AutocompleteInteraction,
 	Interaction,
+	PermissionFlagsBits,
 	SlashCommandBuilder,
 	User,
 	WebhookClient,
@@ -136,7 +137,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 
 		try {
 			if (!override && fetchedUser.total > benefits[benefits.length - 1].amount) return;
-			if (!interaction.inGuild()) throw new Error("User is not in guild!");
+			if (!interaction.inGuild()) throw new Error("Interaction not in guild!");
 
 			const guild = await client.guilds.fetch(interaction.guildId);
 
@@ -248,7 +249,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["zaakceptuj"],
 	description: "Zaakceptuj donate o danym ID",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option

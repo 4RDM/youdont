@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 // prettier-ignore
@@ -40,7 +40,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["cmd", "command"],
 	description: "Wyślij polecenie do konsoli",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option

@@ -1,4 +1,8 @@
-import { HexColorString, SlashCommandBuilder } from "discord.js";
+import {
+	HexColorString,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
@@ -109,7 +113,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["nick"],
 	description: "Zmień przedrostek gracza",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	role: "981302459043577907", // !nick
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>

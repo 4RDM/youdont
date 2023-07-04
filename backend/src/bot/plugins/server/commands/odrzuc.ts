@@ -1,4 +1,8 @@
-import { Interaction, SlashCommandBuilder } from "discord.js";
+import {
+	Interaction,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 export async function odrzuc(
@@ -78,7 +82,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["odrzuc", "odrzuć"],
 	description: "Odrzuć donate o danym ID",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option.setName("id").setDescription("ID wpłaty").setRequired(true)

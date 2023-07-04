@@ -2,7 +2,11 @@ import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
+import {
+	CommandInteraction,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 
 const path = join(
 	// __dirname,
@@ -226,7 +230,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["shared"],
 	description: "Zarządzanie autami współdzielonymi graczy",
-	permissions: ["Administrator"],
+	permissions: PermissionFlagsBits.Administrator,
 	role: "843444626726584370", // ZARZĄD
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>

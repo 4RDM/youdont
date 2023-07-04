@@ -1,4 +1,8 @@
-import { GuildMember, SlashCommandBuilder } from "discord.js";
+import {
+	GuildMember,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 // prettier-ignore
@@ -52,7 +56,8 @@ export default async function ({ interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["kick"],
 	description: "Wyrzuć osobę",
-	permissions: ["BanMembers", "KickMembers"],
+	permissions:
+		PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers,
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

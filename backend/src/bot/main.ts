@@ -7,6 +7,7 @@ import {
 	PermissionResolvable,
 	CommandInteraction,
 	AutocompleteInteraction,
+	PermissionFlags,
 } from "discord.js";
 import { Core } from "../core";
 import config from "../config";
@@ -27,8 +28,8 @@ declare global {
 		triggers: string[];
 		description: string;
 		role?: string;
-		permissions?: PermissionResolvable[];
-		builder: SlashCommandBuilder | SlashCommandSubcommandBuilder;
+		permissions?: PermissionResolvable;
+		builder: SlashCommandBuilder;
 	}
 
 	interface Command {

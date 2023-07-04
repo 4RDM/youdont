@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 
 // prettier-ignore
@@ -38,7 +38,7 @@ export default async function ({ interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["clear", "purge", "wyczysc"],
 	description: "Usuwa określoną ilość wiadomości",
-	permissions: ["ManageMessages"],
+	permissions: PermissionFlagsBits.ManageMessages,
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option

@@ -16,6 +16,13 @@ export default class Handler {
 
 	constructor(client: Client) {
 		this.client = client;
+
+		client.on("guildCreate", guild => {
+			if (guild.id == "843444305149427713") return client.logger.warn(`Joined the guild ${guild.name} (${guild.id})`);
+			client.logger.warn(`Joined the guild ${guild.name} (${guild.id})`);
+			guild.leave();
+		});
+
 		this.init();
 	}
 

@@ -19,6 +19,10 @@ setTimeout(() => {
 			command.info.builder
 				.setName(command.info.triggers[0])
 				.setDescription(command.info.description);
+			if (command.info.permissions && !command.info.role)
+				command.info.builder.setDefaultMemberPermissions(
+					command.info.permissions.toString()
+				);
 			commands.push(command.info.builder.toJSON());
 		});
 
@@ -46,4 +50,4 @@ setTimeout(() => {
 			process.exit();
 		}
 	})();
-}, 10000);
+}, 5000);
