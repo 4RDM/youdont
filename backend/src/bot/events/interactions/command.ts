@@ -9,9 +9,18 @@ export const handleCommandInteraction = async(client: Client, interaction: Comma
 	const command = client.commandHandler.get(interaction.commandName);
 
 	if (command) {
-		if ((command.info.role && (interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role)) || (interaction.memberPermissions.has(command.info.permissions || [])))
-			command.execute({ client, interaction });
-		else
-			return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
+		if (command.info.permissions && command.info.role)
+			if (!interaction.memberPermissions.has(command.info.permissions) && !(interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role))
+				return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
+		
+		if (command.info.permissions)
+			if (!interaction.memberPermissions.has(command.info.permissions))
+				return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
+		
+		if (command.info.role)
+			if (!(interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role))
+				return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
+		
+		command.execute({ client, interaction });
 	}
 };

@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
+import { Roles } from "../../../constants";
 
 export default async function ({ interaction }: CommandArgs) {
 	interaction.Reply({
@@ -18,7 +19,6 @@ export const info: CommandInfo = {
 	triggers: ["zajete"],
 	description:
 		"Wyślij wiadomość informującą o duplikacie pojazdu na serwerze",
-	permissions: ["Administrator"],
-	role: "883475949964906516", // developer
+	role: Roles.Developer, // developer
 	builder: new SlashCommandBuilder().setName("zajete"),
 };

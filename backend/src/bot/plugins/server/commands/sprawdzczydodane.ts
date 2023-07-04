@@ -2,6 +2,7 @@ import { join } from "path";
 import { existsSync } from "fs";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { Roles } from "../../../constants";
 
 const path = join(
 	"/home/rdm/server/data/resources/[optymalizacja kurwa]/auta/stream"
@@ -42,7 +43,7 @@ export const info: CommandInfo = {
 	triggers: ["sprawdz", "sprawdź"],
 	description: "Sprawdź czy auto jest dodane na serwer",
 	permissions: PermissionFlagsBits.KickMembers,
-	role: "843444626726584370", // ZARZĄD
+	role: Roles.Zarzad,
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option

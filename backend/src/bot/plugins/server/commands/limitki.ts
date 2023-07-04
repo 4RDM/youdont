@@ -4,6 +4,7 @@ import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { awaitMessage } from "./shared";
+import { Roles } from "../../../constants";
 
 const path = join(
 	// __dirname,
@@ -201,7 +202,7 @@ export const info: CommandInfo = {
 	triggers: ["limitki"],
 	description: "Zarządzanie limitkami graczy",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "843444626726584370", // ZARZĄD
+	role: Roles.Zarzad, // ZARZĄD
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand

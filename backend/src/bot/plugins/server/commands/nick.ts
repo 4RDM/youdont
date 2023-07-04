@@ -9,6 +9,7 @@ import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import hexToRGB from "../../../../utils/hexToRGB";
 import { getUserHex } from "./hex";
 import { awaitMessage } from "./shared";
+import { Roles } from "../../../constants";
 
 export interface Role {
 	tag: string;
@@ -114,7 +115,7 @@ export const info: CommandInfo = {
 	triggers: ["nick"],
 	description: "Zmień przedrostek gracza",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "981302459043577907", // !nick
+	role: Roles.Nick, // !nick
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

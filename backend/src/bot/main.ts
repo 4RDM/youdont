@@ -3,11 +3,9 @@ import {
 	ClientEvents,
 	ClientOptions,
 	SlashCommandBuilder,
-	SlashCommandSubcommandBuilder,
 	PermissionResolvable,
 	CommandInteraction,
 	AutocompleteInteraction,
-	PermissionFlags,
 } from "discord.js";
 import { Core } from "../core";
 import config from "../config";

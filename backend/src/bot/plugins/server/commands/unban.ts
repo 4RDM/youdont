@@ -1,5 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
+import { Roles } from "../../../constants";
 
 // prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
@@ -47,7 +48,7 @@ export const info: CommandInfo = {
 	triggers: ["unban"],
 	description: "Odbanuj osobę na serwerze",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "843444642539110400", // TEAM 4RDM
+	role: Roles.Team,
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option
