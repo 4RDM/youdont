@@ -16,6 +16,8 @@ export default async function ({
 
 	if (!interaction.inGuild() || interaction.user.bot) return;
 
+	if (interaction.guildId !== client.config.discord.mainGuild) return;
+
 	interaction.hasReplied = false;
 	interaction.Reply = async(options) => {
 		if (!interaction.isRepliable()) return;
