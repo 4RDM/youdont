@@ -1,5 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
+import { Roles } from "../../../constants";
 
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
@@ -46,7 +47,7 @@ export const info: CommandInfo = {
 	triggers: ["gameban"],
 	description: "Zbanuj osobę na serwerze",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "843444642539110400", // TEAM 4RDM
+	role: Roles.Team, // TEAM 4RDM
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option

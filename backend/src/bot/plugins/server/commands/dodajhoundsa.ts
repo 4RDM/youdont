@@ -1,5 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
+import { Roles } from "../../../constants";
 
 // prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
@@ -28,7 +29,7 @@ export const info: CommandInfo = {
 	triggers: ["dodajhoundsa"],
 	description: "Dodaj hounds",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "962784956197765192", // opiekun hounds
+	role: Roles.OpiekunHounds,
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

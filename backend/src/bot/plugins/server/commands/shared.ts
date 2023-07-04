@@ -7,6 +7,7 @@ import {
 	PermissionFlagsBits,
 	SlashCommandBuilder,
 } from "discord.js";
+import { Roles } from "../../../constants";
 
 const path = join(
 	// __dirname,
@@ -231,7 +232,7 @@ export const info: CommandInfo = {
 	triggers: ["shared"],
 	description: "Zarządzanie autami współdzielonymi graczy",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "843444626726584370", // ZARZĄD
+	role: Roles.Zarzad,
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand

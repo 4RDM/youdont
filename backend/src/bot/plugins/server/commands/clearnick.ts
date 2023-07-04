@@ -5,6 +5,7 @@ import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
 import { awaitMessage } from "./shared";
 import { Roles } from "./nick";
+import { Roles as Rl } from "../../../constants";
 
 // prettier-ignore
 const path = join("/home/rdm/server/data/resources/[Nimplex]/4rdm/data/roles.json");
@@ -88,7 +89,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["clearnick"],
 	description: "Usun przedrostek gracza",
-	role: "981302459043577907", // !nick
+	role: Rl.Nick, // !nick
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

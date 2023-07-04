@@ -4,6 +4,7 @@ import { addFile } from "../../../../utils/filesystem";
 import { hexToDec } from "../../../../utils/strings";
 import { join } from "path";
 import { existsSync } from "fs";
+import { Roles } from "../../../constants";
 
 const path = join("/home/rdm/server/data/permisje.cfg");
 
@@ -55,7 +56,7 @@ export const info: CommandInfo = {
 	triggers: ["dodaj"],
 	description: "Dodaj użytkownika do konfiguracji",
 	permissions: PermissionFlagsBits.Administrator,
-	role: "981302216692498443", // !dodaj
+	role: Roles.Dodaj,
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option
