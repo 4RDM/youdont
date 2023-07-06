@@ -94,7 +94,10 @@
 		img {
 			border-collapse: collapse;
 			border: 1px solid grey;
-			max-width: 70%;
+		}
+		img {
+			max-width: 550px;
+			width: 100%;
 		}
 		table * {
 			padding: 10px;
