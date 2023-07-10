@@ -32,7 +32,7 @@ export default () => {
 		fetch('/api/articles')
 			.then((x) => x.json())
 			.then((json) => {
-				if (json.code !== 200) return alert('BŁĄD')
+				if (json.code !== 200) throw new Error(`Invalid response: ${JSON.stringify(json)}`);
 
 				setArticles(json.articles)
 
