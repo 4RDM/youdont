@@ -11,6 +11,7 @@ import MemoryStore from "memorystore";
 
 import indexRouter from "./router";
 import apiRouter from "./router/api";
+import { join } from "path";
 
 const port = 8020;
 
@@ -38,6 +39,8 @@ export default class HTTP {
 			next();
 		});
 
+		// prettier-ignore
+		this.server.get("/sitemap.xml", (_, res) => res.sendFile(join(__dirname, "..", "..", "..", "frontend", "dist", "assets", "sitemap.xml")))
 		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
 

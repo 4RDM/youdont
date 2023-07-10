@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>https://4rdm.pl/</loc>
+		<lastmod>2023-07-11T02:51:24+01:00</lastmod>
+		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://4rdm.pl/articles</loc>
+		<lastmod>2023-07-11T02:51:24+01:00</lastmod>
+		<priority>0.8</priority>
+		<changefreq>monthly</changefreq>
+	</url>
+	<url>
+		<loc>https://4rdm.pl/dashboard</loc>
+		<lastmod>2023-07-11T02:51:24+01:00</lastmod>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://4rdm.pl/articles/wplata-na-serwer</loc>
+		<lastmod>2023-07-11T02:51:24+01:00</lastmod>
+		<priority>0.7</priority>
+		<changefreq>monthly</changefreq>
+	</url>
+	<url>
+		<loc>https://4rdm.pl/articles/skad-zdobyc-hexa</loc>
+		<lastmod>2023-07-11T02:51:24+01:00</lastmod>
+		<priority>0.7</priority>
+		<changefreq>monthly</changefreq>
+	</url>
+</urlset>
