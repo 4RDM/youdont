@@ -28,6 +28,7 @@ export default () => {
 
 	useEffect(() => {
 		setIsOpen(false)
+		// if (location.pathname == "/dashboard") logout
 	}, [location])
 
 	const desktopNavbar = (
@@ -39,7 +40,7 @@ export default () => {
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				{loggedIn ? (
-					<Link to="/dashboard">{accountState.name}</Link>
+					<Link to="/dashboard">{accountState.username}</Link>
 				) : (
 					<a href="/api/dashboard/login">Zaloguj się</a>
 				)}

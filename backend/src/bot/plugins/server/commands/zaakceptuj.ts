@@ -53,7 +53,7 @@ export const benefits: Benefit[] = [
 	},
 ];
 
-const findClosest = (value: number): Benefit =>
+export const findClosest = (value: number): Benefit =>
 	benefits.reduce((a, b) => {
 		if (a.amount === value) return a;
 		if (b.amount === value) return b;

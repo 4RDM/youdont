@@ -6,6 +6,7 @@ import config from "../../../config";
 import timeSince from "../../../utils/timeSince";
 import { internalError, unauthorized } from "../errors";
 import rateLimit from "express-rate-limit";
+import { findClosest } from "../../../bot/plugins/server/commands/zaakceptuj";
 
 interface IUserCache {
 	[index: string]: {
@@ -17,6 +18,7 @@ interface IUserCache {
 		kills?: number;
 		date?: Date;
 		playTime?: number;
+		rank?: string;
 	};
 }
 
@@ -129,6 +131,7 @@ router.get("/stats", userCheck, async (req, res) => {
 
 	if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
 		const response = await req.core.database.users.getUserFromServer(userid);
+		const user = await req.core.database.users.get(userid);
 
 		if (response) {
 			const { discord, identifier, license, kills, deaths, heady } = response;
@@ -141,6 +144,7 @@ router.get("/stats", userCheck, async (req, res) => {
 				deaths,
 				identifier,
 				playTime,
+				rank: findClosest(user?.total || 0).name,
 				date: new Date(),
 			};
 		} else {
@@ -152,6 +156,7 @@ router.get("/stats", userCheck, async (req, res) => {
 				deaths: undefined,
 				identifier: undefined,
 				playTime: 0,
+				rank: undefined,
 				date: new Date(),
 			};
 		}
@@ -160,7 +165,7 @@ router.get("/stats", userCheck, async (req, res) => {
 	res.json({
 		code: 200,
 		message: "OK",
-		...userCache[userid],
+		user: userCache[userid],
 	});
 });
 

@@ -37,8 +37,8 @@ const App = () => {
 					return console.log('Not logged in, skipping state')
 
 				setAccountState({
-					id: user.userid,
-					name: user.username,
+					userid: user.userid,
+					username: user.username,
 					avatar: user.avatar,
 					loggedIn: true,
 				})
