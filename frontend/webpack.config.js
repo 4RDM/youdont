@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const isProduction = process.env.NODE_ENV == 'production'
 
@@ -75,10 +74,7 @@ module.exports = () => {
 		config.plugins.push(new WorkboxWebpackPlugin.GenerateSW())
 
 		config.optimization = {
-			minimizer: [
-				new UglifyJsPlugin({ parallel: 3 }),
-				new TerserPlugin({ parallel: 3 }),
-			],
+			minimizer: [new TerserPlugin({ parallel: 3 })],
 			runtimeChunk: 'single',
 			splitChunks: {
 				chunks: 'all',
