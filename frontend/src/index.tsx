@@ -33,7 +33,8 @@ const App = () => {
 
 				const { user } = data
 
-				if (!user.userid || !user.username || !user.avatar) return
+				if (!user || !user.userid || !user.username || !user.avatar)
+					return console.log('Not logged in, skipping state')
 
 				setAccountState({
 					id: user.userid,
