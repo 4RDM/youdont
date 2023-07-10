@@ -67,9 +67,13 @@ export default () => {
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				{loggedIn ? (
-					<span className="a">Nimplex#1010</span>
+					location.pathname == '/dashboard' ? (
+						<a href="/api/dashboard/logout">Wyloguj się</a>
+					) : (
+						<Link to="/dashboard">{accountState.username}</Link>
+					)
 				) : (
-					<a href="/api/dashboard/">Zaloguj się</a>
+					<a href="/api/dashboard/login">Zaloguj się</a>
 				)}
 			</div>
 			{!isOpen && (
