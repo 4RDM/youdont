@@ -87,5 +87,5 @@ export default () => {
 		</div>
 	)
 
-	return isMobile ? mobileNavbar : desktopNavbar
+	return <nav>{isMobile ? mobileNavbar : desktopNavbar}</nav>
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as marked from 'marked'
+import { Helmet } from 'react-helmet'
 
 import { Article } from './Articles'
 
@@ -15,12 +16,6 @@ export default () => {
 	const content = useRef<HTMLDivElement>(null)
 	const { id } = useParams()
 
-	const [title, setTitle] = useState('Artykuł')
-
-	useEffect(() => {
-		document.title = title
-	}, [title])
-
 	useEffect(() => {
 		fetch(`/api/articles/${id}`)
 			.then((x) => x.json())
@@ -33,7 +28,6 @@ export default () => {
 				}
 
 				setArticle(json.article)
-				setTitle(json.article.title)
 
 				setLoading(false)
 			})
@@ -55,26 +49,46 @@ export default () => {
 		<Loading />
 	) : article ? (
 		!error ? (
-			<div id="article-container">
-				<div id="article-header">
-					<h1>{article.title}</h1>
-					<div id="article-sub-header">
-						<div id="article-author">
-							<img
-								src={article.discordAvatar}
-								alt="Awatar autora"
-								crossOrigin="anonymous"
-							/>
-							<p>{article.discordName},</p>
+			<article>
+				<Helmet>
+					<title>{article.title}</title>
+					<meta
+						name="description"
+						content={article.articleDescription}
+					/>
+					<meta name="author" content={article.discordName} />
+					<meta name="twitter:card" content="summary" />
+					<meta name="twitter:title" content="Artykuł" />
+					<meta
+						name="twitter:description"
+						content={article.articleDescription}
+					/>
+				</Helmet>
+				<div id="article-container">
+					<header>
+						<div id="article-header">
+							<h1>{article.title}</h1>
+							<div id="article-sub-header">
+								<div id="article-author">
+									<img
+										src={article.discordAvatar}
+										alt="Awatar autora"
+										crossOrigin="anonymous"
+									/>
+									<p>{article.discordName},</p>
+								</div>
+								<p id="article-publication-date">
+									Data publikacji:{' '}
+									{new Date(
+										article.createdAt
+									).toLocaleDateString()}
+								</p>
+							</div>
 						</div>
-						<p id="article-publication-date">
-							Data publikacji:{' '}
-							{new Date(article.createdAt).toLocaleDateString()}
-						</p>
-					</div>
+					</header>
+					<div id="article-content" ref={content}></div>
 				</div>
-				<div id="article-content" ref={content}></div>
-			</div>
+			</article>
 		) : (
 			<NotFound />
 		)

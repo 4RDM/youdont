@@ -26,36 +26,38 @@ export default () => {
 	const [cytat] = useState(cytaty[Math.floor(Math.random() * cytaty.length)])
 
 	return (
-		<div id="footer-container">
-			<div>
-				<h1>Cytat</h1>
-				<p>{cytat}</p>
+		<footer>
+			<div id="footer-container">
+				<div>
+					<h1>Cytat</h1>
+					<p>{cytat}</p>
+				</div>
+				<div>
+					<h1>Linki</h1>
+					<a href="https://discord.4rdm.pl">
+						<Discord size={20} /> Discord
+					</a>
+					<a href="https://steamcommunity.com/groups/4rdm">
+						<Steam size={20} /> Steam
+					</a>
+					<a href="https://github.com/4RDM">
+						<Github size={20} /> Github
+					</a>
+				</div>
+				<div>
+					<h1>Mapa strony</h1>
+					<Link to="/">Strona główna</Link>
+					<Link to="/articles">Artykuły</Link>
+					<Link to="/administration">Administracja</Link>
+					<Link to="/dashboard">Panel użytkownika</Link>
+				</div>
+				<div>
+					<p id="footer-author">
+						4RDM © 2020-{new Date().getFullYear()}, made by{' '}
+						<a href="https://github.com/Nimplex">Nimplex</a>
+					</p>
+				</div>
 			</div>
-			<div>
-				<h1>Linki</h1>
-				<a href="https://discord.4rdm.pl">
-					<Discord size={20} /> Discord
-				</a>
-				<a href="https://steamcommunity.com/groups/4rdm">
-					<Steam size={20} /> Steam
-				</a>
-				<a href="https://github.com/4RDM">
-					<Github size={20} /> Github
-				</a>
-			</div>
-			<div>
-				<h1>Mapa strony</h1>
-				<Link to="/">Strona główna</Link>
-				<Link to="/articles">Artykuły</Link>
-				<Link to="/administration">Administracja</Link>
-				<Link to="/dashboard">Panel użytkownika</Link>
-			</div>
-			<div>
-				<p id="footer-author">
-					4RDM © 2020-{new Date().getFullYear()}, made by{' '}
-					<a href="https://github.com/Nimplex">Nimplex</a>
-				</p>
-			</div>
-		</div>
+		</footer>
 	)
 }

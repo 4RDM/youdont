@@ -54,6 +54,7 @@ export default () => {
 			</div>
 			<div id="articles-list">
 				{articles.map((article, i) => (
+					<article>
 					<Link to={`/articles/${article.articleURL}`} key={i}>
 						<div
 							className="article-card"
@@ -84,6 +85,7 @@ export default () => {
 							</div>
 						</div>
 					</Link>
+					</article>
 				))}
 			</div>
 		</div>
