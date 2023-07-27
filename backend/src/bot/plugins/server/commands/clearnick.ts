@@ -8,7 +8,7 @@ import { Roles } from "./nick";
 import { Roles as Rl } from "../../../constants";
 
 // prettier-ignore
-const path = join("/home/rdm/server/data/resources/[Nimplex]/4rdm/data/roles.json");
+const path = join("/home/rdm/server/data/resources/[4RDM]/4rdm/data/roles.json");
 
 // prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {

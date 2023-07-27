@@ -5,7 +5,7 @@ import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Roles } from "../../../constants";
 
 const path = join(
-	"/home/rdm/server/data/resources/[optymalizacja kurwa]/auta/stream"
+	"/home/rdm/server/data/resources/[optymalizacja]/auta/stream"
 );
 
 // prettier-ignore

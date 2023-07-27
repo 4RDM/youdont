@@ -12,7 +12,7 @@ import { Roles } from "../../../constants";
 const path = join(
 	// __dirname,
 	// "vehicles.json"
-	"/home/rdm/server/data/resources/[Nimplex]/4rdm/data/auta/shared.json"
+	"/home/rdm/server/data/resources/[4RDM]/4rdm/data/auta/shared.json"
 );
 
 export const awaitMessage = (
