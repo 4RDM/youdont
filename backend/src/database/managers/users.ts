@@ -5,6 +5,7 @@ import { NoteDatabaseResult } from "./notes";
 export interface User {
 	discordID: string;
 	total: number;
+	realTotal: number;
 	createdAt: Date;
 }
 
@@ -46,13 +47,13 @@ export class UsersManager {
 		}
 	}
 
-	async create(discordID: string, total?: number) {
+	async create(discordID: string, total?: number, realTotal?: number) {
 		try {
 			const user = await this.get(discordID);
 
 			if (user) return user;
 
-			await this.databaseCore.botpool.query("INSERT INTO users (discordID, total) VALUES (?, ?)", [discordID, total || 0]);
+			await this.databaseCore.botpool.query("INSERT INTO users (discordID, total, realTotal) VALUES (?, ?)", [discordID, total || 0, realTotal || 0]);
 
 			return await this.get(discordID);
 		} catch (err) {

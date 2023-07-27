@@ -85,6 +85,8 @@ export class DonatesManager {
 			if (countIn)
 				await this.databaseCore.botpool.query("UPDATE users SET total = total + ? WHERE discordID = ?", [amount, donate.discordID]);
 
+			await this.databaseCore.botpool.query("UPDATE users SET realTotal = realTotal + ? WHERE discordID = ?", [amount, donate.discordID]);
+				
 			return await this.get(donateID);
 		} catch (err) {
 			this.databaseCore.core.bot.logger.error(`DonatesSQL APPROVE Error: ${err}`);
