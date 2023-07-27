@@ -52,11 +52,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 	const userHexes = await getUserHex(client, mention.id);
 	let currentHex = "";
 
-	if (!userHexes)
+	if (!userHexes || !userHexes[0])
 		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono użytkownika")],
 		});
-	
+		
 	if (userHexes.length > 1) {
 		const hexes = userHexes.map((hex, i) => `${i + 1}. ${hex?.identifier}`).join("\n");
 		let awaitedMessage;
