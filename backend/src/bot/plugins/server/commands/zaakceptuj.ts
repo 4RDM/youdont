@@ -73,7 +73,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 	const donate = await client.core.database.donates.get(id);
 
 	if (donate && !donate.approved) {
-		const don = await client.core.database.donates.approve(donate.id, amount, interaction.user.id);
+		const don = await client.core.database.donates.approve(donate.id, amount, interaction.user.id, override !== "produkt");
 
 		if (!don) return;
 
@@ -134,6 +134,8 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 				}),
 			],
 		});
+
+		if (override && override == "produkt") return;
 
 		try {
 			if (!override && fetchedUser.total > benefits[benefits.length - 1].amount) return;
@@ -270,7 +272,10 @@ export const info: CommandInfo = {
 				.setDescription("Jaką promocję dodać?")
 				.setRequired(false)
 				.addChoices(
-					...benefits.map(x => ({ name: x.name, value: x.name }))
+					...[
+						...benefits.map(x => ({ name: x.name, value: x.name })),
+						{ name: "produkt", value: "produkt" },
+					]
 				)
 		)
 		.setName("zaakceptuj"),
