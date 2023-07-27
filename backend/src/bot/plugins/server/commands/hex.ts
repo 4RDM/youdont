@@ -23,11 +23,6 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	if (!response)
 		return interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-		});
-
-	if (!response)
-		return interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono użytkownika")],
 		});
 

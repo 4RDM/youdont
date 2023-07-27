@@ -54,12 +54,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	if (!userHexes)
 		return interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-		});
-
-	if (!userHexes[0])
-		return interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza")],
+			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono użytkownika")],
 		});
 	
 	if (userHexes.length > 1) {
