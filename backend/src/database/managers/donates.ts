@@ -77,7 +77,7 @@ export class DonatesManager {
 
 	async approve(donateID: number, amount: number, approver: string, countIn = true): Promise<Donate | null> {
 		try {
-			await this.databaseCore.botpool.query("UPDATE donates SET approved = true, amount = ?, approver = ?, countIn = ? WHERE id = ?", [amount, approver, donateID, countIn]);
+			await this.databaseCore.botpool.query("UPDATE donates SET approved = true, amount = ?, approver = ?, countIn = ? WHERE id = ?", [amount, approver, countIn, donateID]);
 
 			const donate = await this.get(donateID);
 			if (!donate) return null;

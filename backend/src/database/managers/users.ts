@@ -53,7 +53,7 @@ export class UsersManager {
 
 			if (user) return user;
 
-			await this.databaseCore.botpool.query("INSERT INTO users (discordID, total, realTotal) VALUES (?, ?)", [discordID, total || 0, realTotal || 0]);
+			await this.databaseCore.botpool.query("INSERT INTO users (discordID, total, realTotal) VALUES (?, ?, ?)", [discordID, total || 0, realTotal || 0]);
 
 			return await this.get(discordID);
 		} catch (err) {
@@ -77,7 +77,7 @@ export class UsersManager {
 
 	async getUsersFromServer(discordID: string): Promise<DBUser[] | null> {
 		try {
-			const response: DBUser[] = (await this.databaseCore.serverpool.query(`SELECT * FROM kdr WHERE \`discord\` = 'discord:${discordID}'`));
+			const response: DBUser[] = (await this.databaseCore.serverpool.query(`SELECT * FROM kdr WHERE \`discord\` = '${discordID}'`));
 
 			if (!response[0]) return null;
 
