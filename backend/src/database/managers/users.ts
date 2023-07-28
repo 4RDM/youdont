@@ -77,7 +77,7 @@ export class UsersManager {
 
 	async getUsersFromServer(discordID: string): Promise<DBUser[] | null> {
 		try {
-			const response: DBUser[] = (await this.databaseCore.serverpool.query(`SELECT * FROM kdr WHERE \`discord\` = '${discordID}'`));
+			const response: DBUser[] = (await this.databaseCore.serverpool.query(`SELECT * FROM kdr WHERE \`discord\` = 'discord:${discordID}'`));
 
 			if (!response[0]) return null;
 
