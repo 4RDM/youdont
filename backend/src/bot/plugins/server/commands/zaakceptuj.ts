@@ -127,7 +127,7 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 					}\` została zaakceptowana przez \`${
 						interaction.user.tag
 					}\`. Suma wpłaconych donate: \`${
-						fetchedUser?.total || 0
+						fetchedUser?.realTotal || 0
 					}zł\`\nWyślij swój hex na kanał: <#843488362262167594> ([Jak zdobyć hexa](https://4rdm.pl/articles/skad-zdobyc-hexa))`,
 					color: "#1F8B4C",
 					user: interaction.user,
