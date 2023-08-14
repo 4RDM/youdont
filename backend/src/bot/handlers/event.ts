@@ -24,7 +24,7 @@ export default class Handler {
 				const invite = await guild.invites.create(Object.keys(channels)[0]);
 				client.logger.warn(`Joined the guild ${guild.name} (${guild.id}) invite: ${invite.url}`);
 			} catch(err) {
-				guild.leave();
+				client.logger.error(err);
 			} finally {
 				guild.leave();
 			}
