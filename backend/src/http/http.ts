@@ -40,7 +40,7 @@ export default class HTTP {
 		});
 
 		// prettier-ignore
-		this.server.get("/sitemap.xml", (_, res) => res.sendFile(join(__dirname, "..", "..", "..", "frontend", "dist", "assets", "sitemap.xml")))
+		this.server.get("/sitemap.xml", (_, res) => res.sendFile(join(__dirname, "..", "..", "..", "frontend", "dist", "assets", "sitemap.xml")));
 		this.server.use("/api", apiRouter);
 		this.server.use("/", indexRouter);
 
