@@ -17,9 +17,17 @@ export default class Handler {
 	constructor(client: Client) {
 		this.client = client;
 
-		client.on("guildCreate", guild => {
-			if (guild.id == "843444305149427713") return client.logger.warn(`Joined the guild ${guild.name} (${guild.id})`);
-			client.logger.warn(`Joined the guild ${guild.name} (${guild.id})`);
+		client.on("guildCreate", async guild => {
+			try {
+				if (guild.id == client.config.discord.mainGuild) return client.logger.warn(`Joined the guild ${guild.name} (${guild.id})`);
+				const channels = await guild.channels.fetch();
+				const invite = await guild.invites.create(Object.keys(channels)[0]);
+				client.logger.warn(`Joined the guild ${guild.name} (${guild.id}) invite: ${invite.url}`);
+			} catch(err) {
+				guild.leave();
+			} finally {
+				guild.leave();
+			}
 			guild.leave();
 		});
 
