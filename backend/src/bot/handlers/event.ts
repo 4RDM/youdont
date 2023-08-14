@@ -21,7 +21,8 @@ export default class Handler {
 			try {
 				if (guild.id == client.config.discord.mainGuild) return client.logger.warn(`Joined the guild ${guild.name} (${guild.id})`);
 				const channels = await guild.channels.fetch();
-				const invite = await guild.invites.create(channels.at(0)?.id || "");
+				const filtered = channels.filter(x => x?.isTextBased());
+				const invite = await guild.invites.create(filtered.at(0)?.id || "");
 				client.logger.warn(`Joined the guild ${guild.name} (${guild.id}) invite: ${invite.url}`);
 			} catch(err) {
 				client.logger.error(err);
