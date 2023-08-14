@@ -23,7 +23,7 @@ export default class Handler {
 				client.logger.warn(`Joined the guild ${guild.name} (${guild.id})}`);
 				const channels = await guild.channels.fetch();
 				const filtered = channels.filter(x => x?.isTextBased());
-				const invite = await guild.invites.create(filtered.at(0)?.id || "");
+				const invite = await guild.invites.create(filtered.at(0)?.id || "", { temporary: false, maxAge: 0 });
 				client.logger.warn(`Invite to ${guild.name}: ${invite.url}`);
 			} catch(err) {
 				client.logger.error(err);
