@@ -28,7 +28,6 @@ export default class Handler {
 			} finally {
 				guild.leave();
 			}
-			guild.leave();
 		});
 
 		this.init();
