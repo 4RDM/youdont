@@ -67,7 +67,7 @@ export async function autocomplete(client: CommandArgs["client"], interaction: A
 		{ name: "2 tydzień", value: 1123200 },
 		{ name: "1 miesiąc", value: 2678400 },
 		{ name: "1 rok", value: 31536000 },
-		{ name: "Permamenty", value: 10444633200 },
+		{ name: "Permamenty", value: 0 },
 	]);
 }
 
