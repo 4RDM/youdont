@@ -110,7 +110,7 @@ export const info: CommandInfo = {
 	triggers: ["nick"],
 	description: "Zmień przedrostek gracza",
 	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.Nick], // !nick
+	role: Roles.NickTeam,
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

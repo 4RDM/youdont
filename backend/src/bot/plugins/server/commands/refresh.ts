@@ -40,6 +40,6 @@ export const info: CommandInfo = {
 	triggers: ["refresh"],
 	description: "Przeładuj uprawnienia na serwerze",
 	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.Zarzad], // ZARZĄD
+	role: [Roles.Zarzad, Roles.HeadAdmin], // ZARZĄD
 	builder: new SlashCommandBuilder().setName("refresh"),
 };

@@ -202,7 +202,7 @@ export const info: CommandInfo = {
 	triggers: ["limitki"],
 	description: "Zarządzanie limitkami graczy",
 	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.Zarzad], // ZARZĄD
+	role: [Roles.Zarzad, Roles.HeadAdmin, Roles.Developer], // ZARZĄD
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand

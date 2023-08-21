@@ -56,7 +56,7 @@ export const info: CommandInfo = {
 	triggers: ["dodaj"],
 	description: "Dodaj użytkownika do konfiguracji",
 	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.Dodaj],
+	role: Roles.DodajTeam,
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option

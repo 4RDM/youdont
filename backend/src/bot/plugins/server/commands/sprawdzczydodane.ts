@@ -42,8 +42,7 @@ export default async function ({ interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["sprawdz", "sprawdź"],
 	description: "Sprawdź czy auto jest dodane na serwer",
-	permissions: PermissionFlagsBits.KickMembers,
-	role: [Roles.Zarzad],
+	role: [Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.Developer],
 	builder: new SlashCommandBuilder()
 		.addStringOption(option =>
 			option

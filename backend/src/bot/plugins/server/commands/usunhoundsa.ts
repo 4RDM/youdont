@@ -27,7 +27,7 @@ export const info: CommandInfo = {
 	triggers: ["usunhoundsa"],
 	description: "Usuń hounds",
 	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.OpiekunHounds],
+	role: [Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.OpiekunHounds],
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

@@ -4,6 +4,7 @@ import {
 	SlashCommandBuilder,
 } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
+import { Roles } from "src/bot/constants";
 
 // prettier-ignore
 export default async function ({ interaction }: CommandArgs) {
@@ -68,6 +69,7 @@ export const info: CommandInfo = {
 	triggers: ["edytujregulamin"],
 	description: "Edytuje regulamin",
 	permissions: PermissionFlagsBits.Administrator,
+	role: [Roles.Owner],
 	builder: new SlashCommandBuilder()
 		.addChannelOption(option =>
 			option
