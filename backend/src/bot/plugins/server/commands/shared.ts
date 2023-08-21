@@ -232,7 +232,7 @@ export const info: CommandInfo = {
 	triggers: ["shared"],
 	description: "Zarządzanie autami współdzielonymi graczy",
 	permissions: PermissionFlagsBits.Administrator,
-	role: Roles.Zarzad,
+	role: [Roles.Zarzad],
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand

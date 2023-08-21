@@ -2,6 +2,14 @@ import { CommandInteraction, GuildMemberRoleManager } from "discord.js";
 import { Client } from "../../main";
 
 // prettier-ignore
+export const doesUserHasAnyRole = (userPermissions: GuildMemberRoleManager | string[], roles: string[]) => {
+	if (userPermissions instanceof GuildMemberRoleManager) {
+		return roles.find(roleToFind => userPermissions.cache.find((role) => role.id == roleToFind)) ? true : false;
+	}	
+	return roles.find(roleToFind => userPermissions.find(role => role == roleToFind)) ? true : false;
+};
+
+// prettier-ignore
 export const handleCommandInteraction = async(client: Client, interaction: CommandInteraction) => {
 	if (!interaction.inGuild()) return;
 	if (!interaction.isCommand()) return;
@@ -10,13 +18,13 @@ export const handleCommandInteraction = async(client: Client, interaction: Comma
 
 	if (command) {
 		if (command.info.permissions && command.info.role) {
-			if (!interaction.memberPermissions.has(command.info.permissions) && !(interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role))
+			if (!interaction.memberPermissions.has(command.info.permissions) && !doesUserHasAnyRole(interaction.member.roles, command.info.role))
 				return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
 		} else if (command.info.permissions) {
 			if (!interaction.memberPermissions.has(command.info.permissions))
 				return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
 		} else if (command.info.role) {
-			if (!(interaction.member.roles as GuildMemberRoleManager).cache.has(command.info.role))
+			if (!doesUserHasAnyRole(interaction.member.roles, command.info.role))
 				return interaction.Reply({ content: "Nie posiadasz wymaganych uprawień do tego polecenia!", ephemeral: true });
 		}
 		command.execute({ client, interaction });

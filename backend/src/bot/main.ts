@@ -25,7 +25,7 @@ declare global {
 	interface CommandInfo {
 		triggers: string[];
 		description: string;
-		role?: string;
+		role?: string[];
 		permissions?: PermissionResolvable;
 		builder: SlashCommandBuilder;
 	}

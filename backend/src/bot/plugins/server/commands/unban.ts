@@ -48,7 +48,7 @@ export const info: CommandInfo = {
 	triggers: ["unban"],
 	description: "Odbanuj osobę na serwerze",
 	permissions: PermissionFlagsBits.Administrator,
-	role: Roles.Team,
+	role: [Roles.Team],
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option

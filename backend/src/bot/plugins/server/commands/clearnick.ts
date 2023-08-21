@@ -89,7 +89,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["clearnick"],
 	description: "Usun przedrostek gracza",
-	role: Rl.Nick, // !nick
+	role: [Rl.Nick], // !nick
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

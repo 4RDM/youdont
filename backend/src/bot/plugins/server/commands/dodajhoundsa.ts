@@ -29,7 +29,7 @@ export const info: CommandInfo = {
 	triggers: ["dodajhoundsa"],
 	description: "Dodaj hounds",
 	permissions: PermissionFlagsBits.Administrator,
-	role: Roles.OpiekunHounds,
+	role: [Roles.OpiekunHounds],
 	builder: new SlashCommandBuilder()
 		.addUserOption(option =>
 			option

@@ -75,7 +75,7 @@ export const info: CommandInfo = {
 	triggers: ["gameban"],
 	description: "Zbanuj osobę na serwerze",
 	permissions: PermissionFlagsBits.Administrator,
-	role: Roles.Team, // TEAM 4RDM
+	role: [Roles.Team], // TEAM 4RDM
 	builder: new SlashCommandBuilder()
 		.addIntegerOption(option =>
 			option
