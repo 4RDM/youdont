@@ -1,6 +1,6 @@
 import { Client } from "../../main";
 import { AutocompleteInteraction, GuildMemberRoleManager } from "discord.js";
-import { doesUserHasAnyRole } from "./command";
+import { doesUserHaveAnyRole } from "./command";
 
 // prettier-ignore
 export const handleAutocompleteInteraction = async (
@@ -12,7 +12,7 @@ export const handleAutocompleteInteraction = async (
 	if (!command) return client.logger.error(`AUTOCOMPLETE Could not find the command ${interaction.commandName}`);
 
 	if (!interaction.inGuild() || interaction.user.bot) return;
-	if (!((command.info.role && doesUserHasAnyRole(interaction.member.roles, command.info.role)) || (interaction.memberPermissions.has(command.info.permissions || [])))) return;
+	if (!((command.info.role && doesUserHaveAnyRole(interaction.member.roles, command.info.role)) || (interaction.memberPermissions.has(command.info.permissions || [])))) return;
 
 	try {
 		if (!command.autocomplete) throw new Error(`AUTOCOMPLETE The command ${interaction.commandName} does not have an autocomplete function`);
