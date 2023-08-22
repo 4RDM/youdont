@@ -1,6 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
-
+import { Roles } from "../../../constants";
 // prettier-ignore
 export default async function ({ interaction, client }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
@@ -162,6 +162,7 @@ export const info: CommandInfo = {
 	description: "Notatki",
 	permissions:
 		PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers,
+	role: Roles.NotatkaTeam,
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand
