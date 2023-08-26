@@ -28,8 +28,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 		writeFileSync(path, JSON.stringify(antilagJson), { encoding: "utf-8" });
 
 		const embed = Embed({
-			title: ":x: | Usunięto auto współdzielone!",
-			color: "#f54242",
+			title: ":white_check_mark: | Dodano antilaga!",
+			color: "#1F8B4C",
 			user: interaction.user,
 		});
 
@@ -43,8 +43,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 		writeFileSync(path, JSON.stringify(antilagJson), { encoding: "utf-8" });
 
 		const embed = Embed({
-			title: ":white_check_mark: | Dodano antilaga!",
-			color: "#1F8B4C",
+			title: ":x: | Usunięto antilaga!",
+			color: "#f54242",
 			user: interaction.user,
 		});
 
