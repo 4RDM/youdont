@@ -4,7 +4,7 @@ import {
 	SlashCommandBuilder,
 } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
-import { Roles } from "src/bot/constants";
+import { Roles } from "../../../constants";
 
 // prettier-ignore
 export default async function ({ interaction }: CommandArgs) {
