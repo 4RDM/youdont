@@ -56,7 +56,6 @@ export const info: CommandInfo = {
 	triggers: ["antilag"],
 	description: "Antilag do samochodu",
 	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.Zarzad, Roles.HeadAdmin, Roles.Developer],
 	builder: new SlashCommandBuilder()
 		.addSubcommand(subcommand =>
 			subcommand
