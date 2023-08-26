@@ -26,6 +26,14 @@ export default async function ({ client, interaction }: CommandArgs) {
 		antilagJson.push(spawnName);
 
 		writeFileSync(path, JSON.stringify(antilagJson), { encoding: "utf-8" });
+
+		const embed = Embed({
+			title: ":x: | Usunięto auto współdzielone!",
+			color: "#f54242",
+			user: interaction.user,
+		});
+
+		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand == "usun") {
 		if (!antilagJson.find(x => x == spawnName))
 			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Samochód nie znajduje się na liście!")] });
@@ -33,6 +41,14 @@ export default async function ({ client, interaction }: CommandArgs) {
 		antilagJson = antilagJson.filter(x => x != spawnName);
 
 		writeFileSync(path, JSON.stringify(antilagJson), { encoding: "utf-8" });
+
+		const embed = Embed({
+			title: ":white_check_mark: | Dodano antilaga!",
+			color: "#1F8B4C",
+			user: interaction.user,
+		});
+
+		interaction.Reply({ embeds: [embed] });
 	}
 }
 
