@@ -3,7 +3,7 @@ import { join } from "path";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { awaitMessage } from "./shared";
+import { awaitMessage, selectUserHex } from "./shared";
 import { Roles } from "../../../constants";
 
 const path = join(
@@ -12,7 +12,6 @@ const path = join(
 	"/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/vehicles.json"
 );
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!existsSync(path))
 		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
@@ -21,52 +20,16 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	const subcommand = interaction.options.getSubcommand();
 	const userJson = (await import(path)).default;
+	const mention = interaction.options.getUser("mention", true);
+	const hexOverride = interaction.options.getString("hex", false);
 
 	if (subcommand === "dodaj") {
-		const mention = interaction.options.getUser("mention", true);
 		const spawnName = interaction.options.getString("spawn-name", true);
 		const displayName = interaction.options.getString("display-name", true);
 		const userHexes = await getUserHex(client, mention.id);
-		let currentHex;
+		const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
 
-		if (!userHexes)
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-			});
-
-		if (!userHexes[0])
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
-			});
-		
-		if (userHexes.length > 1) {
-			const identifiers = userHexes;
-			let awaitedMessage;
-
-			interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
-		
-			try {
-				awaitedMessage = await awaitMessage(interaction);
-			} catch (e) {
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
-				});
-			}
-
-			let index = parseInt(awaitedMessage);
-
-			if (isNaN(index))
-				return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
-
-			currentHex = identifiers[--index]?.identifier;
-
-			if (!currentHex)
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
-				});
-		} else {
-			currentHex = userHexes[0].identifier;
-		}
+		if (!currentHex) return;
 
 		if (!userJson[currentHex]) userJson[currentHex] = [];
 		userJson[currentHex].push([spawnName, displayName]);
@@ -86,49 +49,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand === "usun") {
-		const mention = interaction.options.getUser("mention", true);
 		const spawnName = interaction.options.getString("spawn-name", true);
 		const userHexes = await getUserHex(client, mention.id);
-		let currentHex;
+		const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
 
-		if (!userHexes)
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-			});
-
-		if (!userHexes[0])
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
-			});
-		
-		if (userHexes.length > 1) {
-			const identifiers = userHexes;
-			let awaitedMessage;
-
-			interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
-		
-			try {
-				awaitedMessage = await awaitMessage(interaction);
-			} catch (e) {
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
-				});
-			}
-
-			let index = parseInt(awaitedMessage);
-
-			if (isNaN(index))
-				return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
-
-			currentHex = identifiers[--index]?.identifier;
-
-			if (!currentHex)
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
-				});
-		} else {
-			currentHex = userHexes[0].identifier;
-		}
+		if (!currentHex) return;
 
 		const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
 		if (index == -1) {
@@ -154,8 +79,6 @@ export default async function ({ client, interaction }: CommandArgs) {
 		
 		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand === "lista") {
-		const mention = interaction.options.getUser("mention", true);
-
 		const userHexes = await getUserHex(client, mention.id);
 
 		if (!userHexes)
@@ -208,52 +131,24 @@ export const info: CommandInfo = {
 			subcommand
 				.setName("dodaj")
 				.setDescription("Dodaje limitkę")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("spawn-name")
-						.setDescription("Spawn name")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("display-name")
-						.setDescription("Nazwa wyświetlana limitki")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
+				.addStringOption(option => option.setName("display-name").setDescription("Nazwa wyświetlana limitki").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("usun")
 				.setDescription("Usuwa limitkę")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("spawn-name")
-						.setDescription("Spawn name")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("lista")
 				.setDescription("Lista limitek gracza")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 		)
 		.setName("limitki"),
 };

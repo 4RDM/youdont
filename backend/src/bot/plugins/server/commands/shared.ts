@@ -41,7 +41,7 @@ export const awaitMessage = (
 	return promise;
 };
 
-const selectUserHex = async(userHexes: DBUser[] | null, interaction: CommandInteraction) => {
+export const selectUserHex = async(userHexes: DBUser[] | null, interaction: CommandInteraction) => {
 	if (!userHexes) {
 		interaction.Reply({
 			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
