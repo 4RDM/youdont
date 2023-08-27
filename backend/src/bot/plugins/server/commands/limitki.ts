@@ -3,7 +3,7 @@ import { join } from "path";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { awaitMessage, selectUserHex } from "./shared";
+import { selectUserHex } from "./shared";
 import { Roles } from "../../../constants";
 
 const path = join(
