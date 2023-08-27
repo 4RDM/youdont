@@ -60,11 +60,6 @@ export const info: CommandInfo = {
 	triggers: ["userinfo", "user"],
 	description: "Sprawdź informacje na temat użytkownika",
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik")
-				.setRequired(true)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 		.setName("userinfo"),
 };

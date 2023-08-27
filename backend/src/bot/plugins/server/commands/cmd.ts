@@ -42,11 +42,6 @@ export const info: CommandInfo = {
 	description: "Wyślij polecenie do konsoli",
 	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
-		.addStringOption(option =>
-			option
-				.setName("command")
-				.setDescription("Polecenie do wykonania")
-				.setRequired(true)
-		)
+		.addStringOption(option => option.setName("command").setDescription("Polecenie do wykonania").setRequired(true))
 		.setName("cmd"),
 };

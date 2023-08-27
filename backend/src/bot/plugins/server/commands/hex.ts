@@ -34,11 +34,6 @@ export const info: CommandInfo = {
 	triggers: ["hex"],
 	description: "Sprawdź hex użytkownika",
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik, którego hex chcesz sprawdzić")
-				.setRequired(true)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik, którego hex chcesz sprawdzić").setRequired(true))
 		.setName("hex"),
 };

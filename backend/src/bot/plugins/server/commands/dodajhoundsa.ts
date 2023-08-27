@@ -31,17 +31,7 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: [Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.OpiekunHounds],
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik")
-				.setRequired(true)
-		)
-		.addBooleanOption(option =>
-			option
-				.setName("trial")
-				.setDescription("Czy ma być trial?")
-				.setRequired(false)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+		.addBooleanOption(option => option.setName("trial").setDescription("Czy ma być trial?").setRequired(false))
 		.setName("dodajhoundsa"),
 };

@@ -58,20 +58,9 @@ export default async function ({ interaction }: CommandArgs) {
 export const info: CommandInfo = {
 	triggers: ["ban"],
 	description: "Zbanuj osobę",
-	permissions:
-		PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers,
+	permissions: PermissionFlagsBits.BanMembers,
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik do zbanowania")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("reason")
-				.setDescription("Powód zbanowania")
-				.setRequired(false)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik do zbanowania").setRequired(true))
+		.addStringOption(option => option.setName("reason").setDescription("Powód zbanowania").setRequired(false))
 		.setName("ban"),
 };

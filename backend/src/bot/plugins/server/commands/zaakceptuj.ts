@@ -253,30 +253,8 @@ export const info: CommandInfo = {
 	description: "Zaakceptuj donate o danym ID",
 	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
-		.addIntegerOption(option =>
-			option
-				.setName("id")
-				.setDescription("ID donate")
-				.setRequired(true)
-				.setAutocomplete(true)
-		)
-		.addIntegerOption(option =>
-			option
-				.setName("kwota")
-				.setDescription("Kwota donate")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("promocja")
-				.setDescription("Jaką promocję dodać?")
-				.setRequired(false)
-				.addChoices(
-					...[
-						...benefits.map(x => ({ name: x.name, value: x.name })),
-						{ name: "produkt", value: "produkt" },
-					]
-				)
-		)
+		.addIntegerOption(option => option.setName("id").setDescription("ID donate").setRequired(true).setAutocomplete(true))
+		.addIntegerOption(option => option.setName("kwota").setDescription("Kwota donate").setRequired(true))
+		.addStringOption(option => option.setName("promocja").setDescription("Jaką promocję dodać?").setRequired(false).addChoices(...[...benefits.map(x => ({ name: x.name, value: x.name })), { name: "produkt", value: "produkt" }]))
 		.setName("zaakceptuj"),
 };

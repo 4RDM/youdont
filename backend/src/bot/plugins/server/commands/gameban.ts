@@ -77,25 +77,8 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: [Roles.Team], // TEAM 4RDM
 	builder: new SlashCommandBuilder()
-		.addIntegerOption(option =>
-			option
-				.setName("id")
-				.setDescription("ID osoby do zbanowania")
-				.setRequired(true)
-		)
-		.addIntegerOption(option =>
-			option
-				.setName("czas")
-				.setDescription("Czas bana w sekundach")
-				.setRequired(true)
-				.setAutocomplete(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("powod")
-				.setMaxLength(100)
-				.setDescription("Powód bana")
-				.setRequired(true)
-		)
+		.addIntegerOption(option => option.setName("id").setDescription("ID osoby do zbanowania").setRequired(true))
+		.addIntegerOption(option => option.setName("czas").setDescription("Czas bana w sekundach").setRequired(true).setAutocomplete(true))
+		.addStringOption(option => option.setName("powod").setMaxLength(100).setDescription("Powód bana").setRequired(true))
 		.setName("gameban"),
 };

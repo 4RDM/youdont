@@ -58,20 +58,8 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: Roles.DodajTeam,
 	builder: new SlashCommandBuilder()
-		.addStringOption(option =>
-			option
-				.setName("hex")
-				.setDescription("SteamID w hex")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option.setName("role").setDescription("Ranga").setRequired(true)
-		)
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik")
-				.setRequired(true)
-		)
+		.addStringOption(option => option.setName("hex").setDescription("SteamID w hex").setRequired(true))
+		.addStringOption(option => option.setName("role").setDescription("Ranga").setRequired(true))
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 		.setName("dodaj"),
 };

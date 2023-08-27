@@ -112,23 +112,8 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: Roles.NickTeam,
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("kolor")
-				.setDescription("Kolor nicku (hex)")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("prefix")
-				.setDescription("Nowy przedrostek")
-				.setRequired(true)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+		.addStringOption(option => option.setName("kolor").setDescription("Kolor nicku (hex)").setRequired(true))
+		.addStringOption(option => option.setName("prefix").setDescription("Nowy przedrostek").setRequired(true))
 		.setName("nick"),
 };

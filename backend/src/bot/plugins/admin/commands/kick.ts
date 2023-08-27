@@ -59,19 +59,9 @@ export const info: CommandInfo = {
 	triggers: ["kick"],
 	description: "Wyrzuć osobę",
 	permissions:
-		PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers,
+		PermissionFlagsBits.KickMembers,
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik do wyrzucenia")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("reason")
-				.setDescription("Powód wyrzucenia")
-				.setRequired(false)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik do wyrzucenia").setRequired(true))
+		.addStringOption(option => option.setName("reason").setDescription("Powód wyrzucenia").setRequired(false))
 		.setName("kick"),
 };

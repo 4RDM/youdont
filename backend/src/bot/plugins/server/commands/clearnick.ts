@@ -91,11 +91,6 @@ export const info: CommandInfo = {
 	description: "Usun przedrostek gracza",
 	role: Rl.NickTeam,
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik")
-				.setRequired(true)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 		.setName("clearnick"),
 };

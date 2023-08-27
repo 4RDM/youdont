@@ -40,13 +40,6 @@ export const info: CommandInfo = {
 	description: "Usuwa określoną ilość wiadomości",
 	permissions: PermissionFlagsBits.ManageMessages,
 	builder: new SlashCommandBuilder()
-		.addIntegerOption(option =>
-			option
-				.setName("amount")
-				.setDescription("Ilość wiadomości do usunięcia")
-				.setRequired(true)
-				.setMinValue(1)
-				.setMaxValue(100)
-		)
+		.addIntegerOption(option => option.setName("amount").setDescription("Ilość wiadomości do usunięcia").setRequired(true).setMinValue(1).setMaxValue(100))
 		.setName("clear"),
 };

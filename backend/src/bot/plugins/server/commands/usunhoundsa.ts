@@ -29,11 +29,6 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: [Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.OpiekunHounds],
 	builder: new SlashCommandBuilder()
-		.addUserOption(option =>
-			option
-				.setName("mention")
-				.setDescription("Użytkownik")
-				.setRequired(true)
-		)
+		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 		.setName("usunhoundsa"),
 };

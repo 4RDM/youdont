@@ -168,65 +168,28 @@ export const info: CommandInfo = {
 			subcommand
 				.setName("dodaj")
 				.setDescription("Dodaj notatkę")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("content")
-						.setDescription("Treść notatki")
-						.setRequired(true)
-						.setMinLength(2)
-						.setMaxLength(500)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addStringOption(option => option.setName("content").setDescription("Treść notatki").setRequired(true).setMinLength(2).setMaxLength(500))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("usun")
 				.setDescription("Usuń notatkę")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addIntegerOption(option =>
-					option
-						.setName("id")
-						.setDescription("ID notatki")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addIntegerOption(option => option.setName("id").setDescription("ID notatki").setRequired(true))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("lista")
 				.setDescription("Lista notatek")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("wyswietl")
 				.setDescription("Wyswietl notatkę")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addIntegerOption(option =>
-					option
-						.setName("id")
-						.setDescription("ID notatki")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addIntegerOption(option => option.setName("id").setDescription("ID notatki").setRequired(true))
 		)
 		.setName("notatka"),
 };

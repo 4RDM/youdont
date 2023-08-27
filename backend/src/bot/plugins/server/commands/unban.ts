@@ -50,11 +50,6 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: [Roles.Team],
 	builder: new SlashCommandBuilder()
-		.addIntegerOption(option =>
-			option
-				.setName("id")
-				.setDescription("ID bana do odbanowania")
-				.setRequired(true)
-		)
+		.addIntegerOption(option => option.setName("id").setDescription("ID bana do odbanowania").setRequired(true))
 		.setName("unban"),
 };

@@ -44,11 +44,6 @@ export const info: CommandInfo = {
 	description: "Sprawdź czy auto jest dodane na serwer",
 	role: [Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.Developer],
 	builder: new SlashCommandBuilder()
-		.addStringOption(option =>
-			option
-				.setName("resp-name")
-				.setDescription("Nazwa pojazdu")
-				.setRequired(true)
-		)
+		.addStringOption(option => option.setName("resp-name").setDescription("Nazwa pojazdu").setRequired(true))
 		.setName("sprawdz"),
 };

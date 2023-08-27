@@ -84,8 +84,6 @@ export const info: CommandInfo = {
 	description: "Odrzuć donate o danym ID",
 	permissions: PermissionFlagsBits.Administrator,
 	builder: new SlashCommandBuilder()
-		.addIntegerOption(option =>
-			option.setName("id").setDescription("ID wpłaty").setRequired(true)
-		)
+		.addIntegerOption(option => option.setName("id").setDescription("ID wpłaty").setRequired(true))
 		.setName("odrzuc"),
 };

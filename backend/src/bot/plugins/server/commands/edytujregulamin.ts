@@ -71,18 +71,7 @@ export const info: CommandInfo = {
 	permissions: PermissionFlagsBits.Administrator,
 	role: [Roles.Owner],
 	builder: new SlashCommandBuilder()
-		.addChannelOption(option =>
-			option
-				.addChannelTypes(ChannelType.GuildText)
-				.setName("channel")
-				.setDescription("Kanał, w którym znajduje się wiadomość")
-				.setRequired(true)
-		)
-		.addStringOption(option =>
-			option
-				.setName("message")
-				.setDescription("ID wiadomości")
-				.setRequired(true)
-		)
+		.addChannelOption(option => option.addChannelTypes(ChannelType.GuildText).setName("channel").setDescription("Kanał, w którym znajduje się wiadomość").setRequired(true))
+		.addStringOption(option => option.setName("message").setDescription("ID wiadomości").setRequired(true))
 		.setName("edytujregulamin"),
 };
