@@ -22,7 +22,7 @@ interface IUser {
 	kills: number;
 }
 
-type DBUser = null | IUser;
+export type DBUser = null | IUser;
 
 // prettier-ignore
 export class UsersManager {

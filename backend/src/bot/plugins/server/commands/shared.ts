@@ -8,6 +8,7 @@ import {
 	SlashCommandBuilder,
 } from "discord.js";
 import { Roles } from "../../../constants";
+import { DBUser } from "../../../../database/managers/users";
 
 const path = join(
 	// __dirname,
@@ -40,7 +41,61 @@ export const awaitMessage = (
 	return promise;
 };
 
-// prettier-ignore
+const selectUserHex = async(userHexes: DBUser[] | null, interaction: CommandInteraction) => {
+	if (!userHexes) {
+		interaction.Reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+		});
+
+		return false;
+	}
+
+	if (!userHexes[0]) {
+		interaction.Reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
+		});
+
+		return false;
+	}
+
+	if (userHexes.length == 1) return userHexes[0].identifier;
+
+	const identifiers = userHexes;
+	let awaitedMessage;
+
+	interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+
+	try {
+		awaitedMessage = await awaitMessage(interaction);
+	} catch (e) {
+		interaction.Reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
+		});
+
+		return false;
+	}
+
+	let index = parseInt(awaitedMessage);
+
+	if (isNaN(index)) {
+		interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
+
+		return false;
+	}
+
+	const currentHex = identifiers[--index]?.identifier;
+
+	if (!currentHex) {
+		interaction.Reply({
+			embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
+		});
+
+		return false;
+	}
+	
+	return currentHex;
+};
+
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!existsSync(path))
 		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
@@ -49,52 +104,16 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	const subcommand = interaction.options.getSubcommand();
 	const userJson = (await import(path)).default;
+	const mention = interaction.options.getUser("mention", true);
+	const hexOverride = interaction.options.getString("hex", false);
 
 	if (subcommand === "dodaj") {
-		const mention = interaction.options.getUser("mention", true);
 		const spawnName = interaction.options.getString("spawn-name", true);
 		const displayName = interaction.options.getString("display-name", true);
 		const userHexes = await getUserHex(client, mention.id);
-		let currentHex;
+		const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
 
-		if (!userHexes)
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-			});
-
-		if (!userHexes[0])
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
-			});
-		
-		if (userHexes.length > 1) {
-			const identifiers = userHexes;
-			let awaitedMessage;
-
-			interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
-		
-			try {
-				awaitedMessage = await awaitMessage(interaction);
-			} catch (e) {
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
-				});
-			}
-
-			let index = parseInt(awaitedMessage);
-
-			if (isNaN(index))
-				return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
-
-			currentHex = identifiers[--index]?.identifier;
-
-			if (!currentHex)
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
-				});
-		} else {
-			currentHex = userHexes[0].identifier;
-		}
+		if (!currentHex) return;
 
 		if (!userJson[currentHex]) userJson[currentHex] = [];
 		userJson[currentHex].push([spawnName, displayName]);
@@ -114,49 +133,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand === "usun") {
-		const mention = interaction.options.getUser("mention", true);
 		const spawnName = interaction.options.getString("spawn-name", true);
 		const userHexes = await getUserHex(client, mention.id);
-		let currentHex;
+		const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
 
-		if (!userHexes)
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-			});
-
-		if (!userHexes[0])
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
-			});
-		
-		if (userHexes.length > 1) {
-			const identifiers = userHexes;
-			let awaitedMessage;
-
-			interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
-		
-			try {
-				awaitedMessage = await awaitMessage(interaction);
-			} catch (e) {
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
-				});
-			}
-
-			let index = parseInt(awaitedMessage);
-
-			if (isNaN(index))
-				return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
-
-			currentHex = identifiers[--index]?.identifier;
-
-			if (!currentHex)
-				return interaction.Reply({
-					embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
-				});
-		} else {
-			currentHex = userHexes[0].identifier;
-		}
+		if (!currentHex) return;
 
 		const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
 		if (index == -1) {
@@ -182,8 +163,6 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 		interaction.Reply({ embeds: [embed] });
 	} else if (subcommand === "lista") {
-		const mention = interaction.options.getUser("mention", true);
-
 		const userHexes = await getUserHex(client, mention.id);
 
 		if (!userHexes)
@@ -238,52 +217,25 @@ export const info: CommandInfo = {
 			subcommand
 				.setName("dodaj")
 				.setDescription("Dodaje współdzielone auto")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("spawn-name")
-						.setDescription("Spawn name")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("display-name")
-						.setDescription("Nazwa wyświetlana limitki")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
+				.addStringOption(option => option.setName("display-name").setDescription("Nazwa wyświetlana limitki").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(true))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("usun")
 				.setDescription("Usuwa współdzielone auto")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
-				.addStringOption(option =>
-					option
-						.setName("spawn-name")
-						.setDescription("Spawn name")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(true))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("lista")
 				.setDescription("Lista współdzielonych aut")
-				.addUserOption(option =>
-					option
-						.setName("mention")
-						.setDescription("Użytkownik")
-						.setRequired(true)
-				)
+				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(true))
 		)
 		.setName("shared"),
 };
