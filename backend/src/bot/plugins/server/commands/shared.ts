@@ -220,7 +220,7 @@ export const info: CommandInfo = {
 				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
 				.addStringOption(option => option.setName("display-name").setDescription("Nazwa wyświetlana limitki").setRequired(true))
-				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
@@ -228,14 +228,13 @@ export const info: CommandInfo = {
 				.setDescription("Usuwa współdzielone auto")
 				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
 				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
-				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(true))
+				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
 		)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName("lista")
 				.setDescription("Lista współdzielonych aut")
 				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
-				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(true))
 		)
 		.setName("shared"),
 };
