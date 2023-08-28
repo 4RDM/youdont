@@ -6,6 +6,7 @@ import './Articles.scss'
 import kotel from '../../public/kotel.png'
 import Loading from '../../compontents/Loading/Loading'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
+import toast from 'react-hot-toast'
 
 export interface Article {
 	id: string
@@ -33,14 +34,13 @@ export default () => {
 			.then((x) => x.json())
 			.then((json) => {
 				if (json.code !== 200) throw new Error(`Invalid response: ${JSON.stringify(json)}`);
-
 				setArticles(json.articles)
-
 				setLoading(false)
 			})
 			.catch((err) => {
+				toast.error("Wystąpił błąd po stronie serwera!", { duration: 5000 });
 				console.error(err)
-				alert('BŁĄD')
+				setLoading(false);
 			})
 	}, [])
 

@@ -42,10 +42,11 @@ const adminCheck = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 router.get("/", async (req, res) => {
-	let articles = await req.core.database.articles.getAll();
+	const articles = await req.core.database.articles.getAll();
 	const articlesPrepared = [];
 
-	if (!articles) articles = [];
+	if (!articles)
+		return res.json({ code: 500, articles: [] });
 
 	for await (const article of articles) {
 		let userCache = avatarCache.get(article.discordID);

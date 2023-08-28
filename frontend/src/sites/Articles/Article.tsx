@@ -8,6 +8,7 @@ import { Article } from './Articles'
 import './Article.scss'
 import Loading from '../../compontents/Loading/Loading'
 import NotFound from '../NotFound/NotFound'
+import { toast } from 'react-hot-toast'
 
 export default () => {
 	const [isLoading, setLoading] = useState(true)
@@ -20,20 +21,19 @@ export default () => {
 		fetch(`/api/articles/${id}`)
 			.then((x) => x.json())
 			.then((json) => {
-				// TODO: handle error
 				if (json.code !== 200) {
+					toast.error("Wystąpił błąd po stronie serwera!", { duration: 5000 });
 					setError(true)
 					setLoading(false)
 					return
 				}
-
 				setArticle(json.article)
-
 				setLoading(false)
 			})
 			.catch((err) => {
-				console.error(err)
+				toast.error("Wystąpił błąd podczas wczytywania artykułu!", { duration: 5000 });
 				setError(true)
+				setLoading(false)
 			})
 	}, [])
 

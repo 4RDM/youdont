@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RecoilRoot, useRecoilState } from 'recoil'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast';
 
 import Loading from './compontents/Loading/Loading'
 import Navbar from './compontents/Navbar/Navbar'
@@ -73,6 +74,17 @@ const App = () => {
 					</Routes>
 				</div>
 			</div>
+			<Toaster
+				position="bottom-right"
+			toastOptions={{
+				error: {
+					style: {
+						background: '#333',
+						color: '#fff',
+					},
+				}
+			}}
+			/>
 			<Footer />
 		</>
 	)

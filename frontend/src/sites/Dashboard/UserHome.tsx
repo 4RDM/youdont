@@ -6,6 +6,7 @@ import { AccountState } from '../../atoms/AccountState'
 import Unauthorized from '../Unauthorized/Unauthorized'
 
 import './UserHome.scss'
+import toast from 'react-hot-toast'
 
 export interface playerStats {
 	discord: string
@@ -57,7 +58,7 @@ export default () => {
 
 		fetchData().catch((err) => {
 			console.error(err)
-			alert('Wystąpił błąd, sprawdź konsole!')
+			toast.error("Wystąpił błąd po stronie serwera!", { duration: 5000 });
 		})
 	}, [accountState.loggedIn])
 
