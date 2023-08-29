@@ -13,26 +13,12 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Nieznaleziono użytkownika w bazie danych!"
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nieznaleziono użytkownika w bazie danych!")] });
 
 		const note = await client.core.database.notes.create(mention.id, interaction.user.id, content);
 
 		if (!note)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_ADD_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!"
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_ADD_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
 		interaction.Reply({
 			embeds: [
@@ -50,26 +36,12 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Nieznaleziono użytkownika w bazie danych!"
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nieznaleziono użytkownika w bazie danych!")] });
 
 		const response = await client.core.database.notes.delete(mention.id, id);
 
 		if (!response)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_DELETE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!"
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_DELETE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
 		interaction.Reply({
 			embeds: [
@@ -85,14 +57,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Nieznaleziono użytkownika w bazie danych!"
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nieznaleziono użytkownika w bazie danych!")] });
 
 		const description: string[] = [];
 
@@ -120,26 +85,12 @@ export default async function ({ interaction, client }: CommandArgs) {
 		const dbUser = await client.core.database.users.get(mention.id);
 
 		if (!dbUser)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Nieznaleziono użytkownika w bazie danych!"
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction,"Nieznaleziono użytkownika w bazie danych!")] });
 
 		const notatka = dbUser.notes.find(x => x.noteID == id);
 
 		if (!notatka)
-			return interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						`Nie znaleziono notatki od id ${id || "brak"}`
-					),
-				],
-			});
+			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, `Nie znaleziono notatki od id ${id || "brak"}`)] });
 
 		interaction.Reply({
 			embeds: [

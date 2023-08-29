@@ -6,10 +6,7 @@ export default async function ({ interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand() || !interaction.channel || !interaction.channel.isTextBased() || !interaction.inGuild()) return;
 
 	const amount = interaction.options.getInteger("amount", true);
-
-	const messages = await interaction.channel.messages.fetch({
-		limit: amount,
-	});
+	const messages = await interaction.channel.messages.fetch({ limit: amount });
 
 	try {
 		await interaction.channel.bulkDelete(messages);
@@ -24,14 +21,7 @@ export default async function ({ interaction }: CommandArgs) {
 			],
 		});
 	} catch (err) {
-		interaction.Reply({
-			embeds: [
-				ErrorEmbedInteraction(
-					interaction,
-					"**Wystąpił błąd podczas usuwania wiadomości**"
-				),
-			],
-		});
+		interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "**Wystąpił błąd podczas usuwania wiadomości**")] });
 	}
 }
 

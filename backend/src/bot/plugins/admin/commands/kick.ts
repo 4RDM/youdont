@@ -44,14 +44,7 @@ export default async function ({ interaction }: CommandArgs) {
 			});
 		})
 		.catch(() => {
-			interaction.Reply({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Nie udało się wyrzucić tego użytkownika!"
-					),
-				],
-			});
+			interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wyrzucić tego użytkownika!")] });
 		});
 }
 
