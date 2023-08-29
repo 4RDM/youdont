@@ -21,6 +21,7 @@ export const Roles = {
 	DodajTeam: [Owner, Zarzad, Dodaj, HeadAdmin],
 	NickTeam: [Owner, Zarzad, Nick, HeadAdmin],
 	NotatkaTeam: [Owner, Zarzad, HeadAdmin, Developer],
+	DeveloperTeam: [Owner, Zarzad, HeadAdmin, Developer],
 	Owner,
 	Zarzad,
 	Dodaj,
