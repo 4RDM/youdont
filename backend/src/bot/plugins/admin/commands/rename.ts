@@ -4,7 +4,10 @@ import { Roles as Rl } from "../../../constants";
 
 
 export default async function ({ client, interaction }: CommandArgs) {
-	if (!interaction.isChatInputCommand() || !interaction.channel?.isTextBased()) return;
+	if (!interaction.isChatInputCommand()) return;
+
+	if (!interaction.channel)
+		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Polecenie dostępne jedynie na kanale!")] });
 
 	const channel = await interaction.channel.fetch(true);
 
