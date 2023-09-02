@@ -14,7 +14,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 			embeds: [
 				Embed({
 					title: ":white_check_mark: | 4RDM jest online!",
-					description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}\n\n${status.map((x) => `${x.id}. ${x.name}`).join("\n")}`,
+					description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}\n\n${status.map((x) => `**${x.id}**: ${x.name}`).join("\n")}`,
 					color: "#1F8B4C",
 					user: interaction.user,
 				}),
