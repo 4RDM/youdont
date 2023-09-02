@@ -1,8 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Roles } from "../../../constants";
 
-// prettier-ignore
-export default async function ({ client, interaction }: CommandArgs) {
+export default async function ({ interaction }: CommandArgs) {
 	interaction.Reply("Permissions test passed!");
 }
 

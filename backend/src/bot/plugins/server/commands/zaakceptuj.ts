@@ -66,7 +66,6 @@ export const findClosest = (value: number): Benefit =>
 
 const path = join("/home/rdm/server/data/permisje.cfg");
 
-// prettier-ignore
 export async function accept(client: CommandArgs["client"], interaction: Interaction, id: number, amount: number, override?: string) {
 	if (!interaction.isButton() && !interaction.isCommand() && !interaction.isModalSubmit()) return;
 
@@ -228,7 +227,6 @@ export async function accept(client: CommandArgs["client"], interaction: Interac
 	}
 }
 
-// prettier-ignore
 export async function autocomplete(client: CommandArgs["client"], interaction: AutocompleteInteraction) {
 	const donates = await client.core.database.donates.getLastManyUnaproved(10);
 
@@ -237,7 +235,6 @@ export async function autocomplete(client: CommandArgs["client"], interaction: A
 	await interaction.respond(donates.map(x => ({ name: x.id.toString(), value: x.id })));
 }
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 

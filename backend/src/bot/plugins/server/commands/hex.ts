@@ -2,7 +2,6 @@ import { SlashCommandBuilder } from "discord.js";
 import { ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { Client } from "../../../main";
 
-// prettier-ignore
 export const getUserHex = async function (client: Client, discordId: string) {
 	try {
 		const response = await client.core.database.users.getUsersFromServer(discordId);
@@ -14,7 +13,6 @@ export const getUserHex = async function (client: Client, discordId: string) {
 	}
 };
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 

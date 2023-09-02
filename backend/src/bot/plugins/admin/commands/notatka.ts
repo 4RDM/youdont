@@ -1,7 +1,7 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { Roles } from "../../../constants";
-// prettier-ignore
+
 export default async function ({ interaction, client }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -20,7 +20,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		if (!note)
 			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_ADD_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
-		interaction.Reply({
+		await interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":pencil: | Dodano notatkę!",
@@ -43,7 +43,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		if (!response)
 			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_DELETE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!")] });
 
-		interaction.Reply({
+		await interaction.Reply({
 			embeds: [
 				Embed({
 					title: ":coffin: | Usunięto notatke!",
@@ -61,12 +61,11 @@ export default async function ({ interaction, client }: CommandArgs) {
 
 		const description: string[] = [];
 
-		// prettier-ignore
 		dbUser.notes.forEach((note) => {
 			description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.authorID ? `- <@${note.authorID}>` : ""} ${note.createdAt ? `- <t:${new Date(note.createdAt).getTime() / 1000}>` : "" }`);
 		});
 
-		interaction.Reply({
+		await interaction.Reply({
 			embeds: [
 				Embed({
 					author: {
@@ -92,7 +91,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 		if (!notatka)
 			return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, `Nie znaleziono notatki od id ${id || "brak"}`)] });
 
-		interaction.Reply({
+		await interaction.Reply({
 			embeds: [
 				Embed({
 					author: {

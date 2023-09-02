@@ -7,7 +7,6 @@ function useDocumentTitle(title: string, prevailOnUnmount = false) {
 		document.title = title
 	}, [title])
 
-	// prettier-ignore
 	useEffect(() => () => {
 		if (!prevailOnUnmount)
 			document.title = defaultTitle.current;

@@ -1,14 +1,13 @@
 import { join } from "path";
 import { existsSync } from "fs";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
-import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { Roles } from "../../../constants";
 
 const path = join(
 	"/home/rdm/server/data/resources/[optymalizacja]/auta/stream"
 );
 
-// prettier-ignore
 export default async function ({ interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 	

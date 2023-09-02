@@ -26,19 +26,16 @@ export default async function ({ interaction }: CommandArgs) {
 			},
 			{
 				name: "Dołączył",
-				// prettier-ignore
 				value: `<t:${Math.floor((user.joinedAt?.getTime() || 0) / 1000)}:R>`,
 				inline: true,
 			},
 			{
 				name: "Utworzył konto",
-				// prettier-ignore
 				value: `<t:${Math.floor((user.user.createdAt?.getTime() || 0) / 1000)}:R>`,
 				inline: true,
 			},
 			{
 				name: "Booster od",
-				// prettier-ignore
 				value: `${user.premiumSince ? `<t:${Math.floor((user.premiumSince.getTime() || 0) / 1000)}:R>` : "`Brak`"}`,
 				inline: true,
 			},

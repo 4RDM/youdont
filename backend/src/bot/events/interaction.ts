@@ -4,7 +4,6 @@ import { handleModalInteraction } from "./interactions/modalSubmit";
 import { handleCommandInteraction } from "./interactions/command";
 import { handleAutocompleteInteraction } from "./interactions/autocomplete";
 
-// prettier-ignore
 export default async function ({
 	client,
 	props,
@@ -23,10 +22,9 @@ export default async function ({
 		if (!interaction.isRepliable()) return;
 
 		if (interaction.hasReplied) return interaction.followUp(options);
-		else {
-			interaction.hasReplied = true;
-			return interaction.reply(options);
-		}
+
+		interaction.hasReplied = true;
+		return interaction.reply(options);
 	};
 
 	if (interaction.isCommand())

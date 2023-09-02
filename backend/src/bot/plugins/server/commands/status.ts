@@ -2,7 +2,6 @@ import { getPlayers } from "../../../../utils/serverStatus";
 import { Embed } from "../../../../utils/discordEmbed";
 import { SlashCommandBuilder } from "discord.js";
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	const status = await getPlayers();
 

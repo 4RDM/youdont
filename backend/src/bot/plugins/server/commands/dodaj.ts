@@ -8,7 +8,6 @@ import { Roles } from "../../../constants";
 
 const path = join("/home/rdm/server/data/permisje.cfg");
 
-// prettier-ignore
 export default async function ({ interaction, client }: CommandArgs) {
 	if (!existsSync(path))
 		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });

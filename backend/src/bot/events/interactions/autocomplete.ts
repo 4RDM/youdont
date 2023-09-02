@@ -2,7 +2,6 @@ import { Client } from "../../main";
 import { AutocompleteInteraction, GuildMemberRoleManager } from "discord.js";
 import { doesUserHaveAnyRole } from "./command";
 
-// prettier-ignore
 export const handleAutocompleteInteraction = async (
 	client: Client,
 	interaction: AutocompleteInteraction

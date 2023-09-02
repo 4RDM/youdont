@@ -9,7 +9,6 @@ const isFile = (path: string) =>
 		.then(stats => stats.isFile())
 		.catch(() => false);
 
-// prettier-ignore
 export default class Handler {
 	private client: Client;
 	public readonly eventsPath: string = join(__dirname, "..", "events");

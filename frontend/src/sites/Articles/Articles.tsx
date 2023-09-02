@@ -22,7 +22,6 @@ export interface Article {
 	discordAvatar: string
 }
 
-// prettier-ignore
 export default () => {
 	const [isLoading, setLoading] = useState(true)
 	const [articles, setArticles] = useState<Article[]>([])

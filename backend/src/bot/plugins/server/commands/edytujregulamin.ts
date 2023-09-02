@@ -6,7 +6,6 @@ import {
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { Roles } from "../../../constants";
 
-// prettier-ignore
 export default async function ({ interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 

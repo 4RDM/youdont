@@ -27,7 +27,6 @@ export interface ArticleDatabaseResult
 	};
 }
 
-// prettier-ignore
 export class ArticlesManager {
 	constructor(private databaseCore: DatabaseCore) {}
 

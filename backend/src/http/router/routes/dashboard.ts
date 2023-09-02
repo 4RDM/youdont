@@ -25,7 +25,6 @@ interface IUserCache {
 const router = Router();
 const userCache: IUserCache = {};
 
-// prettier-ignore
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
 	max: 5,
@@ -39,7 +38,6 @@ const limiter = rateLimit({
 	},
 });
 
-// prettier-ignore
 const userCheck = (req: Request, res: Response, next: NextFunction) => {
 	const { username, userid, email } = req.session;
 
@@ -52,10 +50,8 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
-// prettier-ignore
 router.get("/login", limiter, (req, res) => res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`));
 
-// prettier-ignore
 router.get("/reply", async(req, res) => {
 	try {
 		const code = <string | undefined>req.query.code;
@@ -102,7 +98,6 @@ router.get("/reply", async(req, res) => {
 	}
 });
 
-// prettier-ignore
 router.get("/logout", userCheck, (req, res) => req.session.destroy(() => res.redirect("/")));
 
 router.get("/session", userCheck, async (req, res) => {
@@ -123,7 +118,6 @@ router.get("/session", userCheck, async (req, res) => {
 	});
 });
 
-// prettier-ignore
 router.get("/stats", userCheck, async (req, res) => {
 	const { userid } = req.session;
 

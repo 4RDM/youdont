@@ -9,7 +9,7 @@ export type Modal = {
 	name: string;
 };
 
-// prettier-ignore
+
 export class ModalHandler {
 	public modals: Map<string, Modal> = new Map();
 	public readonly pluginsPath: string = join(__dirname, "..", "plugins");

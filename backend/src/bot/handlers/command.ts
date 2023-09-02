@@ -1,6 +1,5 @@
 import PluginHandler from "./plugin";
 
-// prettier-ignore
 export default class Handler {
 	private PluginHandler: PluginHandler;
 

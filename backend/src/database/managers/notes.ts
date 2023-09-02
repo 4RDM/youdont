@@ -13,7 +13,6 @@ export interface NoteDatabaseResult extends Array<Note> {
 	[k: number]: Note;
 }
 
-// prettier-ignore
 export class NotesManager {
 	constructor(private databaseCore: DatabaseCore) {}
 

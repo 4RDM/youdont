@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 
-// prettier-ignore
 export default async function ({ interaction }: CommandArgs) {
 	const embed = Embed({
 		title: interaction.guild?.name,

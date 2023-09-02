@@ -2,7 +2,6 @@ import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { Roles } from "../../../constants";
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -19,8 +18,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
 	if (!interactionReply) return;
 
-	client.core
-		.rcon(`unban ${id}`)
+	client.core.rcon(`unban ${id}`)
 		.then(() => {
 			interactionReply.edit({
 				embeds: [
@@ -32,16 +30,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 				],
 			});
 		})
-		.catch(() => {
-			interactionReply.edit({
-				embeds: [
-					ErrorEmbedInteraction(
-						interaction,
-						"Nie udało się wysłać polecenia"
-					),
-				],
-			});
-		});
+		.catch(() => interactionReply.edit({ embeds: [ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia")] }));
 }
 
 export const info: CommandInfo = {

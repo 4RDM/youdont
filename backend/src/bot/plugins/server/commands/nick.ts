@@ -23,10 +23,8 @@ export interface Roles extends Array<{ [k: `steam:${string}`]: Role }> {
 	[k: `steam:${string}`]: Role;
 }
 
-// prettier-ignore
 const path = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!existsSync(path))
 		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });

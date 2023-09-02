@@ -3,7 +3,6 @@ import { Client } from "../../main";
 import { odrzuc } from "../../plugins/server/commands/odrzuc";
 import { ErrorEmbedInteraction } from "../../../utils/discordEmbed";
 
-// prettier-ignore
 export const handleButtonInteraction = async (client: Client, interaction: ButtonInteraction) => {
 	if (!interaction.isButton()) return;
 

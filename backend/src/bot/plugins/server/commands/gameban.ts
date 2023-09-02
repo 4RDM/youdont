@@ -56,7 +56,6 @@ export default async function ({ client, interaction }: CommandArgs) {
 		});
 }
 
-// prettier-ignore
 export async function autocomplete(client: CommandArgs["client"], interaction: AutocompleteInteraction) {
 	interaction.respond([
 		{ name: "6 godzin", value: 21600 },

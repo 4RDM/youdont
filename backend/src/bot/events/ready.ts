@@ -3,7 +3,6 @@ import { getTops, getPlayers } from "../../utils/serverStatus";
 import { Embed } from "../../utils/discordEmbed";
 import chalk from "chalk";
 
-// prettier-ignore
 const reloadStats = async (client: ClientType, statsChannel: TextChannel) => {
 	const stats = await getTops(client.core);
 
@@ -24,7 +23,6 @@ const reloadStats = async (client: ClientType, statsChannel: TextChannel) => {
 	}).catch((err) => client.logger.error(`Error occured while edditing stats message: ${err} (src/bot/events/ready.event.ts)`));
 };
 
-// prettier-ignore
 const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
 	const statusMessage = await statusChannel.messages.fetch(client.config.discord.statusMessage);
 	if (!statusMessage)
@@ -48,7 +46,7 @@ const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
 			embeds: [
 				Embed({
 					title: ":white_check_mark: | 4RDM jest online!",
-					description: `**Graczy online:** ${players.length}/${client.config.maxPlayers}\n\n${players.sort((a, b) => a.id - b.id).map(x => `${x.id}. \`${x.name.replace(/`/gm, "")}\``).join("\n")}`,
+					description: `**Graczy online:** ${players.length}/${client.config.maxPlayers}\n\n${players.sort((a, b) => a.id - b.id).map(x => `[${x.id}] \`${x.name.replace(/`/gm, "")}\``).join("\n")}`,
 					color: "#1F8B4C",
 					timestamp: new Date(),
 				}),
@@ -58,7 +56,6 @@ const reloadStatus = async (client: ClientType, statusChannel: TextChannel) => {
 	}
 };
 
-// prettier-ignore
 export default async function ({ client }: { client: ClientType }) {
 	client.logger.ready("Bot is ready!");
 

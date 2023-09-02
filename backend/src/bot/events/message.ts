@@ -66,14 +66,12 @@ let propozycjeWebhook: WebhookClient | null = null;
 let donateChannel: Channel | null = null;
 let afterInit = false;
 
-// prettier-ignore
 export async function init(client: ClientType) {
 	propozycjeWebhook = new WebhookClient({ url: client.config.propozycjeWebhook });
 	donateChannel = await client.channels.fetch("843586192879517776");
 	afterInit = true;
 }
 
-// prettier-ignore
 export default async function ({ client, props }: { client: ClientType; props: { "0": Message } }) {
 	if (!afterInit) await init(client);
 

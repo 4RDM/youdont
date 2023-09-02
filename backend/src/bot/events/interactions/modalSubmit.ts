@@ -2,7 +2,6 @@ import { ModalSubmitInteraction } from "discord.js";
 import { Client } from "../../main";
 import { accept } from "../../plugins/server/commands/zaakceptuj";
 
-// prettier-ignore
 export const handleModalInteraction = async (client: Client, interaction: ModalSubmitInteraction) => {
 	if (!interaction.isModalSubmit()) return;
 

@@ -30,7 +30,6 @@ export interface playerResponse {
 	ping: number;
 }
 
-// prettier-ignore
 export const getTops = async (core: Core) => {
 	try {
 		const connection = await core.database.serverpool.getConnection();
@@ -70,7 +69,6 @@ export const getTops = async (core: Core) => {
 	}
 };
 
-// prettier-ignore
 export const getPlayers = async () => {
 	try {
 		const res = await fetch(`http://${config.rcon.host}:${config.rcon.port}/players.json`);

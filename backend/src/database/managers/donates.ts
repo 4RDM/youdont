@@ -15,7 +15,6 @@ export interface DonateDatabaseResult extends Array<Donate> {
 	[k: number]: Donate;
 }
 
-// prettier-ignore
 export class DonatesManager {
 	constructor(private databaseCore: DatabaseCore) {}
 

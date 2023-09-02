@@ -3,7 +3,6 @@ import { join } from "path";
 import { Plugin } from "../../types";
 import logger from "../../utils/logger";
 
-// prettier-ignore
 export default class Handler {
 	public plugins: Plugin[] = [];
 	public readonly pluginsPath: string = join(__dirname, "..", "plugins");

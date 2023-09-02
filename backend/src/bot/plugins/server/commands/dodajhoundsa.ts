@@ -2,7 +2,6 @@ import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed } from "../../../../utils/discordEmbed";
 import { Roles } from "../../../constants";
 
-// prettier-ignore
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 	if (!interaction.inGuild()) return;

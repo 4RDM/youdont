@@ -23,7 +23,6 @@ declare module "express-serve-static-core" {
 	}
 }
 
-// prettier-ignore
 declare module "discord.js" {
 	interface BaseInteraction {
 		hasReplied: boolean;

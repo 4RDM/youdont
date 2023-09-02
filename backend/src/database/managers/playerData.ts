@@ -26,7 +26,6 @@ export interface PlayerShort {
 	playTime: number;
 }
 
-// prettier-ignore
 const prodPath = join("/", "home", "rdm", "server", "base", "txData", "default", "data", "playersDB.json");
 const devPath = join(__dirname, "..", "..", "..", "playersDB.json");
 
@@ -34,7 +33,6 @@ export class PlayerDataManager {
 	public players: PlayerShort[];
 
 	constructor() {
-		// prettier-ignore
 		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
 
 		if (json.players)
@@ -44,7 +42,6 @@ export class PlayerDataManager {
 			}));
 		else this.players = [];
 
-		// prettier-ignore
 		setInterval(() => {
 			const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
 			if (json.players) this.players = json.players.map(({ license, playTime }) => ({ license, playTime }));

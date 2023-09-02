@@ -2,7 +2,6 @@ import { AutocompleteInteraction, SlashCommandBuilder } from "discord.js";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { Roles as Rl } from "../../../constants";
 
-
 export default async function ({ client, interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand()) return;
 

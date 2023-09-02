@@ -5,7 +5,6 @@ import {
 	SlashCommandBuilder,
 } from "discord.js";
 
-// prettier-ignore
 export default async function ({ interaction }: CommandArgs) {
 	if (!interaction.isChatInputCommand() || !interaction.guild) return;
 

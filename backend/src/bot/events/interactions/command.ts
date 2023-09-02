@@ -1,7 +1,6 @@
 import { CommandInteraction, GuildMemberRoleManager } from "discord.js";
 import { Client } from "../../main";
 
-// prettier-ignore
 export const doesUserHaveAnyRole = (userPermissions: GuildMemberRoleManager | string[], roles: string[]) => {
 	if (userPermissions instanceof GuildMemberRoleManager) {
 		return roles.find(roleToFind => userPermissions.cache.find((role) => role.id == roleToFind)) ? true : false;
@@ -9,7 +8,6 @@ export const doesUserHaveAnyRole = (userPermissions: GuildMemberRoleManager | st
 	return roles.find(roleToFind => userPermissions.find(role => role == roleToFind)) ? true : false;
 };
 
-// prettier-ignore
 export const handleCommandInteraction = async(client: Client, interaction: CommandInteraction) => {
 	if (!interaction.inGuild()) return;
 	if (!interaction.isCommand()) return;

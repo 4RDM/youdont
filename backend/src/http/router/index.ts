@@ -5,7 +5,6 @@ import { join } from "path";
 const router = Router();
 const publicPath = join(__dirname, "..", "..", "..", "..", "frontend", "dist");
 
-// prettier-ignore
 const spaHandler = async (req: Request, res: Response) => {
 	// URL shortener
 	// if (req.query.r) {

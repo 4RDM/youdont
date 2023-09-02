@@ -24,7 +24,6 @@ interface IUser {
 
 export type DBUser = null | IUser;
 
-// prettier-ignore
 export class UsersManager {
 	constructor(private databaseCore: DatabaseCore) {}
 
