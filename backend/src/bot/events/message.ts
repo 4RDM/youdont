@@ -212,7 +212,7 @@ export default async function ({ client, props }: { client: ClientType; props: {
 			const row = new ActionRowBuilder<ButtonBuilder>().addComponents(acceptButton, rejectButton);
 
 			donateChannel.send({
-				content: `Wpłata ${type == "psc" ? "paysafecard" : type} od gracza ${message.author.tag} (\`${message.author.id}\`)${kodPSC !== "" ? `: ${kodPSC}` : ""}\nID wpłaty: \`${donate.id}\``,
+				content: `Wpłata ${type == "psc" ? "paysafecard" : type} od gracza ${message.author.tag} (\`${message.author.id}\`) (<@${message.author.id}>) ${kodPSC !== "" ? `: ${kodPSC}` : ""}\nID wpłaty: \`${donate.id}\``,
 				components: [row]
 			});
 
