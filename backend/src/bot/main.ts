@@ -75,7 +75,7 @@ export class Client extends Cl {
 
         this.commandHandler = new CommandHandler(this.pluginHandler);
         this.eventHandler = new EventHandler(this);
-        this.modalHandler = new ModalHandler(this);
+        this.modalHandler = new ModalHandler();
 
         this.login(config.discord.token);
     }
