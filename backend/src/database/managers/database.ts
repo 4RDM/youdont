@@ -16,36 +16,36 @@ export interface OkPacketInterface {
 }
 
 export class DatabaseCore {
-	public readonly botpool;
-	public readonly serverpool;
+    public readonly botpool;
+    public readonly serverpool;
 
-	public readonly notes;
-	public readonly donates;
-	public readonly users;
-	public readonly playerData;
-	public readonly articles;
+    public readonly notes;
+    public readonly donates;
+    public readonly users;
+    public readonly playerData;
+    public readonly articles;
 
-	constructor(public readonly core: Core) {
-		this.botpool = mariadb.createPool({
-			host: config.mariadb.host,
-			user: config.mariadb.user,
-			password: config.mariadb.password,
-			port: config.mariadb.port,
-			database: "rdmbot",
-		});
+    constructor(public readonly core: Core) {
+        this.botpool = mariadb.createPool({
+            host: config.mariadb.host,
+            user: config.mariadb.user,
+            password: config.mariadb.password,
+            port: config.mariadb.port,
+            database: "rdmbot",
+        });
 
-		this.serverpool = mariadb.createPool({
-			host: config.mysql.host,
-			user: config.mysql.user,
-			password: config.mysql.password,
-			port: config.mysql.port,
-			database: "rdm",
-		});
+        this.serverpool = mariadb.createPool({
+            host: config.mysql.host,
+            user: config.mysql.user,
+            password: config.mysql.password,
+            port: config.mysql.port,
+            database: "rdm",
+        });
 
-		this.articles = new ArticlesManager(this);
-		this.playerData = new PlayerDataManager();
-		this.notes = new NotesManager(this);
-		this.donates = new DonatesManager(this);
-		this.users = new UsersManager(this);
-	}
+        this.articles = new ArticlesManager(this);
+        this.playerData = new PlayerDataManager();
+        this.notes = new NotesManager(this);
+        this.donates = new DonatesManager(this);
+        this.users = new UsersManager(this);
+    }
 }

@@ -16,35 +16,35 @@ import { join } from "path";
 const port = 8020;
 
 export default class HTTP {
-	public server: Application = expressWs(express()).app;
-	public wssclients: WebSocket[] = [];
+    public server: Application = expressWs(express()).app;
+    public wssclients: WebSocket[] = [];
 
-	constructor(core: Core) {
-		const memoryStore = MemoryStore(session);
+    constructor(core: Core) {
+        const memoryStore = MemoryStore(session);
 
-		this.server.use(
-			session({
-				secret: "{/GDB4pZjG[CG45_Y8yp~3Km,T$A(Em.]x{9g4'7>@fu&h^g",
-				store: new memoryStore({ checkPeriod: 86400000 }),
-				resave: false,
-				saveUninitialized: false,
-			})
-		);
+        this.server.use(
+            session({
+                secret: "{/GDB4pZjG[CG45_Y8yp~3Km,T$A(Em.]x{9g4'7>@fu&h^g",
+                store: new memoryStore({ checkPeriod: 86400000 }),
+                resave: false,
+                saveUninitialized: false,
+            })
+        );
 
-		this.server.use(compression());
+        this.server.use(compression());
 
-		this.server.use((req, _, next) => {
-			req.core = core;
-			req.skip = false;
-			next();
-		});
+        this.server.use((req, _, next) => {
+            req.core = core;
+            req.skip = false;
+            next();
+        });
 
-		this.server.get("/sitemap.xml", (_, res) => res.sendFile(join(__dirname, "..", "..", "..", "frontend", "dist", "assets", "sitemap.xml")));
-		this.server.use("/api", apiRouter);
-		this.server.use("/", indexRouter);
+        this.server.get("/sitemap.xml", (_, res) => res.sendFile(join(__dirname, "..", "..", "..", "frontend", "dist", "assets", "sitemap.xml")));
+        this.server.use("/api", apiRouter);
+        this.server.use("/", indexRouter);
 
-		this.server.listen(port, () =>
-			logger.ready(`Website is listening to port ${port}`)
-		);
-	}
+        this.server.listen(port, () =>
+            logger.ready(`Website is listening to port ${port}`)
+        );
+    }
 }

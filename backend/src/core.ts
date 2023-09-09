@@ -32,39 +32,39 @@ declare module "discord.js" {
 }
 
 export class Core {
-	public httpServer: HTTP | null;
-	public database: DatabaseCore;
-	public bot: Client;
-	public rcon;
-	public cache = new Collection();
+    public httpServer: HTTP | null;
+    public database: DatabaseCore;
+    public bot: Client;
+    public rcon;
+    public cache = new Collection();
 
-	constructor(options?: { disableHTTP?: boolean }) {
-		this.rcon = RCON;
+    constructor(options?: { disableHTTP?: boolean }) {
+        this.rcon = RCON;
 
-		if (!options?.disableHTTP) this.httpServer = new HTTP(this);
-		else this.httpServer = null;
+        if (!options?.disableHTTP) this.httpServer = new HTTP(this);
+        else this.httpServer = null;
 
-		this.database = new DatabaseCore(this);
+        this.database = new DatabaseCore(this);
 
-		this.bot = new Client(this, {
-			intents: [
-				GatewayIntentBits.MessageContent,
-				GatewayIntentBits.Guilds,
-				GatewayIntentBits.GuildMembers,
-				GatewayIntentBits.GuildMessages,
-				GatewayIntentBits.DirectMessages,
-				GatewayIntentBits.GuildVoiceStates,
-				GatewayIntentBits.GuildMessageReactions,
-			],
-			partials: [
-				Partials.Channel,
-				Partials.GuildMember,
-				Partials.User,
-				Partials.Message,
-			],
-			presence: {
-				status: "idle",
-			},
-		});
-	}
+        this.bot = new Client(this, {
+            intents: [
+                GatewayIntentBits.MessageContent,
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMembers,
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.GuildVoiceStates,
+                GatewayIntentBits.GuildMessageReactions,
+            ],
+            partials: [
+                Partials.Channel,
+                Partials.GuildMember,
+                Partials.User,
+                Partials.Message,
+            ],
+            presence: {
+                status: "idle",
+            },
+        });
+    }
 }

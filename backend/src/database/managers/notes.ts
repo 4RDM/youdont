@@ -14,77 +14,77 @@ export interface NoteDatabaseResult extends Array<Note> {
 }
 
 export class NotesManager {
-	constructor(private databaseCore: DatabaseCore) {}
+    constructor(private databaseCore: DatabaseCore) {}
 
-	async get(discordID: string, noteID: number) {
-		try {
-			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ? AND noteID = ? LIMIT 1", [discordID, noteID]);
+    async get(discordID: string, noteID: number) {
+        try {
+            const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ? AND noteID = ? LIMIT 1", [discordID, noteID]);
 
-			if (!notes[0]) return null;
+            if (!notes[0]) return null;
 
-			return notes[0];
-		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL GET Error: ${err}`);
+            return notes[0];
+        } catch (err) {
+            this.databaseCore.core.bot.logger.error(`NotesSQL GET Error: ${err}`);
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	async getAll(discordID: string) {
-		try {
-			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ?", [discordID]);
+    async getAll(discordID: string) {
+        try {
+            const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ?", [discordID]);
 
-			if (!notes[0]) return null;
+            if (!notes[0]) return null;
 
-			return notes;
-		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL GETALL Error: ${err}`);
+            return notes;
+        } catch (err) {
+            this.databaseCore.core.bot.logger.error(`NotesSQL GETALL Error: ${err}`);
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	async getLast(discordID: string) {
-		try {
-			const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ? ORDER BY createdAt DESC LIMIT 1", [discordID]);
+    async getLast(discordID: string) {
+        try {
+            const notes: NoteDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM notes WHERE discordID = ? ORDER BY createdAt DESC LIMIT 1", [discordID]);
 
-			if (!notes[0]) return null;
+            if (!notes[0]) return null;
 
-			return notes[0];
-		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL GETLAST Error: ${err}`);
+            return notes[0];
+        } catch (err) {
+            this.databaseCore.core.bot.logger.error(`NotesSQL GETLAST Error: ${err}`);
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	async create(discordID: string, authorID: string, content: string) {
-		try {
-			const lastNote = await this.getLast(discordID);
-			let newID = 0;
+    async create(discordID: string, authorID: string, content: string) {
+        try {
+            const lastNote = await this.getLast(discordID);
+            let newID = 0;
 
-			if (!lastNote) newID = 1;
-			else newID = lastNote.noteID + 1;
+            if (!lastNote) newID = 1;
+            else newID = lastNote.noteID + 1;
 
-			await this.databaseCore.botpool.query("INSERT INTO notes (discordID, authorID, noteID, content) VALUES (?, ?, ?, ?)", [discordID, authorID, newID, content]);
+            await this.databaseCore.botpool.query("INSERT INTO notes (discordID, authorID, noteID, content) VALUES (?, ?, ?, ?)", [discordID, authorID, newID, content]);
 
-			return await this.get(discordID, newID);
-		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL CREATE Error: ${err}`);
+            return await this.get(discordID, newID);
+        } catch (err) {
+            this.databaseCore.core.bot.logger.error(`NotesSQL CREATE Error: ${err}`);
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	async delete(discordID: string, noteID: number) {
-		try {
-			await this.databaseCore.botpool.query("DELETE FROM notes WHERE discordID = ? AND noteID = ?", [discordID, noteID]);
+    async delete(discordID: string, noteID: number) {
+        try {
+            await this.databaseCore.botpool.query("DELETE FROM notes WHERE discordID = ? AND noteID = ?", [discordID, noteID]);
 
-			return true;
-		} catch (err) {
-			this.databaseCore.core.bot.logger.error(`NotesSQL DELETE Error: ${err}`);
+            return true;
+        } catch (err) {
+            this.databaseCore.core.bot.logger.error(`NotesSQL DELETE Error: ${err}`);
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

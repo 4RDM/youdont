@@ -10,85 +10,85 @@ import { Roles as Rl } from "../../../constants";
 const path = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
 
 export default async function ({ client, interaction }: CommandArgs) {
-	if (!existsSync(path))
-		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
+    if (!existsSync(path))
+        return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
-	if (!interaction.isChatInputCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
-	const mention = interaction.options.getUser("mention", true);
+    const mention = interaction.options.getUser("mention", true);
 
-	const rolesJson: Roles | null = (await import(path)).default;
+    const rolesJson: Roles | null = (await import(path)).default;
 
-	if (!rolesJson)
-		return interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-		});
+    if (!rolesJson)
+        return interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+        });
 
-	const userHexes = await getUserHex(client, mention.id);
-	let currentHex = "";
+    const userHexes = await getUserHex(client, mention.id);
+    let currentHex = "";
 
-	if (!userHexes)
-		return interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-		});
+    if (!userHexes)
+        return interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+        });
 
-	if (!userHexes[0])
-		return interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza")],
-		});
+    if (!userHexes[0])
+        return interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza")],
+        });
 	
-	if (userHexes.length > 1) {
-		const hexes = userHexes.map((hex, i) => `${i + 1}. ${hex?.identifier}`).join("\n");
-		let awaitedMessage;
+    if (userHexes.length > 1) {
+        const hexes = userHexes.map((hex, i) => `${i + 1}. ${hex?.identifier}`).join("\n");
+        let awaitedMessage;
 
-		interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${hexes}\`\`\`\nKtóry z nich użyć?`);
+        interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${hexes}\`\`\`\nKtóry z nich użyć?`);
 
-		try {
-			awaitedMessage = await awaitMessage(interaction);
-		} catch (e) {
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
-			});
-		}
+        try {
+            awaitedMessage = await awaitMessage(interaction);
+        } catch (e) {
+            return interaction.Reply({
+                embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
+            });
+        }
 
-		const index = parseInt(awaitedMessage);
+        const index = parseInt(awaitedMessage);
 
-		if (isNaN(index))
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")]
-			});
+        if (isNaN(index))
+            return interaction.Reply({
+                embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")]
+            });
 
-		const temp = userHexes[index - 1];
+        const temp = userHexes[index - 1];
 
-		if (!temp)
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")]
-			});
+        if (!temp)
+            return interaction.Reply({
+                embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")]
+            });
 		
-		currentHex = temp.identifier;
-	} else {
-		currentHex = userHexes[0].identifier;
-	}
+        currentHex = temp.identifier;
+    } else {
+        currentHex = userHexes[0].identifier;
+    }
 
-	delete rolesJson[currentHex as `steam:${string}`];
+    delete rolesJson[currentHex as `steam:${string}`];
 
-	writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
+    writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
-	const embed = Embed({
-		title: ":x: | Wyczyszczono przedrostek",
-		color: "#f54242",
-	});
+    const embed = Embed({
+        title: ":x: | Wyczyszczono przedrostek",
+        color: "#f54242",
+    });
 
-	interaction.Reply({ embeds: [embed] });
+    interaction.Reply({ embeds: [embed] });
 
-	client.core.rcon("reloadchat");
+    client.core.rcon("reloadchat");
 }
 
 export const info: CommandInfo = {
-	triggers: ["clearnick"],
-	description: "Usun przedrostek gracza",
-	role: Rl.NickTeam,
-	builder: new SlashCommandBuilder()
-		.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
-		.setName("clearnick"),
+    triggers: ["clearnick"],
+    description: "Usun przedrostek gracza",
+    role: Rl.NickTeam,
+    builder: new SlashCommandBuilder()
+        .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+        .setName("clearnick"),
 };

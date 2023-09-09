@@ -11,16 +11,14 @@ module.exports = {
 	root: true,
 	env: {
 		node: true,
-		jest: true,
+		jest: false,
 	},
 	ignorePatterns: [".eslintrc.js"],
 	rules: {
+        "no-mixed-spaces-and-tabs": "error",
 		"no-unused-vars": "off",
 		"no-empty-function": "off",
-		"indent": [
-			"error",
-			"tab"
-		],
+		"indent": ["error", 4],
 		"linebreak-style": [
 			"error",
 			"unix"

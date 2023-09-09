@@ -5,38 +5,38 @@ import { handleCommandInteraction } from "./interactions/command";
 import { handleAutocompleteInteraction } from "./interactions/autocomplete";
 
 export default async function ({
-	client,
-	props,
+    client,
+    props,
 }: {
 	client: ClientType;
 	props: { "0": Interaction };
 }) {
-	const interaction = props["0"];
+    const interaction = props["0"];
 
-	if (!interaction.inGuild() || interaction.user.bot) return;
+    if (!interaction.inGuild() || interaction.user.bot) return;
 
-	if (interaction.guildId !== client.config.discord.mainGuild) return;
+    if (interaction.guildId !== client.config.discord.mainGuild) return;
 
-	interaction.hasReplied = false;
-	interaction.Reply = async(options) => {
-		if (!interaction.isRepliable()) return;
+    interaction.hasReplied = false;
+    interaction.Reply = async(options) => {
+        if (!interaction.isRepliable()) return;
 
-		if (interaction.hasReplied) return interaction.followUp(options);
+        if (interaction.hasReplied) return interaction.followUp(options);
 
-		interaction.hasReplied = true;
-		return interaction.reply(options);
-	};
+        interaction.hasReplied = true;
+        return interaction.reply(options);
+    };
 
-	if (interaction.isCommand())
-		handleCommandInteraction(client, interaction);
-	else if (interaction.isButton())
-		handleButtonInteraction(client, interaction);
-	else if (interaction.isModalSubmit())
-		handleModalInteraction(client, interaction);
-	else if (interaction.isAutocomplete())
-		handleAutocompleteInteraction(client, interaction);
+    if (interaction.isCommand())
+        handleCommandInteraction(client, interaction);
+    else if (interaction.isButton())
+        handleButtonInteraction(client, interaction);
+    else if (interaction.isModalSubmit())
+        handleModalInteraction(client, interaction);
+    else if (interaction.isAutocomplete())
+        handleAutocompleteInteraction(client, interaction);
 }
 
 export const info: EventInfo = {
-	eventName: "interactionCreate",
+    eventName: "interactionCreate",
 };

@@ -3,238 +3,238 @@ import { join } from "path";
 import { Embed, ErrorEmbedInteraction } from "../../../../utils/discordEmbed";
 import { getUserHex } from "./hex";
 import {
-	CommandInteraction,
-	PermissionFlagsBits,
-	SlashCommandBuilder,
+    CommandInteraction,
+    PermissionFlagsBits,
+    SlashCommandBuilder,
 } from "discord.js";
 import { Roles } from "../../../constants";
 import { DBUser } from "../../../../database/managers/users";
 
 const path = join(
-	// __dirname,
-	// "vehicles.json"
-	"/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json"
+    // __dirname,
+    // "vehicles.json"
+    "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json"
 );
 
 export const awaitMessage = (
-	interaction: CommandInteraction
+    interaction: CommandInteraction
 ): Promise<string> => {
-	const promise = new Promise<string>((resolve, reject) => {
-		interaction.channel
-			?.awaitMessages({
-				filter: msg => msg.author.id === interaction.user.id,
-				max: 1,
-				time: 60000,
-				errors: ["time"],
-			})
-			.then(collected => {
-				if (!collected || !collected.first())
-					return reject("Nie wprowadzono odpowiedzi");
+    const promise = new Promise<string>((resolve, reject) => {
+        interaction.channel
+            ?.awaitMessages({
+                filter: msg => msg.author.id === interaction.user.id,
+                max: 1,
+                time: 60000,
+                errors: ["time"],
+            })
+            .then(collected => {
+                if (!collected || !collected.first())
+                    return reject("Nie wprowadzono odpowiedzi");
 
-				resolve(collected.first()?.content || "");
-			})
-			.catch(() => {
-				reject("Nie wprowadzono odpowiedzi");
-			});
-	});
+                resolve(collected.first()?.content || "");
+            })
+            .catch(() => {
+                reject("Nie wprowadzono odpowiedzi");
+            });
+    });
 
-	return promise;
+    return promise;
 };
 
 export const selectUserHex = async(userHexes: DBUser[] | null, interaction: CommandInteraction) => {
-	if (!userHexes) {
-		interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-		});
+    if (!userHexes) {
+        interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+        });
 
-		return false;
-	}
+        return false;
+    }
 
-	if (!userHexes[0]) {
-		interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
-		});
+    if (!userHexes[0]) {
+        interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
+        });
 
-		return false;
-	}
+        return false;
+    }
 
-	if (userHexes.length == 1) return userHexes[0].identifier;
+    if (userHexes.length == 1) return userHexes[0].identifier;
 
-	const identifiers = userHexes;
-	let awaitedMessage;
+    const identifiers = userHexes;
+    let awaitedMessage;
 
-	interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
+    interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
 
-	try {
-		awaitedMessage = await awaitMessage(interaction);
-	} catch (e) {
-		interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
-		});
+    try {
+        awaitedMessage = await awaitMessage(interaction);
+    } catch (e) {
+        interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Nie wprowadzono odpowiedzi")],
+        });
 
-		return false;
-	}
+        return false;
+    }
 
-	let index = parseInt(awaitedMessage);
+    let index = parseInt(awaitedMessage);
 
-	if (isNaN(index)) {
-		interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
+    if (isNaN(index)) {
+        interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Wprowadzono błędny index, nie jest cyfrą!")] });
 
-		return false;
-	}
+        return false;
+    }
 
-	const currentHex = identifiers[--index]?.identifier;
+    const currentHex = identifiers[--index]?.identifier;
 
-	if (!currentHex) {
-		interaction.Reply({
-			embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
-		});
+    if (!currentHex) {
+        interaction.Reply({
+            embeds: [ErrorEmbedInteraction(interaction, "Wybrano błędny hex!")],
+        });
 
-		return false;
-	}
+        return false;
+    }
 	
-	return currentHex;
+    return currentHex;
 };
 
 export default async function ({ client, interaction }: CommandArgs) {
-	if (!existsSync(path))
-		return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
+    if (!existsSync(path))
+        return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Funkcja niedostępna na tym komputerze!")] });
 
-	if (!interaction.isChatInputCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
-	const subcommand = interaction.options.getSubcommand();
-	const userJson = (await import(path)).default;
-	const mention = interaction.options.getUser("mention", true);
-	const hexOverride = interaction.options.getString("hex", false);
+    const subcommand = interaction.options.getSubcommand();
+    const userJson = (await import(path)).default;
+    const mention = interaction.options.getUser("mention", true);
+    const hexOverride = interaction.options.getString("hex", false);
 
-	if (subcommand === "dodaj") {
-		const spawnName = interaction.options.getString("spawn-name", true);
-		const displayName = interaction.options.getString("display-name", true);
-		const userHexes = await getUserHex(client, mention.id);
-		const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
+    if (subcommand === "dodaj") {
+        const spawnName = interaction.options.getString("spawn-name", true);
+        const displayName = interaction.options.getString("display-name", true);
+        const userHexes = await getUserHex(client, mention.id);
+        const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
 
-		if (!currentHex) return;
+        if (!currentHex) return;
 
-		if (!userJson[currentHex]) userJson[currentHex] = [];
-		userJson[currentHex].push([spawnName, displayName]);
+        if (!userJson[currentHex]) userJson[currentHex] = [];
+        userJson[currentHex].push([spawnName, displayName]);
 
-		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+        writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
 
-		const embed = Embed({
-			title: ":white_check_mark: | Dodano auto współdzielone!",
-			color: "#1F8B4C",
-			author: {
-				name: mention.tag,
-				iconURL: mention.displayAvatarURL(),
-			},
-			description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\`\n**Display name**: \`${displayName}\``,
-			user: interaction.user,
-		});
+        const embed = Embed({
+            title: ":white_check_mark: | Dodano auto współdzielone!",
+            color: "#1F8B4C",
+            author: {
+                name: mention.tag,
+                iconURL: mention.displayAvatarURL(),
+            },
+            description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\`\n**Display name**: \`${displayName}\``,
+            user: interaction.user,
+        });
 
-		interaction.Reply({ embeds: [embed] });
-	} else if (subcommand === "usun") {
-		const spawnName = interaction.options.getString("spawn-name", true);
-		const userHexes = await getUserHex(client, mention.id);
-		const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
+        interaction.Reply({ embeds: [embed] });
+    } else if (subcommand === "usun") {
+        const spawnName = interaction.options.getString("spawn-name", true);
+        const userHexes = await getUserHex(client, mention.id);
+        const currentHex = hexOverride || await selectUserHex(userHexes, interaction);
 
-		if (!currentHex) return;
+        if (!currentHex) return;
 
-		const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
-		if (index == -1) {
-			const embed = ErrorEmbedInteraction(interaction, `Nie znaleziono aut współdzielonych o nazwie \`${spawnName}\`!`);
+        const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
+        if (index == -1) {
+            const embed = ErrorEmbedInteraction(interaction, `Nie znaleziono aut współdzielonych o nazwie \`${spawnName}\`!`);
 
-			return interaction.Reply({ embeds: [embed] });
-		}
+            return interaction.Reply({ embeds: [embed] });
+        }
 
-		userJson[currentHex].splice(index, 1);
+        userJson[currentHex].splice(index, 1);
 
-		writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+        writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
 
-		const embed = Embed({
-			title: ":x: | Usunięto auto współdzielone!",
-			color: "#f54242",
-			author: {
-				name: mention.tag,
-				iconURL: mention.displayAvatarURL(),
-			},
-			description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\``,
-			user: interaction.user,
-		});
+        const embed = Embed({
+            title: ":x: | Usunięto auto współdzielone!",
+            color: "#f54242",
+            author: {
+                name: mention.tag,
+                iconURL: mention.displayAvatarURL(),
+            },
+            description: `**Hex**: \`${currentHex}\`\n**Spawn name**: \`${spawnName}\``,
+            user: interaction.user,
+        });
 
-		interaction.Reply({ embeds: [embed] });
-	} else if (subcommand === "lista") {
-		const userHexes = await getUserHex(client, mention.id);
+        interaction.Reply({ embeds: [embed] });
+    } else if (subcommand === "lista") {
+        const userHexes = await getUserHex(client, mention.id);
 
-		if (!userHexes)
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
-			});
+        if (!userHexes)
+            return interaction.Reply({
+                embeds: [ErrorEmbedInteraction(interaction, "Wystąpił błąd bazy danych")],
+            });
 
-		if (!userHexes[0])
-			return interaction.Reply({
-				embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
-			});
+        if (!userHexes[0])
+            return interaction.Reply({
+                embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono gracza!")],
+            });
 
-		const limitki: { [key: string]: string[][] } = {};
-		const description: string[] = [];
+        const limitki: { [key: string]: string[][] } = {};
+        const description: string[] = [];
 
-		userHexes.forEach((x) => {
-			limitki[x?.identifier || ""] = userJson[x?.identifier || ""];
-		});
+        userHexes.forEach((x) => {
+            limitki[x?.identifier || ""] = userJson[x?.identifier || ""];
+        });
 
-		Array.from(Object.keys(limitki)).forEach((hex) => {
-			if (limitki[hex]) {
-				description.push(`**${hex}**:`);
-				limitki[hex].forEach((limitka: string[]) => {
-					description.push(`\`${limitka[0]}\`: \`${limitka[1]}\``);
-				});
-			}
-		});
+        Array.from(Object.keys(limitki)).forEach((hex) => {
+            if (limitki[hex]) {
+                description.push(`**${hex}**:`);
+                limitki[hex].forEach((limitka: string[]) => {
+                    description.push(`\`${limitka[0]}\`: \`${limitka[1]}\``);
+                });
+            }
+        });
 
-		interaction.Reply({
-			embeds: [
-				Embed({
-					author: {
-						name: mention.username,
-						iconURL: mention.displayAvatarURL(),
-					},
-					user: interaction.user,
-					title: "Auta współdzielone użytkownika",
-					description: description.join("\n"),
-				}),
-			],
-		});
-	}
+        interaction.Reply({
+            embeds: [
+                Embed({
+                    author: {
+                        name: mention.username,
+                        iconURL: mention.displayAvatarURL(),
+                    },
+                    user: interaction.user,
+                    title: "Auta współdzielone użytkownika",
+                    description: description.join("\n"),
+                }),
+            ],
+        });
+    }
 }
 
 export const info: CommandInfo = {
-	triggers: ["shared"],
-	description: "Zarządzanie autami współdzielonymi graczy",
-	permissions: PermissionFlagsBits.Administrator,
-	role: [Roles.Zarzad, Roles.HeadAdmin, Roles.Developer], // ZARZĄD
-	builder: new SlashCommandBuilder()
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName("dodaj")
-				.setDescription("Dodaje współdzielone auto")
-				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
-				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
-				.addStringOption(option => option.setName("display-name").setDescription("Nazwa wyświetlana limitki").setRequired(true))
-				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName("usun")
-				.setDescription("Usuwa współdzielone auto")
-				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
-				.addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
-				.addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName("lista")
-				.setDescription("Lista współdzielonych aut")
-				.addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
-		)
-		.setName("shared"),
+    triggers: ["shared"],
+    description: "Zarządzanie autami współdzielonymi graczy",
+    permissions: PermissionFlagsBits.Administrator,
+    role: [Roles.Zarzad, Roles.HeadAdmin, Roles.Developer], // ZARZĄD
+    builder: new SlashCommandBuilder()
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName("dodaj")
+                .setDescription("Dodaje współdzielone auto")
+                .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+                .addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
+                .addStringOption(option => option.setName("display-name").setDescription("Nazwa wyświetlana limitki").setRequired(true))
+                .addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName("usun")
+                .setDescription("Usuwa współdzielone auto")
+                .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+                .addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
+                .addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName("lista")
+                .setDescription("Lista współdzielonych aut")
+                .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
+        )
+        .setName("shared"),
 };

@@ -7,6 +7,6 @@ export default function (hex: HexColorString): {
 	g: number;
 	b: number;
 } {
-	const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return r ? { r: x(r[1]), g: x(r[2]), b: x(r[3]) } : { r: 0, g: 0, b: 0 };
+    const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return r ? { r: x(r[1]), g: x(r[2]), b: x(r[3]) } : { r: 0, g: 0, b: 0 };
 }

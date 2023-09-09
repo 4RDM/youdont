@@ -30,30 +30,30 @@ const prodPath = join("/", "home", "rdm", "server", "base", "txData", "default",
 const devPath = join(__dirname, "..", "..", "..", "playersDB.json");
 
 export class PlayerDataManager {
-	public players: PlayerShort[];
+    public players: PlayerShort[];
 
-	constructor() {
-		const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
+    constructor() {
+        const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
 
-		if (json.players)
-			this.players = json.players.map(({ license, playTime }) => ({
-				license,
-				playTime,
-			}));
-		else this.players = [];
+        if (json.players)
+            this.players = json.players.map(({ license, playTime }) => ({
+                license,
+                playTime,
+            }));
+        else this.players = [];
 
-		setInterval(() => {
-			const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
-			if (json.players) this.players = json.players.map(({ license, playTime }) => ({ license, playTime }));
-			else this.players = [];
-		}, 1000 * 60 * 15);
-	}
+        setInterval(() => {
+            const json: Players = JSON.parse(readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString());
+            if (json.players) this.players = json.players.map(({ license, playTime }) => ({ license, playTime }));
+            else this.players = [];
+        }, 1000 * 60 * 15);
+    }
 
-	getUser(discordID: string): PlayerShort {
-		const player = this.players.find(user => user.license == discordID);
+    getUser(discordID: string): PlayerShort {
+        const player = this.players.find(user => user.license == discordID);
 
-		if (!player) return { license: discordID, playTime: 0 };
+        if (!player) return { license: discordID, playTime: 0 };
 
-		return player;
-	}
+        return player;
+    }
 }

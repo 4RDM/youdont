@@ -1,11 +1,11 @@
 import {
-	Client as Cl,
-	ClientEvents,
-	ClientOptions,
-	SlashCommandBuilder,
-	PermissionResolvable,
-	CommandInteraction,
-	AutocompleteInteraction,
+    Client as Cl,
+    ClientEvents,
+    ClientOptions,
+    SlashCommandBuilder,
+    PermissionResolvable,
+    CommandInteraction,
+    AutocompleteInteraction,
 } from "discord.js";
 import { Core } from "../core";
 import config from "../config";
@@ -52,31 +52,31 @@ declare global {
 }
 
 export class Client extends Cl {
-	public readonly pluginHandler: PluginHandler;
-	public readonly commandHandler: CommandHandler;
-	public readonly eventHandler: EventHandler;
-	public readonly modalHandler: ModalHandler;
+    public readonly pluginHandler: PluginHandler;
+    public readonly commandHandler: CommandHandler;
+    public readonly eventHandler: EventHandler;
+    public readonly modalHandler: ModalHandler;
 
-	public readonly core: Core;
-	public readonly config = config;
-	public readonly logger = logger;
-	public noCommands = process.argv.includes("--no-commands");
+    public readonly core: Core;
+    public readonly config = config;
+    public readonly logger = logger;
+    public noCommands = process.argv.includes("--no-commands");
 
-	constructor(core: Core, options: ClientOptions) {
-		super(options);
+    constructor(core: Core, options: ClientOptions) {
+        super(options);
 
-		this.core = core;
-		this.pluginHandler = new PluginHandler();
+        this.core = core;
+        this.pluginHandler = new PluginHandler();
 
-		if (this.noCommands) {
-			this.pluginHandler.plugins = [];
-			this.logger.warn(chalk.bgRedBright("Commands are disabled!"));
-		}
+        if (this.noCommands) {
+            this.pluginHandler.plugins = [];
+            this.logger.warn(chalk.bgRedBright("Commands are disabled!"));
+        }
 
-		this.commandHandler = new CommandHandler(this.pluginHandler);
-		this.eventHandler = new EventHandler(this);
-		this.modalHandler = new ModalHandler(this);
+        this.commandHandler = new CommandHandler(this.pluginHandler);
+        this.eventHandler = new EventHandler(this);
+        this.modalHandler = new ModalHandler(this);
 
-		this.login(config.discord.token);
-	}
+        this.login(config.discord.token);
+    }
 }

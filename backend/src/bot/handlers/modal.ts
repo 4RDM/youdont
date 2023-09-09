@@ -1,53 +1,52 @@
 import { existsSync, promises } from "fs";
 import { join } from "path";
 import logger from "../../utils/logger";
-import { Client } from "../main";
 import { ModalBuilder } from "discord.js";
 
 export type Modal = {
-	execute: (args: string) => ModalBuilder;
+	execute: (_: string) => ModalBuilder;
 	name: string;
 };
 
 
 export class ModalHandler {
-	public modals: Map<string, Modal> = new Map();
-	public readonly pluginsPath: string = join(__dirname, "..", "plugins");
+    public modals: Map<string, Modal> = new Map();
+    public readonly pluginsPath: string = join(__dirname, "..", "plugins");
 
-	constructor(private readonly client: Client) {
-		this.init();
-	}
+    constructor() {
+        this.init();
+    }
 
-	init = async () => {
-		const pluginsFolder = await promises.readdir(this.pluginsPath);
-	
-		for (const pluginName of pluginsFolder) {
-			const pluginPath = join(this.pluginsPath, pluginName);
-			const modalsPath = join(pluginPath, "modals");
+    init = async () => {
+        const pluginsFolder = await promises.readdir(this.pluginsPath);
 
-			if (!existsSync(modalsPath)) continue;
+        for (const pluginName of pluginsFolder) {
+            const pluginPath = join(this.pluginsPath, pluginName);
+            const modalsPath = join(pluginPath, "modals");
 
-			const modalsFolder = await promises.readdir(modalsPath);
+            if (!existsSync(modalsPath)) continue;
 
-			for (const modalName of modalsFolder) {
-				const file = await import(join(pluginPath, "modals", modalName));
+            const modalsFolder = await promises.readdir(modalsPath);
 
-				if (!file.info) {
-					logger.error(`Could not load the modal ${modalName}, the info export is missing`);
-					continue;
-				}
+            for (const modalName of modalsFolder) {
+                const file = await import(join(pluginPath, "modals", modalName));
 
-				if (!file.modal) {
-					logger.error(`Could not load the modal ${modalName}, the handler modal is missing`);
-					continue;
-				}
+                if (!file.info) {
+                    logger.error(`Could not load the modal ${modalName}, the info export is missing`);
+                    continue;
+                }
 
-				this.modals.set(file.info.name, { execute: file.modal, name: file.info.name });
-			}
-		}
-	};
+                if (!file.modal) {
+                    logger.error(`Could not load the modal ${modalName}, the handler modal is missing`);
+                    continue;
+                }
 
-	get(name: string): Modal | undefined {
-		return this.modals.get(name);
-	}
+                this.modals.set(file.info.name, { execute: file.modal, name: file.info.name });
+            }
+        }
+    };
+
+    get(name: string): Modal | undefined {
+        return this.modals.get(name);
+    }
 }

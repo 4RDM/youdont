@@ -6,11 +6,11 @@
 	"private": true,
 	"scripts": {
 		"build": "tsc",
-		"dev": "nodemon --ignore '*/**.json' src/index.ts",
-		"dev:nc": "nodemon --ignore '*/**.json' src/index.ts --no-commands",
-		"deploy-win": "set NODE_ENV=production && ts-node src/deploy-commands.ts",
-		"deploy-linux": "export NODE_ENV=production && /bin/env ts-node src/deploy-commands.ts",
-		"prod-linux": "export NODE_ENV=production && /bin/env ts-node src/index.ts"
+		"dev": "nodemon --ignore '*/**.json' -x ts-node -r tsconfig-paths/register src/index.ts",
+		"dev:nc": "nodemon --ignore '*/**.json' src/index.ts -r tsconfig-paths/register --no-commands",
+		"deploy-win": "set NODE_ENV=production && ts-node -r tsconfig-paths/register src/deploy-commands.ts",
+		"deploy-linux": "export NODE_ENV=production && /bin/env ts-node -r tsconfig-paths/register src/deploy-commands.ts",
+		"prod-linux": "export NODE_ENV=production && /bin/env ts-node -r tsconfig-paths/register src/index.ts"
 	},
 	"dependencies": {
 		"bufferutil": "^4.0.6",
@@ -52,6 +52,7 @@
 		"nodemon": "^3.0.1",
 		"prisma": "^4.15.0",
 		"ts-node": "^10.9.1",
+		"tsconfig-paths": "^4.2.0",
 		"typescript": "^4.5.4"
 	}
 }
