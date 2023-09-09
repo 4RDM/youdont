@@ -1,6 +1,6 @@
 import mariadb from "mariadb";
 import config from "../../config";
-import { Core } from "src/core";
+import { Core } from "core";
 
 // Managers
 import { NotesManager } from "./notes";
