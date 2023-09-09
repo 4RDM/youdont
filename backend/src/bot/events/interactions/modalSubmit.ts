@@ -67,7 +67,7 @@ export const handleModalInteraction = async (client: Client, interaction: ModalS
         await client.core.database.playerData.createUnban(banID);
 
         const embed = Embed({
-            title: "Podanie o unbana",
+            title: "Odwołanie od unbana",
             description: `**Nick:** \`${ban.name}\`\n**Powód:** \`${ban.reason.replace(/( [(] Gracz*.+)/gm, "")}\`\n**Ban przedawnia się:** \`${ban.expireString}\`\n**Administrator:** <@${bannerDiscord}>\n\n**Dlaczego powinieneś dostać unbana:**\n\`\`\`${description}\`\`\``,
             color: "#0685ee"
         });

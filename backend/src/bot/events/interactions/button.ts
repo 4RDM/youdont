@@ -3,12 +3,6 @@ import { Client } from "../../main";
 import { odrzuc } from "../../plugins/server/commands/odrzuc";
 import { Embed, ErrorEmbedInteraction } from "../../../utils/discordEmbed";
 import { getBan } from "./modalSubmit";
-import { join } from "path";
-
-const banlistPath =
-    process.env.NODE_ENV == "production" ?
-        "/home/rdm/server/data/resources/[4rdm]/EasyAdmin-6/banlist.json" :
-        join(__dirname, "..", "..", "..", "data", "banlist.json");
 
 export const handleButtonInteraction = async (client: Client, interaction: ButtonInteraction) => {
     if (!interaction.isButton()) return;
@@ -32,7 +26,7 @@ export const handleButtonInteraction = async (client: Client, interaction: Butto
             await interaction.Reply({
                 embeds: [
                     Embed({
-                        title: "Podanie zostało zaakceptowane!",
+                        title: "Odwołanie zostało zaakceptowane!",
                         color: "#1F8B4C",
                         user: interaction.user,
                     }),
@@ -47,10 +41,10 @@ export const handleButtonInteraction = async (client: Client, interaction: Butto
             await interaction.message.edit({ embeds: interaction.message.embeds, components: [] });
 
             await interaction.Reply({
-                content: res[0] >= 3 ? "<@&843444626726584370> podanie zostało odrzucone >= 3 razy!" : "",
+                content: res[0] >= 3 ? "<@&843444626726584370> odwołanie zostało odrzucone >= 3 razy!" : "",
                 embeds: [
                     Embed({
-                        title: "Podanie zostało odrzucone!",
+                        title: "Odwołanie zostało odrzucone!",
                         color: "#1F8B4C",
                         user: interaction.user,
                     }),
