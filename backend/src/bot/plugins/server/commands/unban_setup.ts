@@ -23,7 +23,7 @@ export default async function ({ interaction }: CommandArgs) {
 
 export const info: CommandInfo = {
     triggers: ["unban_setup"],
-    description: "",
+    description: "Setup unban modal",
     permissions: PermissionFlagsBits.Administrator,
     builder: new SlashCommandBuilder().setName("unban_setup"),
 };
