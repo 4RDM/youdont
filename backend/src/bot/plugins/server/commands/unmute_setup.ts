@@ -23,7 +23,7 @@ export default async function ({ interaction }: CommandArgs) {
 
 export const info: CommandInfo = {
     triggers: ["unmute_setup"],
-    description: "",
+    description: "Setup unmute modal",
     permissions: PermissionFlagsBits.Administrator,
     builder: new SlashCommandBuilder().setName("unmute_setup"),
 };
