@@ -1,4 +1,4 @@
-import { Interaction } from "discord.js";
+import { EmbedBuilder, Interaction } from "discord.js";
 import { handleButtonInteraction } from "./interactions/button";
 import { handleModalInteraction } from "./interactions/modalSubmit";
 import { handleCommandInteraction } from "./interactions/command";
@@ -21,9 +21,19 @@ export default async function ({
     interaction.Reply = async(options) => {
         if (!interaction.isRepliable()) return;
 
-        if (interaction.hasReplied) return interaction.followUp(options);
+        if (interaction.hasReplied) {
+            if (options instanceof EmbedBuilder) {
+                return interaction.followUp({ embeds: [options] });
+            }
+            return interaction.followUp(options);
+        }
 
         interaction.hasReplied = true;
+
+        if (options instanceof EmbedBuilder) {
+            return interaction.reply({ embeds: [options] });
+        }
+
         return interaction.reply(options);
     };
 

@@ -1,7 +1,14 @@
 import { ButtonInteraction } from "discord.js";
 import { Client } from "../../main";
 import { odrzuc } from "../../plugins/server/commands/odrzuc";
-import { ErrorEmbedInteraction } from "../../../utils/discordEmbed";
+import { Embed, ErrorEmbedInteraction } from "../../../utils/discordEmbed";
+import { getBan } from "./modalSubmit";
+import { join } from "path";
+
+const banlistPath =
+    process.env.NODE_ENV == "production" ?
+        "/home/rdm/server/data/resources/[4rdm]/EasyAdmin-6/banlist.json" :
+        join(__dirname, "..", "..", "..", "data", "banlist.json");
 
 export const handleButtonInteraction = async (client: Client, interaction: ButtonInteraction) => {
     if (!interaction.isButton()) return;
@@ -10,6 +17,50 @@ export const handleButtonInteraction = async (client: Client, interaction: Butto
 
     if (commandName == "open-mute-form") {
         // const modal = client.modalHandler.get("donateAcceptModal");
+    }
+
+    if (commandName == "unbanButton") {
+        const banID = args[1];
+        const ban = getBan(banID);
+
+        if (!ban)
+            return interaction.Reply({ content: "Ban nie istnieje (prawdopodobnie się przedawnił)", ephemeral: true });
+
+        if (args[0] == "accept") {
+            await client.core.database.playerData.acceptUnban(banID);
+            await interaction.message.edit({ embeds: interaction.message.embeds, components: [] });
+            await interaction.Reply({
+                embeds: [
+                    Embed({
+                        title: "Podanie zostało zaakceptowane!",
+                        color: "#1F8B4C",
+                        user: interaction.user,
+                    }),
+                ]
+            });
+        } else if (args[0] == "deny") {
+            const res = await client.core.database.playerData.denyUnban(banID);
+
+            if (!res)
+                return await interaction.Reply({ content: "Wystąpił błąd bazy danych!", ephemeral: true });
+
+            await interaction.message.edit({ embeds: interaction.message.embeds, components: [] });
+
+            await interaction.Reply({
+                content: res[0] >= 3 ? "<@&843444626726584370> podanie zostało odrzucone >= 3 razy!" : "",
+                embeds: [
+                    Embed({
+                        title: "Podanie zostało odrzucone!",
+                        color: "#1F8B4C",
+                        user: interaction.user,
+                    }),
+                ]
+            });
+        } else if (args[0] == "shorten") {
+            await client.core.database.playerData.acceptUnban(banID);
+
+            await interaction.message.edit({ embeds: interaction.message.embeds, components: [] });
+        }
     }
 
     if (commandName == "open-unban-form") {

@@ -17,9 +17,13 @@ export const modal = (...args: string[]) =>
                     .setPlaceholder("np. 1298")
                     .setMinLength(1)
                     .setStyle(TextInputStyle.Short),
+            ),
+            new ActionRowBuilder<TextInputBuilder>().addComponents(
                 new TextInputBuilder()
                     .setCustomId("description")
                     .setLabel("Dlaczego masz dostać unbana?")
+                    .setMinLength(20)
+                    .setMaxLength(1000)
                     .setStyle(TextInputStyle.Paragraph)
             )
         );

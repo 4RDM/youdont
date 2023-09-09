@@ -31,6 +31,7 @@ export class DatabaseCore {
             user: config.mariadb.user,
             password: config.mariadb.password,
             port: config.mariadb.port,
+            connectionLimit: 100,
             database: "rdmbot",
         });
 
@@ -39,11 +40,12 @@ export class DatabaseCore {
             user: config.mysql.user,
             password: config.mysql.password,
             port: config.mysql.port,
+            connectionLimit: 100,
             database: "rdm",
         });
 
         this.articles = new ArticlesManager(this);
-        this.playerData = new PlayerDataManager();
+        this.playerData = new PlayerDataManager(this);
         this.notes = new NotesManager(this);
         this.donates = new DonatesManager(this);
         this.users = new UsersManager(this);

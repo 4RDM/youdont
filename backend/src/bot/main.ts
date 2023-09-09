@@ -56,6 +56,7 @@ export class Client extends Cl {
     public readonly commandHandler: CommandHandler;
     public readonly eventHandler: EventHandler;
     public readonly modalHandler: ModalHandler;
+    private rateLimits: Map<string, Map<string, Date>> = new Map();
 
     public readonly core: Core;
     public readonly config = config;
@@ -77,6 +78,43 @@ export class Client extends Cl {
         this.eventHandler = new EventHandler(this);
         this.modalHandler = new ModalHandler();
 
+        this.rateLimits.set("unban", new Map());
+
         this.login(config.discord.token);
+    }
+
+    getRatelimit(category: string, discordID: string) {
+        const ratelimitCategory = this.rateLimits.get(category);
+
+        if (!ratelimitCategory)
+            return false;
+
+        const user = ratelimitCategory.get(discordID);
+
+        return user;
+    }
+
+    addRateLimit(category: string, discordID: string, miliseconds: number) {
+        const ratelimitCategory = this.rateLimits.get(category);
+
+        if (!ratelimitCategory)
+            return false;
+
+        console.log(category, discordID, new Date(Date.now() + miliseconds));
+
+        return ratelimitCategory.set(discordID, new Date(Date.now() + miliseconds));
+    }
+
+    hasExpired(category: string, discordID: string) {
+        const rateLimit = this.getRatelimit(category, discordID);
+
+        if (!rateLimit) return false;
+
+        if (Date.now() > rateLimit.getTime()) {
+            this.rateLimits.get(category)?.delete(discordID);
+
+            return true;
+        }
+        else return false;
     }
 }

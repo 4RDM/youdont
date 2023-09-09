@@ -15,10 +15,12 @@ export default async function ({ interaction }: CommandArgs) {
 
     if (!interaction.channel) return;
 
-    return await interaction.channel.send({
+    await interaction.channel.send({
         embeds: [embed],
         components: [row]
     });
+
+    return await interaction.reply({ content: "ok", ephemeral: true });
 }
 
 export const info: CommandInfo = {
