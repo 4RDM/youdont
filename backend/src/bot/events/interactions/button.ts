@@ -7,7 +7,18 @@ export const handleButtonInteraction = async (client: Client, interaction: Butto
     if (!interaction.isButton()) return;
 
     const [commandName, ...args] = interaction.customId.split("_");
-	
+
+    if (commandName == "open-mute-form") {
+        // const modal = client.modalHandler.get("donateAcceptModal");
+    }
+
+    if (commandName == "open-unban-form") {
+        const modal = client.modalHandler.get("unbanFormModal");
+        if (!modal) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono modala")] });
+
+        await interaction.showModal(modal.execute(interaction.user.id));
+    }
+
     if (commandName == "donateAccept") {
         const modal = client.modalHandler.get("donateAcceptModal");
         if (!modal) return interaction.Reply({ embeds: [ErrorEmbedInteraction(interaction, "Nie znaleziono modala")] });

@@ -6,7 +6,7 @@ export const handleModalInteraction = async (client: Client, interaction: ModalS
     if (!interaction.isModalSubmit()) return;
 
     const [commandName, ...args] = interaction.customId.split("_");
-	
+
     if (commandName == "donateAcceptModal") {
         accept(client, interaction, parseInt(args[0]), parseInt(interaction.fields.getTextInputValue("donateAcceptModalInput")));
     }

@@ -4,7 +4,7 @@ import { Client } from "../../main";
 export const doesUserHaveAnyRole = (userPermissions: GuildMemberRoleManager | string[], roles: string[]) => {
     if (userPermissions instanceof GuildMemberRoleManager) {
         return roles.find(roleToFind => userPermissions.cache.find((role) => role.id == roleToFind)) ? true : false;
-    }	
+    }
     return roles.find(roleToFind => userPermissions.find(role => role == roleToFind)) ? true : false;
 };
 
