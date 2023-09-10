@@ -16,7 +16,7 @@ const reloadStats = async (client: ClientType, statsChannel: TextChannel) => {
     const killEmbed = Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka killi", description: stats.kills.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} killi)`).join("\n") });
     const deathsEmbed = Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka śmierci", description: stats.deaths.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} śmierci)`).join("\n") });
     const kdrEmbed = Embed({ color: "#6f42c1", timestamp: new Date(), title: ":bar_chart: | Topka KDR", description: stats.kdr.map(({ value, name }, i) => `**${i + 1}**: \`${name}\` (${value} kdr)`).join("\n") });
-	
+
     statsChannel.messages.edit(topsMessage, {
         embeds: [killEmbed, deathsEmbed, kdrEmbed],
         content: "",

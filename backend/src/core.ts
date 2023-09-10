@@ -1,11 +1,10 @@
+import { Collection, GatewayIntentBits, Partials } from "discord.js";
+import { Session } from "express-session";
 import { Client } from "./bot/main";
 import { DatabaseCore } from "./database/managers/database";
 import RCON from "./utils/rcon";
 import HTTP from "./http/http";
-
 import dotenv from "dotenv";
-import { Collection, GatewayIntentBits, Partials } from "discord.js";
-import { Session } from "express-session";
 
 dotenv.config();
 
@@ -24,10 +23,10 @@ declare module "express-serve-static-core" {
 }
 
 declare module "discord.js" {
-	interface BaseInteraction {
-		hasReplied: boolean;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		Reply: (options: string | EmbedBuilder | MessagePayload | InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
+    interface BaseInteraction {
+        hasReplied: boolean;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Reply: (options: string | EmbedBuilder | MessagePayload | InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
     }
 }
 
@@ -35,13 +34,11 @@ export class Core {
     public httpServer: HTTP | null;
     public database: DatabaseCore;
     public bot: Client;
-    public rcon;
+    public rcon = RCON;
     public cache = new Collection();
 
-    constructor(options?: { disableHTTP?: boolean }) {
-        this.rcon = RCON;
-
-        if (!options?.disableHTTP) this.httpServer = new HTTP(this);
+    constructor(options: { disableHTTP: boolean }) {
+        if (!options.disableHTTP) this.httpServer = new HTTP(this);
         else this.httpServer = null;
 
         this.database = new DatabaseCore(this);

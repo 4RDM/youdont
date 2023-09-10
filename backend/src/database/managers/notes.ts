@@ -1,12 +1,12 @@
 import { DatabaseCore } from "./database";
 
 export interface Note {
-	id: number;
-	discordID: string;
-	authorID: string;
-	noteID: number;
-	content: string;
-	createdAt: Date;
+    id: number;
+    discordID: string;
+    authorID: string;
+    noteID: number;
+    content: string;
+    createdAt: Date;
 }
 
 export interface NoteDatabaseResult extends Array<Note> {

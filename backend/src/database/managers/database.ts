@@ -10,9 +10,9 @@ import { PlayerDataManager } from "./playerData";
 import { ArticlesManager } from "./articles";
 
 export interface OkPacketInterface {
-	affectedRows: number;
-	insertId: number;
-	warningStatus: number;
+    affectedRows: number;
+    insertId: number;
+    warningStatus: number;
 }
 
 export class DatabaseCore {
@@ -27,19 +27,13 @@ export class DatabaseCore {
 
     constructor(public readonly core: Core) {
         this.botpool = mariadb.createPool({
-            host: config.mariadb.host,
-            user: config.mariadb.user,
-            password: config.mariadb.password,
-            port: config.mariadb.port,
+            ...config.mariadb,
             connectionLimit: 100,
             database: "rdmbot",
         });
 
         this.serverpool = mariadb.createPool({
-            host: config.mysql.host,
-            user: config.mysql.user,
-            password: config.mysql.password,
-            port: config.mysql.port,
+            ...config.mysql,
             connectionLimit: 100,
             database: "rdm",
         });

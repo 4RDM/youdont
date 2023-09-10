@@ -4,28 +4,28 @@ import { DatabaseCore, OkPacketInterface } from "./database";
 import logger from "utils/logger";
 
 export interface PlayerElement {
-	license: string;
-	name: string;
-	playTime: number;
-	tsJoined: number;
-	tsLastConnection: number;
-	notes: Notes;
-}
-
-export interface Players {
-	version: number;
-	players: PlayerElement[];
-}
-
-export interface Notes {
-	text: string;
-	lastAdmin: string;
-	tsLastEdit: number;
+    license: string;
+    name: string;
+    playTime: number;
+    tsJoined: number;
+    tsLastConnection: number;
+    notes: Notes;
 }
 
 export interface PlayerShort {
-	license: string;
-	playTime: number;
+    license: string;
+    playTime: number;
+}
+
+export interface Players {
+    version: number;
+    players: PlayerElement[];
+}
+
+export interface Notes {
+    text: string;
+    lastAdmin: string;
+    tsLastEdit: number;
 }
 
 const prodPath = join("/", "home", "rdm", "server", "base", "txData", "default", "data", "playersDB.json");

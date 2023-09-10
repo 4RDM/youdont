@@ -64,7 +64,10 @@ export const handleModalInteraction = async (client: Client, interaction: ModalS
 
         const bannerDiscord = banner[0].replace(/discord:/gm, "");
 
-        await client.core.database.playerData.createUnban(banID);
+        const res = await client.core.database.playerData.createUnban(banID);
+
+        if (!res)
+            return await interaction.Reply("Wystąpił błąd bazy danych (modalSubmit)");
 
         const embed = Embed({
             title: "Odwołanie od unbana",
@@ -77,8 +80,8 @@ export const handleModalInteraction = async (client: Client, interaction: ModalS
         actionRow.addComponents(new ButtonBuilder().setCustomId(`unbanButton_deny_${banID}`).setLabel("Odrzuć").setStyle(ButtonStyle.Danger).setEmoji("✖️"));
         actionRow.addComponents(new ButtonBuilder().setCustomId(`unbanButton_shorten_${banID}`).setLabel("Skróć bana").setStyle(ButtonStyle.Primary).setEmoji("⌚"));
 
-        const res = await interaction.Reply({ embeds: [embed], content: `<@${bannerDiscord}>`, components: [actionRow] });
-        const message = await res?.fetch();
+        const interactionRes = await interaction.Reply({ embeds: [embed], content: `<@${bannerDiscord}>`, components: [actionRow] });
+        const message = await interactionRes?.fetch();
 
         if (message instanceof Message) {
             const thread = await (message.channel as TextChannel).threads.create({

@@ -17,38 +17,38 @@ import { ModalHandler } from "./handlers/modal";
 import chalk from "chalk";
 
 declare global {
-	interface CommandArgs<T = CommandInteraction> {
-		client: Client;
-		interaction: T;
-	}
+    interface CommandArgs<T = CommandInteraction> {
+        client: Client;
+        interaction: T;
+    }
 
-	interface CommandInfo {
-		triggers: string[];
-		description: string;
-		role?: string[];
-		permissions?: PermissionResolvable;
-		builder: SlashCommandBuilder;
-	}
+    interface CommandInfo {
+        triggers: string[];
+        description: string;
+        role?: string[];
+        permissions?: PermissionResolvable;
+        builder: SlashCommandBuilder;
+    }
 
-	interface Command {
-		info: CommandInfo;
-		execute({ client, interaction }: CommandArgs): Promise<void>;
-		autocomplete?(
-			client: Client,
-			interaction: AutocompleteInteraction
-		): Promise<void>;
-	}
+    interface Command {
+        info: CommandInfo;
+        execute({ client, interaction }: CommandArgs): Promise<void>;
+        autocomplete?(
+            client: Client,
+            interaction: AutocompleteInteraction
+        ): Promise<void>;
+    }
 
-	interface EventInfo {
-		eventName: keyof ClientEvents;
-	}
+    interface EventInfo {
+        eventName: keyof ClientEvents;
+    }
 
-	interface EventHandle<T extends keyof ClientEvents> {
-		info: EventInfo;
-		execute({}: ClientEvents[T]): Promise<void>;
-	}
+    interface EventHandle<T extends keyof ClientEvents> {
+        info: EventInfo;
+        execute({}: ClientEvents[T]): Promise<void>;
+    }
 
-	type ClientType = Client;
+    type ClientType = Client;
 }
 
 export class Client extends Cl {
@@ -58,15 +58,13 @@ export class Client extends Cl {
     public readonly modalHandler: ModalHandler;
     private rateLimits: Map<string, Map<string, Date>> = new Map();
 
-    public readonly core: Core;
     public readonly config = config;
     public readonly logger = logger;
     public noCommands = process.argv.includes("--no-commands");
 
-    constructor(core: Core, options: ClientOptions) {
+    constructor(public readonly core: Core, options: ClientOptions) {
         super(options);
 
-        this.core = core;
         this.pluginHandler = new PluginHandler();
 
         if (this.noCommands) {

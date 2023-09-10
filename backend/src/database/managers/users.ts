@@ -13,16 +13,16 @@ export interface UserDatabaseResult extends Array<User> {
 	[k: number]: User;
 }
 
-interface IUser {
-	identifier: string;
-	license: string;
-	discord: string;
-	deaths: number;
-	heady: number;
-	kills: number;
+interface Player {
+    identifier: string;
+    license: string;
+    discord: string;
+    deaths: number;
+    heady: number;
+    kills: number;
 }
 
-export type DBUser = null | IUser;
+export type DBUser = null | Player;
 
 export class UsersManager {
     constructor(private databaseCore: DatabaseCore) {}

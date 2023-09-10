@@ -1,30 +1,19 @@
 import { DatabaseCore, OkPacketInterface } from "./database";
 
 interface ArticleDatabaseResultObject {
-	id: string;
-	title: string;
-	content: string;
-	articleURL: string;
-	articleDescription: string;
-	discordID: string;
-	views: number;
-	createdAt: Date;
-	editedAt: Date;
+    id: string;
+    title: string;
+    content: string;
+    articleURL: string;
+    articleDescription: string;
+    discordID: string;
+    views: number;
+    createdAt: Date;
+    editedAt: Date;
 }
 
-export interface ArticleDatabaseResult
-	extends Array<ArticleDatabaseResultObject> {
-	[k: number]: {
-		id: string;
-		title: string;
-		content: string;
-		articleURL: string;
-		articleDescription: string;
-		discordID: string;
-		views: number;
-		createdAt: Date;
-		editedAt: Date;
-	};
+export interface ArticleDatabaseResult extends Array<ArticleDatabaseResultObject> {
+    [k: number]: ArticleDatabaseResultObject;
 }
 
 export class ArticlesManager {

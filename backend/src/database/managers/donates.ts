@@ -1,18 +1,18 @@
 import { DatabaseCore, OkPacketInterface } from "./database";
 
 export interface Donate {
-	id: number;
-	amount: number;
-	discordID: string;
-	approved: boolean;
-	approver: string;
-	createdAt: Date;
-	countIn: boolean;
-	type: "psc" | "paypal" | "tipply";
+    id: number;
+    amount: number;
+    discordID: string;
+    approved: boolean;
+    approver: string;
+    createdAt: Date;
+    countIn: boolean;
+    type: "psc" | "paypal" | "tipply";
 }
 
 export interface DonateDatabaseResult extends Array<Donate> {
-	[k: number]: Donate;
+    [k: number]: Donate;
 }
 
 export class DonatesManager {
@@ -21,7 +21,7 @@ export class DonatesManager {
     async get(donateID: number): Promise<Donate | null> {
         try {
             const donate: DonateDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM donates WHERE id = ?", [donateID]);
-		
+
             if (!donate[0]) return null;
 
             return donate[0];
@@ -45,7 +45,7 @@ export class DonatesManager {
             return null;
         }
     }
-	
+
     async getLastManyUnaproved(howMany: number): Promise<DonateDatabaseResult | null> {
         try {
             const donates: DonateDatabaseResult = await this.databaseCore.botpool.query("SELECT * FROM donates WHERE donates.approved = FALSE ORDER BY donates.id DESC LIMIT ?", howMany);
