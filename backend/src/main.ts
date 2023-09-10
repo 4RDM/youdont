@@ -29,10 +29,23 @@ export class RDMBot extends Client {
 
         this.database = new Database(this);
 
-        logger.error("TEST");
-        logger.log("TEST");
-        logger.ready("TEST");
-        logger.warn("TEST");
+        this.database.testConnection();
+
+        this.database.once("error", () => {
+            logger.error("Cannot estabilish connection with database, exiting with code 1");
+            process.exit(1);
+        });
+
+        this.database.once("ready", () => {
+            logger.ready("Database is ready!");
+            this.init();
+        });
+    }
+
+    init() {
+        if (this.devMode) {
+            logger.warn("Bot is running in development mode");
+        }
     }
 }
 
