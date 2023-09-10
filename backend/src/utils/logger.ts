@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { red, cyan, grey, yellow, green } from "chalk";
-
 export const gT = (): string =>
     `${("0" + new Date().getHours()).slice(-2)}:${(
         "0" + new Date().getMinutes()
@@ -10,11 +8,11 @@ export const cT = (m: any): any => m.join("\t");
 
 export default {
     error: (...message: any): void =>
-        console.error(`${red("ERROR")} [${grey(gT())}] | ${cT(message)}`),
+        console.error(`\x1b[31mERROR\x1b[m [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`),
     ready: (...message: any): void =>
-        console.log(`${green("READY")} [${grey(gT())}] | ${cT(message)}`),
+        console.log(`\x1b[92mREADY\x1b[m [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`),
     log: (...message: any): void =>
-        console.log(`${cyan("LOG")}   [${grey(gT())}] | ${cT(message)}`),
+        console.log(`\x1b[36mLOG\x1b[m   [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`),
     warn: (...message: any): void =>
-        console.warn(`${yellow("WARN")}  [${grey(gT())}] | ${cT(message)}`),
+        console.warn(`\x1b[93mWARN\x1b[m  [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`),
 };
