@@ -1,4 +1,4 @@
-import { Donate } from "./donate";
+import { Donate } from "./donates";
 
 export class User {
     public donates: Map<number, Donate> = new Map();
