@@ -15,6 +15,7 @@ import CommandHandler from "./handlers/command";
 import EventHandler from "./handlers/event";
 import { ModalHandler } from "./handlers/modal";
 import chalk from "chalk";
+import { IndropManager } from "utils/indrop";
 
 declare global {
     interface CommandArgs<T = CommandInteraction> {
@@ -56,6 +57,7 @@ export class Client extends Cl {
     public readonly commandHandler: CommandHandler;
     public readonly eventHandler: EventHandler;
     public readonly modalHandler: ModalHandler;
+    public readonly paymentHandler: IndropManager;
     private rateLimits: Map<string, Map<string, Date>> = new Map();
 
     public readonly config = config;
@@ -64,6 +66,8 @@ export class Client extends Cl {
 
     constructor(public readonly core: Core, options: ClientOptions) {
         super(options);
+
+        this.paymentHandler = new IndropManager(this.config.indropkey);
 
         this.pluginHandler = new PluginHandler();
 

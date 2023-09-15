@@ -4,7 +4,6 @@ import { Core } from "core";
 
 // Managers
 import { NotesManager } from "./notes";
-import { DonatesManager } from "./donates";
 import { UsersManager } from "./users";
 import { PlayerDataManager } from "./playerData";
 import { ArticlesManager } from "./articles";
@@ -20,7 +19,6 @@ export class DatabaseCore {
     public readonly serverpool;
 
     public readonly notes;
-    public readonly donates;
     public readonly users;
     public readonly playerData;
     public readonly articles;
@@ -41,7 +39,6 @@ export class DatabaseCore {
         this.articles = new ArticlesManager(this);
         this.playerData = new PlayerDataManager(this);
         this.notes = new NotesManager(this);
-        this.donates = new DonatesManager(this);
         this.users = new UsersManager(this);
     }
 }

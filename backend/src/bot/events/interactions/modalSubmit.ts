@@ -1,6 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, Message, ModalSubmitInteraction, TextChannel, ThreadAutoArchiveDuration } from "discord.js";
 import { Client } from "../../main";
-import { accept } from "../../plugins/server/commands/zaakceptuj";
 import { Embed } from "utils/discordEmbed";
 import { join } from "path";
 import { readFile } from "fs/promises";
@@ -94,9 +93,5 @@ export const handleModalInteraction = async (client: Client, interaction: ModalS
             await thread.members.add(bannerDiscord);
             await thread.members.add(userID);
         }
-    }
-
-    if (commandName == "donateAcceptModal") {
-        accept(client, interaction, parseInt(args[0]), parseInt(interaction.fields.getTextInputValue("donateAcceptModalInput")));
     }
 };

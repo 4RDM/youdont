@@ -1,5 +1,4 @@
 import { DatabaseCore } from "./database";
-import { DonateDatabaseResult } from "./donates";
 import { NoteDatabaseResult } from "./notes";
 
 export interface User {
@@ -33,10 +32,9 @@ export class UsersManager {
 
             if (!user[0]) return null;
 
-            const donates = (await this.databaseCore.donates.getAll(discordID)) || [] as DonateDatabaseResult;
             const notes = (await this.databaseCore.notes.getAll(discordID)) || [] as NoteDatabaseResult;
 
-            const finalUser = Object.assign({ donates: [] as DonateDatabaseResult, notes: [] as NoteDatabaseResult }, { ...user[0], donates, notes });
+            const finalUser = Object.assign({ notes: [] as NoteDatabaseResult }, { ...user[0], notes });
 
             return finalUser;
         } catch (err) {

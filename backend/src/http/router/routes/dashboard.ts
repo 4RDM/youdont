@@ -6,7 +6,6 @@ import config from "../../../config";
 import timeSince from "../../../utils/timeSince";
 import { internalError, unauthorized } from "../errors";
 import rateLimit from "express-rate-limit";
-import { findClosest } from "../../../bot/plugins/server/commands/zaakceptuj";
 
 interface IUserCache {
 	[index: string]: {
@@ -138,7 +137,6 @@ router.get("/stats", userCheck, async (req, res) => {
                 deaths,
                 identifier,
                 playTime,
-                rank: findClosest(user?.total || 0).name,
                 date: new Date(),
             };
         } else {

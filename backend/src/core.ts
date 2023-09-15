@@ -5,6 +5,7 @@ import { DatabaseCore } from "./database/managers/database";
 import RCON from "./utils/rcon";
 import HTTP from "./http/http";
 import dotenv from "dotenv";
+import { IndropManager } from "utils/indrop";
 
 dotenv.config();
 
