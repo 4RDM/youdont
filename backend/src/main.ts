@@ -1,7 +1,10 @@
 import { Client, ClientOptions, GatewayIntentBits, Partials } from "discord.js";
-import config from "config";
 import { Database } from "database/database";
+import { EventHandler } from "handlers/events";
 import logger from "utils/logger";
+import config from "config";
+import PluginHandler from "handlers/plugins";
+import CommandHandler from "handlers/commands";
 
 interface DatabaseLoginData {
     host: string
@@ -11,14 +14,21 @@ interface DatabaseLoginData {
     database: string
 }
 
+interface DiscordLoginData {
+    token: string
+}
+
 export interface Config {
     botDB: DatabaseLoginData
     fivemDB: DatabaseLoginData
+    discord: DiscordLoginData
 }
 
 export class RDMBot extends Client {
     public config: Config;
-    public devMode: boolean;
+    public devMode;
+    public plugins;
+    public commands;
     public database;
 
     constructor(options: ClientOptions) {
@@ -28,6 +38,8 @@ export class RDMBot extends Client {
         this.config = config;
 
         this.database = new Database(this);
+        this.plugins = new PluginHandler();
+        this.commands = new CommandHandler(this.plugins);
 
         this.database.testConnection();
 
@@ -43,9 +55,14 @@ export class RDMBot extends Client {
     }
 
     init() {
-        if (this.devMode) {
+        this.plugins.init();
+
+        if (this.devMode)
             logger.warn("Bot is running in development mode");
-        }
+
+        new EventHandler(this);
+
+        this.login(config.discord.token);
     }
 }
 

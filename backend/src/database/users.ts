@@ -1,24 +1,26 @@
-import { Donate } from "./donates";
+import { Database } from "./database";
 
 export class User {
-    public donates: Map<number, Donate> = new Map();
-
     constructor(
         public id: string,
-        public total: number,
-        public realTotal: number,
         public createdAt: Date
     ) {}
+}
 
-    addDonate(donate: Donate) {
-        this.donates.set(donate.id, donate);
+export class UserManager {
+    private user: Map<string, User> = new Map();
+
+    constructor(private database: Database) {}
+
+    async getConnection() {
+        return await this.database.getBotConnection();
     }
 
-    getDonate(id: number) {
-        return this.donates.get(id);
+    async create(id: string, createdAt: Date) {
+        this.user.set(id, new User(id, createdAt));
     }
 
-    getAllDonates() {
-        return Array.from(this.donates.values());
+    async get(id: string) {
+        return this.user.get(id);
     }
 }
