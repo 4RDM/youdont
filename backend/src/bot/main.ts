@@ -67,7 +67,7 @@ export class Client extends Cl {
     constructor(public readonly core: Core, options: ClientOptions) {
         super(options);
 
-        this.paymentHandler = new IndropManager(this.config.indropkey);
+        this.paymentHandler = new IndropManager(this, this.config.indropkey);
 
         this.pluginHandler = new PluginHandler();
 

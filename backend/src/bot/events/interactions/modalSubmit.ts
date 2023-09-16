@@ -28,6 +28,14 @@ export const getBan = async(banID: string) => {
     return ban;
 };
 
+export const getBanBySteam = async(hex: string) => {
+    const file = await readFile(banlistPath, { encoding: "utf-8" });
+    const banlist: Ban[] = JSON.parse(file.toString());
+    const ban = banlist.reverse().find(ban => ban.identifiers.includes(`steam:${hex}`));
+
+    return ban;
+};
+
 export const handleModalInteraction = async (client: Client, interaction: ModalSubmitInteraction) => {
     if (!interaction.isModalSubmit()) return;
 
