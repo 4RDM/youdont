@@ -192,15 +192,13 @@ export class IndropManager {
         let res = true;
 
         try {
-            if (payment.product_id.startsWith("unban")) {
+            if (payment.product_id.startsWith("unban"))
                 res = await this.executeUnban(payment, hex);
-                this.sendDiscord(payment, res);
-            }
 
-            if (payment.product_id.startsWith("ranga")) {
+            if (payment.product_id.startsWith("ranga"))
                 res = await this.executeRanga(payment, hex);
-                this.sendDiscord(payment, res);
-            }
+
+            this.sendDiscord(payment, res);
 
             const discord = await this.client.core.database.playerData.getDiscordBySteam(`steam:${hex}`);
 
