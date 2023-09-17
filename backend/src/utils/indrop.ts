@@ -210,7 +210,7 @@ export class IndropManager {
                     user.send({ embeds: [
                         Embed({
                             title: ":money_with_wings: | Dziękujemy za zakupy!",
-                            description: "Dziękujemy za zakupy w naszym sklepie internetowym, w razie jakichkolwiek pytań zapraszamy do kontaktu przez otwarcie zgłoszenia na naszym oficjalnym [serwerze discord](https://discord.gg/4rdm) <#843444694226960394>. W celu odbioru zamówionych przedmiotów zapraszamy do kontaktu z administracją!",
+                            description: "Dziękujemy za zakupy w naszym sklepie internetowym, w razie jakichkolwiek pytań zapraszamy do kontaktu przez otwarcie zgłoszenia na naszym oficjalnym [serwerze discord](https://discord.gg/4rdm) <#843444694226960394>. W celu odbioru zamówionych przedmiotów zapraszamy do kontaktu z administracją!\n**Jeżeli kupiłeś unban za cheaty musisz skontaktować się przez ticketa!**",
                             fields: [
                                 {
                                     name: "ID transakcji",
