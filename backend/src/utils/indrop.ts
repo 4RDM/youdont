@@ -29,11 +29,13 @@ const path = join("/home/rdm/server/data/permisje.cfg");
 export class IndropManager {
     private key;
     private webhook: WebhookClient;
+    private newDiscord: WebhookClient;
 
     constructor(private client: Client, key: string) {
         this.key = key;
 
         this.webhook = new WebhookClient({ url: config.btDonate });
+        this.newDiscord = new WebhookClient({ url: config.btDev });
         this.init();
     }
 
@@ -200,11 +202,15 @@ export class IndropManager {
             if (payment.product_id.startsWith("ranga"))
                 res = await this.executeRanga(payment, hex);
 
-            this.sendDiscord(payment, res);
+            this.sendDiscord(this.webhook, payment, res);
 
             const discord = await this.client.core.database.playerData.getDiscordBySteam(`steam:${hex}`);
 
             if (discord) {
+                if (!payment.product_id.startsWith("unban") && !payment.product_id.startsWith("ranga")) {
+                    this.sendWebhook(this.newDiscord, [{ name: "Użytkownik", value: `<@${discord}> (${discord})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }], "#4fdf62", "Wpłata");
+                }
+
                 const user = await this.client.users.fetch(discord[0].replace("discord:", ""));
                 if (user) {
                     user.send({ embeds: [
@@ -238,8 +244,8 @@ export class IndropManager {
         }
     }
 
-    async sendWebhook(fields: EmbedField[], color: HexColorString, title: string) {
-        this.webhook.send({ embeds: [Embed({
+    async sendWebhook(webhook: WebhookClient, fields: EmbedField[], color: HexColorString, title: string) {
+        webhook.send({ embeds: [Embed({
             color,
             title,
             fields,
@@ -247,12 +253,11 @@ export class IndropManager {
         })] });
     }
 
-    async sendDiscord(payment: Payment, accept: boolean) {
-        this.sendWebhook([
+    async sendDiscord(webhook: WebhookClient, payment: Payment, accept: boolean) {
+        this.sendWebhook(webhook, [
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             ...Object.keys(payment).map(key => ({ name: (([x, ...y]) => x.toUpperCase() + y.join("").toLowerCase())(key.replace(/_/gm, " ")), value: `\`${payment[key]}\``, inline: true }))
-        ], accept ? "#4fdf62" : "#f54242", "Płatność",
-        );
+        ], accept ? "#4fdf62" : "#f54242", "Płatność");
     }
 }
