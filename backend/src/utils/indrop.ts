@@ -139,6 +139,10 @@ export class IndropManager {
     async executeUnban(payment: Payment, hex: string) {
         const ban = await getBanBySteam(hex);
 
+        if (payment.product_id == "unban-cheating") {
+            return true;
+        }
+
         if (!ban) {
             logger.warn(`Wpłata ${payment.id} zostala odrzucona, nie znaleziono bana!`);
             return false;
@@ -157,8 +161,6 @@ export class IndropManager {
             if (hour > 720) return false;
         } else if (payment.product_id == "unban-30-dni") {
             // _placeholder_
-        } else if (payment.product_id == "unban-cheating") {
-            return true;
         }
 
         try {
