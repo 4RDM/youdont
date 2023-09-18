@@ -1,6 +1,7 @@
 import { Interaction, InteractionReplyOptions } from "discord.js";
 import { RDMBot } from "main";
 import { EmbedBuilder as EB, ErrorEmbedInteraction } from "utils/embedBuilder";
+import logger from "utils/logger";
 
 interface _ReplyOptions extends InteractionReplyOptions {
     isError: boolean
@@ -13,7 +14,7 @@ declare module "discord.js" {
     }
 }
 
-export const handleInteraction = (interaction: Interaction, client: RDMBot) => {
+export const handleInteraction = async (interaction: Interaction, client: RDMBot) => {
     if (!interaction.inGuild()) return;
 
     interaction.Reply = async (content: string | EB[], options?: _ReplyOptions) => {
@@ -42,7 +43,20 @@ export const handleInteraction = (interaction: Interaction, client: RDMBot) => {
         const command = client.commands.get(interaction.commandName);
 
         if (!command)
-            return interaction.Reply("Command not found!", { isError: true });
+            return await interaction.Reply("Command not found!", { isError: true });
+
+        await command.execute({ client, interaction });
     }
 
+    if (interaction.isAutocomplete()) {
+        const command = client.commands.get(interaction.commandName);
+
+        if (!command)
+            return await interaction.Reply("Command not found!", { isError: true });
+
+        if (!command.autocomplete)
+            return logger.warn(`Autocompletion for ${command.info.name} not found!`);
+
+        await command.autocomplete({ client, interaction });
+    }
 };
