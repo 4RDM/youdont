@@ -8,6 +8,7 @@ import {
     CommandInteraction,
     Interaction,
 } from "discord.js";
+import { emojis } from "./emojis";
 
 export interface EmbedStructure {
     title?: string;
@@ -23,7 +24,7 @@ export interface EmbedStructure {
     icon?: string;
 }
 
-class EmbedBuilder extends _EmbedBuilder {
+export class EmbedBuilder extends _EmbedBuilder {
     constructor() {
         super();
     }
@@ -88,4 +89,4 @@ export const ErrorEmbedInteraction = (
         description: `${reason}`,
         color: "#f54242",
         user: interaction.user,
-    });
+    }).setIcon(emojis.errorGenericURL);
