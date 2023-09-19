@@ -42,8 +42,6 @@ CREATE TABLE IF NOT EXISTS articles(
 );
 CREATE TABLE IF NOT EXISTS bans(
     id INTEGER UNIQUE,
-    discordID VARCHAR(30) NOT NULL,
     counter INTEGER,
-    FOREIGN KEY(discordID) REFERENCES users(discordID),
     PRIMARY KEY(id)
 );

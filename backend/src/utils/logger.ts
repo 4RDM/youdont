@@ -7,8 +7,10 @@ export const gT = (): string =>
 export const cT = (m: any): any => m.join("\t");
 
 export default {
-    error: (...message: any): void =>
-        console.error(`\x1b[31mERROR\x1b[m [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`),
+    error: (...message: any): false => {
+        console.error(`\x1b[31mERROR\x1b[m [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`);
+        return false;
+    },
     ready: (...message: any): void =>
         console.log(`\x1b[92mREADY\x1b[m [\x1b[90m${gT()}\x1b[m] | ${cT(message)}`),
     log: (...message: any): void =>

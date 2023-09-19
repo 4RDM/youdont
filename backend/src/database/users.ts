@@ -53,12 +53,17 @@ export class UsersManager {
         let res = await this.fetch();
 
         if (!res)
-            logger.error("UserManager.init(): cannot fetch users!");
+            return logger.error("UserManager.init(): cannot fetch users!");
 
         res = await this.database.payments.fetch();
 
         if (!res)
-            logger.error("UserManager.init(): cannot fetch donates!");
+            return logger.error("UserManager.init(): cannot fetch payments!");
+
+        res = await this.database.notes.fetch();
+
+        if (!res)
+            return logger.error("UserManager.init(): cannot fetch notes!");
     }
 
     async getConnection() {
@@ -77,8 +82,11 @@ export class UsersManager {
             response.forEach(user =>
                 this.user.set(user.discordID, new User(user.discordID, new Date(user.createdAt)))
             );
+
+            return true;
         } catch(err) {
-            logger.error(`UserManager.fetchUsers(): "${err}"`);
+            logger.error(`UserManager.fetch(): "${err}"`);
+
             return false;
         }
     }

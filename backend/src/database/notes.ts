@@ -70,8 +70,11 @@ export class NotesManager {
 
                 this.notes.set(note.id, newNote);
             });
+
+            return true;
         } catch(err) {
-            logger.error(`UserManager.fetchUsers(): "${err}"`);
+            logger.error(`NotesManager.fetch(): "${err}"`);
+
             return false;
         }
     }

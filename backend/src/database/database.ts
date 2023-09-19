@@ -4,6 +4,8 @@ import mariadb from "mariadb";
 import logger from "utils/logger";
 import { UsersManager } from "./users";
 import { PaymentsManager } from "./payments";
+import { NotesManager } from "./notes";
+import { BansManager } from "./bans";
 
 export interface OkPacketInterface {
 	affectedRows: number;
@@ -16,6 +18,8 @@ export class Database extends EventEmitter {
     private botPool;
     public users;
     public payments;
+    public notes;
+    public bans;
 
     constructor(private client: RDMBot) {
         super();
@@ -25,6 +29,8 @@ export class Database extends EventEmitter {
 
         this.users = new UsersManager(this);
         this.payments = new PaymentsManager(this);
+        this.notes = new NotesManager(this);
+        this.bans = new BansManager(this);
     }
 
     async getBotConnection() {

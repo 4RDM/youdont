@@ -113,8 +113,11 @@ export class PaymentsManager {
 
                 this.payments.set(payment.id, newPayment);
             });
+
+            return true;
         } catch(err) {
-            logger.error(`PaymentsManager.fetchPayments(): "${err}"`);
+            logger.error(`PaymentsManager.fetch(): "${err}"`);
+
             return false;
         }
     }
