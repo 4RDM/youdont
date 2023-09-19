@@ -105,7 +105,8 @@ export class PaymentsManager {
 
                 const user = this.database.users.get(payment.discordID);
 
-                if (!user) return;
+                if (!user)
+                    return logger.warn(`Cannot create payment "${payment.id}", user not found!`);
 
                 newPayment.assignUser(user);
                 user.addPayment(newPayment);
@@ -113,7 +114,7 @@ export class PaymentsManager {
                 this.payments.set(payment.id, newPayment);
             });
         } catch(err) {
-            logger.error(`PaymentsManager.fetchPayments(): ${err}`);
+            logger.error(`PaymentsManager.fetchPayments(): "${err}"`);
             return false;
         }
     }

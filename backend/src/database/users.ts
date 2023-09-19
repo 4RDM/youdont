@@ -1,29 +1,44 @@
 import logger from "utils/logger";
 import { Database } from "./database";
 import { Payment } from "./payments";
+import { Note } from "./notes";
 
 export interface UserSchema {
     discordID: string
-    createdAt: number
+    createdAt: string
 }
 
 export class User {
+    private payments: Payment[] = [];
+    private notes: Note[] = [];
+
     constructor(
         public id: string,
         public createdAt: Date,
-        private payments: Payment[]
     ) {}
 
     addPayment(payment: Payment) {
         this.payments.push(payment);
     }
 
+    addNote(note: Note) {
+        this.notes.push(note);
+    }
+
     getPayment(id: string) {
         return this.payments.find(payment => payment.id === id);
     }
 
+    getNote(noteID: number) {
+        return this.notes.find(note => note.noteID == noteID);
+    }
+
     getPayments() {
         return this.payments;
+    }
+
+    getNotes() {
+        return this.notes;
     }
 }
 
@@ -60,10 +75,10 @@ export class UsersManager {
                 return false;
 
             response.forEach(user =>
-                this.user.set(user.discordID, new User(user.discordID, new Date(user.createdAt), []))
+                this.user.set(user.discordID, new User(user.discordID, new Date(user.createdAt)))
             );
         } catch(err) {
-            logger.error(`UserManager.fetchUsers(): ${err}`);
+            logger.error(`UserManager.fetchUsers(): "${err}"`);
             return false;
         }
     }
