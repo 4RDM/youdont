@@ -33,6 +33,8 @@ export class BansManager {
 
             response.forEach(ban => this.bans.set(ban.id, new Ban(ban.id, ban.counter)));
 
+            await connection.end();
+
             return true;
         } catch(err) {
             logger.error(`BansManager.fetch(): "${err}"`);
@@ -49,6 +51,8 @@ export class BansManager {
             const res: OkPacketInterface = await query.execute([banID]);
 
             await this.resetBan(banID);
+
+            await connection.end();
 
             return res;
         } catch(err) {
@@ -77,6 +81,8 @@ export class BansManager {
 
             this.bans.set(banID, new Ban(banID, 0));
 
+            await connection.end();
+
             return res;
         } catch(err) {
             logger.error(`BansManager.resetBan(): ${err}`);
@@ -93,6 +99,8 @@ export class BansManager {
             await query.execute([banID]);
 
             this.bans.get(banID)?.increaseCounter();
+
+            await connection.end();
 
             return await this.getUnban(banID);
         } catch(err) {

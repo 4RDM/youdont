@@ -71,6 +71,8 @@ export class NotesManager {
                 this.notes.set(note.id, newNote);
             });
 
+            await connection.end();
+
             return true;
         } catch(err) {
             logger.error(`NotesManager.fetch(): "${err}"`);

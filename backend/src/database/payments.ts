@@ -114,6 +114,8 @@ export class PaymentsManager {
                 this.payments.set(payment.id, newPayment);
             });
 
+            await connection.end();
+
             return true;
         } catch(err) {
             logger.error(`PaymentsManager.fetch(): "${err}"`);

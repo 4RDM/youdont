@@ -83,6 +83,8 @@ export class UsersManager {
                 this.user.set(user.discordID, new User(user.discordID, new Date(user.createdAt)))
             );
 
+            await connection.end();
+
             return true;
         } catch(err) {
             logger.error(`UserManager.fetch(): "${err}"`);
