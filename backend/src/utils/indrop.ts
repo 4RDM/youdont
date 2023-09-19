@@ -208,7 +208,7 @@ export class IndropManager {
 
             if (discord) {
                 if (!payment.product_id.startsWith("unban") && !payment.product_id.startsWith("ranga")) {
-                    this.sendWebhook(this.newDiscord, [{ name: "Użytkownik", value: `<@${discord}> (${discord})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }, { name: "Hex", value: hex, inline: true }], "#4fdf62", "Wpłata");
+                    this.sendWebhook(this.newDiscord, [{ name: "Użytkownik", value: `<@${discord[0].replace("discord:", "")}> (${discord.replace("discord:", "")})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }, { name: "Hex", value: hex, inline: true }], "#4fdf62", "Wpłata");
                 }
 
                 const user = await this.client.users.fetch(discord[0].replace("discord:", ""));
