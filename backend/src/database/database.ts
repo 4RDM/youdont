@@ -2,6 +2,8 @@ import { EventEmitter } from "events";
 import { RDMBot } from "main";
 import mariadb from "mariadb";
 import logger from "utils/logger";
+import { UsersManager } from "./users";
+import { PaymentsManager } from "./payments";
 
 export interface OkPacketInterface {
 	affectedRows: number;
@@ -12,12 +14,17 @@ export interface OkPacketInterface {
 export class Database extends EventEmitter {
     private serverPool;
     private botPool;
+    public users;
+    public payments;
 
     constructor(private client: RDMBot) {
         super();
 
         this.serverPool = mariadb.createPool({ ...client.config.fivemDB });
         this.botPool = mariadb.createPool({ ...client.config.botDB });
+
+        this.users = new UsersManager(this);
+        this.payments = new PaymentsManager(this);
     }
 
     async getBotConnection() {
