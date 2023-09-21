@@ -36,7 +36,14 @@ export class Note {
 export class NotesManager {
     private notes: Map<number, Note> = new Map();
 
-    constructor(private database: Database) {}
+    constructor(private database: Database) {
+        this.database.users.on("ready", async () => {
+            const res = await this.fetch();
+
+            if (!res)
+                return logger.error("NotesManager(): cannot fetch notes!");
+        });
+    }
 
     async getConnection() {
         return await this.database.getBotConnection();

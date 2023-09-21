@@ -2,6 +2,7 @@ import logger from "utils/logger";
 import { Database } from "./database";
 import { Payment } from "./payments";
 import { Note } from "./notes";
+import { EventEmitter } from "events";
 
 export interface UserSchema {
     discordID: string
@@ -42,28 +43,21 @@ export class User {
     }
 }
 
-export class UsersManager {
+export class UsersManager extends EventEmitter {
     private user: Map<string, User> = new Map();
 
     constructor(private database: Database) {
+        super();
         this.init();
     }
 
     async init() {
-        let res = await this.fetch();
+        const res = await this.fetch();
 
         if (!res)
-            return logger.error("UserManager.init(): cannot fetch users!");
+            logger.error("UserManager.init(): cannot fetch users!");
 
-        res = await this.database.payments.fetch();
-
-        if (!res)
-            return logger.error("UserManager.init(): cannot fetch payments!");
-
-        res = await this.database.notes.fetch();
-
-        if (!res)
-            return logger.error("UserManager.init(): cannot fetch notes!");
+        this.emit("ready");
     }
 
     async getConnection() {
