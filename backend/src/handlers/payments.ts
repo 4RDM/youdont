@@ -13,3 +13,5 @@
 
 // const formBody = (details: { [index: string]: string }) => Object.keys(details).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(details[key])).join("&");
 // const timeBetween = (date: Date, date2: Date) => new Date(date.getTime() - date2.getTime());
+
+console.log("dziła");

@@ -1,5 +1,5 @@
 import logger from "utils/logger";
-import { Database } from "./database";
+import { Database, OkPacketInterface } from "./database";
 import { User } from "./users";
 
 export interface PaymentSchema {
@@ -119,6 +119,49 @@ export class PaymentsManager {
             return true;
         } catch(err) {
             logger.error(`PaymentsManager.fetch(): "${err}"`);
+
+            return false;
+        }
+    }
+
+    async create(payment: PaymentSchema) {
+        try {
+            const connection = await this.getConnection();
+            const query = await connection.prepare("INSERT INTO payments(id, productID, title, price, paymentChannel, email, steamID, steamUser, discordID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            const response: OkPacketInterface = await query.execute([...Object.values(payment)]);
+
+            if (!response.insertId)
+                return false;
+
+            const newPayment = new Payment(
+                payment.id,
+                payment.productID,
+                payment.title,
+                payment.price,
+                payment.paymentChannel,
+                payment.email,
+                payment.steamID,
+                payment.steamUser,
+                `https://steamcommunity.com/profiles/${payment.steamID}`,
+                payment.date,
+            );
+
+            const user = this.database.users.get(payment.discordID);
+
+            if (!user) {
+                logger.warn(`Cannot create payment "${payment.id}", user not found!`);
+git 
+                return false;
+            }
+
+            newPayment.assignUser(user);
+            user.addPayment(newPayment);
+
+            this.payments.set(payment.id, newPayment);
+
+            return true;
+        } catch(err) {
+            logger.error(`PaymentsManager.create(): ${err}`);
 
             return false;
         }
