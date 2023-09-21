@@ -28,7 +28,7 @@ export class Database extends EventEmitter {
         this.botPool = mariadb.createPool({ ...client.config.botDB });
 
         this.users = new UsersManager(this);
-        this.payments = new PaymentsManager(this);
+        this.payments = new PaymentsManager(this, this.client.config.indrop.key);
         this.notes = new NotesManager(this);
         this.bans = new BansManager(this);
     }

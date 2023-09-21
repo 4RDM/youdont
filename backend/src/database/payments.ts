@@ -293,7 +293,7 @@ export class PaymentsManager {
     }
 
     async executePayment(payment: Payment) {
-        // const hex = BigInt(payment.getSteamId()).toString(16);
+        const hex = BigInt(payment.getSteamId()).toString(16);
 
         try {
             return true;
