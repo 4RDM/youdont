@@ -1,5 +1,5 @@
 import logger from "utils/logger";
-import { Database } from "./database";
+import { Database, OkPacketInterface } from "./database";
 import { Payment } from "./payments";
 import { Note } from "./notes";
 import { EventEmitter } from "events";
@@ -44,7 +44,7 @@ export class User {
 }
 
 export class UsersManager extends EventEmitter {
-    private user: Map<string, User> = new Map();
+    private users: Map<string, User> = new Map();
 
     constructor(private database: Database) {
         super();
@@ -74,7 +74,7 @@ export class UsersManager extends EventEmitter {
                 return false;
 
             response.forEach(user =>
-                this.user.set(user.discordID, new User(user.discordID, new Date(user.createdAt)))
+                this.users.set(user.discordID, new User(user.discordID, new Date(user.createdAt)))
             );
 
             await connection.end();
@@ -87,7 +87,26 @@ export class UsersManager extends EventEmitter {
         }
     }
 
+    async create(discordID: string) {
+        try {
+            const connection = await this.getConnection();
+            const query = await connection.prepare("INSERT IGNORE INTO users(discordID) VALUES(?)");
+            const response: OkPacketInterface = await query.execute([discordID]);
+
+            if (response.affectedRows) {
+                const newUser = new User(discordID, new Date());
+                this.users.set(discordID, newUser);
+            }
+
+            return true;
+        } catch(err) {
+            logger.error(`UsersManager.create(): ${err}`);
+
+            return false;
+        }
+    }
+
     get(id: string) {
-        return this.user.get(id);
+        return this.users.get(id);
     }
 }
