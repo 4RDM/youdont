@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS payments(
     paymentChannel VARCHAR(20) NOT NULL,
     email VARCHAR(255) NOT NULL,
     steamID varchar(30) NOT NULL,
-    steamUser text NOT NULL,
+    steamUsername text NOT NULL,
     discordID VARCHAR(30) NOT NULL,
     date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(discordID) REFERENCES users(discordID),
