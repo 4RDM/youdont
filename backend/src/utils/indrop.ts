@@ -206,7 +206,7 @@ export class IndropManager {
 
             const discord = await this.client.core.database.playerData.getDiscordBySteam(`steam:${hex}`);
 
-            if (discord) {
+            if (discord && discord[0]) {
                 if (!payment.product_id.startsWith("unban") && !payment.product_id.startsWith("ranga")) {
                     this.sendWebhook(this.newDiscord, [{ name: "Użytkownik", value: `<@${discord[0].replace("discord:", "")}> (${discord[0].replace("discord:", "")})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }, { name: "Hex", value: hex, inline: true }], "#4fdf62", "Wpłata");
                 }
