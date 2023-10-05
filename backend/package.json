@@ -18,7 +18,6 @@
 		"compression": "^1.7.4",
 		"discord.js": "^14.11.0",
 		"dotenv": "^16.0.0",
-		"ejs": "^3.1.6",
 		"erlpack": "^0.1.4",
 		"express": "^4.17.2",
 		"express-rate-limit": "^6.7.0",
@@ -50,7 +49,6 @@
 		"@typescript-eslint/parser": "^5.11.0",
 		"eslint": "^8.9.0",
 		"nodemon": "^3.0.1",
-		"prisma": "^4.15.0",
 		"ts-node": "^10.9.1",
 		"tsconfig-paths": "^4.2.0",
 		"typescript": "^4.5.4"
