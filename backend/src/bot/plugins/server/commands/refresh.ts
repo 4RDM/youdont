@@ -38,6 +38,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfo = {
     triggers: ["refresh"],
     description: "Przeładuj uprawnienia na serwerze",
+    permissions: PermissionFlagsBits.Administrator,
     role: [Roles.Zarzad, Roles.HeadAdmin, Roles.Developer], // ZARZĄD
     builder: new SlashCommandBuilder().setName("refresh"),
 };
