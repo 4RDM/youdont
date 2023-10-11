@@ -50,7 +50,7 @@ export class BansManager {
             const query = await connection.prepare("INSERT IGNORE INTO forms(banID) VALUES(?)");
             const res: OkPacketInterface = await query.execute([banID]);
 
-            await this.resetBan(banID);
+            await this.resetUnban(banID);
 
             await connection.end();
 
@@ -72,7 +72,7 @@ export class BansManager {
             return cache;
     }
 
-    async resetBan(banID: number) {
+    async resetUnban(banID: number) {
         try {
             const connection = await this.getConnection();
 
@@ -111,6 +111,6 @@ export class BansManager {
     }
 
     async acceptUnban(banID: number) {
-        return await this.resetBan(banID);
+        return await this.resetUnban(banID);
     }
 }
