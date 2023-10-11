@@ -7,6 +7,7 @@ import {
     User,
     CommandInteraction,
     Interaction,
+    BaseInteraction,
 } from "discord.js";
 import { emojis } from "./emojis";
 
@@ -69,7 +70,14 @@ export const Embed = ({
     return embed;
 };
 
-export const ErrorEmbed = (message: Message, reason: string) =>
+export const ErrorEmbed = (object: Message | Interaction, reason: string) => {
+    if (object instanceof Message)
+        return ErrorEmbedMessage(object, reason);
+    if (object instanceof BaseInteraction)
+        return ErrorEmbedInteraction(object, reason);
+};
+
+export const ErrorEmbedMessage = (message: Message, reason: string) =>
     Embed({
         title: "Błąd",
         description: `${message.content
@@ -78,7 +86,7 @@ export const ErrorEmbed = (message: Message, reason: string) =>
             .join("\n")}\n\n**${reason}**`,
         color: "#f54242",
         user: message.author,
-    });
+    }).setIcon(emojis.errorGenericURL);
 
 export const ErrorEmbedInteraction = (
     interaction: Interaction | CommandInteraction,
