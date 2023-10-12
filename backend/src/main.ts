@@ -16,6 +16,8 @@ interface DatabaseLoginData {
 
 interface DiscordLoginData {
     token: string
+    statsChannel: string
+    statsMessage: string
 }
 
 interface IndropLoginData {
