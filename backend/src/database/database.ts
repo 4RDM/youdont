@@ -6,6 +6,7 @@ import { UsersManager } from "./users";
 import { PaymentsManager } from "./payments";
 import { NotesManager } from "./notes";
 import { BansManager } from "./bans";
+import { PlayerDataManager } from "./playerData";
 
 export interface OkPacketInterface {
 	affectedRows: number;
@@ -16,14 +17,17 @@ export interface OkPacketInterface {
 export class Database extends EventEmitter {
     private serverPool;
     private botPool;
+    public devMode;
     public users;
     public payments;
     public notes;
     public bans;
+    public txadmin;
 
     constructor(private client: RDMBot) {
         super();
 
+        this.devMode = client.devMode;
         this.serverPool = mariadb.createPool({ ...client.config.fivemDB });
         this.botPool = mariadb.createPool({ ...client.config.botDB });
 
@@ -31,19 +35,21 @@ export class Database extends EventEmitter {
         this.payments = new PaymentsManager(this, this.client.config.indrop.key);
         this.notes = new NotesManager(this);
         this.bans = new BansManager(this);
+        this.txadmin = new PlayerDataManager(this);
     }
 
     async getBotConnection() {
         return await this.botPool.getConnection();
     }
 
-    async serverGetConnection() {
+    async getServerConnection() {
         return await this.serverPool.getConnection();
     }
 
     async testConnection() {
         const conn1 = await this.getBotConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
-        const conn2 = await this.serverGetConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
+        const conn2 = await this.getServerConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
+
 
         if ((conn1 + conn2).includes("ERROR")) {
             logger.error(`Bot database: ${conn1}`);

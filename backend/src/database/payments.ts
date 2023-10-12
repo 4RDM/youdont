@@ -102,6 +102,9 @@ export class PaymentsManager {
         this.database.users.once("ready", async() => {
             const res = await this.fetch();
 
+            if (database.devMode)
+                return logger.warn("Payments are disabled due to development mode!");
+
             if (!res)
                 return logger.error("PaymentsManager(): cannot fetch payments from database!");
 
@@ -113,7 +116,11 @@ export class PaymentsManager {
 
                 res.forEach(async ({ date, email, id, payment_channel, price, product_id, steam_id, steam_username, title }) => {
                     const hex = BigInt(steam_id).toString(16);
+                    let discordID = await database.txadmin.getDiscordBySteam(`steam:${hex}`);
                     const payment = this.get(id);
+
+                    if (!discordID)
+                        discordID = ["0"];
 
                     if (!payment) {
                         const res = await this.create({
@@ -126,7 +133,7 @@ export class PaymentsManager {
                             steamID: steam_id,
                             steamUsername: steam_username,
                             title,
-                            discordID: (() => "1")() // get discord by hex
+                            discordID: discordID[0]
                         });
 
                         if (!res) {
@@ -170,6 +177,8 @@ export class PaymentsManager {
             const query = await connection.prepare("SELECT * FROM payments");
             const response: PaymentSchema[] = await query.execute();
 
+            await connection.end();
+
             if (!response)
                 return false;
 
@@ -188,8 +197,6 @@ export class PaymentsManager {
 
                 this.payments.set(payment.id, newPayment);
             });
-
-            await connection.end();
 
             return true;
         } catch(err) {
@@ -226,6 +233,8 @@ export class PaymentsManager {
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT IGNORE INTO payments(id, productID, title, price, paymentChannel, email, steamID, steamUsername, discordID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
             const response: OkPacketInterface = await query.execute([payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID]);
+
+            await connection.end();
 
             const newPayment = new Payment(payment);
 
@@ -308,6 +317,10 @@ export class PaymentsManager {
 
     async executePayment(payment: Payment) {
         const hex = BigInt(payment.getSteamId()).toString(16);
+        let discordID = await this.database.txadmin.getDiscordBySteam(`steam:${hex}`);
+
+        if (!discordID)
+            discordID = ["0"];
 
         try {
             return true;

@@ -31,9 +31,9 @@ export class BansManager {
             const query = await connection.prepare("SELECT * FROM bans");
             const response: BanSchema[] = await query.execute();
 
-            response.forEach(ban => this.bans.set(ban.id, new Ban(ban.id, ban.counter)));
-
             await connection.end();
+
+            response.forEach(ban => this.bans.set(ban.id, new Ban(ban.id, ban.counter)));
 
             return true;
         } catch(err) {
@@ -50,9 +50,9 @@ export class BansManager {
             const query = await connection.prepare("INSERT IGNORE INTO forms(banID) VALUES(?)");
             const res: OkPacketInterface = await query.execute([banID]);
 
-            await this.resetBan(banID);
-
             await connection.end();
+
+            await this.resetUnban(banID);
 
             return res;
         } catch(err) {
@@ -72,16 +72,16 @@ export class BansManager {
             return cache;
     }
 
-    async resetBan(banID: number) {
+    async resetUnban(banID: number) {
         try {
             const connection = await this.getConnection();
 
             const query = await connection.prepare("UPDATE bans SET counter = 0 WHERE banID = ?");
             const res: OkPacketInterface = await query.execute([banID]);
 
-            this.bans.set(banID, new Ban(banID, 0));
-
             await connection.end();
+
+            this.bans.set(banID, new Ban(banID, 0));
 
             return res;
         } catch(err) {
@@ -98,9 +98,9 @@ export class BansManager {
             const query = await connection.prepare("UPDATE bans SET counter = counter + 1 WHERE banID = ?");
             await query.execute([banID]);
 
-            this.bans.get(banID)?.increaseCounter();
-
             await connection.end();
+
+            this.bans.get(banID)?.increaseCounter();
 
             return await this.getUnban(banID);
         } catch(err) {
@@ -111,6 +111,6 @@ export class BansManager {
     }
 
     async acceptUnban(banID: number) {
-        return await this.resetBan(banID);
+        return await this.resetUnban(banID);
     }
 }

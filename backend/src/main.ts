@@ -16,10 +16,18 @@ interface DatabaseLoginData {
 
 interface DiscordLoginData {
     token: string
+    statsChannel: string
+    statsMessage: string
 }
 
 interface IndropLoginData {
     key: string
+}
+
+interface RconLoginData {
+    host: string
+    port: number
+    password: string
 }
 
 export interface Config {
@@ -27,6 +35,7 @@ export interface Config {
     fivemDB: DatabaseLoginData
     discord: DiscordLoginData
     indrop: IndropLoginData
+    rcon: RconLoginData
 }
 
 export class RDMBot extends Client {
