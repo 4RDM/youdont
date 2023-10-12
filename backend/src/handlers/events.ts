@@ -23,7 +23,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
-            description: stats.kills.map((user, i) => `#**${i}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** zabójstw`).join("\n"),
+            description: stats.kills.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** zabójstw`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
             color: "#924ED1",
             timestamp: new Date()
@@ -35,7 +35,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
-            description: stats.deaths.map((user, i) => `#**${i}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** śmierci`).join("\n"),
+            description: stats.deaths.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** śmierci`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
             color: "#924ED1",
             timestamp: new Date()
@@ -47,7 +47,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
-            description: stats.kdr.map((user, i) => `#**${i}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** KDR`).join("\n"),
+            description: stats.kdr.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** KDR`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
             color: "#924ED1",
             timestamp: new Date()
