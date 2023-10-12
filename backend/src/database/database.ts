@@ -47,8 +47,8 @@ export class Database extends EventEmitter {
     }
 
     async testConnection() {
-        const conn1 = await this.getBotConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
-        const conn2 = await this.getServerConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
+        const conn1 = await this.getBotConnection().then(() => "OK").catch(() => "ERROR");
+        const conn2 = await this.getServerConnection().then(() => "OK").catch(() => "ERROR");
 
 
         if ((conn1 + conn2).includes("ERROR")) {
