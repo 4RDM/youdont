@@ -116,7 +116,11 @@ export class PaymentsManager {
 
                 res.forEach(async ({ date, email, id, payment_channel, price, product_id, steam_id, steam_username, title }) => {
                     const hex = BigInt(steam_id).toString(16);
+                    let discordID = await database.txadmin.getDiscordBySteam(`steam:${hex}`);
                     const payment = this.get(id);
+
+                    if (!discordID)
+                        discordID = ["0"];
 
                     if (!payment) {
                         const res = await this.create({
@@ -129,7 +133,7 @@ export class PaymentsManager {
                             steamID: steam_id,
                             steamUsername: steam_username,
                             title,
-                            discordID: (() => "1")() // get discord by hex
+                            discordID: discordID[0]
                         });
 
                         if (!res) {
@@ -313,6 +317,10 @@ export class PaymentsManager {
 
     async executePayment(payment: Payment) {
         const hex = BigInt(payment.getSteamId()).toString(16);
+        let discordID = await this.database.txadmin.getDiscordBySteam(`steam:${hex}`);
+
+        if (!discordID)
+            discordID = ["0"];
 
         try {
             return true;
