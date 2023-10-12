@@ -38,7 +38,7 @@ export const getTops = async (core: RDMBot) => {
         const deathsTop: deathsTopResponse = await connection.query("SELECT (@counter := @counter + 1) AS position, users.name, kdr.deaths FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) AS dummy ORDER BY deaths DESC LIMIT 10");
         const kdrTop: kdrTopResponse = await connection.query("SELECT (@counter := @counter + 1) AS position, users.name, ROUND(kdr.kills/kdr.deaths, 2) as KDR FROM kdr JOIN users ON kdr.identifier=users.identifier CROSS JOIN (SELECT @counter := 0) as dummy WHERE kdr.kills > 500 AND kdr.deaths > 1 ORDER BY kdr.kills/kdr.deaths DESC LIMIT 10");
 
-        connection.end();
+        await connection.end();
 
         const kills: User[] = killTop.map(user => {
             return {

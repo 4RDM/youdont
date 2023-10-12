@@ -102,6 +102,9 @@ export class PaymentsManager {
         this.database.users.once("ready", async() => {
             const res = await this.fetch();
 
+            if (database.devMode)
+                return logger.warn("Payments are disabled due to development mode!");
+
             if (!res)
                 return logger.error("PaymentsManager(): cannot fetch payments from database!");
 
@@ -170,6 +173,8 @@ export class PaymentsManager {
             const query = await connection.prepare("SELECT * FROM payments");
             const response: PaymentSchema[] = await query.execute();
 
+            await connection.end();
+
             if (!response)
                 return false;
 
@@ -188,8 +193,6 @@ export class PaymentsManager {
 
                 this.payments.set(payment.id, newPayment);
             });
-
-            await connection.end();
 
             return true;
         } catch(err) {
@@ -226,6 +229,8 @@ export class PaymentsManager {
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT IGNORE INTO payments(id, productID, title, price, paymentChannel, email, steamID, steamUsername, discordID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
             const response: OkPacketInterface = await query.execute([payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID]);
+
+            await connection.end();
 
             const newPayment = new Payment(payment);
 

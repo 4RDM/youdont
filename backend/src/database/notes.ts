@@ -55,6 +55,8 @@ export class NotesManager {
             const query = await connection.prepare("SELECT * FROM notes");
             const response: NoteSchema[] = await query.execute();
 
+            await connection.end();
+
             if (!response)
                 return false;
 
@@ -77,8 +79,6 @@ export class NotesManager {
 
                 this.notes.set(note.id, newNote);
             });
-
-            await connection.end();
 
             return true;
         } catch(err) {

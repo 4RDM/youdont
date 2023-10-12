@@ -16,6 +16,7 @@ export interface OkPacketInterface {
 export class Database extends EventEmitter {
     private serverPool;
     private botPool;
+    public devMode;
     public users;
     public payments;
     public notes;
@@ -24,6 +25,7 @@ export class Database extends EventEmitter {
     constructor(private client: RDMBot) {
         super();
 
+        this.devMode = client.devMode;
         this.serverPool = mariadb.createPool({ ...client.config.fivemDB });
         this.botPool = mariadb.createPool({ ...client.config.botDB });
 
@@ -44,6 +46,7 @@ export class Database extends EventEmitter {
     async testConnection() {
         const conn1 = await this.getBotConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
         const conn2 = await this.getServerConnection().then(() => "\x1b[102m OK \x1b[m").catch(() => "\x1b[101m ERROR \x1b[m");
+
 
         if ((conn1 + conn2).includes("ERROR")) {
             logger.error(`Bot database: ${conn1}`);
