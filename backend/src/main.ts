@@ -18,6 +18,8 @@ interface DiscordLoginData {
     token: string
     statsChannel: string
     statsMessage: string
+    mainGuild: string
+    clientId: string
 }
 
 interface IndropLoginData {
@@ -38,6 +40,10 @@ export interface Config {
     rcon: RconLoginData
 }
 
+interface BotOptions extends ClientOptions {
+    disableHTTP?: boolean
+}
+
 export class RDMBot extends Client {
     public config: Config;
     public devMode;
@@ -45,7 +51,7 @@ export class RDMBot extends Client {
     public commands;
     public database;
 
-    constructor(options: ClientOptions) {
+    constructor(options: BotOptions) {
         super(options);
 
         this.devMode = process.env.NODE_ENV !== "production";

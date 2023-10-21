@@ -323,6 +323,7 @@ export class PaymentsManager {
             discordID = ["0"];
 
         try {
+            logger.log(discordID);
             return true;
         } catch(err) {
             logger.error(err);

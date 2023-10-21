@@ -3,6 +3,7 @@ import { Command } from "./commands";
 import { join } from "path";
 import logger from "../utils/logger";
 import EventEmitter from "events";
+import { pathToFileURL } from "url";
 
 export interface Plugin {
     commands: Command[];
@@ -35,7 +36,8 @@ export default class PluginHandler extends EventEmitter {
             for (const commandName of commandsFolder) {
                 hasErrored = false;
 
-                const file = await import(join(pluginPath, "commands", commandName));
+                const filePath = join(pluginPath, "commands", commandName);
+                const file = await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString());
 
                 if (!file.info) {
                     hasErrored = true;
