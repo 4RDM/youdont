@@ -45,7 +45,7 @@ export default class PluginHandler extends EventEmitter {
                     logger.error(`Could not load the command "${commandName}": The info export is missing.`);
                 }
 
-                if (!file.default.default) {
+                if (!file.default.default || typeof file.default.default !== "function") {
                     hasErrored = true;
                     hasErrored2 = true;
                     logger.error(`Could not load the command "${commandName}": The default export is missing.`);
@@ -53,7 +53,7 @@ export default class PluginHandler extends EventEmitter {
 
                 if (hasErrored) continue;
 
-                commands.push({ info: file.info, execute: file.default, autocomplete: file.autocomplete });
+                commands.push({ info: file.info, execute: file.default.default, autocomplete: file.autocomplete });
             }
 
             if (hasErrored2) logger.warn(`Some commands were not loaded in plugin "${name}" due to an error.`);

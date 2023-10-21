@@ -4,7 +4,7 @@ import { EmbedBuilder as EB, ErrorEmbedInteraction } from "utils/embedBuilder";
 import logger from "utils/logger";
 
 interface _ReplyOptions extends InteractionReplyOptions {
-    isError: boolean
+    isError?: boolean
 }
 
 declare module "discord.js" {
@@ -45,7 +45,11 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         if (!command)
             return await interaction.Reply("Nie znaleziono polecenia!", { isError: true });
 
-        await command.execute({ client, interaction });
+        try {
+            await command.execute({ client, interaction });
+        } catch(err) {
+            logger.error(`handleInteraction.command.execute(): ${err}`)
+        }
     }
 
     if (interaction.isAutocomplete()) {
