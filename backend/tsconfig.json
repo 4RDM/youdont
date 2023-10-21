@@ -10,7 +10,10 @@
         "typeRoots": ["node_modules/@types"],
         "removeComments": true,
         "esModuleInterop": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "resolveJsonModule": true,
-    }
+    },
+    "include": [
+        "src/**/*"
+    ]
 }

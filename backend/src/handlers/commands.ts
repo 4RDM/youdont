@@ -1,17 +1,19 @@
-import { AutocompleteInteraction, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { AutocompleteInteraction, CommandInteraction, PermissionResolvable, SlashCommandBuilder } from "discord.js";
 import { RDMBot } from "../main";
 import PluginHandler from "./plugins";
 
 export type CommandArgs = { client: RDMBot, interaction: CommandInteraction };
 export type AutocompleteArgs = { client: RDMBot, interaction: AutocompleteInteraction };
+export interface CommandInfoType {
+    name: string;
+    description: string;
+    role?: string[];
+    permissions?: PermissionResolvable;
+    builder: SlashCommandBuilder;
+}
 
 export interface Command {
-    info: {
-        name: string;
-        description: string;
-        role?: string[];
-        builder: SlashCommandBuilder;
-    };
+    info: CommandInfoType;
     execute(args: CommandArgs): Promise<void>;
     autocomplete?(args: AutocompleteArgs): Promise<void>;
 }
