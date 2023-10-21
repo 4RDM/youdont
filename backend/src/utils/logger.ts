@@ -24,10 +24,9 @@ const logFormat = winston.format.combine(
 
 const logger = winston.createLogger({
     level: "info",
-    format: winston.format.json(),
     transports: [
-        new winston.transports.File({ filename: "combined.log" }),
-        new winston.transports.Console({ format: logFormat })
+        new winston.transports.Console({ format: logFormat }),
+        new winston.transports.File({ filename: "combined.log", format: winston.format.combine(winston.format.timestamp(), winston.format.json()) })
     ]
 });
 
