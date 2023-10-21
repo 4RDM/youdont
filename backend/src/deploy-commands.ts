@@ -1,13 +1,9 @@
 import { REST, Routes } from "discord.js";
-import { RDMBot } from "./main";
+import RDMBot from "./main";
 import config from "./config";
 import logger from "./utils/logger";
 
-const client = new RDMBot({
-    disableHTTP: true,
-    intents: [],
-    partials: []
-});
+const client = RDMBot;
 const commands: unknown[] = [];
 
 client.plugins.once("ready", () => {
