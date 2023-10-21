@@ -45,7 +45,7 @@ export default class PluginHandler extends EventEmitter {
                     logger.error(`Could not load the command "${commandName}": The info export is missing.`);
                 }
 
-                if (!file.default) {
+                if (!file.default.default) {
                     hasErrored = true;
                     hasErrored2 = true;
                     logger.error(`Could not load the command "${commandName}": The default export is missing.`);
