@@ -1,23 +1,21 @@
 import { Interaction, InteractionReplyOptions } from "discord.js";
 import { RDMBot } from "main";
 import { EmbedBuilder as EB, ErrorEmbedInteraction } from "utils/embedBuilder";
-import logger from "utils/logger";
-
-interface _ReplyOptions extends InteractionReplyOptions {
-    isError?: boolean
-}
+import handleCommands from "./events/commands";
+import handleAutocomplete from "./events/autocomplete";
 
 declare module "discord.js" {
     interface BaseInteraction {
         hasReplied: boolean;
-        Reply: (content: string | EB[], options?: _ReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
+        Reply: (content: string | EB[], options?: InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
+        Error: (content: string, options?: InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
     }
 }
 
 export const handleInteraction = async (interaction: Interaction, client: RDMBot) => {
     if (!interaction.inGuild()) return;
 
-    interaction.Reply = async (content: string | EB[], options?: _ReplyOptions) => {
+    interaction.Reply = async (content: string | EB[], options?: InteractionReplyOptions) => {
         if (!interaction.isRepliable()) return undefined;
 
         let messageObject = {};
@@ -28,39 +26,17 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
             messageObject = Object.assign(options || {}, { embeds: content });
 
         if (interaction.hasReplied) {
-            if (options?.isError)
-                return interaction.Reply([ErrorEmbedInteraction(interaction, content as string)]);
             return interaction.deferReply(messageObject);
         } else {
-            if (options?.isError)
-                return interaction.Reply([ErrorEmbedInteraction(interaction, content as string)]);
             interaction.hasReplied = true;
             return interaction.reply(messageObject);
         }
     };
 
-    if (interaction.isCommand()) {
-        const command = client.commands.get(interaction.commandName);
+    interaction.Error = (content: string, options?: InteractionReplyOptions) => {
+        return interaction.Reply([ ErrorEmbedInteraction(interaction, content as string) ], options);
+    };
 
-        if (!command)
-            return await interaction.Reply("Nie znaleziono polecenia!", { isError: true });
-
-        try {
-            await command.execute({ client, interaction });
-        } catch(err) {
-            logger.error(`handleInteraction.command.execute(): ${err}`)
-        }
-    }
-
-    if (interaction.isAutocomplete()) {
-        const command = client.commands.get(interaction.commandName);
-
-        if (!command)
-            return;
-
-        if (!command.autocomplete)
-            return logger.warn(`Autocompletion for ${command.info.name} not found!`);
-
-        await command.autocomplete({ client, interaction });
-    }
+    await handleCommands(client, interaction);
+    await handleAutocomplete(client, interaction);
 };

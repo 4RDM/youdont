@@ -1,12 +1,14 @@
 import { readFile, readdir } from "fs/promises";
-import { Command } from "./commands";
-import { join } from "path";
 import logger from "../utils/logger";
-import EventEmitter from "events";
+import { Command } from "./commands";
+import { Modal } from "./modals";
+import { join } from "path";
 import { pathToFileURL } from "url";
+import EventEmitter from "events";
 
 export interface Plugin {
     commands: Command[];
+    modals: Modal[]
     id: string;
     name: string;
 }
@@ -27,11 +29,13 @@ export default class PluginHandler extends EventEmitter {
 
             const configContent = await readFile(join(pluginPath, "config.json"));
             const commandsFolder = await readdir(join(pluginPath, "commands"));
+            const modalsFolder = await readdir(join(pluginPath, "modals"));
 
             const { name, id } = JSON.parse(configContent.toString());
             const commands: Command[] = [];
+            const modals: Modal[] = [];
+
             let hasErrored = false;
-            let hasErrored2 = false;
 
             for (const commandName of commandsFolder) {
                 hasErrored = false;
@@ -41,13 +45,11 @@ export default class PluginHandler extends EventEmitter {
 
                 if (!file.info) {
                     hasErrored = true;
-                    hasErrored2 = true;
                     logger.error(`Could not load the command "${commandName}": The info export is missing.`);
                 }
 
                 if (!file.default.default || typeof file.default.default !== "function") {
                     hasErrored = true;
-                    hasErrored2 = true;
                     logger.error(`Could not load the command "${commandName}": The default export is missing.`);
                 }
 
@@ -56,10 +58,30 @@ export default class PluginHandler extends EventEmitter {
                 commands.push({ info: file.info, execute: file.default.default, autocomplete: file.autocomplete });
             }
 
-            if (hasErrored2) logger.warn(`Some commands were not loaded in plugin "${name}" due to an error.`);
+            for (const modalName of modalsFolder) {
+                hasErrored = false;
 
-            logger.log(`Loaded ${id} plugin`);
-            this.plugins.push({ name, id, commands });
+                const filePath = join(pluginPath, "modals", modalName);
+                const file = await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString());
+
+                if (!file.info) {
+                    hasErrored = true;
+                    logger.error(`Could not load the modal "${modalName}": The info export is missing.`);
+                }
+
+                if (!file.default.default || typeof file.default.default !== "function") {
+                    hasErrored = true;
+                    logger.error(`Could not load the modal "${modalName}": The default export is missing.`);
+                }
+
+                if (hasErrored) continue;
+
+                modals.push({ info: file.info, execute: file.default.default });
+            }
+
+            logger.log(`Loaded "${id}" plugin, commands: ${commands.length}, modals: ${modals.length}`);
+
+            this.plugins.push({ name, id, commands, modals });
         }
 
         logger.log(`Loaded ${this.plugins.length} plugins`);
