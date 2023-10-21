@@ -43,7 +43,7 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         const command = client.commands.get(interaction.commandName);
 
         if (!command)
-            return await interaction.Reply("Command not found!", { isError: true });
+            return await interaction.Reply("Nie znaleziono polecenia!", { isError: true });
 
         await command.execute({ client, interaction });
     }
@@ -52,7 +52,7 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         const command = client.commands.get(interaction.commandName);
 
         if (!command)
-            return await interaction.Reply("Command not found!", { isError: true });
+            return;
 
         if (!command.autocomplete)
             return logger.warn(`Autocompletion for ${command.info.name} not found!`);
