@@ -3,6 +3,7 @@ import { RDMBot } from "main";
 import { EmbedBuilder as EB, ErrorEmbedInteraction } from "utils/embedBuilder";
 import handleCommands from "./events/commands";
 import handleAutocomplete from "./events/autocomplete";
+import handleButton from "./events/button";
 
 declare module "discord.js" {
     interface BaseInteraction {
@@ -37,6 +38,7 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         return interaction.Reply([ ErrorEmbedInteraction(interaction, content as string) ], options);
     };
 
+    await handleButton(client, interaction);
     await handleCommands(client, interaction);
     await handleAutocomplete(client, interaction);
 };
