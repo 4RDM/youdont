@@ -6,7 +6,7 @@ import { join } from "path";
 const banlistPath =
     process.env.NODE_ENV == "production" ?
         "/home/rdm/server/data/resources/[4rdm]/EasyAdmin-6/banlist.json" :
-        join(__dirname, "..", "..", "..", "data", "banlist.json");
+        join(__dirname, "..", "..", "..", "banlist.json");
 
 export interface Ban {
     expire: number
@@ -35,7 +35,24 @@ export const getBanBySteam = async(hex: string) => {
     return ban;
 };
 
-export default async function ({ interaction }: ModalSubmitArgs) {
+export default async function ({ interaction, client }: ModalSubmitArgs) {
+    const banID = interaction.fields.getTextInputValue("banID");
+    const reason = interaction.fields.getTextInputValue("reason");
+    const rateLimit = client.getRatelimit("unban", interaction.user.id);
+
+    if (rateLimit && !client.hasExpired("unban", interaction.user.id))
+        return await interaction.Error(`Jesteś ograniczony czasowo! Kolejne odwołanie możesz napisać <t:${Math.floor(rateLimit.getTime() / 1000)}>`, { ephemeral: true });
+
+    if (isNaN(parseInt(banID)))
+        return await interaction.Error("Wprowadzono nieprawidłowe ID bana", { ephemeral: true });
+
+    const ban = await getBan(banID);
+
+    if (!ban || !ban.identifiers.includes(`discord:${interaction.user.id}`))
+        return await interaction.Error("Nie znaleziono bana nałożonego na twoje konto discord! Odwołaj się na tickecie", { ephemeral: true });
+
+    console.log(ban, reason);
+
     interaction.Reply("test");
 }
 
