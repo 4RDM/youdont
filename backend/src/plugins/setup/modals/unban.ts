@@ -1,9 +1,10 @@
+import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
 import { join } from "path";
 
 
-const banlistPath =
+const path =
     process.env.NODE_ENV == "production" ?
         "/home/rdm/server/data/resources/[4rdm]/EasyAdmin-6/banlist.json" :
         join(__dirname, "..", "..", "..", "banlist.json");
@@ -20,7 +21,7 @@ export interface Ban {
 }
 
 export const getBan = async(banID: string) => {
-    const file = await readFile(banlistPath, { encoding: "utf-8" });
+    const file = await readFile(path, { encoding: "utf-8" });
     const banlist: Ban[] = JSON.parse(file.toString());
     const ban = banlist.find(ban => ban.banid == parseInt(banID));
 
@@ -28,7 +29,7 @@ export const getBan = async(banID: string) => {
 };
 
 export const getBanBySteam = async(hex: string) => {
-    const file = await readFile(banlistPath, { encoding: "utf-8" });
+    const file = await readFile(path, { encoding: "utf-8" });
     const banlist: Ban[] = JSON.parse(file.toString());
     const ban = banlist.reverse().find(ban => ban.identifiers.includes(`steam:${hex}`));
 
@@ -36,6 +37,9 @@ export const getBanBySteam = async(hex: string) => {
 };
 
 export default async function ({ interaction, client }: ModalSubmitArgs) {
+    if (!existsSync(path))
+        return interaction.Error("Funkcja niedostępna na tym komputerze, skontaktuj się z administracją!", { ephemeral: true });
+
     const banID = interaction.fields.getTextInputValue("banID");
     const reason = interaction.fields.getTextInputValue("reason");
     const rateLimit = client.getRatelimit("unban", interaction.user.id);
@@ -57,6 +61,5 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
 }
 
 export const info: ModalSubmitInfoType = {
-    name: "test",
-    description: "test",
+    name: "unban_form"
 };

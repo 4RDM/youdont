@@ -5,7 +5,6 @@ import PluginHandler from "./plugins";
 export type ModalSubmitArgs = { client: RDMBot, interaction: ModalSubmitInteraction };
 export interface ModalSubmitInfoType {
     name: string;
-    description: string;
 }
 
 export interface Modal {
