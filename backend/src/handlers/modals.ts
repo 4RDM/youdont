@@ -1,4 +1,4 @@
-import { ModalSubmitInteraction, PermissionResolvable } from "discord.js";
+import { ModalSubmitInteraction, } from "discord.js";
 import { RDMBot } from "../main";
 import PluginHandler from "./plugins";
 
@@ -6,8 +6,6 @@ export type ModalSubmitArgs = { client: RDMBot, interaction: ModalSubmitInteract
 export interface ModalSubmitInfoType {
     name: string;
     description: string;
-    role?: string[];
-    permissions?: PermissionResolvable;
 }
 
 export interface Modal {
