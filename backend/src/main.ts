@@ -5,6 +5,7 @@ import logger from "utils/logger";
 import config from "config";
 import PluginHandler from "handlers/plugins";
 import CommandHandler from "handlers/commands";
+import ModalsHandler from "handlers/modals";
 
 interface DatabaseLoginData {
     host: string
@@ -50,6 +51,7 @@ export class RDMBot extends Client {
     public plugins;
     public commands;
     public database;
+    public modals;
     private rateLimits: Map<string, Map<string, Date>> = new Map();
 
     constructor(options: BotOptions) {
@@ -61,6 +63,7 @@ export class RDMBot extends Client {
         this.database = new Database(this);
         this.plugins = new PluginHandler();
         this.commands = new CommandHandler(this.plugins);
+        this.modals = new ModalsHandler(this.plugins);
 
         this.database.testConnection();
 
