@@ -18,7 +18,7 @@ export class ConfigManager {
 
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT INTO config(key, value) VALUES(?, ?)");
+            const query = await connection.prepare("INSERT INTO config(dKey, dValue) VALUES(?, ?)");
             const res: OkPacketInterface = await query.execute([key, value]);
 
             await connection.end();
@@ -34,7 +34,7 @@ export class ConfigManager {
     async get(key: string) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM config WHERE key = ?");
+            const query = await connection.prepare("SELECT * FROM config WHERE dKey = ?");
             const res: string[] = await query.execute([key]);
 
             await connection.end();

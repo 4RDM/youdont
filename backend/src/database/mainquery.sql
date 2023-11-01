@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS bans(
     PRIMARY KEY(id)
 );
 CREATE TABLE IF NOT EXISTS config(
-    key VARCHAR(100) NOT NULL UNIQUE,
-    value TEXT,
-    PRIMARY KEY(key)
+    dKey VARCHAR(100) NOT NULL UNIQUE,
+    dValue TEXT,
+    PRIMARY KEY(dKey)
 );
