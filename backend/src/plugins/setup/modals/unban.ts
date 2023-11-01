@@ -2,6 +2,7 @@ import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
 import { join } from "path";
+import { Embed } from "utils/embedBuilder";
 
 
 const path =
@@ -55,9 +56,36 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
     if (!ban || !ban.identifiers.includes(`discord:${interaction.user.id}`))
         return await interaction.Error("Nie znaleziono bana nałożonego na twoje konto discord! Odwołaj się na tickecie", { ephemeral: true });
 
-    console.log(ban, reason);
+    const unbanChannel = await client.database.config.get("unbanFormAdminChannel");
 
-    interaction.Reply("test");
+    if (unbanChannel == false)
+        return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });
+
+    const channel = await interaction.guild?.channels.fetch(unbanChannel);
+
+    if (!channel)
+        return await interaction.Error("Nie udało się znaleźć kanału administracyjnego, skontaktuj się z administracją!", { ephemeral: true });
+
+    if (!channel.isTextBased())
+        return await interaction.Error("Kanał administracyjny nie jest tekstowy, skontaktuj się z administracją!", { ephemeral: true });
+
+    await channel.send({
+        content: `<@${interaction.user.id}>`,
+        embeds: [
+            Embed({
+                title: "Odwołanie od bana",
+                fields: [
+                    { name: "Nazwa użytkownika", value: `\`${ban.name}\``, inline: false },
+                    { name: "ID bana", value: `\`${ban.banid}\``, inline: false },
+                    { name: "Banujący", value: `\`${ban.banner}\``, inline: false },
+                    { name: "Powód bana", value: `\`${ban.reason}\``, inline: false },
+                    { name: "Treść odwołania", value: `\`\`\`${reason}\`\`\``, inline: false },
+                ]
+            })
+        ]
+    });
+
+    await interaction.Reply("Twoje odwołanie zostało przesłane", { ephemeral: true });
 }
 
 export const info: ModalSubmitInfoType = {
