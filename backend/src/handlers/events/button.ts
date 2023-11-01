@@ -5,6 +5,6 @@ import { unbanFormModal } from "modals/unban";
 export default async function(client: RDMBot, interaction: Interaction) {
     if (!interaction.isButton()) return;
 
-    if (interaction.customId == "test1")
+    if (interaction.customId == "unbanFormModal")
         interaction.showModal(unbanFormModal);
 }
