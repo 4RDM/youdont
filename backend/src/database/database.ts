@@ -7,6 +7,7 @@ import { PaymentsManager } from "./payments";
 import { NotesManager } from "./notes";
 import { BansManager } from "./bans";
 import { PlayerDataManager } from "./playerData";
+import { ConfigManager } from "./config";
 
 export interface OkPacketInterface {
 	affectedRows: number;
@@ -23,6 +24,7 @@ export class Database extends EventEmitter {
     public notes;
     public bans;
     public txadmin;
+    public config;
 
     constructor(private client: RDMBot) {
         super();
@@ -36,6 +38,7 @@ export class Database extends EventEmitter {
         this.notes = new NotesManager(this);
         this.bans = new BansManager(this);
         this.txadmin = new PlayerDataManager(this);
+        this.config = new ConfigManager(this);
     }
 
     async getBotConnection() {

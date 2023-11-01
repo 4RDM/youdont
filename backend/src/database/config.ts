@@ -1,6 +1,10 @@
 import logger from "utils/logger";
 import { Database, OkPacketInterface } from "./database";
 
+/**
+ * note: Key length can't be longer than 100 characters.
+ */
+
 export class ConfigManager {
     constructor(private database: Database) {}
 
