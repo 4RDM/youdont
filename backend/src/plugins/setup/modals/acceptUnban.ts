@@ -1,6 +1,5 @@
-import { Ban, getBan } from "./unban";
+import { getBan } from "./unban";
 import { existsSync } from "fs";
-import { readFile, writeFile } from "fs/promises";
 import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
 import { join } from "path";
 import { Embed } from "utils/embedBuilder";
@@ -12,10 +11,12 @@ const path =
         join(__dirname, "..", "..", "..", "banlist.json");
 
 export const removeBan = async(banID: number) => {
-    const file = await readFile(path, { encoding: "utf-8" });
-    const banlist: Ban[] = JSON.parse(file.toString());
-    const banlistNew = banlist.filter((ban) => ban.banid !== banID);
-    return await writeFile(path, JSON.stringify(banlistNew, null, 4), { encoding: "utf-8" });
+    // const file = await readFile(path, { encoding: "utf-8" });
+    // const banlist: Ban[] = JSON.parse(file.toString());
+    // const banlistNew = banlist.filter((ban) => ban.banid !== banID);
+    // return await writeFile(path, JSON.stringify(banlistNew, null, 4), { encoding: "utf-8" });
+    /* TODO: implement rcon */
+    banID;
 };
 
 export default async function ({ interaction, client, args }: ModalSubmitArgs) {

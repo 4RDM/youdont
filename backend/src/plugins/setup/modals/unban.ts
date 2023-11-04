@@ -77,6 +77,9 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
         new ButtonBuilder().setCustomId(`shortenUnbanForm-${banID}`).setLabel("Skróć").setStyle(ButtonStyle.Primary)
     );
 
+    /* check if banner is in administration */
+    /* if is ping banner else ping management */
+
     await channel.send({
         content: `<@${interaction.user.id}>`,
         embeds: [
