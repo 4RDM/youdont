@@ -1,3 +1,4 @@
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
@@ -69,6 +70,13 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
     if (!channel.isTextBased())
         return await interaction.Error("Kanał administracyjny nie jest tekstowy, skontaktuj się z administracją!", { ephemeral: true });
 
+    const actionRow = new ActionRowBuilder<ButtonBuilder>();
+    actionRow.addComponents(
+        new ButtonBuilder().setCustomId(`acceptUnbanModal-${banID}`).setLabel("Zaakceptuj").setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId(`denyUnbanModal-${banID}`).setLabel("Odrzuć").setStyle(ButtonStyle.Danger),
+        new ButtonBuilder().setCustomId(`shortenUnbanForm-${banID}`).setLabel("Skróć").setStyle(ButtonStyle.Primary)
+    );
+
     await channel.send({
         content: `<@${interaction.user.id}>`,
         embeds: [
@@ -82,7 +90,8 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
                     { name: "Treść odwołania", value: `\`\`\`${reason}\`\`\``, inline: false },
                 ]
             })
-        ]
+        ],
+        components: [actionRow]
     });
 
     await interaction.Reply("Twoje odwołanie zostało przesłane", { ephemeral: true });

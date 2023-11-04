@@ -2,7 +2,7 @@ import { ModalSubmitInteraction, } from "discord.js";
 import { RDMBot } from "../main";
 import PluginHandler from "./plugins";
 
-export type ModalSubmitArgs = { client: RDMBot, interaction: ModalSubmitInteraction };
+export type ModalSubmitArgs = { client: RDMBot, interaction: ModalSubmitInteraction, args?: string[] };
 export interface ModalSubmitInfoType {
     name: string;
 }
