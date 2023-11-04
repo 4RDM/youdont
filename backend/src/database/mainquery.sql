@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS articles(
     PRIMARY KEY(id)
 );
 CREATE TABLE IF NOT EXISTS bans(
-    id INTEGER UNIQUE,
+    banID INTEGER UNIQUE,
     counter INTEGER,
     PRIMARY KEY(id)
 );
