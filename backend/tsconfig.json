@@ -12,8 +12,10 @@
         "esModuleInterop": true,
         "sourceMap": false,
         "resolveJsonModule": true,
+        "incremental": false,
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "src/**/*.json"
     ]
 }
