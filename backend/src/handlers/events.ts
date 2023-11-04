@@ -2,7 +2,7 @@ import { RDMBot } from "main";
 import logger from "utils/logger";
 import { handleInteraction } from "./interactions";
 import { getTops } from "utils/serverStatus";
-import { TextChannel } from "discord.js";
+import { Channel, TextChannel } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import config from "config";
 
@@ -70,9 +70,9 @@ export class EventHandler {
             try {
                 logger.ready(`${readyClient.user.tag} is ready!`);
 
-                const statsChannel = await readyClient.channels.fetch(config.discord.statsChannel, { cache: true, force: true });
+                const statsChannel = (await readyClient.channels.fetch(config.discord.statsChannel, { cache: true, force: true }).catch(() => false)) as Channel | false;
 
-                if (!statsChannel)
+                if (!statsChannel || statsChannel == null)
                     return logger.error("EventHandler(): Stats channel not found!") as unknown as void;
 
                 if (!statsChannel.isTextBased())
