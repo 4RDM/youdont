@@ -19,7 +19,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     const actionRow = new ActionRowBuilder<ButtonBuilder>();
     actionRow.addComponents(new ButtonBuilder().setCustomId("unbanFormModal").setLabel("Otwórz formularz").setStyle(ButtonStyle.Success));
 
-    return interaction.Reply([ Embed({ title: "Odwołanie od bana", description: "Aby otworzyć formularz naciśnij przycisk poniżej", color: "#6f42c1" }) ], { components: [actionRow] });
+    return interaction.Reply([ Embed({ title: "Odwołanie od bana", description: "Aby otworzyć formularz naciśnij przycisk poniżej" }) ], { components: [actionRow] });
 }
 
 export const info: CommandInfoType = {

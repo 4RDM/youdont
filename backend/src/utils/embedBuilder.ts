@@ -54,7 +54,7 @@ export const Embed = ({
     if (author) embed.setAuthor(author);
     if (title) embed.setTitle(title + (process.env.NODE_ENV !== "production" ? " (dev)" : ""));
     if (color) embed.setColor(color);
-    else embed.setColor("#fcbe03");
+    else embed.setColor("#6f42c1");
     if (description) embed.setDescription(description);
     if (fields) embed.addFields(fields);
     if (footer) embed.setFooter({ text: footer }).setTimestamp(new Date());
