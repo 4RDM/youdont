@@ -29,14 +29,15 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
     await interaction.Reply(
         [
             Embed({
-                title: ":x: | Twoje podanie zostało odrzucone",
+                title: ":x: | Twoje podanie zostało rozpatrzone negatywnie",
                 fields: [
                     { name: "Nazwa użytkownika", value: `\`${ban.name}\``, inline: false },
                     { name: "ID bana", value: `\`${ban.banid}\``, inline: false },
                     { name: "Banujący", value: `\`${ban.banner}\``, inline: false },
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
                 ],
-                color: "#f54242"
+                color: "#f54242",
+                user: interaction.user
             })
         ],
         { content: `${denyUnbanRes.counter >= 3 ? `<@&843444626726584370>, podanie \`${args[1]}\` zostało odrzucone ${denyUnbanRes.counter} razy!` : ""} ${interaction.message.content}` }

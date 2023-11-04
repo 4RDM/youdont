@@ -113,6 +113,7 @@ export class BansManager {
     }
 
     async acceptUnban(banID: number) {
+        await this.getUnban(banID);
         return await this.resetUnban(banID);
     }
 }
