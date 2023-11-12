@@ -58,3 +58,22 @@ export const denyUnbanModal = new ModalBuilder()
     .setTitle("Odrzuć podanie o unbana")
     .setCustomId("deny_unban")
     .addComponents(commentRow);
+
+/*
+    SHORTEN UNBAN FORM
+*/
+
+const secondsRow = new ActionRowBuilder<ModalActionRowComponentBuilder>();
+const secondsInput = new TextInputBuilder()
+    .setLabel("Ilość sekund")
+    .setCustomId("seconds")
+    .setStyle(TextInputStyle.Short)
+    .setRequired(true)
+    .setPlaceholder("O ile sekund skrócić bana?");
+
+secondsRow.addComponents(secondsInput);
+
+export const shortenUnbanModal = new ModalBuilder()
+    .setTitle("Skróć bana")
+    .setCustomId("shorten_unban")
+    .addComponents(commentRow, secondsRow);
