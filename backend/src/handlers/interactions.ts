@@ -16,6 +16,7 @@ declare module "discord.js" {
 
 export const handleInteraction = async (interaction: Interaction, client: RDMBot) => {
     if (!interaction.inGuild()) return;
+    if (interaction.guildId != client.config.discord.mainGuild) return;
 
     interaction.Reply = async (content: string | EB[], options?: InteractionReplyOptions) => {
         if (!interaction.isRepliable()) return undefined;
