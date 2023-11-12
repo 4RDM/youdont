@@ -1,3 +1,4 @@
+import { doesUserHaveAnyRole } from "handlers/events/commands";
 import { getBan } from "./unban";
 import { existsSync } from "fs";
 import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
@@ -21,10 +22,21 @@ export const removeBan = async(banID: number) => {
 
 export default async function ({ interaction, client, args }: ModalSubmitArgs) {
     if (!existsSync(path))
-        return interaction.Error("Funkcja niedostępna na tym komputerze, skontaktuj się z administracją!", { ephemeral: true });
+        return await interaction.Error("Funkcja niedostępna na tym komputerze, skontaktuj się z administracją!", { ephemeral: true });
 
     if (!args || !args[1])
-        return interaction.Error("Wystąpił błąd wewnętrzny, brak argumentów! Zgłoś się do administracji!", { ephemeral: true });
+        return await interaction.Error("Wystąpił błąd wewnętrzny, brak argumentów! Zgłoś się do administracji!", { ephemeral: true });
+
+    if (!interaction.inGuild())
+        return await interaction.Error("Nie możesz użyć tej komendy w DM!", { ephemeral: true });
+
+    const bannerDiscordID = interaction.message?.embeds[0].fields.find(x => x.name == "Banujący");
+
+    if (!bannerDiscordID)
+        return await interaction.Error("Nie można znaleźć ID banującego, skontaktuj się z administracją!", { ephemeral: true });
+
+    if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, ["843444626726584370"]))
+        return await interaction.Error("Nie możesz zaakceptować unbana, ponieważ nie jesteś banującym!", { ephemeral: true });
 
     const ban = await getBan(args[1]);
 
@@ -39,7 +51,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
 
     const acceptUnbanRes = await client.database.bans.acceptUnban(parseInt(args[1]));
 
-    if (acceptUnbanRes == false)
+    if (acceptUnbanRes === false)
         return await interaction.Error("Wystąpił błąd bazy danych, Skontaktuj się z administracją", { ephemeral: true });
 
     const comment = interaction.fields.getTextInputValue("comment");
@@ -49,21 +61,21 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
 
     await interaction.message.edit({ components: [] });
 
-    await interaction.Reply(
+    return await interaction.Reply(
         [
             Embed({
                 title: ":white_check_mark: | Twoje podanie zostało rozpatrzone pozytywnie",
                 fields: [
                     { name: "Nazwa użytkownika", value: `\`${ban.name}\``, inline: false },
                     { name: "ID bana", value: `\`${ban.banid}\``, inline: false },
-                    { name: "Banujący", value: `\`${ban.banner}\``, inline: false },
+                    { name: "Banujący", value: interaction.message.embeds[0].fields.find(x => x.name == "Banujący")?.value || "`Nie znaleziono`", inline: false },
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
                 ],
                 color: "#42f569",
                 user: interaction.user
             })
         ],
-        { content: interaction.message.content }
+        { content: interaction.message.content.split("|")[0].trim() }
     );
 }
 

@@ -40,7 +40,10 @@ export const getBanBySteam = async(hex: string) => {
 
 export default async function ({ interaction, client }: ModalSubmitArgs) {
     if (!existsSync(path))
-        return interaction.Error("Funkcja niedostępna na tym komputerze, skontaktuj się z administracją!", { ephemeral: true });
+        return await interaction.Error("Funkcja niedostępna na tym komputerze, skontaktuj się z administracją!", { ephemeral: true });
+
+    if (!interaction.inGuild())
+        return await interaction.Error("Nie możesz użyć tej komendy w DM!", { ephemeral: true });
 
     const banID = interaction.fields.getTextInputValue("banID");
     const reason = interaction.fields.getTextInputValue("reason");
@@ -59,7 +62,7 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
 
     const unbanChannel = await client.database.config.get("unbanFormAdminChannel");
 
-    if (unbanChannel == false)
+    if (unbanChannel === false)
         return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });
 
     const channel = await interaction.guild?.channels.fetch(unbanChannel);
@@ -80,24 +83,41 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
     /* check if banner is in administration */
     /* if is ping banner else ping management */
 
+    let messageContent = `Podanie o unbana od <@${interaction.user.id}> \`(${interaction.user.id})\``;
+
+    const bannerDiscordID = await client.database.txadmin.getDiscordBySteam(ban.bannersteam);
+
+    if (bannerDiscordID === false)
+        return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });
+
+    const bannerDiscordUser = bannerDiscordID[0] !== null ? await interaction.guild?.members.fetch(bannerDiscordID[0].replace("discord:", "")).catch(() => undefined) : undefined;
+
+    ban.banner = bannerDiscordUser ? `<@${bannerDiscordID[0].replace("discord:", "")}>` : null || "`Nie znaleziono`";
+
+    if (ban.banner == "`Nie znaleziono`")
+        messageContent += " | <@&843444626726584370>, nie znaleziono administratora!";
+    else if (bannerDiscordUser && !bannerDiscordUser.roles.cache.has("843444642539110400"))
+        messageContent += " | <@&843444626726584370>, banujący nie jest w administracji!";
+
     await channel.send({
-        content: `<@${interaction.user.id}>`,
+        content: messageContent,
         embeds: [
             Embed({
                 title: "Odwołanie od bana",
                 fields: [
                     { name: "Nazwa użytkownika", value: `\`${ban.name}\``, inline: false },
                     { name: "ID bana", value: `\`${ban.banid}\``, inline: false },
-                    { name: "Banujący", value: `\`${ban.banner}\``, inline: false },
-                    { name: "Powód bana", value: `\`${ban.reason}\``, inline: false },
+                    { name: "Banujący", value: ban.banner, inline: false },
+                    { name: "Powód bana", value: `\`${ban.reason.split("( Gracz")[0].trim()}\``, inline: false },
                     { name: "Treść odwołania", value: `\`\`\`${reason}\`\`\``, inline: false },
-                ]
+                ],
+                user: interaction.user
             })
         ],
         components: [actionRow]
     });
 
-    await interaction.Reply("Twoje odwołanie zostało przesłane", { ephemeral: true });
+    return await interaction.Reply("Twoje odwołanie zostało przesłane", { ephemeral: true });
 }
 
 export const info: ModalSubmitInfoType = {

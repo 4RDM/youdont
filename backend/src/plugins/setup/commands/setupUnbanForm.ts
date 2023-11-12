@@ -13,7 +13,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     if (res == -1)
         return await interaction.Error("Długość klucza jest nieprawidłowa, skontaktuj się z administracją!", { ephemeral: true });
 
-    if (res == false)
+    if (res === false)
         return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>();
