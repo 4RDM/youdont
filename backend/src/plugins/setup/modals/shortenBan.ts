@@ -12,13 +12,8 @@ const path =
         "/home/rdm/server/data/resources/[4rdm]/EasyAdmin-6/banlist.json" :
         join(__dirname, "..", "..", "..", "banlist.json");
 
-export const removeBan = async(banID: number) => {
-    // const file = await readFile(path, { encoding: "utf-8" });
-    // const banlist: Ban[] = JSON.parse(file.toString());
-    // const banlistNew = banlist.filter((ban) => ban.banid !== banID);
-    // return await writeFile(path, JSON.stringify(banlistNew, null, 4), { encoding: "utf-8" });
-    /* TODO: implement rcon */
-    return await rcon(`unban ${banID}`);
+export const shortenBan = async(banID: number, seconds: number) => {
+    return await rcon(`shortenBan ${banID} ${seconds}`);
 };
 
 export default async function ({ interaction, client, args }: ModalSubmitArgs) {
@@ -37,17 +32,22 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
         return await interaction.Error("Nie można znaleźć ID banującego, skontaktuj się z administracją!", { ephemeral: true });
 
     if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, ["843444626726584370"]))
-        return await interaction.Error("Nie możesz zaakceptować unbana, ponieważ nie jesteś banującym!", { ephemeral: true });
+        return await interaction.Error("Nie możesz skrócić bana, ponieważ nie jesteś banującym!", { ephemeral: true });
 
     const ban = await getBan(args[1]);
 
     if (!ban)
         return await interaction.Error("Nieznaleziono bana na liscie, prawdopodobnie się przedawnił", { ephemeral: true });
 
+    const seconds = interaction.fields.getTextInputValue("seconds");
+
+    if (isNaN(parseInt(seconds)))
+        return await interaction.Error("Wprowadzono nieprawidłową liczbę sekund", { ephemeral: true });
+
     try {
-        await removeBan(parseInt(args[1])).catch(err => logger.error(`acceptUnban.execute(): Cannot remove ban! ${err}`));
+        await shortenBan(parseInt(args[1]), parseInt(seconds)).catch(err => logger.error(`shortenUnban.execute(): Cannot shorten ban! ${err}`));
     } catch(err) {
-        return logger.error(`acceptUnban.execute(): Cannot save banlist! ${err}`);
+        return logger.error(`shortenUnban.execute(): Cannot save banlist! ${err}`);
     }
 
     const acceptUnbanRes = await client.database.bans.acceptUnban(parseInt(args[1]));
@@ -65,14 +65,15 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
     return await interaction.Reply(
         [
             Embed({
-                title: ":white_check_mark: | Twoje podanie zostało rozpatrzone pozytywnie",
+                title: ":clock10: | Twój ban zostal skrócony!",
                 fields: [
                     { name: "Nazwa użytkownika", value: `\`${ban.name}\``, inline: false },
                     { name: "ID bana", value: `\`${ban.banid}\``, inline: false },
                     { name: "Banujący", value: interaction.message.embeds[0].fields.find(x => x.name == "Banujący")?.value || "`Nie znaleziono`", inline: false },
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
+                    { name: "Ban został skrócony o", value: `\`${seconds}\` sekund`, inline: false }
                 ],
-                color: "#42f569",
+                color: "#5865f2",
                 user: interaction.user
             })
         ],

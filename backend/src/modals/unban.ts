@@ -73,7 +73,7 @@ const secondsInput = new TextInputBuilder()
 
 secondsRow.addComponents(secondsInput);
 
-export const shortenUnbanModal = new ModalBuilder()
+export const shortenBanModal = new ModalBuilder()
     .setTitle("Skróć bana")
-    .setCustomId("shorten_unban")
+    .setCustomId("shorten_ban")
     .addComponents(commentRow, secondsRow);

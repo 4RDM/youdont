@@ -1,6 +1,6 @@
 import { Interaction } from "discord.js";
 import { RDMBot } from "main";
-import { acceptUnbanModal, denyUnbanModal, shortenUnbanModal, unbanFormModal } from "modals/unban";
+import { acceptUnbanModal, denyUnbanModal, shortenBanModal, unbanFormModal } from "modals/unban";
 
 export default async function(client: RDMBot, interaction: Interaction) {
     if (!interaction.isButton()) return;
@@ -17,8 +17,8 @@ export default async function(client: RDMBot, interaction: Interaction) {
         case "denyUnbanModal":
             interaction.showModal(denyUnbanModal.setCustomId(`deny_unban-${args[1]}`));
             break;
-        case "shortenUnbanForm":
-            interaction.showModal(shortenUnbanModal.setCustomId(`shorten_unban-${args[1]}`));
+        case "shortenBanForm":
+            interaction.showModal(shortenBanModal.setCustomId(`shorten_ban-${args[1]}`));
             break;
     }
 }

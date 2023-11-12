@@ -77,7 +77,7 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
     actionRow.addComponents(
         new ButtonBuilder().setCustomId(`acceptUnbanModal-${banID}`).setLabel("Zaakceptuj").setStyle(ButtonStyle.Success),
         new ButtonBuilder().setCustomId(`denyUnbanModal-${banID}`).setLabel("Odrzuć").setStyle(ButtonStyle.Danger),
-        new ButtonBuilder().setCustomId(`shortenUnbanForm-${banID}`).setLabel("Skróć").setStyle(ButtonStyle.Primary)
+        new ButtonBuilder().setCustomId(`shortenBanForm-${banID}`).setLabel("Skróć").setStyle(ButtonStyle.Primary)
     );
 
     /* check if banner is in administration */
