@@ -5,6 +5,7 @@ import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
 import { join } from "path";
 import { Embed } from "utils/embedBuilder";
 import logger from "utils/logger";
+import rcon from "utils/rcon";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -17,7 +18,7 @@ export const removeBan = async(banID: number) => {
     // const banlistNew = banlist.filter((ban) => ban.banid !== banID);
     // return await writeFile(path, JSON.stringify(banlistNew, null, 4), { encoding: "utf-8" });
     /* TODO: implement rcon */
-    banID;
+    return await rcon(`unban ${banID}`);
 };
 
 export default async function ({ interaction, client, args }: ModalSubmitArgs) {
@@ -44,7 +45,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
         return await interaction.Error("Nieznaleziono bana na liscie, prawdopodobnie się przedawnił", { ephemeral: true });
 
     try {
-        await removeBan(parseInt(args[1]));
+        await removeBan(parseInt(args[1])).catch(err => logger.error(`acceptUnban.execute(): Cannot remove ban! ${err}`));
     } catch(err) {
         return logger.error(`acceptUnban.execute(): Cannot save banlist! ${err}`);
     }
