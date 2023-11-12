@@ -27,7 +27,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
         return await interaction.Error("Nie można znaleźć ID banującego, skontaktuj się z administracją!", { ephemeral: true });
 
     if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, ["843444626726584370"]))
-        return await interaction.Error("Nie możesz zaakceptować unbana, ponieważ nie jesteś banującym!", { ephemeral: true });
+        return await interaction.Error("Nie możesz odrzucić unbana, ponieważ nie jesteś banującym!", { ephemeral: true });
 
     const ban = await getBan(args[1]);
 
