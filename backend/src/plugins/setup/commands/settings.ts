@@ -15,7 +15,7 @@ const showAllSettings = async (args: functionArgs) => {
     const settings = await args.client.database.config.getAll();
 
     if (!settings)
-        return args.interaction.Error("Nie udało się pobrać ustawień serwera!", { ephemeral: true });
+        return await args.interaction.Error("Nie udało się pobrać ustawień serwera!", { ephemeral: true });
 
     const embed = Embed({
         title: "<:coin:1173353006113239080> | Ustawienia serwera",
@@ -35,15 +35,15 @@ const showAllSettings = async (args: functionArgs) => {
 
 const showSetting = async (args: functionArgs) => {
     if (!args.option || args.option.length > 100)
-        return args.interaction.Error("Nieprawidłowe dane, klucz nie może być dłuższy niż 100 znaków!", { ephemeral: true });
+        return await args.interaction.Error("Nieprawidłowe dane, klucz nie może być dłuższy niż 100 znaków!", { ephemeral: true });
 
     const setting = await args.client.database.config.get(args.option as string);
 
     if (setting === false)
-        return args.interaction.Error("Nie udało się pobrać ustawienia serwera!", { ephemeral: true });
+        return await args.interaction.Error("Nie udało się pobrać ustawienia serwera!", { ephemeral: true });
 
     if (setting === null)
-        return args.interaction.Error("Nie znaleziono ustawienia!", { ephemeral: true });
+        return await args.interaction.Error("Nie znaleziono ustawienia!", { ephemeral: true });
 
     const embed = Embed({
         title: "<:coin:1173353006113239080> | Ustawienie serwera",
@@ -63,15 +63,15 @@ const showSetting = async (args: functionArgs) => {
 
 const setSetting = async (args: functionArgs) => {
     if (!args.option || !args.value || args.option.length > 100 || args.value.length < 1)
-        return args.interaction.Error("Nieprawidłowe dane, klucz nie może być dłuższy niż 100 znaków!", { ephemeral: true });
+        return await args.interaction.Error("Nieprawidłowe dane, klucz nie może być dłuższy niż 100 znaków!", { ephemeral: true });
 
     const setting = await args.client.database.config.set(args.option, args.value);
 
     if (setting === false)
-        return args.interaction.Error("Nie udało się ustawić ustawienia serwera!", { ephemeral: true });
+        return await args.interaction.Error("Nie udało się ustawić ustawienia serwera!", { ephemeral: true });
 
     if (setting === -1)
-        return args.interaction.Error("Klucz jest dłuższy niż 100 znaków!", { ephemeral: true });
+        return await args.interaction.Error("Klucz jest dłuższy niż 100 znaków!", { ephemeral: true });
 
     const embed = Embed({
         title: "<:coin:1173353006113239080> | Ustawienie serwera",
@@ -85,12 +85,12 @@ const setSetting = async (args: functionArgs) => {
 
 const resetSetting = async (args: functionArgs) => {
     if (!args.option || args.option.length > 100)
-        return args.interaction.Error("Nieprawidłowe dane, klucz nie może być dłuższy niż 100 znaków!", { ephemeral: true });
+        return await args.interaction.Error("Nieprawidłowe dane, klucz nie może być dłuższy niż 100 znaków!", { ephemeral: true });
 
     const setting = await args.client.database.config.reset(args.option);
 
     if (setting === false)
-        return args.interaction.Error("Nie udało się ustawić ustawienia serwera!", { ephemeral: true });
+        return await args.interaction.Error("Nie udało się ustawić ustawienia serwera!", { ephemeral: true });
 
     const embed = Embed({
         title: "<:coin:1173353006113239080> | Ustawienie serwera",

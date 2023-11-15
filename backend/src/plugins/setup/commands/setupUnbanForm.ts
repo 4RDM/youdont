@@ -10,7 +10,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     const res = await client.database.config.set("unbanFormAdminChannel", adminChannel.id);
 
-    if (res == -1)
+    if (res === -1)
         return await interaction.Error("Długość klucza jest nieprawidłowa, skontaktuj się z administracją!", { ephemeral: true });
 
     if (res === false)
@@ -19,7 +19,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     const actionRow = new ActionRowBuilder<ButtonBuilder>();
     actionRow.addComponents(new ButtonBuilder().setCustomId("unbanFormModal").setLabel("Otwórz formularz").setStyle(ButtonStyle.Success));
 
-    return interaction.Reply([ Embed({ title: "Odwołanie od bana", description: "Aby otworzyć formularz naciśnij przycisk poniżej" }) ], { components: [ actionRow ] });
+    return await interaction.Reply([ Embed({ title: "Odwołanie od bana", description: "Aby otworzyć formularz naciśnij przycisk poniżej" }) ], { components: [ actionRow ] });
 }
 
 export const info: CommandInfoType = {
