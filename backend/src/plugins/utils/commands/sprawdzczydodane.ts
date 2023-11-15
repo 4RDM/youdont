@@ -5,9 +5,7 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Roles, embedColors } from "utils/constants";
 import { Embed } from "utils/embedBuilder";
 
-const path = join(
-    "/home/rdm/server/data/resources/[optymalizacja]/auta/stream"
-);
+const path = join("/home/rdm/server/data/resources/[optymalizacja]/auta/stream");
 
 export default async function ({ interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
