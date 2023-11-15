@@ -62,7 +62,8 @@ export default async function ({ client, interaction }: CommandArgs) {
     const embed = Embed({
         title: ":white_check_mark: | Zmieniono przedrostek",
         color: embedColors.green,
-        description: `Zmieniono przedrostek gracza ${mention.tag} (${mention.id}) na ${prefix}`
+        description: `Zmieniono przedrostek gracza ${mention.tag} (${mention.id}) na ${prefix}`,
+        user: interaction.user,
     });
 
     interaction.Reply([ embed ]);
