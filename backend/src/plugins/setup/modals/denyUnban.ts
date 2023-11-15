@@ -4,7 +4,7 @@ import { Embed } from "utils/embedBuilder";
 import { existsSync } from "fs";
 import { join } from "path";
 import { doesUserHaveAnyRole } from "handlers/events/commands";
-import { color } from "utils/constants";
+import { embedColors } from "utils/constants";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -60,7 +60,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
                     { name: "Banujący", value: interaction.message.embeds[0].fields.find(x => x.name == "Banujący")?.value || "`Nie znaleziono`", inline: false },
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
                 ],
-                color: color.red,
+                color: embedColors.red,
                 user: interaction.user
             })
         ],

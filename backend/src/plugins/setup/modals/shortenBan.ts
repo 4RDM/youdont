@@ -6,7 +6,7 @@ import { join } from "path";
 import { Embed } from "utils/embedBuilder";
 import logger from "utils/logger";
 import rcon from "utils/rcon";
-import { color } from "utils/constants";
+import { embedColors } from "utils/constants";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -74,7 +74,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
                     { name: "Ban został skrócony o", value: `\`${seconds}\` sekund`, inline: false }
                 ],
-                color: color.blue,
+                color: embedColors.blue,
                 user: interaction.user
             })
         ],

@@ -5,7 +5,7 @@ import { getTops } from "utils/serverStatus";
 import { Channel, TextChannel } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import config from "config";
-import { color } from "utils/constants";
+import { embedColors } from "utils/constants";
 
 const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
     try {
@@ -26,7 +26,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
             },
             description: stats.kills.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** zabójstw`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
-            color: color.purple,
+            color: embedColors.purple,
             timestamp: new Date()
         });
 
@@ -38,7 +38,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
             },
             description: stats.deaths.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** śmierci`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
-            color: color.purple,
+            color: embedColors.purple,
             timestamp: new Date()
         });
 
@@ -50,7 +50,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
             },
             description: stats.kdr.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** KDR`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
-            color: color.purple,
+            color: embedColors.purple,
             timestamp: new Date()
         });
 

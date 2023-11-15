@@ -1,6 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { AutocompleteArgs, CommandArgs, CommandInfoType } from "handlers/commands";
-import { color } from "utils/constants";
+import { embedColors } from "utils/constants";
 import { Embed } from "utils/embedBuilder";
 
 interface functionArgs {
@@ -54,7 +54,7 @@ const showSetting = async (args: functionArgs) => {
                 inline: true
             }
         ],
-        color: color.blue,
+        color: embedColors.blue,
         user: args.interaction.user
     });
 
@@ -76,7 +76,7 @@ const setSetting = async (args: functionArgs) => {
     const embed = Embed({
         title: "<:coin:1173353006113239080> | Ustawienie serwera",
         description: `Ustawiono \`${args.option}\` na \`${args.value}\``,
-        color: color.green,
+        color: embedColors.green,
         user: args.interaction.user
     });
 
@@ -95,7 +95,7 @@ const resetSetting = async (args: functionArgs) => {
     const embed = Embed({
         title: "<:coin:1173353006113239080> | Ustawienie serwera",
         description: `Zresetowano \`${args.option}\``,
-        color: color.green,
+        color: embedColors.green,
         user: args.interaction.user
     });
 

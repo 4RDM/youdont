@@ -10,7 +10,7 @@ import {
     BaseInteraction,
 } from "discord.js";
 import { emojis } from "./emojis";
-import { color as _color } from "./constants";
+import { embedColors as _color } from "./constants";
 
 export interface EmbedStructure {
     title?: string;
