@@ -23,7 +23,7 @@ export class Database extends EventEmitter {
     public payments;
     public notes;
     public bans;
-    public txadmin;
+    public players;
     public config;
 
     constructor(private client: RDMBot) {
@@ -37,7 +37,7 @@ export class Database extends EventEmitter {
         this.payments = new PaymentsManager(this, this.client.config.indrop.key);
         this.notes = new NotesManager(this);
         this.bans = new BansManager(this);
-        this.txadmin = new PlayerDataManager(this);
+        this.players = new PlayerDataManager(this);
         this.config = new ConfigManager(this);
     }
 

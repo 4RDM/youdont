@@ -28,6 +28,17 @@ export interface Notes {
     tsLastEdit: number;
 }
 
+interface Player {
+    identifier: string;
+    license: string;
+    discord: string;
+    deaths: number;
+    heady: number;
+    kills: number;
+}
+
+export type DBUser = null | Player;
+
 const prodPath = join("/", "home", "rdm", "server", "base", "txData", "default", "data", "playersDB.json");
 const devPath = join(__dirname, "..", "playersDB.json");
 
@@ -56,6 +67,20 @@ export class PlayerDataManager {
                 }));
             else this.players = [];
         }, 1000 * 60 * 15);
+    }
+
+    async getUserFromServer(discordID: string) {
+        try {
+            const connection = await this.database.getServerConnection();
+            const query = await connection.prepare("SELECT * FROM users WHERE discord = ?");
+            const res: DBUser[] = await query.execute([ `discord:${discordID}` ]);
+
+            await connection.end();
+
+            return res;
+        } catch (err) {
+            return logger.error(`getUserFromServer DB error: ${err}`);
+        }
     }
 
     async getDiscordBySteam(steam: string) {

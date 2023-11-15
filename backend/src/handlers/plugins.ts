@@ -29,12 +29,12 @@ export default class PluginHandler extends EventEmitter {
             const pluginPath = join(pluginsPath, pluginName);
 
             const configContent = await readFile(join(pluginPath, "config.json"));
-            const commandsFolder = await readdir(join(pluginPath, "commands")).catch((err) => {
-                logger.error(`Could not load plugin "${pluginName}": ${err}`);
+            const commandsFolder = await readdir(join(pluginPath, "commands")).catch(() => {
+                // logger.error(`Could not load plugin "${pluginName}": ${err}`);
                 return [];
             });
-            const modalsFolder = await readdir(join(pluginPath, "modals")).catch((err) => {
-                logger.error(`Could not load modal "${pluginName}": ${err}`);
+            const modalsFolder = await readdir(join(pluginPath, "modals")).catch(() => {
+                // logger.error(`Could not load modal "${pluginName}": ${err}`);
                 return [];
             });
 

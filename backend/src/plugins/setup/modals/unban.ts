@@ -88,7 +88,7 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
 
     let messageContent = `Podanie o unbana od <@${interaction.user.id}> \`(${interaction.user.id})\``;
 
-    const bannerDiscordID = await client.database.txadmin.getDiscordBySteam(ban.bannersteam);
+    const bannerDiscordID = await client.database.players.getDiscordBySteam(ban.bannersteam);
 
     if (bannerDiscordID === false)
         return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });

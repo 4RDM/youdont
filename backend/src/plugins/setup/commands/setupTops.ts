@@ -1,7 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 
-
 export default async function ({ interaction }: CommandArgs) {
     interaction.channel?.send("TEST");
 }
