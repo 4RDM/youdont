@@ -9,7 +9,7 @@ export const getUserHex = async function (client: RDMBot, discordId: string) {
 
         return response;
     } catch (err) {
-        logger.error(`MariaDB returned an error: ${err}`);
+        logger.error(`getUserHex returned an error: ${err}`);
 
         return false;
     }

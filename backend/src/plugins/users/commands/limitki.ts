@@ -1,97 +1,23 @@
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { getUserHex } from "./hex";
-import {
-    CommandInteraction,
-    PermissionFlagsBits,
-    SlashCommandBuilder,
-} from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { selectUserHex } from "./shared";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
-import { Roles, embedColors } from "utils/constants";
-import { DBUser } from "database/playerData";
 import { Embed } from "utils/embedBuilder";
+import { Roles, embedColors } from "utils/constants";
 
 const path = join(
-    "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json"
+    // __dirname,
+    // "vehicles.json"
+    "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/vehicles.json"
 );
 
-export const awaitMessage = (
-    interaction: CommandInteraction
-): Promise<string> => {
-    const promise = new Promise<string>((resolve, reject) => {
-        interaction.channel
-            ?.awaitMessages({
-                filter: msg => msg.author.id === interaction.user.id,
-                max: 1,
-                time: 60000,
-                errors: [ "time" ],
-            })
-            .then(collected => {
-                if (!collected || !collected.first())
-                    return reject("Nie wprowadzono odpowiedzi");
-
-                resolve(collected.first()?.content || "");
-            })
-            .catch(() => {
-                reject("Nie wprowadzono odpowiedzi");
-            });
-    });
-
-    return promise;
-};
-
-export const selectUserHex = async(userHexes: DBUser[] | null, interaction: CommandInteraction) => {
-    if (!userHexes) {
-        interaction.Error("Wystąpił błąd bazy danych", { ephemeral: true });
-
-        return false;
-    }
-
-    if (!userHexes[0]) {
-        interaction.Error("Nie znaleziono gracza!", { ephemeral: true });
-
-        return false;
-    }
-
-    if (userHexes.length == 1) return userHexes[0].identifier;
-
-    const identifiers = userHexes;
-    let awaitedMessage;
-
-    await interaction.Reply(`\`\`\`Znalezione identyfikatory:\n${identifiers.map((x, i: number) => `${i + 1}. ${x?.identifier}`).join("\n")}\`\`\`\nKtóry z nich użyć?`);
-
-    try {
-        awaitedMessage = await awaitMessage(interaction);
-    } catch (e) {
-        interaction.Error("Nie wprowadzono odpowiedzi");
-
-        return false;
-    }
-
-    let index = parseInt(awaitedMessage);
-
-    if (isNaN(index)) {
-        interaction.Error("Wprowadzono błędny index, nie jest cyfrą!");
-
-        return false;
-    }
-
-    const currentHex = identifiers[--index]?.identifier;
-
-    if (!currentHex) {
-        interaction.Error("Wybrano błędny hex!");
-
-        return false;
-    }
-
-    return currentHex;
-};
-
 export default async function ({ client, interaction }: CommandArgs) {
-    if (!existsSync(path))
-        return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
-
     if (!interaction.isChatInputCommand()) return;
+
+    if (!existsSync(path))
+        return await interaction.Error("Funkcja niedostępna na tym komputerze!");
 
     const subcommand = interaction.options.getSubcommand();
     const userJson = (await import(path)).default;
@@ -116,7 +42,7 @@ export default async function ({ client, interaction }: CommandArgs) {
         writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
 
         const embed = Embed({
-            title: ":white_check_mark: | Dodano auto współdzielone!",
+            title: ":white_check_mark: | Dodano limitkę!",
             color: embedColors.green,
             author: {
                 name: mention.tag,
@@ -140,7 +66,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
         const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
         if (index == -1) {
-            return await interaction.Error(`Nie znaleziono aut współdzielonych o nazwie \`${spawnName}\`!`, { ephemeral: true });
+            return await interaction.Error(`Nie znaleziono limitki o nazwie \`${spawnName}\`!`, { ephemeral: true });
         }
 
         userJson[currentHex].splice(index, 1);
@@ -148,7 +74,7 @@ export default async function ({ client, interaction }: CommandArgs) {
         writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
 
         const embed = Embed({
-            title: ":x: | Usunięto auto współdzielone!",
+            title: ":x: | Usunięto limitkę!",
             color: embedColors.red,
             author: {
                 name: mention.tag,
@@ -162,8 +88,8 @@ export default async function ({ client, interaction }: CommandArgs) {
     } else if (subcommand === "lista") {
         const userHexes = await getUserHex(client, mention.id);
 
-        if (!userHexes)
-            return await interaction.Error("Wystąpił błąd bazy danych", { ephemeral: true });
+        if (userHexes === false)
+            return await interaction.Error("Wystąpił błąd bazy danych (KOD: UHSDB)", { ephemeral: true });
 
         if (!userHexes[0])
             return await interaction.Error("Nie znaleziono gracza!", { ephemeral: true });
@@ -184,30 +110,30 @@ export default async function ({ client, interaction }: CommandArgs) {
             }
         });
 
-        return await interaction.Reply([
-            Embed({
-                author: {
-                    name: mention.username,
-                    iconURL: mention.displayAvatarURL(),
-                },
-                user: interaction.user,
-                title: "Auta współdzielone użytkownika",
-                description: description.join("\n"),
-            }),
-        ]);
+        const embed = Embed({
+            author: {
+                name: mention.username,
+                iconURL: mention.displayAvatarURL(),
+            },
+            user: interaction.user,
+            title: "Limitki użytkownika",
+            description: description.join("\n"),
+        });
+
+        interaction.Reply([ embed ]);
     }
 }
 
 export const info: CommandInfoType = {
-    name: "shared",
-    description: "Zarządzanie autami współdzielonymi graczy",
+    name: "limitki",
+    description: "Zarządzanie limitkami graczy",
     permissions: PermissionFlagsBits.Administrator,
     role: [ Roles.Zarzad, Roles.HeadAdmin, Roles.Developer ],
     builder: new SlashCommandBuilder()
         .addSubcommand(subcommand =>
             subcommand
                 .setName("dodaj")
-                .setDescription("Dodaje współdzielone auto")
+                .setDescription("Dodaje limitkę")
                 .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
                 .addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
                 .addStringOption(option => option.setName("display-name").setDescription("Nazwa wyświetlana limitki").setRequired(true))
@@ -216,7 +142,7 @@ export const info: CommandInfoType = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName("usun")
-                .setDescription("Usuwa współdzielone auto")
+                .setDescription("Usuwa limitkę")
                 .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
                 .addStringOption(option => option.setName("spawn-name").setDescription("Spawn name").setRequired(true))
                 .addStringOption(option => option.setName("hex").setDescription("Hex użytkownika").setRequired(false))
@@ -224,8 +150,8 @@ export const info: CommandInfoType = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName("lista")
-                .setDescription("Lista współdzielonych aut")
+                .setDescription("Lista limitek gracza")
                 .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
         )
-        .setName("shared"),
+        .setName("limitki"),
 };
