@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 import { getUserHex } from "./hex";
@@ -51,6 +51,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfoType = {
     name: "clearnick",
     description: "Usun przedrostek gracza",
+    permissions: PermissionFlagsBits.Administrator,
     role: RL.NickTeam,
     builder: new SlashCommandBuilder()
         .addUserOption(option => option.setName("mention").setDescription("Użytkownik").setRequired(true))
