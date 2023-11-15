@@ -22,6 +22,8 @@ client.plugins.once("ready", () => {
         try {
             logger.log("Refreshing application commands.");
 
+            rest.delete(Routes.applicationGuildCommands(config.discord.clientId, config.discord.mainGuild));
+
             const data = await rest.put(Routes.applicationGuildCommands(config.discord.clientId, config.discord.mainGuild), { body: commands });
 
             logger.ready(`Successfully registered ${(data as []).length} application commands.`);
