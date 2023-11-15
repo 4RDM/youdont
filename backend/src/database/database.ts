@@ -10,9 +10,9 @@ import { PlayerDataManager } from "./playerData";
 import { ConfigManager } from "./config";
 
 export interface OkPacketInterface {
-	affectedRows: number;
-	insertId: number;
-	warningStatus: number;
+    affectedRows: number;
+    insertId: number;
+    warningStatus: number;
 }
 
 export class Database extends EventEmitter {

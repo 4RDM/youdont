@@ -3,31 +3,31 @@ import config from "../config";
 import logger from "./logger";
 
 interface User {
-	name: string;
-	value: number;
+    name: string;
+    value: number;
 }
 
 export interface killTopResponse
-	extends Array<{ position: number; name: string; kills: number }> {
-	meta: unknown;
+    extends Array<{ position: number; name: string; kills: number }> {
+    meta: unknown;
 }
 
 export interface deathsTopResponse
-	extends Array<{ position: number; name: string; deaths: number }> {
-	meta: unknown;
+    extends Array<{ position: number; name: string; deaths: number }> {
+    meta: unknown;
 }
 
 export interface kdrTopResponse
-	extends Array<{ position: number; name: string; KDR: number }> {
-	meta: unknown;
+    extends Array<{ position: number; name: string; KDR: number }> {
+    meta: unknown;
 }
 
 export interface playerResponse {
-	endpoint: string;
-	id: number;
-	identifiers?: string[] | null;
-	name: string;
-	ping: number;
+    endpoint: string;
+    id: number;
+    identifiers?: string[] | null;
+    name: string;
+    ping: number;
 }
 
 export const getTops = async (core: RDMBot) => {
