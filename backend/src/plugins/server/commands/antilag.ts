@@ -37,7 +37,7 @@ export default async function ({ interaction }: CommandArgs) {
         return await interaction.Reply([ embed ]);
     } else if (subcommand == "usun") {
         if (!antilagJson.find(x => x == spawnName))
-            return await interaction.Error("Samochód nie znajduje się na liście!");
+            return await interaction.Error("Samochód nie znajduje się na liście!", { ephemeral: true });
 
         antilagJson = antilagJson.filter(x => x != spawnName);
 
