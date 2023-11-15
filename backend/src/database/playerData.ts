@@ -62,7 +62,7 @@ export class PlayerDataManager {
         try {
             const connection = await this.database.getServerConnection();
             const query = await connection.prepare("SELECT discord FROM users WHERE identifier = ?");
-            const res: Array<{ discord: string }> = await query.execute([steam]);
+            const res: Array<{ discord: string }> = await query.execute([ steam ]);
 
             await connection.end();
 

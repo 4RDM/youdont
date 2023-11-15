@@ -48,7 +48,7 @@ export class BansManager {
             const connection = await this.getConnection();
 
             const query = await connection.prepare("INSERT IGNORE INTO bans(banID) VALUES(?)");
-            const res: OkPacketInterface = await query.execute([banID]);
+            const res: OkPacketInterface = await query.execute([ banID ]);
 
             await connection.end();
 
@@ -77,7 +77,7 @@ export class BansManager {
             const connection = await this.getConnection();
 
             const query = await connection.prepare("UPDATE bans SET counter = 0 WHERE banID = ?");
-            const res: OkPacketInterface = await query.execute([banID]);
+            const res: OkPacketInterface = await query.execute([ banID ]);
 
             await connection.end();
 
@@ -98,7 +98,7 @@ export class BansManager {
             const connection = await this.getConnection();
 
             const query = await connection.prepare("UPDATE bans SET counter = counter + 1 WHERE banID = ?");
-            await query.execute([banID]);
+            await query.execute([ banID ]);
 
             await connection.end();
 

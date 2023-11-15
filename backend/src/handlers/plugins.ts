@@ -24,12 +24,19 @@ export default class PluginHandler extends EventEmitter {
 
     init = async () => {
         const pluginsFolder = await readdir(pluginsPath);
+
         for (const pluginName of pluginsFolder) {
             const pluginPath = join(pluginsPath, pluginName);
 
             const configContent = await readFile(join(pluginPath, "config.json"));
-            const commandsFolder = await readdir(join(pluginPath, "commands"));
-            const modalsFolder = await readdir(join(pluginPath, "modals"));
+            const commandsFolder = await readdir(join(pluginPath, "commands")).catch((err) => {
+                logger.error(`Could not load plugin "${pluginName}": ${err}`);
+                return [];
+            });
+            const modalsFolder = await readdir(join(pluginPath, "modals")).catch((err) => {
+                logger.error(`Could not load modal "${pluginName}": ${err}`);
+                return [];
+            });
 
             const { name, id } = JSON.parse(configContent.toString());
             const commands: Command[] = [];

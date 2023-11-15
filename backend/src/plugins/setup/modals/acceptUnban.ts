@@ -6,6 +6,7 @@ import { join } from "path";
 import { Embed } from "utils/embedBuilder";
 import logger from "utils/logger";
 import rcon from "utils/rcon";
+import { color } from "utils/constants";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -36,7 +37,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
     if (!bannerDiscordID)
         return await interaction.Error("Nie można znaleźć ID banującego, skontaktuj się z administracją!", { ephemeral: true });
 
-    if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, ["843444626726584370"]))
+    if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, [ "843444626726584370" ]))
         return await interaction.Error("Nie możesz zaakceptować unbana, ponieważ nie jesteś banującym!", { ephemeral: true });
 
     const ban = await getBan(args[1]);
@@ -72,7 +73,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
                     { name: "Banujący", value: interaction.message.embeds[0].fields.find(x => x.name == "Banujący")?.value || "`Nie znaleziono`", inline: false },
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
                 ],
-                color: "#42f569",
+                color: color.green,
                 user: interaction.user
             })
         ],

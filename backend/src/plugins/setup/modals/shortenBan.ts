@@ -6,6 +6,7 @@ import { join } from "path";
 import { Embed } from "utils/embedBuilder";
 import logger from "utils/logger";
 import rcon from "utils/rcon";
+import { color } from "utils/constants";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -31,7 +32,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
     if (!bannerDiscordID)
         return await interaction.Error("Nie można znaleźć ID banującego, skontaktuj się z administracją!", { ephemeral: true });
 
-    if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, ["843444626726584370"]))
+    if (bannerDiscordID.value.replace(/[<@>]/gm, "") != interaction.user.id && !doesUserHaveAnyRole(interaction.member.roles, [ "843444626726584370" ]))
         return await interaction.Error("Nie możesz skrócić bana, ponieważ nie jesteś banującym!", { ephemeral: true });
 
     const ban = await getBan(args[1]);
@@ -73,7 +74,7 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
                     { name: "Komentarz administratora", value: `\`\`\`${comment}\`\`\``, inline: false },
                     { name: "Ban został skrócony o", value: `\`${seconds}\` sekund`, inline: false }
                 ],
-                color: "#5865f2",
+                color: color.blue,
                 user: interaction.user
             })
         ],

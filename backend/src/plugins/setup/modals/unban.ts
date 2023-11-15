@@ -43,7 +43,7 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
         return await interaction.Error("Funkcja niedostępna na tym komputerze, skontaktuj się z administracją!", { ephemeral: true });
 
     if (!interaction.inGuild())
-        return await interaction.Error("Nie możesz użyć tej komendy w DM!", { ephemeral: true });
+        return await interaction.Error("To polecenie można wykonać tylko na serwerze!", { ephemeral: true });
 
     const banID = interaction.fields.getTextInputValue("banID");
     const reason = interaction.fields.getTextInputValue("reason");
@@ -64,6 +64,9 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
 
     if (unbanChannel === false)
         return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });
+
+    if (unbanChannel === null)
+        return await interaction.Error("Nie ustawiono kanału administracyjnego, skontaktuj się z administracją!", { ephemeral: true });
 
     const channel = await interaction.guild?.channels.fetch(unbanChannel);
 
@@ -114,7 +117,7 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
                 user: interaction.user
             })
         ],
-        components: [actionRow]
+        components: [ actionRow ]
     });
 
     return await interaction.Reply("Twoje odwołanie zostało przesłane", { ephemeral: true });

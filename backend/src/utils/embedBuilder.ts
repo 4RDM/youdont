@@ -10,6 +10,7 @@ import {
     BaseInteraction,
 } from "discord.js";
 import { emojis } from "./emojis";
+import { color as _color } from "./constants";
 
 export interface EmbedStructure {
     title?: string;
@@ -54,7 +55,7 @@ export const Embed = ({
     if (author) embed.setAuthor(author);
     if (title) embed.setTitle(title + (process.env.NODE_ENV !== "production" ? " (dev)" : ""));
     if (color) embed.setColor(color);
-    else embed.setColor("#6f42c1");
+    else embed.setColor(_color.purple);
     if (description) embed.setDescription(description);
     if (fields) embed.addFields(fields);
     if (footer) embed.setFooter({ text: footer }).setTimestamp(new Date());
@@ -84,7 +85,7 @@ export const ErrorEmbedMessage = (message: Message, reason: string) =>
             .split("\n")
             .map((x: string) => `> ${x}`)
             .join("\n")}\n\n**${reason}**`,
-        color: "#f54242",
+        color: _color.red,
         user: message.author,
     }).setIcon(emojis.errorGenericURL);
 
@@ -95,6 +96,6 @@ export const ErrorEmbedInteraction = (
     Embed({
         title: "Błąd",
         description: `${reason}`,
-        color: "#f54242",
+        color: _color.red,
         user: interaction.user,
     }).setIcon(emojis.errorGenericURL);

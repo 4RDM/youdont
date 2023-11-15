@@ -5,6 +5,7 @@ import { getTops } from "utils/serverStatus";
 import { Channel, TextChannel } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import config from "config";
+import { color } from "utils/constants";
 
 const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
     try {
@@ -18,43 +19,43 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
             return logger.error("reloadStats(): Tops message not found");
 
         const killsEmbed = Embed({
-            title: "Topka killi",
+            title: "<:kill:1173353002107674754> | Topka killi",
             author: {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
             description: stats.kills.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** zabójstw`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
-            color: "#924ED1",
+            color: color.purple,
             timestamp: new Date()
         });
 
         const deathsEmbed = Embed({
-            title: "Topka śmierci",
+            title: "<:death:1173352998383136818> | Topka śmierci",
             author: {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
             description: stats.deaths.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** śmierci`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
-            color: "#924ED1",
+            color: color.purple,
             timestamp: new Date()
         });
 
         const kdrEmbed = Embed({
-            title: "Topka KDR",
+            title: "<:kdr:1173353000543191191> | Topka KDR",
             author: {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
             description: stats.kdr.map((user, i) => `#**${i + 1}** \`${user.name.replace(/`/gm, "")}\`: **${user.value}** KDR`).join("\n"),
             footer: "Statystyki aktualizują się co 10 minut",
-            color: "#924ED1",
+            color: color.purple,
             timestamp: new Date()
         });
 
         statsChannel.messages.edit(topsMessage, {
-            embeds: [killsEmbed, deathsEmbed, kdrEmbed],
+            embeds: [ killsEmbed, deathsEmbed, kdrEmbed ],
             content: "",
         });
 

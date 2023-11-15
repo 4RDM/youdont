@@ -120,7 +120,7 @@ export class PaymentsManager {
                     const payment = this.get(id);
 
                     if (!discordID)
-                        discordID = ["0"];
+                        discordID = [ "0" ];
 
                     if (!payment) {
                         const res = await this.create({
@@ -232,7 +232,7 @@ export class PaymentsManager {
 
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT IGNORE INTO payments(id, productID, title, price, paymentChannel, email, steamID, steamUsername, discordID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            const response: OkPacketInterface = await query.execute([payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID]);
+            const response: OkPacketInterface = await query.execute([ payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID ]);
 
             await connection.end();
 
@@ -320,7 +320,7 @@ export class PaymentsManager {
         let discordID = await this.database.txadmin.getDiscordBySteam(`steam:${hex}`);
 
         if (!discordID)
-            discordID = ["0"];
+            discordID = [ "0" ];
 
         try {
             logger.log(discordID);

@@ -89,7 +89,7 @@ export class UsersManager extends EventEmitter {
         try {
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT IGNORE INTO users(discordID) VALUES(?)");
-            const response: OkPacketInterface = await query.execute([discordID]);
+            const response: OkPacketInterface = await query.execute([ discordID ]);
 
             await connection.end();
 

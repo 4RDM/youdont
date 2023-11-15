@@ -19,7 +19,7 @@ export class ConfigManager {
         try {
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT INTO config(dKey, dValue) VALUES(?, ?) ON DUPLICATE KEY UPDATE dValue = VALUES(dValue)");
-            const res: OkPacketInterface = await query.execute([key, value]);
+            const res: OkPacketInterface = await query.execute([ key, value ]);
 
             await connection.end();
 
@@ -35,13 +35,48 @@ export class ConfigManager {
         try {
             const connection = await this.getConnection();
             const query = await connection.prepare("SELECT * FROM config WHERE dKey = ?");
-            const res: { dKey: string, dValue: string }[] = await query.execute([key]);
+            const res: { dKey: string, dValue: string }[] = await query.execute([ key ]);
 
             await connection.end();
+
+            if (!res[0])
+                return null;
 
             return res[0].dValue;
         } catch(err) {
             logger.error(`ConfigManager.get(): "${err}"`);
+
+            return false;
+        }
+    }
+
+    async getAll() {
+        try {
+            const connection = await this.getConnection();
+            const query = await connection.prepare("SELECT * FROM config");
+            const res: { dKey: string, dValue: string }[] = await query.execute();
+
+            await connection.end();
+
+            return res;
+        } catch(err) {
+            logger.error(`ConfigManager.getAll(): "${err}"`);
+
+            return false;
+        }
+    }
+
+    async reset(key: string) {
+        try {
+            const connection = await this.getConnection();
+            const query = await connection.prepare("DELETE FROM config WHERE dKey = ?");
+            const res: OkPacketInterface = await query.execute([ key ]);
+
+            await connection.end();
+
+            return res;
+        } catch(err) {
+            logger.error(`ConfigManager.delete(): "${err}"`);
 
             return false;
         }
