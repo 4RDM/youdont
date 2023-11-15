@@ -41,6 +41,12 @@ export class Database extends EventEmitter {
         this.config = new ConfigManager(this);
     }
 
+    closeAll() {
+        this.serverPool.end();
+        this.botPool.end();
+        return;
+    }
+
     async getBotConnection() {
         return await this.botPool.getConnection();
     }

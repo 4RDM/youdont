@@ -123,7 +123,7 @@ export class RDMBot extends Client {
     }
 }
 
-export default new RDMBot({
+const instance = new RDMBot({
     intents: [
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.Guilds,
@@ -142,4 +142,15 @@ export default new RDMBot({
     presence: {
         status: "idle",
     },
+});
+
+export default instance;
+
+process.on("uncaughtException", async (err) => {
+    logger.error(`Uncaught exception: ${err}`);
+
+    instance.database.closeAll();
+    instance.destroy();
+
+    process.exit(1);
 });
