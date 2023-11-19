@@ -22,7 +22,7 @@ export default async function ({ interaction, client }: CommandArgs) {
         if (!dbUser)
             return await interaction.Error("Nieznaleziono użytkownika w bazie danych!", { ephemeral: true });
 
-        const note = await client.database.notes.create(mention.id, interaction.user.id, content);
+        const note = await client.database.notes.create(content, mention.id, interaction.user.id);
 
         if (!note)
             return await interaction.Error("Wystąpił wewnętrzny błąd bota (KOD: CNADE). Spróbuj ponownie później / skontaktuj się z administracją!", { ephemeral: true });
@@ -77,7 +77,7 @@ export default async function ({ interaction, client }: CommandArgs) {
         const description: string[] = [];
 
         dbUser.getNotes().forEach((note) => {
-            description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.author?.id ? `- <@${note.author?.id}>` : ""} ${note.createdAt ? `- <t:${new Date(note.createdAt).getTime() / 1000}>` : "" }`);
+            description.push(`**#${note.noteID}** | \`${note.content.substring(0, 20)}...\` ${note.author?.id ? `- <@${note.author?.id}>` : ""} ${note.createdAt ? `- <t:${Math.floor(new Date(note.createdAt).getTime() / 1000)}>` : "" }`);
         });
 
         return await interaction.Reply([
@@ -117,7 +117,7 @@ export default async function ({ interaction, client }: CommandArgs) {
                     iconURL: mention.displayAvatarURL(),
                 },
                 user: interaction.user,
-                title: `Notatka #${notatka.id}`,
+                title: `Notatka #${notatka.noteID}`,
                 description: `\`\`\`${notatka.content}\`\`\``,
             }),
         ]);
