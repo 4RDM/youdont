@@ -24,8 +24,8 @@ body {
 
 .homepage {
 	background-image: url('./public/ScreenshotBG.webp') !important;
-	background-position: center;
-	background-size: cover;
+	background-position: center  !important;
+	background-size: cover !important;
 	#navbar-container {
 		background: none !important;
 		border: none !important;
