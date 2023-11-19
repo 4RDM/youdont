@@ -6,6 +6,8 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 export default async function ({ client, interaction }: CommandArgs) {
     const status = await getPlayers();
 
+    // todo: store maxPlayers in settings database
+
     if (!status)
         interaction.Reply([ Embed({ title: ":x: | 4RDM jest offline!", color: "#f54242", user: interaction.user }) ]);
     else
