@@ -1,5 +1,5 @@
 import logger from "utils/logger";
-import { Database } from "./database";
+import { Database, OkPacketInterface } from "./database";
 import { User } from "./users";
 
 export interface NoteSchema {
@@ -88,7 +88,91 @@ export class NotesManager {
         }
     }
 
+    async create(content: string, discordID: string, authorID: string) {
+        try {
+            const userRes = await this.database.users.create(discordID);
+            const authorRes = await this.database.users.create(authorID);
+
+            if (!userRes || !authorRes)
+                return false;
+
+            const connection = await this.getConnection();
+            const query = await connection.prepare("INSERT INTO notes(discordID, authorID, content) VALUES(?, ?, ?)");
+            const res: OkPacketInterface = await query.execute([ discordID, authorID, content ]);
+
+            await connection.end();
+
+            const notes = this.getUserNotes(discordID);
+
+            const note = new Note(
+                res.insertId,
+                notes ? notes.length + 1 : 1,
+                content,
+                new Date()
+            );
+
+            const user = this.database.users.get(discordID);
+            const author = this.database.users.get(authorID);
+
+            if (!user)
+                return logger.error(`Cannot create note "${res.insertId}", user not found!`);
+
+            if (!author)
+                return logger.error(`Cannot create note "${res.insertId}", author not found!`);
+
+            note.assignUser(user);
+            note.assignAuthor(author);
+
+            user.addNote(note);
+
+            this.notes.set(res.insertId, note);
+
+            return note;
+        } catch(err) {
+            logger.error(`NotesManager.create(): "${err}"`);
+
+            return false;
+        }
+    }
+
+    async delete(id: number) {
+        try {
+            const connection = await this.getConnection();
+            const query = await connection.prepare("DELETE FROM notes WHERE id = ?");
+            const res: OkPacketInterface = await query.execute([ id ]);
+
+            await connection.end();
+
+            const note = this.notes.get(id);
+
+            if (!note)
+                return false;
+
+            if (!note.user)
+                return false;
+
+            note.user.deleteNoteByID(id);
+
+            this.notes.delete(id);
+
+            return res;
+        } catch(err) {
+            logger.error(`NotesManager.delete(): "${err}"`);
+
+            return false;
+        }
+    }
+
     get(id: number) {
         return this.notes.get(id);
+    }
+
+    getUserNotes(discordID: string) {
+        const user = this.database.users.get(discordID);
+
+        if (!user)
+            return null;
+
+        return user.getNotes();
     }
 }

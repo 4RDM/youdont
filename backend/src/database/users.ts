@@ -26,6 +26,10 @@ export class User {
         this.notes.push(note);
     }
 
+    deleteNoteByID(noteID: number) {
+        this.notes = this.notes.filter(note => note.noteID !== noteID);
+    }
+
     getPayment(id: string) {
         return this.payments.find(payment => payment.id === id);
     }
