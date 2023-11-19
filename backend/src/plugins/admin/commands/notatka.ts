@@ -38,12 +38,13 @@ export default async function ({ interaction, client }: CommandArgs) {
     } else if (subcommand === "usun") {
         const mention = interaction.options.getUser("mention", true);
         const id = interaction.options.getInteger("id", true);
-        const dbUser = client.database.users.get(mention.id);
 
         const res = await client.database.users.create(mention.id);
 
         if (!res)
             return await interaction.Error("Wystąpił wewnętrzny błąd bota (KOD: CNCADE). Spróbuj ponownie później / skontaktuj się z administracją!", { ephemeral: true });
+
+        const dbUser = client.database.users.get(mention.id);
 
         if (!dbUser)
             return await interaction.Error("Nieznaleziono użytkownika w bazie danych!", { ephemeral: true });
@@ -62,12 +63,13 @@ export default async function ({ interaction, client }: CommandArgs) {
         ]);
     } else if (subcommand === "lista") {
         const mention = interaction.options.getUser("mention", true);
-        const dbUser = client.database.users.get(mention.id);
 
         const res = await client.database.users.create(mention.id);
 
         if (!res)
             return await interaction.Error("Wystąpił wewnętrzny błąd bota (KOD: CNCADE). Spróbuj ponownie później / skontaktuj się z administracją!", { ephemeral: true });
+
+        const dbUser = client.database.users.get(mention.id);
 
         if (!dbUser)
             return await interaction.Error("Nieznaleziono użytkownika w bazie danych!", { ephemeral: true });
@@ -92,6 +94,12 @@ export default async function ({ interaction, client }: CommandArgs) {
     } else if (subcommand === "wyswietl") {
         const mention = interaction.options.getUser("mention", true);
         const id = interaction.options.getInteger("id", true);
+
+        const res = await client.database.users.create(mention.id);
+
+        if (!res)
+            return await interaction.Error("Wystąpił wewnętrzny błąd bota (KOD: CNCADE). Spróbuj ponownie później / skontaktuj się z administracją!", { ephemeral: true });
+
         const dbUser = client.database.users.get(mention.id);
 
         if (!dbUser)
