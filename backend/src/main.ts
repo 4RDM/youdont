@@ -39,6 +39,7 @@ export interface Config {
     discord: DiscordLoginData
     indrop: IndropLoginData
     rcon: RconLoginData
+    maxPlayers: number
 }
 
 interface BotOptions extends ClientOptions {
