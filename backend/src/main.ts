@@ -6,6 +6,7 @@ import config from "config";
 import PluginHandler from "handlers/plugins";
 import CommandHandler from "handlers/commands";
 import ModalsHandler from "handlers/modals";
+import HTTP from "http/http";
 
 interface DatabaseLoginData {
     host: string
@@ -21,6 +22,8 @@ interface DiscordLoginData {
     statsMessage: string
     mainGuild: string
     clientId: string
+    secret: string
+    redirectUri: string
 }
 
 interface IndropLoginData {
@@ -53,6 +56,7 @@ export class RDMBot extends Client {
     public commands;
     public database;
     public modals;
+    public http;
     private rateLimits: Map<string, Map<string, Date>> = new Map();
 
     constructor(options: BotOptions) {
@@ -65,6 +69,7 @@ export class RDMBot extends Client {
         this.plugins = new PluginHandler();
         this.commands = new CommandHandler(this.plugins);
         this.modals = new ModalsHandler(this.plugins);
+        this.http = new HTTP(this);
 
         this.database.testConnection();
 
@@ -76,6 +81,7 @@ export class RDMBot extends Client {
         this.database.once("ready", () => {
             logger.ready("Database is ready!");
             this.init();
+            this.http.listen();
         });
     }
 

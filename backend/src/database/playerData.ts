@@ -104,4 +104,12 @@ export class PlayerDataManager {
 
         return player;
     }
+
+    get(license: string): PlayerShort {
+        const player = this.players.find(user => user.license == license);
+
+        if (!player) return { license, playTime: 0 };
+
+        return player;
+    }
 }

@@ -8,6 +8,7 @@ import { NotesManager } from "./notes";
 import { BansManager } from "./bans";
 import { PlayerDataManager } from "./playerData";
 import { ConfigManager } from "./config";
+import { ArticlesManager } from "./articles";
 
 export interface OkPacketInterface {
     affectedRows: number;
@@ -25,6 +26,7 @@ export class Database extends EventEmitter {
     public bans;
     public players;
     public config;
+    public articles;
 
     constructor(private client: RDMBot) {
         super();
@@ -39,6 +41,7 @@ export class Database extends EventEmitter {
         this.bans = new BansManager(this);
         this.players = new PlayerDataManager(this);
         this.config = new ConfigManager(this);
+        this.articles = new ArticlesManager(this);
     }
 
     closeAll() {
