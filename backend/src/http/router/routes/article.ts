@@ -23,12 +23,12 @@ const adminCheck = async (req: Request, res: Response, next: NextFunction) => {
         const { userid } = req.session;
         if (!userid) return unauthorized(res, "No session found");
 
-        const guild = await req.core.bot.guilds.fetch(req.core.bot.config.discord.mainGuild);
+        const guild = await req.core.guilds.fetch(req.core.config.discord.mainGuild);
         if (!guild) return internalError(res, "MainGuild not found (ERROR CODE: ARTICLE_CONFIG_MAIN_GUILD_NOT_FOUND)");
 
         const user = await guild.members.fetch(userid);
         if (!user) return unauthorized(res, "User not found in main guild (ERROR CODE: ARTICLE_USER_NOT_IN_MAIN_GUILD)");
-	
+
         if (user.roles.cache.has("ADMINISTRATOR")) {
             req.skip = true;
             next();
@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
     const articles = await req.core.database.articles.getAll();
     const articlesPrepared = [];
 
-    if (!articles)
+    if (articles === null)
         return res.json({ code: 500, articles: [] });
 
     for await (const article of articles) {
@@ -68,8 +68,8 @@ router.get("/", async (req, res) => {
         userCache = avatarCache.get(article.discordID);
 
         if (!userCache) {
-            const user = await req.core.bot.users.fetch(article.discordID);
-			
+            const user = await req.core.users.fetch(article.discordID);
+
             if (!user) {
                 articlesPrepared.push({
                     ...article,
@@ -120,7 +120,7 @@ router.get("/:id", async (req, res) => {
     userCache = avatarCache.get(article.discordID);
 
     if (!userCache) {
-        const user = await req.core.bot.users.fetch(article.discordID);
+        const user = await req.core.users.fetch(article.discordID);
 
         if (!user) {
             articlePrepared.discordName = article.discordID;
@@ -131,7 +131,7 @@ router.get("/:id", async (req, res) => {
                 url: user.avatarURL({ size: 128, extension: "png" }) || "",
                 name: user.username,
             });
-			
+
             articlePrepared.discordName = user.username;
             articlePrepared.discordAvatar = user.avatarURL({ size: 128, extension: "png" }) || "";
         }
@@ -149,8 +149,7 @@ router.post("/create", adminCheck, limiter, async (req, res) => {
     if (!title || !content || !description || !url)
         return res.json({
             code: 400,
-            message:
-				"Missing parameters, { title: string, content: string, description: string, id: number, url: string }",
+            message: "Missing parameters, { title: string, content: string, description: string, id: number, url: string }",
             body: req.body,
         });
 
@@ -174,8 +173,7 @@ router.post("/update", adminCheck, limiter, async (req, res) => {
     if (!title || !content || !description || !id || !url)
         return res.json({
             code: 500,
-            message:
-				"Missing parameters, { title: string, content: string, description: string, id: number, url: string }",
+            message: "Missing parameters, { title: string, content: string, description: string, id: number, url: string }",
             body: req.body,
         });
 

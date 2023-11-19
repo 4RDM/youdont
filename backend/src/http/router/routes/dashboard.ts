@@ -3,22 +3,22 @@ import FormData from "form-data";
 import fetch from "node-fetch";
 import logger from "../../../utils/logger";
 import config from "../../../config";
-import timeSince from "../../../utils/timeSince";
-import { internalError, unauthorized } from "../errors";
+import timeSince from "utils/timeSince";
+import { internalError, notFound, unauthorized } from "../errors";
 import rateLimit from "express-rate-limit";
 
 interface IUserCache {
-	[index: string]: {
-		identifier?: string;
-		license?: string;
-		discord?: string;
-		deaths?: number;
-		heady?: number;
-		kills?: number;
-		date?: Date;
-		playTime?: number;
-		rank?: string;
-	};
+    [index: string]: {
+        identifier?: string;
+        license?: string;
+        discord?: string;
+        deaths?: number;
+        heady?: number;
+        kills?: number;
+        date?: Date;
+        playTime?: number;
+        rank?: string;
+    };
 }
 
 const router = Router();
@@ -49,7 +49,7 @@ const userCheck = (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-router.get("/login", limiter, (req, res) => res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${config.discord.id}&redirect_uri=${config.discord.redirect}&response_type=code&scope=email%20identify%20guilds.join`));
+router.get("/login", limiter, (_, res) => res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${config.discord.clientId}&redirect_uri=${config.discord.redirectUri}&response_type=code&scope=email%20identify%20guilds.join`));
 
 router.get("/reply", async(req, res) => {
     try {
@@ -58,9 +58,9 @@ router.get("/reply", async(req, res) => {
         if (!code) return res.send("Unauthorized, no code provided");
 
         const form = new FormData();
-        form.append("client_id", config.discord.id);
+        form.append("client_id", config.discord.clientId);
         form.append("client_secret", config.discord.secret);
-        form.append("redirect_uri", config.discord.redirect);
+        form.append("redirect_uri", config.discord.redirectUri);
         form.append("grant_type", "authorization_code");
         form.append("code", code);
 
@@ -78,7 +78,7 @@ router.get("/reply", async(req, res) => {
         if (!email || !avatar || !username || !id)
             return internalError(res, "Discord returned an error, missing data");
 
-        fetch(`https://discord.com/api/guilds/${req.core.bot.config.discord.mainGuild}/members/${id}`,{
+        fetch(`https://discord.com/api/guilds/${config.discord.mainGuild}/members/${id}`,{
             body: JSON.stringify({ access_token: oauth2.access_token }),
             headers: { authorization: `Bot ${config.discord.token}`, "Content-Type": "application/json" },
             method: "PUT",
@@ -123,12 +123,17 @@ router.get("/stats", userCheck, async (req, res) => {
     if (!userid) return unauthorized(res, "No userid provided");
 
     if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
-        const response = await req.core.database.users.getUserFromServer(userid);
-        const user = await req.core.database.users.get(userid);
+        const response = await req.core.database.players.getUserFromServer(userid);
 
         if (response) {
-            const { discord, identifier, license, kills, deaths, heady } = response;
-            const { playTime } = req.core.database.playerData.getUser(license);
+            if (response.length == 0) return notFound(res, "User not found in database");
+
+            const user = response[0];
+            if (user === null) return internalError(res, "Database error");
+
+            const { discord, identifier, license, heady, kills, deaths } = user;
+
+            const { playTime } = req.core.database.players.get(license);
             userCache[userid] = {
                 discord,
                 license,

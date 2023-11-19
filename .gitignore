@@ -15,5 +15,6 @@ backend/dist
 !frontend/dist/assets/*
 temp
 playersDB.json
+banlist.json
 backend/.env
 .yarn

@@ -1,9 +1,9 @@
 const pI = parseInt;
 
 export interface rgbObject {
-	r: number;
-	g: number;
-	b: number;
+    r: number;
+    g: number;
+    b: number;
 }
 
 export type hexString = `#${string}`;
@@ -22,7 +22,7 @@ export const hexToRGB = (hex: hexString): rgbObject => {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const [r, g, b] = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(ihex);
+    const [ r, g, b ] = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(ihex);
 
     return { r, g, b };
 };
@@ -35,14 +35,14 @@ export const rgbToHex = (rgb: rgbString): string => {
         const ispl = irgb.split(" ").join("").split(",");
 
         const r = pI(ispl[0]), g = pI(ispl[1]), b = pI(ispl[2]);
-        const obj = [r, g, b].map(v => {
+        const obj = [ r, g, b ].map(v => {
             if (isNaN(v) || v > 255 || v < 0) return 0;
             else return v;
         });
 
         obj.forEach(x => (temp += x.toString(16)));
     } else {
-        [rgb.r, rgb.g, rgb.b].forEach(v => (temp += v.toString(16)));
+        [ rgb.r, rgb.g, rgb.b ].forEach(v => (temp += v.toString(16)));
     }
 
     return temp;

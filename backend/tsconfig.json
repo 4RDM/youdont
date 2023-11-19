@@ -1,18 +1,21 @@
 {
-	"compilerOptions": {
-		"target": "ES2020",
-		"module": "commonjs",
-		"lib": ["ES6", "DOM"],
-		"outDir": "./dist",
-		"baseUrl": "./src",
-		"rootDir": "./src",
-		"strict": true,
-		"moduleResolution": "node",
-		"typeRoots": ["node_modules/@types", "./src/types"],
-		"esModuleInterop": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"sourceMap": true,
-		"resolveJsonModule": true
-	}
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "NodeNext",
+        "outDir": "dist",
+        "baseUrl": "src",
+        "rootDir": "src",
+        "strict": true,
+        "moduleResolution": "NodeNext",
+        "typeRoots": ["node_modules/@types"],
+        "removeComments": true,
+        "esModuleInterop": true,
+        "sourceMap": false,
+        "resolveJsonModule": true,
+        "incremental": false,
+    },
+    "include": [
+        "src/**/*",
+        "src/**/*.json"
+    ]
 }

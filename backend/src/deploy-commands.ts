@@ -1,53 +1,34 @@
 import { REST, Routes } from "discord.js";
+import RDMBot from "./main";
 import config from "./config";
 import logger from "./utils/logger";
 
-import { Core } from "./core";
-
-// Load commands from command handler!
-const client = new Core({ disableHTTP: true });
+const client = RDMBot;
 const commands: unknown[] = [];
 
-setTimeout(() => {
-    //
-    // Registering slash commands
-    //
+client.plugins.once("ready", () => {
     const rest = new REST().setToken(config.discord.token);
 
     (async () => {
-        client.bot.commandHandler.all().forEach(command => {
+        client.commands.getAll().forEach(command => {
             command.info.builder
-                .setName(command.info.triggers[0])
+                .setName(command.info.name)
                 .setDescription(command.info.description);
             if (command.info.permissions && !command.info.role)
-                command.info.builder.setDefaultMemberPermissions(
-                    command.info.permissions.toString()
-                );
+                command.info.builder.setDefaultMemberPermissions(command.info.permissions.toString());
             commands.push(command.info.builder.toJSON());
         });
 
         try {
             logger.log("Refreshing application commands.");
 
-            const data = await rest.put(
-                Routes.applicationGuildCommands(
-                    config.discord.id,
-                    config.discord.mainGuild
-                ),
-                {
-                    body: commands,
-                }
-            );
+            const data = await rest.put(Routes.applicationGuildCommands(config.discord.clientId, config.discord.mainGuild), { body: commands });
 
-            logger.ready(
-                `Successfully registered ${
-                    (data as []).length
-                } application commands.`
-            );
+            logger.ready(`Successfully registered ${(data as []).length} application commands.`);
         } catch (error) {
             logger.error(error);
         } finally {
             process.exit();
         }
     })();
-}, 5000);
+});
