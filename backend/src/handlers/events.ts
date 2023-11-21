@@ -104,7 +104,6 @@ const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
         title: "<a:zaakceptowane:846767788739657738> | 4RDM jest online!",
         description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}`,
         color: embedColors.green,
-        footer: "Status aktualizuje się co 5 sekund",
         timestamp: new Date()
     });
 
