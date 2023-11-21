@@ -21,7 +21,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
             return logger.error("reloadStats(): statsMessageID not set");
 
         const killsEmbed = Embed({
-            title: "<:kill:1173353002107674754> | Topka killi",
+            title: "<:kill:1176598126749036665> | Topka killi",
             author: {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
@@ -33,7 +33,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
         });
 
         const deathsEmbed = Embed({
-            title: "<:death:1173352998383136818> | Topka śmierci",
+            title: "<:death:1176598134198108271> | Topka śmierci",
             author: {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
@@ -45,7 +45,7 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
         });
 
         const kdrEmbed = Embed({
-            title: "<:kdr:1173353000543191191> | Topka KDR",
+            title: "<:kdr:1176598125163585657> | Topka KDR",
             author: {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
