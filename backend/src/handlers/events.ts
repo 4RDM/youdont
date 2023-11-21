@@ -111,9 +111,13 @@ const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
     });
 
     const playerEmbed = Embed({
-        title: "<:coin:1176598132683964517> | Lista graczy",
+        author: {
+            name: "4RDM",
+            iconURL: "https://4rdm.pl/assets/logo.png"
+        },
+        title: "Lista graczy",
         description: `${status.sort((a, b) => a.id - b.id).map((player) => `**${player.id}.** \`${player.name.replace(/`/gm, "")}\``).join("\n")}`,
-        color: embedColors.green,
+        color: embedColors.purple,
         footer: "Status aktualizuje się co 5 sekund",
         timestamp: new Date()
     });
