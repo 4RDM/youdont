@@ -11,7 +11,7 @@
         "start": "cross-env NODE_ENV=production TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/main.js",
         "start-dev": "cross-env NODE_ENV=development TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/main.js",
         "deploy-win": "cross-env NODE_ENV=development TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/deploy-commands.js",
-        "deploy-linux": "cross-env NODE_ENV=development TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/deploy-commands.js"
+        "deploy-linux": "cross-env NODE_ENV=production TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/deploy-commands.js"
     },
     "keywords": [],
     "author": "",
