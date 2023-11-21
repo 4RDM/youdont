@@ -22,6 +22,8 @@ interface DiscordLoginData {
     clientId: string
     secret: string
     redirectUri: string
+    btDonate: string
+    btDev: string
 }
 
 interface IndropLoginData {

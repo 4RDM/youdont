@@ -1,11 +1,12 @@
 import { EmbedField, HexColorString, WebhookClient } from "discord.js";
 import logger from "./logger";
 import config from "config";
-import { Embed } from "./discordEmbed";
-import { getBanBySteam } from "bot/events/interactions/modalSubmit";
+import { Embed } from "./embedBuilder";
+import { getBanBySteam } from "plugins/setup/modals/unban";
 import { addFile } from "./filesystem";
 import { join } from "path";
-import { Client } from "bot/main";
+import { RDMBot } from "../main";
+import rcon from "./rcon";
 
 interface Payment {
     id: string
@@ -31,11 +32,11 @@ export class IndropManager {
     private webhook: WebhookClient;
     private newDiscord: WebhookClient;
 
-    constructor(private client: Client, key: string) {
+    constructor(private client: RDMBot, key: string) {
         this.key = key;
 
-        this.webhook = new WebhookClient({ url: config.btDonate });
-        this.newDiscord = new WebhookClient({ url: config.btDev });
+        this.webhook = new WebhookClient({ url: config.discord.btDonate });
+        this.newDiscord = new WebhookClient({ url: config.discord.btDev });
         this.init();
     }
 
@@ -166,11 +167,12 @@ export class IndropManager {
         }
 
         try {
-            this.client.core.rcon(`unban ${ban.banid}`)
+            rcon(`unban ${ban.banid}`)
                 .catch(() => logger.error(`Nie udało się odbanować ${ban.banid}`));
         } catch(err) {
             logger.error(`Nie udało się odbanować ${ban.banid}`);
         } finally {
+            // eslint-disable-next-line no-unsafe-finally
             return true;
         }
     }
@@ -180,8 +182,8 @@ export class IndropManager {
 
         addFile(`add_principal identifier.steam:${hex} group.${ranga} # ${payment.id} https://steamcommunity.com/profiles/${payment.steam_id} ${new Date().toLocaleDateString()}`, path)
             .then(() => {
-                this.client.core.rcon("exec permisje.cfg");
-                this.client.core.rcon("refreshallW0");
+                rcon("exec permisje.cfg");
+                rcon("refreshallW0");
                 return true;
             })
             .catch(() => {
@@ -202,13 +204,14 @@ export class IndropManager {
             if (payment.product_id.startsWith("ranga"))
                 res = await this.executeRanga(payment, hex);
 
-            this.sendDiscord(this.webhook, payment, res);
 
-            const discord = await this.client.core.database.playerData.getDiscordBySteam(`steam:${hex}`);
+            const discord = await this.client.database.players.getDiscordBySteam(`steam:${hex}`);
 
             if (discord && discord[0]) {
+                this.sendDiscord(this.webhook, payment, res, discord[0]);
+
                 if (!payment.product_id.startsWith("unban") && !payment.product_id.startsWith("ranga")) {
-                    this.sendWebhook(this.newDiscord, [{ name: "Użytkownik", value: `<@${discord[0].replace("discord:", "")}> (${discord[0].replace("discord:", "")})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }, { name: "Hex", value: hex, inline: true }], "#4fdf62", "Wpłata");
+                    this.sendWebhook(this.newDiscord, [ { name: "Użytkownik", value: `<@${discord[0].replace("discord:", "")}> (${discord[0].replace("discord:", "")})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }, { name: "Hex", value: hex, inline: true } ], "#4fdf62", "Wpłata");
                 }
 
                 const user = await this.client.users.fetch(discord[0].replace("discord:", ""));
@@ -233,8 +236,10 @@ export class IndropManager {
                             timestamp: new Date(),
                             thumbnail: "https://4rdm.pl/assets/logo.png"
                         })
-                    ] }).catch(_ => logger.error(`${user.tag} has closed DMs!`));
+                    ] }).catch(() => logger.error(`${user.tag} has closed DMs!`));
                 }
+            } else {
+                this.sendDiscord(this.webhook, payment, res);
             }
 
             return res;
@@ -245,19 +250,22 @@ export class IndropManager {
     }
 
     async sendWebhook(webhook: WebhookClient, fields: EmbedField[], color: HexColorString, title: string) {
-        webhook.send({ embeds: [Embed({
+        webhook.send({ embeds: [ Embed({
             color,
             title,
             fields,
             timestamp: new Date()
-        })] });
+        }) ] });
     }
 
-    async sendDiscord(webhook: WebhookClient, payment: Payment, accept: boolean) {
+    async sendDiscord(webhook: WebhookClient, payment: Payment, accept: boolean, discord?: string) {
         this.sendWebhook(webhook, [
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            ...Object.keys(payment).map(key => ({ name: (([x, ...y]) => x.toUpperCase() + y.join("").toLowerCase())(key.replace(/_/gm, " ")), value: `\`${payment[key]}\``, inline: true }))
+            { name: "Discord", value: discord ? `<@${discord.replace("discord:", "")}> (\`${discord.replace("discord:", "")}\`)` : "`Nie znaleziono`", inline: true },
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            ...Object.keys(payment).map(key => ({ name: (([ x, ...y ]) => x.toUpperCase() + y.join("").toLowerCase())(key.replace(/_/gm, " ")), value: `\`${payment[key]}\``, inline: true }))
         ], accept ? "#4fdf62" : "#f54242", "Płatność");
     }
 }
