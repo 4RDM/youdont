@@ -8,7 +8,7 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { Roles as RL, embedColors } from "utils/constants";
 import rcon from "utils/rcon";
-import { pathToFileURL } from "url";
+import { readFile } from "fs/promises";
 
 const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
 
@@ -20,7 +20,10 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     const mention = interaction.options.getUser("mention", true);
 
-    const rolesJson: Roles | null = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default;
+    const file = await readFile(filePath, { encoding: "utf-8" });
+    const json = JSON.parse(file) as Roles;
+
+    const rolesJson: Roles | null = json;
 
     if (!rolesJson)
         return await interaction.Error("Wystąpił błąd podczas wczytywania plików!", { ephemeral: true });

@@ -6,8 +6,7 @@ import { selectUserHex } from "./shared";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
-import { pathToFileURL } from "url";
-
+import { readFile } from "fs/promises";
 const filePath = join(
     // __dirname,
     // "vehicles.json"
@@ -20,8 +19,11 @@ export default async function ({ client, interaction }: CommandArgs) {
     if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!");
 
+    const file = await readFile(filePath, { encoding: "utf-8" });
+    const json = JSON.parse(file);
+
     const subcommand = interaction.options.getSubcommand();
-    const userJson = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default;
+    const userJson = json;
     const mention = interaction.options.getUser("mention", true);
     const hexOverride = interaction.options.getString("hex", false);
 

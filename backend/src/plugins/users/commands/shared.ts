@@ -10,7 +10,7 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Roles, embedColors } from "utils/constants";
 import { DBUser } from "database/playerData";
 import { Embed } from "utils/embedBuilder";
-import { pathToFileURL } from "url";
+import { readFile } from "fs/promises";
 
 const filePath = join(
     "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json"
@@ -94,8 +94,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     if (!interaction.isChatInputCommand()) return;
 
+    const file = await readFile(filePath, { encoding: "utf-8" });
+    const json = JSON.parse(file);
+
     const subcommand = interaction.options.getSubcommand();
-    const userJson = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default;
+    const userJson = json;
     const mention = interaction.options.getUser("mention", true);
     const hexOverride = interaction.options.getString("hex", false);
 

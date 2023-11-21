@@ -7,7 +7,7 @@ import {
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { embedColors } from "utils/constants";
-import { pathToFileURL } from "url";
+import { readFile } from "fs/promises";
 
 const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/antilag.json");
 
@@ -17,7 +17,10 @@ export default async function ({ interaction }: CommandArgs) {
     if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
 
-    let antilagJson = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default as string[];
+    const file = await readFile(filePath, { encoding: "utf-8" });
+    const json = JSON.parse(file) as string[];
+
+    let antilagJson = json;
     const subcommand = interaction.options.getSubcommand();
     const spawnName = interaction.options.getString("spawn-name", true);
 

@@ -12,7 +12,7 @@ import hexToRGB from "utils/hexToRGB";
 import { Embed } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
 import rcon from "utils/rcon";
-import { pathToFileURL } from "url";
+import { readFile } from "fs/promises";
 
 export interface Role {
     tag: string;
@@ -41,7 +41,10 @@ export default async function ({ client, interaction }: CommandArgs) {
     if (!color.startsWith("#") || color.length !== 7 || !color.match(/^#[0-9a-fA-F]+$/))
         return await interaction.Error("Niepoprawny format koloru", { ephemeral: true });
 
-    const rolesJson: Roles | null = ((await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString()))).default;
+    const file = await readFile(filePath, { encoding: "utf-8" });
+    const json = JSON.parse(file) as Roles;
+
+    const rolesJson = json;
 
     if (!rolesJson)
         return await interaction.Error("Wystąpił błąd bazy danych (KOD: RLSJS)", { ephemeral: true });
