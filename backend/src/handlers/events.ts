@@ -4,7 +4,6 @@ import { handleInteraction } from "./interactions";
 import { getTops } from "utils/serverStatus";
 import { Channel, TextChannel } from "discord.js";
 import { Embed } from "utils/embedBuilder";
-import config from "config";
 import { embedColors } from "utils/constants";
 
 const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
@@ -14,9 +13,12 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
         if (!stats)
             return logger.error("reloadStats(): Cannot estabilish connection with database");
 
-        const topsMessage = await statsChannel.messages.fetch(config.discord.statsMessage);
-        if (!topsMessage)
-            return logger.error("reloadStats(): Tops message not found");
+        const topsMessage = await client.database.config.get("statsMessageID");
+
+        if (topsMessage === false)
+            return logger.error("reloadStats(): Database error while fetching statsMessageID");
+        if (topsMessage === null)
+            return logger.error("reloadStats(): statsMessageID not set");
 
         const killsEmbed = Embed({
             title: "<:kill:1173353002107674754> | Topka killi",
@@ -67,11 +69,19 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
 
 export class EventHandler {
     constructor(private client: RDMBot) {
-        this.client.once("ready", async (readyClient) => {
+        client.once("ready", async (readyClient) => {
             try {
                 logger.ready(`${readyClient.user.tag} is ready!`);
 
-                const statsChannel = (await readyClient.channels.fetch(config.discord.statsChannel, { cache: true, force: true }).catch(() => false)) as Channel | false;
+                const statsChannelID = await client.database.config.get("statsChannelID");
+
+                if (statsChannelID === false)
+                    return logger.error("EventHandler(): Database error while fetching statsChannelID") as unknown as void;
+
+                if (statsChannelID === null)
+                    return logger.error("EventHandler(): statsChannelID not set") as unknown as void;
+
+                const statsChannel = (await readyClient.channels.fetch(statsChannelID, { cache: true, force: true }).catch(() => false)) as Channel | false;
 
                 if (!statsChannel || statsChannel == null)
                     return logger.error("EventHandler(): Stats channel not found!") as unknown as void;

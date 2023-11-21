@@ -18,8 +18,6 @@ interface DatabaseLoginData {
 
 interface DiscordLoginData {
     token: string
-    statsChannel: string
-    statsMessage: string
     mainGuild: string
     clientId: string
     secret: string
