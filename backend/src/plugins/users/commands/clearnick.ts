@@ -8,18 +8,19 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { Roles as RL, embedColors } from "utils/constants";
 import rcon from "utils/rcon";
+import { pathToFileURL } from "url";
 
-const path = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
+const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
 
 export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
 
-    if (!existsSync(path))
+    if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
 
     const mention = interaction.options.getUser("mention", true);
 
-    const rolesJson: Roles | null = (await import(path)).default;
+    const rolesJson: Roles | null = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default;
 
     if (!rolesJson)
         return await interaction.Error("Wystąpił błąd podczas wczytywania plików!", { ephemeral: true });
@@ -35,7 +36,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     delete rolesJson[currentHex as `steam:${string}`];
 
-    writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
+    writeFileSync(filePath, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
     const embed = Embed({
         title: ":x: | Wyczyszczono przedrostek",

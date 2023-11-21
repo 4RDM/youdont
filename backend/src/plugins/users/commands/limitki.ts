@@ -6,8 +6,9 @@ import { selectUserHex } from "./shared";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
+import { pathToFileURL } from "url";
 
-const path = join(
+const filePath = join(
     // __dirname,
     // "vehicles.json"
     "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/vehicles.json"
@@ -16,11 +17,11 @@ const path = join(
 export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
 
-    if (!existsSync(path))
+    if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!");
 
     const subcommand = interaction.options.getSubcommand();
-    const userJson = (await import(path)).default;
+    const userJson = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default;
     const mention = interaction.options.getUser("mention", true);
     const hexOverride = interaction.options.getString("hex", false);
 
@@ -39,7 +40,7 @@ export default async function ({ client, interaction }: CommandArgs) {
         if (!userJson[currentHex]) userJson[currentHex] = [];
         userJson[currentHex].push([ spawnName, displayName ]);
 
-        writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+        writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
         const embed = Embed({
             title: ":white_check_mark: | Dodano limitkę!",
@@ -71,7 +72,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
         userJson[currentHex].splice(index, 1);
 
-        writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+        writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
         const embed = Embed({
             title: ":x: | Usunięto limitkę!",

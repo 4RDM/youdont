@@ -12,6 +12,7 @@ import hexToRGB from "utils/hexToRGB";
 import { Embed } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
 import rcon from "utils/rcon";
+import { pathToFileURL } from "url";
 
 export interface Role {
     tag: string;
@@ -25,12 +26,12 @@ export interface Roles extends Array<{ [k: `steam:${string}`]: Role }> {
     [k: `steam:${string}`]: Role;
 }
 
-const path = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
+const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
 
 export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
 
-    if (!existsSync(path))
+    if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
 
     const mention = interaction.options.getUser("mention", true);
@@ -40,7 +41,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     if (!color.startsWith("#") || color.length !== 7 || !color.match(/^#[0-9a-fA-F]+$/))
         return await interaction.Error("Niepoprawny format koloru", { ephemeral: true });
 
-    const rolesJson: Roles | null = (await import(path)).default;
+    const rolesJson: Roles | null = ((await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString()))).default;
 
     if (!rolesJson)
         return await interaction.Error("Wystąpił błąd bazy danych (KOD: RLSJS)", { ephemeral: true });
@@ -57,7 +58,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     const { r, g, b } = hexToRGB(color as HexColorString);
     rolesJson[`${currentHex as `steam:${string}`}`] = { tag: prefix, r, g, b, comment: `${mention.tag} (${mention.id})` };
 
-    writeFileSync(path, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
+    writeFileSync(filePath, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
     const embed = Embed({
         title: ":white_check_mark: | Zmieniono przedrostek",

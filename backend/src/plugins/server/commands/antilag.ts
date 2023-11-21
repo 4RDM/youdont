@@ -7,16 +7,17 @@ import {
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { embedColors } from "utils/constants";
+import { pathToFileURL } from "url";
 
-const path = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/antilag.json");
+const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/antilag.json");
 
 export default async function ({ interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
 
-    if (!existsSync(path))
+    if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
 
-    let antilagJson = (await import(path)).default as string[];
+    let antilagJson = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default as string[];
     const subcommand = interaction.options.getSubcommand();
     const spawnName = interaction.options.getString("spawn-name", true);
 
@@ -26,7 +27,7 @@ export default async function ({ interaction }: CommandArgs) {
 
         antilagJson.push(spawnName);
 
-        writeFileSync(path, JSON.stringify(antilagJson), { encoding: "utf-8" });
+        writeFileSync(filePath, JSON.stringify(antilagJson), { encoding: "utf-8" });
 
         const embed = Embed({
             title: ":white_check_mark: | Dodano antilaga!",
@@ -41,7 +42,7 @@ export default async function ({ interaction }: CommandArgs) {
 
         antilagJson = antilagJson.filter(x => x != spawnName);
 
-        writeFileSync(path, JSON.stringify(antilagJson), { encoding: "utf-8" });
+        writeFileSync(filePath, JSON.stringify(antilagJson), { encoding: "utf-8" });
 
         const embed = Embed({
             title: ":x: | Usunięto antilaga!",

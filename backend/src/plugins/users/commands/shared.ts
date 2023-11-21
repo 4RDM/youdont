@@ -10,8 +10,9 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Roles, embedColors } from "utils/constants";
 import { DBUser } from "database/playerData";
 import { Embed } from "utils/embedBuilder";
+import { pathToFileURL } from "url";
 
-const path = join(
+const filePath = join(
     "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json"
 );
 
@@ -88,13 +89,13 @@ export const selectUserHex = async(userHexes: DBUser[] | null, interaction: Comm
 };
 
 export default async function ({ client, interaction }: CommandArgs) {
-    if (!existsSync(path))
+    if (!existsSync(filePath))
         return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
 
     if (!interaction.isChatInputCommand()) return;
 
     const subcommand = interaction.options.getSubcommand();
-    const userJson = (await import(path)).default;
+    const userJson = (await import(filePath.startsWith("file://") ? filePath : pathToFileURL(filePath).toString())).default;
     const mention = interaction.options.getUser("mention", true);
     const hexOverride = interaction.options.getString("hex", false);
 
@@ -113,7 +114,7 @@ export default async function ({ client, interaction }: CommandArgs) {
         if (!userJson[currentHex]) userJson[currentHex] = [];
         userJson[currentHex].push([ spawnName, displayName ]);
 
-        writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+        writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
         const embed = Embed({
             title: ":white_check_mark: | Dodano auto współdzielone!",
@@ -145,7 +146,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
         userJson[currentHex].splice(index, 1);
 
-        writeFileSync(path, JSON.stringify(userJson), { encoding: "utf-8" });
+        writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
         const embed = Embed({
             title: ":x: | Usunięto auto współdzielone!",
