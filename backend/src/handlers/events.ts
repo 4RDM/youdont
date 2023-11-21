@@ -2,7 +2,7 @@ import { RDMBot } from "main";
 import logger from "utils/logger";
 import { handleInteraction } from "./interactions";
 import { getPlayers, getTops } from "utils/serverStatus";
-import { Channel, TextChannel } from "discord.js";
+import { ActivityType, Channel, TextChannel } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import { embedColors } from "utils/constants";
 
@@ -69,6 +69,10 @@ const reloadStats = async (client: RDMBot, statsChannel: TextChannel) => {
 
 const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
     const status = await getPlayers();
+
+    if (!status)
+        client.user?.setPresence({ status: "dnd", activities: [ { name: "4RDM jest offline!", type: ActivityType.Watching } ] });
+    else client.user?.setPresence({ status: "idle", activities: [ { name: `${status.length} / ${client.config.maxPlayers}`, type: ActivityType.Watching } ] });
 
     const statusMessage = await client.database.config.get("statusMessageID");
 
