@@ -171,6 +171,10 @@ export class EventHandler {
                 if (statsChannel.isDMBased())
                     return logger.error("EventHandler(): Stats channel is DM based!") as unknown as void;
 
+                await reloadStats(client, statsChannel as TextChannel);
+                await reloadStatus(client, statusChannel as TextChannel);
+
+
                 setInterval(async () => {
                     await reloadStats(client, statsChannel as TextChannel);
                 }, 1000 * 60 * 10);
