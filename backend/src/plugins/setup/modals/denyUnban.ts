@@ -4,7 +4,7 @@ import { Embed } from "utils/embedBuilder";
 import { existsSync } from "fs";
 import { join } from "path";
 import { doesUserHaveAnyRole } from "handlers/events/commands";
-import { embedColors } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -69,5 +69,6 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
 }
 
 export const info: ModalSubmitInfoType = {
-    name: "deny_unban"
+    name: "deny_unban",
+    roles: [ Roles.Team ]
 };

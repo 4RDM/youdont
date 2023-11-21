@@ -6,7 +6,7 @@ import { join } from "path";
 import { Embed } from "utils/embedBuilder";
 import logger from "utils/logger";
 import rcon from "utils/rcon";
-import { embedColors } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 
 const path =
     process.env.NODE_ENV == "production" ?
@@ -83,5 +83,6 @@ export default async function ({ interaction, client, args }: ModalSubmitArgs) {
 }
 
 export const info: ModalSubmitInfoType = {
-    name: "shorten_ban"
+    name: "shorten_ban",
+    roles: [ Roles.Team ]
 };

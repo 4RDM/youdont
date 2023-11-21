@@ -3,6 +3,7 @@ import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { ModalSubmitArgs, ModalSubmitInfoType } from "handlers/modals";
 import { join } from "path";
+import { Roles } from "utils/constants";
 import { Embed } from "utils/embedBuilder";
 
 
@@ -120,9 +121,12 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
         components: [ actionRow ]
     });
 
+    client.addRateLimit("unban", interaction.user.id, 1000 * 60 * 60 * 2);
+
     return await interaction.Reply("Twoje odwołanie zostało przesłane", { ephemeral: true });
 }
 
 export const info: ModalSubmitInfoType = {
-    name: "unban_form"
+    name: "unban_form",
+    roles: [ Roles.Czlonek ]
 };

@@ -34,6 +34,7 @@ const TrialDevelopr = "863107202365390879";
 const Team = "843444642539110400";
 const OpiekunHounds = "962784956197765192";
 const Hounds = "932345054142529538";
+const Czlonek = "843476029226221609";
 
 export const Roles = {
     DodajTeam: [ Owner, Zarzad, Dodaj, HeadAdmin ],
@@ -58,4 +59,5 @@ export const Roles = {
     Team,
     OpiekunHounds,
     Hounds,
+    Czlonek
 };
