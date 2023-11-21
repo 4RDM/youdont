@@ -84,7 +84,7 @@ const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
                 name: "4RDM",
                 iconURL: "https://4rdm.pl/assets/logo.png"
             },
-            color: embedColors.red,
+            color: embedColors.purple,
             title: "<a:odrzucone:846767715807920159> | 4RDM jest offline!",
             footer: "Status aktualizuje się co 5 sekund",
             timestamp: new Date()
@@ -101,9 +101,9 @@ const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
             name: "4RDM",
             iconURL: "https://4rdm.pl/assets/logo.png"
         },
+        color: embedColors.purple,
         title: "<a:zaakceptowane:846767788739657738> | 4RDM jest online!",
         description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}`,
-        color: embedColors.green,
     });
 
     const playerEmbed = Embed({
