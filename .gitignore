@@ -19,3 +19,4 @@ playersDB.json
 banlist.json
 backend/.env
 .yarn
+npm-shrinkwrap.json
