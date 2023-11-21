@@ -14,7 +14,7 @@ export default async function ({ client, interaction }: CommandArgs) {
         interaction.Reply([
             Embed({
                 title: ":white_check_mark: | 4RDM jest online!",
-                description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}}`,
+                description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}`,
                 color: "#1F8B4C",
                 user: interaction.user,
             }),
