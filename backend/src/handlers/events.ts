@@ -108,7 +108,7 @@ const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
         color: embedColors.purple,
         title: "<a:zaakceptowane:846767788739657738> | 4RDM jest online!",
         description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}`,
-        footer: "Status aktualizuje się co 5 sekund",
+        footer: "Status aktualizuje się co 1 minutę",
     });
 
     const playerEmbed = Embed({
@@ -119,7 +119,7 @@ const reloadStatus = async (client: RDMBot, statusChannel: TextChannel) => {
         title: "Lista graczy",
         description: `${status.sort((a, b) => a.id - b.id).map((player) => `**${player.id}.** \`${player.name.replace(/`/gm, "")}\``).join("\n")}`,
         color: embedColors.purple,
-        footer: "Status aktualizuje się co 5 sekund",
+        footer: "Status aktualizuje się co 1 minutę",
         timestamp: new Date()
     });
 
@@ -181,7 +181,7 @@ export class EventHandler {
 
                 setInterval(async () => {
                     await reloadStatus(client, statusChannel as TextChannel);
-                }, 5000);
+                }, 1000 * 60);
             } catch(err) {
                 logger.error(`EventHandler(): Ready handler threw an error: ${err}`);
             }
