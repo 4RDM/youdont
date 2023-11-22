@@ -124,7 +124,6 @@ router.get("/stats", userCheck, async (req, res) => {
 
     if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
         const response = await req.core.database.players.getUserFromServer(userid);
-
         if (response) {
             if (response.length == 0) return notFound(res, "User not found in database");
 

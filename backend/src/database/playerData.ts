@@ -72,8 +72,8 @@ export class PlayerDataManager {
     async getUserFromServer(discordID: string) {
         try {
             const connection = await this.database.getServerConnection();
-            const query = await connection.prepare("SELECT * FROM users WHERE discord = ?");
-            const res: DBUser[] = await query.execute([ `discord:${discordID}` ]);
+            const query = await connection.prepare("SELECT * FROM kdr WHERE discord = ?");
+            const res: DBUser[] = await query.execute([ discordID ]);
 
             await connection.end();
 
