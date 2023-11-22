@@ -11,6 +11,7 @@ import Footer from './compontents/Footer/Footer'
 import { AccountState } from './atoms/AccountState'
 
 import Home from './sites/Home/Home'
+const AdminList = lazy(() => import('./sites/AdministrationList/Administration'))
 const Articles = lazy(() => import('./sites/Articles/Articles'))
 const NotFound = lazy(() => import('./sites/NotFound/NotFound'))
 const Article = lazy(() => import('./sites/Articles/Article'))
@@ -67,6 +68,7 @@ const App = () => {
 							<Route path="dashboard">
 								<Route index element={<UserHome />} />
 							</Route>
+							<Route path="administration" element={<AdminList />} />
 							{/* <Route path="about" element={<About />} /> */}
 							{/* <Route path="dashboard" element={<Dashboard />} /> */}
 							<Route path="*" element={<NotFound />} />
