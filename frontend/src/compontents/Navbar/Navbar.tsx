@@ -38,6 +38,7 @@ export default () => {
 			<div id="navbar-navigator">
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
+				<Link to="/administration">Administracja</Link>
 				{loggedIn ? (
 					location.pathname == '/dashboard' ? (
 						<a href="/api/dashboard/logout">Wyloguj się</a>
@@ -66,6 +67,7 @@ export default () => {
 				</span>
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
+				<Link to="/administration">Administracja</Link>
 				{loggedIn ? (
 					location.pathname == '/dashboard' ? (
 						<a href="/api/dashboard/logout">Wyloguj się</a>
