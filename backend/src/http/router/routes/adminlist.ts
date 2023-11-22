@@ -80,7 +80,7 @@ const parsePermissions = async (req: Request, file: string) => {
 
         if (!member) continue;
 
-        discordRolesByUser[discordID[0].replace(/discord:/g, "")] = { discord: discordID[0].replace(/discord:/g, ""), role: rolesByUser[steamHex][0], avatar: member.user.avatarURL({ forceStatic: false, size: 256 }) || "", tag: member.user.tag };
+        discordRolesByUser[discordID[0].replace(/discord:/g, "")] = { discord: discordID[0].replace(/discord:/g, ""), role: rolesByUser[steamHex][0], avatar: member.user.avatarURL({ forceStatic: false, size: 256 }) || "", tag: member.user.displayName };
     }
 
     return discordRolesByUser;
