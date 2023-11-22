@@ -11,7 +11,6 @@ export default () => {
 		<div id="notfound-container">
 			<img src={PepeCry} alt="Crying pepe emoji" />
 			<h1>Odmowa dostępu!</h1>
-			<p>zaloguj się do swojego konta! 💀</p>
 		</div>
 	)
 }
