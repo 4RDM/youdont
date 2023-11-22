@@ -5,11 +5,8 @@
 
     @media (max-width: 530px) {
         #administrationlist-list .administrationlist-role-list-item {
-                max-width: 100% !important;
-                img {
-                    max-width: 100% !important;
-                }
-            }
+            max-width: 100% !important;
+        }
     }
 
     @media (max-width: 720px) {
@@ -56,7 +53,6 @@
                 max-width: 220px;
 
                 img {
-                    max-width: 200px;
                     width: 100%;
                     border-radius: 5px;
                 }
