@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import './Administration.scss'
 
 const ROLES: Record<string, [number, string]> = {
-    "superadmin": [11, "Właściciel"],
+    "superadmin": [11, "Właściciele"],
     "zarzad": [10, "Zarząd"],
     "hadmin": [9, "Head Admin"],
     "senioradmin": [8, "Senior Admin"],
