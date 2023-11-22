@@ -52,6 +52,8 @@ export default class HTTP {
             req.skip = false;
             next();
         });
+        
+        this.server.set("trust proxy", "127.0.0.1")
 
         this.server.get("/sitemap.xml", (_, res) => res.sendFile(join(__dirname, "..", "..", "..", "frontend", "dist", "assets", "sitemap.xml")));
         this.server.use("/api", apiRouter);
