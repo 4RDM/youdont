@@ -4,6 +4,7 @@ backend/src/config.ts
 backend/images/*
 backend/temp/*
 backend/dist
+frontend/dist
 **/dist/**/*.js
 **/dist/**/*.css
 **/dist/**/*.png
@@ -18,3 +19,4 @@ playersDB.json
 banlist.json
 backend/.env
 .yarn
+npm-shrinkwrap.json
