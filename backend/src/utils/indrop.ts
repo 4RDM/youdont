@@ -7,6 +7,7 @@ import { addFile } from "./filesystem";
 import { join } from "path";
 import { RDMBot } from "../main";
 import rcon from "./rcon";
+import { embedColors } from "./constants";
 
 interface Payment {
     id: string
@@ -55,6 +56,8 @@ export class IndropManager {
         if (!payments) return false;
         else {
             payments.forEach(async (payment) => {
+                logger.log("Executing payment", payment.id, payment.product_id, payment.steam_id, payment.steam_user);
+
                 let res = await this.executePayment(payment);
 
                 if (!res) {
@@ -204,12 +207,9 @@ export class IndropManager {
             if (payment.product_id.startsWith("ranga"))
                 res = await this.executeRanga(payment, hex);
 
-
             const discord = await this.client.database.players.getDiscordBySteam(`steam:${hex}`);
 
             if (discord && discord[0]) {
-                this.sendDiscord(this.webhook, payment, res, discord[0]);
-
                 if (!payment.product_id.startsWith("unban") && !payment.product_id.startsWith("ranga")) {
                     this.sendWebhook(this.newDiscord, [ { name: "Użytkownik", value: `<@${discord[0].replace("discord:", "")}> (${discord[0].replace("discord:", "")})`, inline: true }, { name: "Zakupiony przedmiot", value: `\`${payment.product_id}\``, inline: true }, { name: "Hex", value: hex, inline: true } ], "#4fdf62", "Wpłata");
                 }
@@ -230,35 +230,46 @@ export class IndropManager {
                                     name: "Kwota",
                                     value: `\`${payment.price}\``,
                                     inline: true,
+                                },
+                                {
+                                    name: "Status",
+                                    value: `\`${res ? "Płatność zaakceptowana" : "Płatność odrzucona"}\``,
+                                    inline: true,
                                 }
                             ],
-                            color: "#4fdf62",
+                            color: res ? embedColors.green : embedColors.red,
                             timestamp: new Date(),
                             thumbnail: "https://4rdm.pl/assets/logo.png"
                         })
                     ] }).catch(() => logger.error(`${user.tag} has closed DMs!`));
                 }
-            } else {
-                this.sendDiscord(this.webhook, payment, res);
             }
+
+            this.sendDiscord(this.webhook, payment, res, discord ? discord[0] : undefined);
 
             return res;
         } catch(err) {
             logger.error(err);
+
             return false;
         }
     }
 
     async sendWebhook(webhook: WebhookClient, fields: EmbedField[], color: HexColorString, title: string) {
-        webhook.send({ embeds: [ Embed({
-            color,
-            title,
-            fields,
-            timestamp: new Date()
-        }) ] });
+        try {
+            webhook.send({ embeds: [ Embed({
+                color,
+                title,
+                fields,
+                timestamp: new Date()
+            }) ] });
+        } catch(err) {
+            logger.error(`sendWebhook(): ${err}`);
+        }
     }
 
     async sendDiscord(webhook: WebhookClient, payment: Payment, accept: boolean, discord?: string) {
+        logger.log("Sending payment webhook!");
         this.sendWebhook(webhook, [
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
