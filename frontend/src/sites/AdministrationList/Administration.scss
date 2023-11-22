@@ -13,10 +13,21 @@
         #administrationlist-list {
             padding: 0 5px !important;
         }
+        #administrationlist-head h1 {
+            text-align: center !important;
+        }
     }
 
-    #administrationlist-head > h1 {
-        text-align: center !important;
+    #administrationlist-head {
+        display: flex;
+        height: 45px;
+        align-items: center;
+        flex-direction: row;
+        border-bottom: 1px solid #2a2a2a;
+        padding-bottom: 5px;
+        h1 {
+            margin-right: 5px;
+        }
     }
 }
 
