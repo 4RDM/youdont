@@ -170,9 +170,9 @@ export class PaymentsManager {
                         else
                             paymentRes = await this.acceptPayment(id);
 
-                        this.sendDiscord(this.webhook, newPayment, paymentRes, discordID[0]);
+                        this.sendDiscord(this.webhook, newPayment, executeRes, discordID[0]);
 
-                        return res;
+                        return paymentRes;
                     } else {
                         const executeRes = await this.executePayment(payment);
                         let paymentRes = true;
@@ -182,7 +182,7 @@ export class PaymentsManager {
                         else
                             paymentRes = await this.acceptPayment(id);
 
-                        this.sendDiscord(this.webhook, payment, paymentRes, discordID[0]);
+                        this.sendDiscord(this.webhook, payment, executeRes, discordID[0]);
 
                         return paymentRes;
                     }
