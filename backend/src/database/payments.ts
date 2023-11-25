@@ -169,7 +169,7 @@ export class PaymentsManager {
                             return await this.acceptPayment(id);
                     }
                 });
-            }, 10000);
+            }, 60000);
         });
     }
 
