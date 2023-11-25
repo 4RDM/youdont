@@ -47,7 +47,7 @@ export class IndropManager {
 
             if (!payments)
                 return logger.error("Cannot fetch payments!");
-        }, 10000);
+        }, 60000);
     }
 
     async refresh() {
@@ -82,7 +82,7 @@ export class IndropManager {
             const res = await fetch(`https://indrop.pro/api/auth/${this.key}/payments`);
 
             if (res.status !== 200)
-                return false;
+                return logger.error(`fetchPayments(ERROR)(): ${JSON.stringify(res)}`);
 
             const json: Array<Payment> = await res.json();
 
