@@ -5,6 +5,9 @@ import { addFile } from "utils/filesystem";
 import rcon from "utils/rcon";
 import { getBanBySteam } from "plugins/setup/modals/unban";
 import { join } from "path";
+import { EmbedField, HexColorString, WebhookClient } from "discord.js";
+import { Embed } from "utils/embedBuilder";
+import config from "config";
 
 const formBody = (details: { [index: string]: string }) => Object.keys(details).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(details[key])).join("&");
 const timeBetween = (date: Date, date2: Date) => new Date(date.getTime() - date2.getTime());
@@ -103,8 +106,13 @@ export class Payment {
 
 export class PaymentsManager {
     private payments: Map<string, Payment> = new Map();
+    private webhook: WebhookClient;
+    private newDiscord: WebhookClient;
 
     constructor(private database: Database, private key: string) {
+        this.webhook = new WebhookClient({ url: config.discord.btDonate });
+        this.newDiscord = new WebhookClient({ url: config.discord.btDev });
+
         this.database.users.once("ready", async() => {
             const res = await this.fetch();
 
@@ -155,18 +163,28 @@ export class PaymentsManager {
                         }
 
                         const executeRes = await this.executePayment(newPayment);
+                        let paymentRes = true;
 
                         if (!executeRes)
-                            return await this.fraudPayment(id);
+                            paymentRes = await this.fraudPayment(id);
                         else
-                            return await this.acceptPayment(id);
+                            paymentRes = await this.acceptPayment(id);
+
+                        this.sendDiscord(this.webhook, newPayment, paymentRes, discordID[0]);
+
+                        return res;
                     } else {
                         const executeRes = await this.executePayment(payment);
+                        let paymentRes = true;
 
                         if (!executeRes)
-                            return await this.fraudPayment(id);
+                            paymentRes = await this.fraudPayment(id);
                         else
-                            return await this.acceptPayment(id);
+                            paymentRes = await this.acceptPayment(id);
+
+                        this.sendDiscord(this.webhook, payment, paymentRes, discordID[0]);
+
+                        return paymentRes;
                     }
                 });
             }, 60000);
@@ -384,8 +402,6 @@ export class PaymentsManager {
         if (!discordID)
             discordID = [ "0" ];
 
-
-
         try {
             let res = true;
 
@@ -400,7 +416,32 @@ export class PaymentsManager {
             return res;
         } catch(err) {
             logger.error(err);
+
             return false;
         }
+    }
+
+    async sendWebhook(webhook: WebhookClient, fields: EmbedField[], color: HexColorString, title: string) {
+        try {
+            webhook.send({ embeds: [ Embed({
+                color,
+                title,
+                fields,
+                timestamp: new Date()
+            }) ] });
+        } catch(err) {
+            logger.error(`sendWebhook(): ${err}`);
+        }
+    }
+
+    async sendDiscord(webhook: WebhookClient, payment: Payment, accept: boolean, discord?: string) {
+        this.sendWebhook(webhook, [
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            { name: "Discord", value: discord ? `<@${discord.replace("discord:", "")}> (\`${discord.replace("discord:", "")}\`)` : "`Nie znaleziono`", inline: true },
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            ...Object.keys(payment).map(key => ({ name: (([ x, ...y ]) => x.toUpperCase() + y.join("").toLowerCase())(key.replace(/_/gm, " ")), value: `\`${payment[key]}\``, inline: true }))
+        ], accept ? "#4fdf62" : "#f54242", "Płatność");
     }
 }
