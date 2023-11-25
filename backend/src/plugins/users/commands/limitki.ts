@@ -7,6 +7,7 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
 import { readFile } from "fs/promises";
+
 const filePath = join(
     // __dirname,
     // "vehicles.json"

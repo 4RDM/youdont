@@ -1,8 +1,14 @@
 import logger from "utils/logger";
 import { Database, OkPacketInterface } from "./database";
 import { User } from "./users";
+import { addFile } from "utils/filesystem";
+import rcon from "utils/rcon";
+import { getBanBySteam } from "plugins/setup/modals/unban";
+import { join } from "path";
 
 const formBody = (details: { [index: string]: string }) => Object.keys(details).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(details[key])).join("&");
+const timeBetween = (date: Date, date2: Date) => new Date(date.getTime() - date2.getTime());
+const path = join("/home/rdm/server/data/permisje.cfg");
 
 export interface PaymentSchema {
     id: string
@@ -315,6 +321,62 @@ export class PaymentsManager {
         }
     }
 
+    async executeUnban(payment: Payment) {
+        const ban = await getBanBySteam(payment.getSteamHex());
+
+        const productID = payment.getProductId();
+
+        if (productID == "unban-cheating") {
+            return true;
+        }
+
+        if (!ban) {
+            logger.warn(`Wpłata ${payment.id} zostala odrzucona, nie znaleziono bana!`);
+            return false;
+        }
+
+        const time = timeBetween(new Date(ban.expire * 1000), new Date()).getTime();
+        const hour = (time / 1000 / 60 / 60);
+
+        if (productID == "unban-24h") {
+            if (hour >= 24) return false;
+        } else if (productID == "unban-1--3-dni") {
+            if (hour > 72) return false;
+        } else if (productID == "unban-4--7-dni") {
+            if (hour > 168) return false;
+        } else if (productID == "unban-8--30-dni") {
+            if (hour > 720) return false;
+        } else if (productID == "unban-30-dni") {
+            // _placeholder_
+        }
+
+        try {
+            rcon(`unban ${ban.banid}`)
+                .catch(() => logger.error(`Nie udało się odbanować ${ban.banid}`));
+        } catch(err) {
+            logger.error(`Nie udało się odbanować ${ban.banid}`);
+        } finally {
+            // eslint-disable-next-line no-unsafe-finally
+            return true;
+        }
+    }
+
+    async executeRanga(payment: Payment) {
+        const ranga = payment.getProductId().replace("ranga-", "").split("-").join("");
+
+        addFile(`add_principal identifier.steam:${payment.getSteamHex()} group.${ranga} # ${payment.id} https://steamcommunity.com/profiles/${payment.getSteamId()} ${new Date().toLocaleDateString()}`, path)
+            .then(() => {
+                rcon("exec permisje.cfg");
+                rcon("refreshallW0");
+                return true;
+            })
+            .catch(() => {
+                return false;
+            });
+
+        return true;
+    }
+
     async executePayment(payment: Payment) {
         const hex = BigInt(payment.getSteamId()).toString(16);
         let discordID = await this.database.players.getDiscordBySteam(`steam:${hex}`);
@@ -322,9 +384,20 @@ export class PaymentsManager {
         if (!discordID)
             discordID = [ "0" ];
 
+
+
         try {
-            logger.log(discordID);
-            return true;
+            let res = true;
+
+            const productID = payment.getProductId();
+
+            if (productID.startsWith("unban"))
+                res = await this.executeUnban(payment);
+
+            if (productID.startsWith("ranga"))
+                res = await this.executeRanga(payment);
+
+            return res;
         } catch(err) {
             logger.error(err);
             return false;
