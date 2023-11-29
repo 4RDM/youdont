@@ -50,6 +50,7 @@ export const info: CommandInfoType = {
     name: "kick",
     description: "Wyrzuć osobę",
     permissions: PermissionFlagsBits.KickMembers,
+    role: [ Roles.Team ],
     builder: new SlashCommandBuilder()
         .addUserOption(option => option.setName("mention").setDescription("Użytkownik do wyrzucenia").setRequired(true))
         .addStringOption(option => option.setName("reason").setDescription("Powód wyrzucenia").setRequired(false))
