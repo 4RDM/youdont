@@ -97,7 +97,7 @@ export class UsersManager extends EventEmitter {
 
             await connection.end();
 
-            if (response.affectedRows) {
+            if (response.affectedRows || !this.users.get(discordID)) {
                 const newUser = new User(discordID, new Date());
                 this.users.set(discordID, newUser);
             }
