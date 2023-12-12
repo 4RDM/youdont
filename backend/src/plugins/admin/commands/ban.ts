@@ -1,6 +1,7 @@
 import { GuildMember, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
+import { Roles } from "utils/constants";
 
 export default async function ({ interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand() || !interaction.guild) return;
