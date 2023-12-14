@@ -147,7 +147,7 @@ export class PaymentsManager {
                             steamID: steam_id,
                             steamUsername: steam_username,
                             title,
-                            discordID: discordID[0]
+                            discordID: discordID[0].replace("discord:", "")
                         });
 
                         if (!res) {
@@ -170,7 +170,7 @@ export class PaymentsManager {
                         else
                             paymentRes = await this.acceptPayment(id);
 
-                        this.sendDiscord(this.webhook, newPayment, executeRes, discordID[0]);
+                        this.sendDiscord(this.webhook, newPayment, executeRes, discordID[0].replace("discord:", ""));
 
                         return paymentRes;
                     } else {
@@ -182,7 +182,7 @@ export class PaymentsManager {
                         else
                             paymentRes = await this.acceptPayment(id);
 
-                        this.sendDiscord(this.webhook, payment, executeRes, discordID[0]);
+                        this.sendDiscord(this.webhook, payment, executeRes, discordID[0].replace("discord:", ""));
 
                         return paymentRes;
                     }
@@ -211,7 +211,7 @@ export class PaymentsManager {
 
                 this.payments.set(payment.id, newPayment);
 
-                const user = this.database.users.get(payment.discordID);
+                const user = this.database.users.get(payment.discordID.replace("discord:", ""));
 
                 if (!user)
                     return logger.warn(`PaymentsManager.fetch(): Cannot create payment "${payment.id}", user not found!`);
@@ -249,14 +249,14 @@ export class PaymentsManager {
 
     async create(payment: PaymentSchema) {
         try {
-            const res = await this.database.users.create(payment.discordID);
+            const res = await this.database.users.create(payment.discordID.replace("discord:", ""));
 
             if (!res)
                 return false;
 
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT IGNORE INTO payments(id, productID, title, price, paymentChannel, email, steamID, steamUsername, discordID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            const response: OkPacketInterface = await query.execute([ payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID ]);
+            const response: OkPacketInterface = await query.execute([ payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID.replace("discord:", "") ]);
 
             await connection.end();
 
@@ -266,7 +266,7 @@ export class PaymentsManager {
                 return false;
             }
 
-            const user = this.database.users.get(payment.discordID);
+            const user = this.database.users.get(payment.discordID.replace("discord:", ""));
 
             if (!user) {
                 logger.warn(`PaymentsManager.create(): Cannot create payment "${payment.id}", user not found!`);
