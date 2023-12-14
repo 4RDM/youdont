@@ -39,14 +39,14 @@ interface Player {
 
 export type DBUser = null | Player;
 
-const prodPath = join("/", "home", "rdm", "server", "base", "txData", "default", "data", "playersDB.json");
+const prodPath = "/home/rdm/server/base/txData/default/data/playersDB.json";
 const devPath = join(__dirname, "..", "playersDB.json");
 
 export class PlayerDataManager {
     public players: PlayerShort[];
 
     constructor(private database: Database) {
-        const file = readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" }).toString();
+        const file = readFileSync(process.env.NODE_ENV == "production" ? prodPath : devPath, { encoding: "utf-8" });
         const json: Players = JSON.parse(file);
 
         if (json.players)
