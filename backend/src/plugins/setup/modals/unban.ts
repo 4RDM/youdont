@@ -94,6 +94,9 @@ export default async function ({ interaction, client }: ModalSubmitArgs) {
     if (bannerDiscordID === false)
         return await interaction.Error("Wystąpił błąd bazy danych, skontaktuj się z administracją!", { ephemeral: true });
 
+    if (bannerDiscordID === null)
+        return await interaction.Error("Nie znaleziono discorda administratora, odwołaj się na tickecie!", { ephemeral: true });
+
     const bannerDiscordUser = bannerDiscordID[0] !== null ? await interaction.guild?.members.fetch(bannerDiscordID[0].replace("discord:", "")).catch(() => undefined) : undefined;
 
     ban.banner = bannerDiscordUser ? `<@${bannerDiscordID[0].replace("discord:", "")}>` : null || "`Nie znaleziono`";

@@ -133,8 +133,8 @@ export class PaymentsManager {
                     let discordID = await database.players.getDiscordBySteam(`steam:${hex}`);
                     const payment = this.get(id);
 
-                    if (!discordID)
-                        discordID = [ "0" ];
+                    if (discordID === null || discordID === false)
+                        discordID = [ "0" ]; 
 
                     if (!payment) {
                         const res = await this.create({

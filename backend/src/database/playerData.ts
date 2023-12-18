@@ -90,8 +90,12 @@ export class PlayerDataManager {
             const res: Array<{ discord: string }> = await query.execute([ steam ]);
 
             await connection.end();
+            
+            const flatMap = res.flatMap(x => x.discord);
+            
+            if (!flatMap[0]) return null;
 
-            return res.flatMap(x => x.discord);
+            return flatMap;
         } catch(err) {
             return logger.error(`getDiscordBySteam DB error: ${err}`);
         }
