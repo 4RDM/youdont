@@ -119,6 +119,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 
         writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
+        console.log(currentHex, interaction)
+
         const embed = Embed({
             title: ":white_check_mark: | Dodano auto współdzielone!",
             color: embedColors.green,
