@@ -21,8 +21,6 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
     interaction.Reply = async (content: string | EB[], options?: InteractionReplyOptions) => {
         if (!interaction.isRepliable()) return undefined;
 
-        interaction.hasReplied = true;
-
         let messageObject = {};
 
         if (typeof content == "string")
@@ -30,9 +28,10 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         else if (content[0] instanceof EB)
             messageObject = Object.assign(options || {}, { embeds: content });
 
-        if (interaction.hasReplied) {
+        if (interaction.hasReplied || interaction.replied) {
             return interaction.deferReply(messageObject);
         } else {
+            interaction.hasReplied = true;
             return interaction.reply(messageObject);
         }
     };
