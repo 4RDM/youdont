@@ -15,9 +15,11 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     client.cache.set(member.id, 1);
 
-    await member.voice.channel.edit({ permissionOverwrites: [
-        { id: member.id, allow: [ "Stream", "ViewChannel", "Connect" ] },
-    ] }).catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
+    await member.voice.channel.permissionOverwrites.create(member.id, {
+        ViewChannel: true,
+        Connect: true,
+        Stream: true,
+    }, { reason: "User joined channel" }).catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
 
     await interaction.Reply([ Embed({
         color: "#1F8B4C",

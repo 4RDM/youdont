@@ -198,11 +198,7 @@ export class EventHandler {
 
             client.cache.delete(newState.member.id);
 
-            await channel.permissionOverwrites.edit(newState.member.id, {
-                ViewChannel: null,
-                Connect: null,
-                Stream: null,
-            }, { reason: "User left the channel", type: OverwriteType.Member })
+            await channel.permissionOverwrites.delete(newState.member.id, "User left the channel")
                 .catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
         });
 
