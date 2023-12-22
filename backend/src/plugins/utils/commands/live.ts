@@ -1,4 +1,4 @@
-import { GuildMember, SlashCommandBuilder } from "discord.js";
+import { GuildMember, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import logger from "utils/logger";
@@ -30,7 +30,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 export const info: CommandInfoType = {
     name: "live",
     description: "Nadaj uprawnienia do streamowania na kanale",
-    role: [ Roles.Hounds ],
+    role: Roles.HoundsTeam,
+    permissions: PermissionFlagsBits.Administrator,
     builder: new SlashCommandBuilder()
         .addUserOption(option => option.setName("mention").setDescription("Użytkownik, któremu nadać uprawnienia do live").setRequired(true))
         .setName("live"),

@@ -59,5 +59,6 @@ export const Roles = {
     Team,
     OpiekunHounds,
     Hounds,
+    HoundsTeam: [ Hounds, OpiekunHounds, Team ],
     Czlonek
 };
