@@ -198,9 +198,9 @@ export class EventHandler {
 
             client.cache.delete(newState.member.id);
 
-            await channel.edit({ permissionOverwrites: [
-                { id: newState.member.id, deny: [ "ViewChannel", "Connect" ] }
-            ] }).catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
+            await channel.permissionOverwrites
+                .delete(newState.member.id, "Remove permissions for channel")
+                .catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
         });
 
         client.on("interactionCreate", async (interaction) => {
