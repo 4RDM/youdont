@@ -57,6 +57,7 @@ export class RDMBot extends Client {
     public database;
     public modals;
     public http;
+    public cache: Map<string, number> = new Map();
     private rateLimits: Map<string, Map<string, Date>> = new Map();
 
     constructor(options: BotOptions) {
