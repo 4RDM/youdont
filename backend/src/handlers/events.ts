@@ -186,7 +186,24 @@ export class EventHandler {
                 logger.error(`EventHandler(): Ready handler threw an error: ${err}`);
             }
         });
-        this.client.on("interactionCreate", async (interaction) => {
+
+        client.on("voiceStateUpdate", async (oldState, newState) => {
+            if (oldState.channelId === null || newState.channelId !== null) return;
+            if (!newState.member) return;
+            if (!client.cache.get(newState.member.id)) return;
+
+            const channel = await client.channels.fetch(oldState.channelId);
+
+            if (!channel || !channel.isVoiceBased()) return;
+
+            client.cache.delete(newState.member.id);
+
+            await channel.edit({ permissionOverwrites: [
+                { id: newState.member.id, deny: [ "ViewChannel", "Connect" ] }
+            ] }).catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
+        });
+
+        client.on("interactionCreate", async (interaction) => {
             await handleInteraction(interaction, this.client);
         });
     }
