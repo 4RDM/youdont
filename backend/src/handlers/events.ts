@@ -2,7 +2,7 @@ import { RDMBot } from "main";
 import logger from "utils/logger";
 import { handleInteraction } from "./interactions";
 import { getPlayers, getTops } from "utils/serverStatus";
-import { ActivityType, Channel, TextChannel } from "discord.js";
+import { ActivityType, Channel, OverwriteType, TextChannel } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import { embedColors } from "utils/constants";
 
@@ -198,8 +198,11 @@ export class EventHandler {
 
             client.cache.delete(newState.member.id);
 
-            await channel.permissionOverwrites
-                .delete(newState.member.id, "Remove permissions for channel")
+            await channel.permissionOverwrites.edit(newState.member.id, {
+                ViewChannel: null,
+                Connect: null,
+                Stream: null,
+            }, { reason: "User left the channel", type: OverwriteType.Member })
                 .catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
         });
 
