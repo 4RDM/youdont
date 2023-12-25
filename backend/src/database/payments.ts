@@ -28,7 +28,7 @@ export interface PaymentSchema {
 
 export interface PaymentSchemaAPI {
     id: string
-    product_id: string
+    product_id?: string
     title: string
     price: string
     payment_channel: string
@@ -143,7 +143,7 @@ export class PaymentsManager {
                             id,
                             paymentChannel: payment_channel,
                             price,
-                            productID: product_id,
+                            productID: product_id || "custom_url",
                             steamID: steam_id,
                             steamUsername: steam_username,
                             title,
@@ -400,6 +400,9 @@ export class PaymentsManager {
             let res = true;
 
             const productID = payment.getProductId();
+
+            if (productID == "custom_url")
+                return true;
 
             if (productID.startsWith("unban"))
                 res = await this.executeUnban(payment);
