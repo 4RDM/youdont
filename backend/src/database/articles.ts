@@ -26,7 +26,7 @@ export class ArticlesManager {
 
     async getByURL(articleURL: string): Promise<ArticleDatabaseResultObject | null> {
         try {
-            let connection = await this.getConnection();
+            const connection = await this.getConnection();
             let query = await connection.prepare("SELECT * FROM articles WHERE articleURL = ? LIMIT 1");
             const res: ArticleDatabaseResult = await query.execute([ articleURL ]);
 
@@ -35,7 +35,6 @@ export class ArticlesManager {
                 return null;
             }
 
-            connection = await this.getConnection();
             query = await connection.prepare("UPDATE articles SET views = views + 1 WHERE articleURL = ?");
             await query.execute([ articleURL ]);
 
@@ -51,7 +50,7 @@ export class ArticlesManager {
 
     async get(id: number): Promise<ArticleDatabaseResultObject | null> {
         try {
-            let connection = await this.getConnection();
+            const connection = await this.getConnection();
             let query = await connection.prepare("SELECT * FROM articles WHERE id = ? LIMIT 1");
             const res: ArticleDatabaseResult = await query.execute([ id ]);
 
@@ -60,7 +59,6 @@ export class ArticlesManager {
                 return null;
             }
 
-            connection = await this.getConnection();
             query = await connection.prepare("UPDATE articles SET views = views + 1 WHERE id = ?");
             await query.execute([ id ]);
 

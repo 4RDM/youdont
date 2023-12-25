@@ -256,26 +256,20 @@ export class PaymentsManager {
 
             const connection = await this.getConnection();
             const query = await connection.prepare("INSERT IGNORE INTO payments(id, productID, title, price, paymentChannel, email, steamID, steamUsername, discordID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            const response: OkPacketInterface = await query.execute([ payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID.replace("discord:", "") ]);
+            await query.execute([ payment.id, payment.productID, payment.title, payment.price, payment.paymentChannel, payment.email, payment.steamID, payment.steamUsername, payment.discordID.replace("discord:", "") ]);
 
             await connection.end();
 
             const newPayment = new Payment(payment);
 
-            if (!response.affectedRows) {
-                return false;
-            }
-
             const user = this.database.users.get(payment.discordID.replace("discord:", ""));
 
-            if (!user) {
-                logger.warn(`PaymentsManager.create(): Cannot create payment "${payment.id}", user not found!`);
-
-                return false;
+            if (user) {
+                newPayment.assignUser(user);
+                user.addPayment(newPayment);
+            } else {
+                logger.warn(`PaymentsManager.create(): No discord for payment "${payment.id}", user not found!`);
             }
-
-            newPayment.assignUser(user);
-            user.addPayment(newPayment);
 
             this.payments.set(payment.id, newPayment);
 
@@ -389,7 +383,7 @@ export class PaymentsManager {
                 return true;
             })
             .catch(() => {
-                return false;
+                return true;
             });
 
         return true;
@@ -417,7 +411,7 @@ export class PaymentsManager {
         } catch(err) {
             logger.error(err);
 
-            return false;
+            return true;
         }
     }
 
