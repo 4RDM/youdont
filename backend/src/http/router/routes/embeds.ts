@@ -2,6 +2,7 @@ import { Router } from "express";
 import { badRequest, internalError, notFound } from "../errors";
 
 import rateLimit from "express-rate-limit";
+import { Embed } from "utils/embedBuilder";
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -27,47 +28,54 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/:id", limiter, async (req, res) => {
-    const id = req.params.id;
-    const embed = req.core.embedCache.get(id);
+    try {
+        const id = req.params.id;
+        const embed = req.core.embedCache.get(id);
 
-    if (embed === undefined)
-        return notFound(res);
+        if (embed === undefined)
+            return notFound(res);
 
-    const { title, description, color, footer, thumbnail, image } = req.body;
+        const { title, description, color, footer, thumbnail, image, fields } =
+            Object.assign({
+                title: "",
+                description: "",
+                color: "",
+                footer: "",
+                thumbnail: "",
+                image: "",
+                fields: []
+            }, req.body);
 
-    if (!title || !description || !color || !footer || !thumbnail || !image)
-        return badRequest(res, "Missing parameters, { title: string, description: string, color: string, footer: string, thumbnail: string, image: string }");
+        const channel = await req.core.channels.fetch(embed.channelID);
 
-    const channel = await req.core.channels.fetch(embed.channelID);
+        if (!channel)
+            return internalError(res, "Channel not found");
 
-    if (!channel)
-        return internalError(res, "Channel not found");
+        if (!channel.isTextBased())
+            return badRequest(res, "Channel is not text based");
 
-    if (!channel.isTextBased())
-        return badRequest(res, "Channel is not text based");
+        await channel.send({
+            embeds: [
+                Embed({
+                    title,
+                    description,
+                    color,
+                    footer,
+                    thumbnail,
+                    image,
+                    fields
+                })
+            ],
+        }).catch(err => {
+            return internalError(res, err);
+        });
 
-    await channel.send({
-        embeds: [
-            {
-                title,
-                description,
-                color,
-                footer: {
-                    text: footer,
-                },
-                thumbnail: {
-                    url: thumbnail,
-                },
-                image: {
-                    url: image,
-                },
-            }
-        ],
-    }).catch(err => {
-        return internalError(res, err);
-    });
+        req.core.embedCache.delete(id);
 
-    res.json({ code: 200 });
+        res.json({ code: 200 });
+    } catch (err) {
+        return internalError(res, err as string);
+    }
 });
 
 export default router;

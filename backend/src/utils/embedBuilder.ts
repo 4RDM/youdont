@@ -64,8 +64,8 @@ export const Embed = ({
         embed
             .setFooter({ text: `${user.tag} (${user.id})` })
             .setTimestamp(new Date());
-    if (image) embed.setImage(image);
-    if (thumbnail) embed.setThumbnail(thumbnail);
+    if (image && image.replace(/[ \n\t]/gm, "") !== "") embed.setImage(image);
+    if (thumbnail && thumbnail.replace(/[ \n\t]/gm, "") !== "") embed.setThumbnail(thumbnail);
     if (icon) embed.setIcon(icon);
 
     return embed;

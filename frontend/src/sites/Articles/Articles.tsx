@@ -87,7 +87,7 @@ export default () => {
 						</article>
 					))}
 				</div>
-		}
+			}
 		</div>
 	)
 }

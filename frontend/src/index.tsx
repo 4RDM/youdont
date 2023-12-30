@@ -18,6 +18,7 @@ const Article = lazy(() => import('./sites/Articles/Article'))
 
 import './index.scss'
 import UserHome from './sites/Dashboard/UserHome'
+import Embeds from './sites/Embeds/Embeds';
 
 const App = () => {
 	const location = useLocation()
@@ -71,6 +72,7 @@ const App = () => {
 							<Route path="administration" element={<AdminList />} />
 							{/* <Route path="about" element={<About />} /> */}
 							{/* <Route path="dashboard" element={<Dashboard />} /> */}
+							<Route path="embeds/:id" element={<Embeds />} />
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Routes>
@@ -78,14 +80,14 @@ const App = () => {
 			</div>
 			<Toaster
 				position="bottom-right"
-			toastOptions={{
-				error: {
-					style: {
-						background: '#333',
-						color: '#fff',
-					},
-				}
-			}}
+				toastOptions={{
+					error: {
+						style: {
+							background: '#333',
+							color: '#fff',
+						},
+					}
+				}}
 			/>
 			<Footer />
 		</>
