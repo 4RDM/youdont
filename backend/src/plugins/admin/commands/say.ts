@@ -1,9 +1,9 @@
+import { randomUUID } from "crypto";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
-import { Roles, embedColors } from "utils/constants";
-import { Embed } from "utils/embedBuilder";
+import { Roles } from "utils/constants";
 
-export default async function ({ interaction }: CommandArgs) {
+export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
     if (!interaction.inGuild()) return;
 
@@ -11,19 +11,16 @@ export default async function ({ interaction }: CommandArgs) {
     const embed = interaction.options.getBoolean("embed", false);
 
     if (embed) {
-        await interaction.Reply([
-            Embed({
-                title: "Wiadomość od administracji",
-                thumbnail: "https://4rdm.pl/assets/logo.png",
-                description: message,
-                user: interaction.user,
-                color: embedColors.red,
-            })
-        ]);
+        const uuid = randomUUID();
+
+        client.embedCache.set(uuid, { channelID: interaction.channelId, content: message, time: Date.now() });
+        
+        await interaction.Reply(`https://4rdm.pl/embeds/${uuid}`, {
+            ephemeral: true,
+        });
     } else {
         await interaction.Reply(message);
     }
-
 }
 
 export const info: CommandInfoType = {
