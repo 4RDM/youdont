@@ -9,7 +9,7 @@ import { getUserHex } from "./hex";
 import { selectUserHex } from "./shared";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import hexToRGB from "utils/hexToRGB";
-import { Embed } from "utils/embedBuilder";
+import { Embed, ErrorEmbedInteraction } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
 import rcon from "utils/rcon";
 import { readFile } from "fs/promises";
@@ -72,7 +72,10 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     interaction.Reply([ embed ]);
 
-    return await rcon("reloadchat");
+    return await rcon("reloadchat")
+        .catch(() => {
+            interaction.editReply({ embeds: [ ErrorEmbedInteraction(interaction, "Nie udało się wysłać polecenia") ] });
+        });
 }
 
 export const info: CommandInfoType = {
