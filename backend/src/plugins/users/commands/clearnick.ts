@@ -35,16 +35,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     const currentHex = await selectUserHex(userHexes, interaction);
 
-    console.log(currentHex);
-
     if (currentHex === false) return;
 
     delete rolesJson[currentHex as `steam:${string}`];
 
     writeFileSync(filePath, JSON.stringify(rolesJson, null, "\t"), { encoding: "utf-8" });
 
-    console.log(interaction);
-    
     const embed = Embed({
         title: ":x: | Wyczyszczono przedrostek",
         color: embedColors.red,
