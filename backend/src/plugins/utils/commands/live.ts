@@ -13,7 +13,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     if (!member.voice.channel) return await interaction.Error("Użytkownik nie jest na kanale głosowym!", { ephemeral: true });
 
-    client.cache.set(member.id, 1);
+    client.liveCache.set(member.id, 1);
 
     await member.voice.channel.permissionOverwrites.create(member.id, {
         ViewChannel: true,

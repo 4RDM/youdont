@@ -57,7 +57,9 @@ export class RDMBot extends Client {
     public database;
     public modals;
     public http;
-    public cache: Map<string, number> = new Map();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public embedCache: Map<string, { content: string, channelID: string, time: number }> = new Map();
+    public liveCache: Map<string, number> = new Map();
     private rateLimits: Map<string, Map<string, Date>> = new Map();
 
     constructor(options: BotOptions) {
@@ -84,6 +86,14 @@ export class RDMBot extends Client {
             this.init();
             this.http.listen();
         });
+
+        setInterval(() => {
+            this.embedCache.forEach((value, key) => {
+                if (Date.now() > (value.time + 1000 * 60 * 60 * 3)) {
+                    this.embedCache.delete(key);
+                }
+            });
+        }, 1000 * 30);
     }
 
     init() {

@@ -190,13 +190,13 @@ export class EventHandler {
         client.on("voiceStateUpdate", async (oldState, newState) => {
             if (oldState.channelId === null || newState.channelId !== null) return;
             if (!newState.member) return;
-            if (!client.cache.get(newState.member.id)) return;
+            if (!client.liveCache.get(newState.member.id)) return;
 
             const channel = await client.channels.fetch(oldState.channelId);
 
             if (!channel || !channel.isVoiceBased()) return;
 
-            client.cache.delete(newState.member.id);
+            client.liveCache.delete(newState.member.id);
 
             await channel.permissionOverwrites.delete(newState.member.id, "User left the channel")
                 .catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
