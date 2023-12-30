@@ -13,6 +13,8 @@ export default async function(client: RDMBot, interaction: Interaction) {
     if (!interaction.inGuild()) return;
     if (!interaction.isCommand()) return;
 
+    await interaction.deferReply(); // Some commands may take a while to execute, this will let the user know that the bot is processing the command
+
     const command = client.commands.get(interaction.commandName);
 
     if (!command)
