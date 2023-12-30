@@ -49,7 +49,9 @@ export default async function ({ interaction }: CommandArgs) {
 }
 
 export async function autocomplete(_: CommandArgs["client"], interaction: AutocompleteInteraction) {
-    interaction.respond([
+    if (!interaction.isAutocomplete()) return;
+
+    await interaction.respond([
         { name: "6 godzin", value: 21600 },
         { name: "12 godzin", value: 43200 },
         { name: "1 dzień", value: 86400 },
