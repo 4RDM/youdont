@@ -8,7 +8,6 @@ import handleModalSubmit from "./events/modalSubmit";
 
 declare module "discord.js" {
     interface BaseInteraction {
-        hasReplied: boolean;
         Reply: (content: string | EB[], options?: InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
         Error: (content: string, options?: InteractionReplyOptions) => Promise<Message<boolean> | InteractionResponse<boolean> | undefined>;
     }
@@ -28,11 +27,10 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         else if (content[0] instanceof EB)
             messageObject = Object.assign(options || {}, { embeds: content });
 
-        if (interaction.hasReplied || interaction.replied) {
-            return interaction.deferReply(messageObject);
+        if (interaction.replied) {
+            return await interaction.followUp(messageObject);
         } else {
-            interaction.hasReplied = true;
-            return interaction.reply(messageObject);
+            return await interaction.reply(messageObject);
         }
     };
 
