@@ -70,7 +70,7 @@ export default () => {
         setList([ ...list, { name: "", value: "", inline: false } ]);
     };
 
-    const editField = (index: number, field: "title" | "value" | "inline", value: string | boolean) => {
+    const editField = (index: number, field: "title" | "name" | "inline", value: string | boolean) => {
         const listCopy = list;
         if (!listCopy[index]) return;
         // @ts-ignore
@@ -125,7 +125,7 @@ export default () => {
                         <div className="field">
                             <div className="embed-editor-input">
                                 <p>Tytuł</p>
-                                <input type="text" defaultValue={field.name} onChange={(e) => editField(i, "title", e.target.value)} />
+                                <input type="text" defaultValue={field.name} onChange={(e) => editField(i, "name", e.target.value)} />
                             </div>
                             <div className="embed-editor-input">
                                 <p>Wartość</p>
