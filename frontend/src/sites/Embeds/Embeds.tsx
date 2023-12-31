@@ -91,27 +91,27 @@ export default () => {
                     <h1>Ustawienia</h1>
                     <div className="embed-editor-input">
                         <p>Tytuł</p>
-                        <input type="text" value={title.current?.value} ref={title} />
+                        <input type="text" ref={title} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Opis</p>
-                        <textarea id="description" value={description.current?.value} ref={description} />
+                        <textarea id="description" ref={description} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Kolor</p>
-                        <input type="color" ref={color} value={color.current?.value} defaultValue="#feff2f" />
+                        <input type="color" ref={color} defaultValue="#feff2f" />
                     </div>
                     <div className="embed-editor-input">
                         <p>Miniaturka</p>
-                        <input type="text" value={thumbnail.current?.value} ref={thumbnail} />
+                        <input type="text" ref={thumbnail} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Obrazek</p>
-                        <input type="text" value={image.current?.value} ref={image} />
+                        <input type="text" ref={image} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Stopka</p>
-                        <input type="text" value={footer.current?.value} ref={footer} />
+                        <input type="text" ref={footer} />
                     </div>
                 </div>
                 <div className="pane">
