@@ -9,12 +9,12 @@ import "./Embeds.scss";
 export default () => {
     const { id } = useParams();
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [color, setColor] = useState("");
-    const [footer, setFooter] = useState("");
-    const [thumbnail, setThumbnail] = useState("");
-    const [image, setImage] = useState("");
+    const title = useRef<HTMLInputElement>(null);
+    const description = useRef<HTMLTextAreaElement>(null);
+    const color = useRef<HTMLInputElement>(null);
+    const footer = useRef<HTMLInputElement>(null);
+    const thumbnail = useRef<HTMLInputElement>(null);
+    const image = useRef<HTMLInputElement>(null);
     const [list, setList] = useState<{
         name: string,
         value: string,
@@ -39,12 +39,12 @@ export default () => {
 
     const handleSubmit = () => {
         const data = {
-            title: title,
-            description: description,
-            color: color,
-            footer: footer,
-            thumbnail: thumbnail,
-            image: image,
+            title: title.current?.value,
+            description: description.current?.value,
+            color: color.current?.value,
+            footer: footer.current?.value,
+            thumbnail: thumbnail.current?.value,
+            image: image.current?.value,
             fields: list,
         };
 
@@ -91,27 +91,27 @@ export default () => {
                     <h1>Ustawienia</h1>
                     <div className="embed-editor-input">
                         <p>Tytuł</p>
-                        <input type="text" onChange={(e) => setTitle(e.target.value)} />
+                        <input type="text" ref={title} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Opis</p>
-                        <textarea id="description" onChange={(e) => setDescription(e.target.value)} />
+                        <textarea id="description" ref={description} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Kolor</p>
-                        <input type="color" onChange={(e) => setColor(e.target.value)} defaultValue="#feff2f" />
+                        <input type="color" ref={color} defaultValue="#feff2f" />
                     </div>
                     <div className="embed-editor-input">
                         <p>Miniaturka</p>
-                        <input type="text" onChange={(e) => setThumbnail(e.target.value)} />
+                        <input type="text" ref={thumbnail} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Obrazek</p>
-                        <input type="text" onChange={(e) => setImage(e.target.value)} />
+                        <input type="text" ref={image} />
                     </div>
                     <div className="embed-editor-input">
                         <p>Stopka</p>
-                        <input type="text" onChange={(e) => setFooter(e.target.value)} />
+                        <input type="text" ref={footer} />
                     </div>
                 </div>
                 <div className="pane">
