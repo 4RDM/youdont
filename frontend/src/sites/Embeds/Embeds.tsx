@@ -70,7 +70,7 @@ export default () => {
         setList([ ...list, { name: "", value: "", inline: false } ]);
     };
 
-    const editField = (index: number, field: "title" | "name" | "inline", value: string | boolean) => {
+    const editField = (index: number, field: "value" | "name" | "inline", value: string | boolean) => {
         const listCopy = list;
         if (!listCopy[index]) return;
         // @ts-ignore
