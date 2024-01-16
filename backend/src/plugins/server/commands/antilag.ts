@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
-import { embedColors } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 import { readFile } from "fs/promises";
 
 const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/antilag.json");
@@ -61,6 +61,7 @@ export const info: CommandInfoType = {
     name: "antilag",
     description: "Antilag do samochodu",
     permissions: PermissionFlagsBits.Administrator,
+    role: Roles.AntilagTeam,
     builder: new SlashCommandBuilder()
         .addSubcommand(subcommand =>
             subcommand

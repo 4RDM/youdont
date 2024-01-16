@@ -35,10 +35,12 @@ const Team = "843444642539110400";
 const OpiekunHounds = "962784956197765192";
 const Hounds = "932345054142529538";
 const Czlonek = "843476029226221609";
+const Antilag = "1196829757363474554";
 
 export const Roles = {
     DodajTeam: [ Owner, Zarzad, Dodaj, HeadAdmin ],
     NickTeam: [ Owner, Zarzad, Nick, HeadAdmin ],
+    AntilagTeam: [ Owner, Zarzad, Antilag, HeadAdmin ],
     NotatkaTeam: [ Owner, Zarzad, HeadAdmin, Developer ],
     DeveloperTeam: [ Owner, Zarzad, HeadAdmin, Developer ],
     Owner,
