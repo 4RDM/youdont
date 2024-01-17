@@ -48,7 +48,7 @@ export const info: CommandInfoType = {
     name: "ban",
     description: "Zbanuj osobę",
     permissions: PermissionFlagsBits.BanMembers,
-    role: [ Roles.Team ],
+    role: [ Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.SeniorAdmin, Roles.Admin, Roles.JuniorAdmin, Roles.SeniorModerator ],
     builder: new SlashCommandBuilder()
         .addUserOption(option => option.setName("mention").setDescription("Użytkownik do zbanowania").setRequired(true))
         .addStringOption(option => option.setName("reason").setDescription("Powód zbanowania").setRequired(false))
