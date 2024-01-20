@@ -1,7 +1,7 @@
-import { AutocompleteInteraction, SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "utils/embedBuilder";
 import { Roles as Rl } from "utils/constants";
-import { CommandArgs, CommandInfoType } from "handlers/commands";
+import { AutocompleteArgs, CommandArgs, CommandInfoType } from "handlers/commands";
 import logger from "utils/logger";
 
 export default async function ({ interaction }: CommandArgs) {
@@ -30,8 +30,8 @@ export default async function ({ interaction }: CommandArgs) {
         });
 }
 
-export async function autocomplete(client: CommandArgs["client"], interaction: AutocompleteInteraction) {
-    // if (!interaction.isAutocomplete()) return;
+export async function autocomplete({ interaction }: AutocompleteArgs) {
+    if (!interaction.isAutocomplete()) return;
 
     const response = [
         {

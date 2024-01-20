@@ -121,7 +121,7 @@ export default async function ({ interaction, client }: CommandArgs) {
 }
 
 export async function autocomplete({ interaction, client }: AutocompleteArgs) {
-    // if (!interaction.isAutocomplete()) return;
+    if (!interaction.isAutocomplete()) return;
 
     const focused = interaction.options.getFocused(true);
 

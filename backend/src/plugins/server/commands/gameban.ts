@@ -1,9 +1,8 @@
 import {
-    AutocompleteInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
-import { CommandArgs, CommandInfoType } from "handlers/commands";
+import { AutocompleteArgs, CommandArgs, CommandInfoType } from "handlers/commands";
 import { Roles, embedColors } from "utils/constants";
 import { Embed, ErrorEmbedInteraction } from "utils/embedBuilder";
 import rcon from "utils/rcon";
@@ -48,8 +47,8 @@ export default async function ({ interaction }: CommandArgs) {
         });
 }
 
-export async function autocomplete(_: CommandArgs["client"], interaction: AutocompleteInteraction) {
-    // if (!interaction.isAutocomplete()) return;
+export async function autocomplete({ interaction }: AutocompleteArgs) {
+    if (!interaction.isAutocomplete()) return;
 
     await interaction.respond([
         { name: "6 godzin", value: 21600 },
