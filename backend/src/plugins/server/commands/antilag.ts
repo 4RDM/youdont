@@ -61,7 +61,7 @@ export const info: CommandInfoType = {
     name: "antilag",
     description: "Antilag do samochodu",
     permissions: PermissionFlagsBits.Administrator,
-    role: Roles.AntilagTeam,
+    role: [Roles.AntilagTeam],
     builder: new SlashCommandBuilder()
         .addSubcommand(subcommand =>
             subcommand
