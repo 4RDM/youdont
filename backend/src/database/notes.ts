@@ -138,7 +138,7 @@ export class NotesManager {
     async delete(id: number) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("DELETE FROM notes WHERE id = ?");
+            const query = await connection.prepare("DELETE FROM notes WHERE noteID = ?");
             const res: OkPacketInterface = await query.execute([ id ]);
 
             await connection.end();
