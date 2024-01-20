@@ -31,7 +31,7 @@ export default async function ({ interaction }: CommandArgs) {
 }
 
 export async function autocomplete(client: CommandArgs["client"], interaction: AutocompleteInteraction) {
-    if (!interaction.isAutocomplete()) return;
+    // if (!interaction.isAutocomplete()) return;
 
     const response = [
         {
