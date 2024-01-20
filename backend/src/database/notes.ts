@@ -96,13 +96,13 @@ export class NotesManager {
             if (!userRes || !authorRes)
                 return false;
 
+            const notes = this.getUserNotes(discordID);
+
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT INTO notes(discordID, authorID, content) VALUES(?, ?, ?)");
-            const res: OkPacketInterface = await query.execute([ discordID, authorID, content ]);
+            const query = await connection.prepare("INSERT INTO notes(discordID, authorID, content, noteID) VALUES(?, ?, ?)");
+            const res: OkPacketInterface = await query.execute([ discordID, authorID, content, notes ? notes.length + 1 : 1 ]);
 
             await connection.end();
-
-            const notes = this.getUserNotes(discordID);
 
             const note = new Note(
                 res.insertId,
