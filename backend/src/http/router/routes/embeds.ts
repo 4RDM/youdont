@@ -46,8 +46,6 @@ router.post("/:id", limiter, async (req, res) => {
                 fields: []
             }, req.body);
 
-        console.log(req.body)
-
         const channel = await req.core.channels.fetch(embed.channelID);
 
         if (!channel)
