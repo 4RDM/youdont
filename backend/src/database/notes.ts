@@ -99,7 +99,7 @@ export class NotesManager {
             const notes = this.getUserNotes(discordID);
 
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT INTO notes(discordID, authorID, content, noteID) VALUES(?, ?, ?)");
+            const query = await connection.prepare("INSERT INTO notes(discordID, authorID, content, noteID) VALUES(?, ?, ?, ?)");
             const res: OkPacketInterface = await query.execute([ discordID, authorID, content, notes ? notes.length + 1 : 1 ]);
 
             await connection.end();
@@ -138,7 +138,7 @@ export class NotesManager {
     async delete(id: number) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("DELETE FROM notes WHERE noteID = ?");
+            const query = await connection.prepare("DELETE FROM notes WHERE id = ?");
             const res: OkPacketInterface = await query.execute([ id ]);
 
             await connection.end();
@@ -151,7 +151,7 @@ export class NotesManager {
             if (!note.user)
                 return false;
 
-            note.user.deleteNoteByID(id);
+            note.user.deleteNoteByID(note.noteID);
 
             this.notes.delete(id);
 

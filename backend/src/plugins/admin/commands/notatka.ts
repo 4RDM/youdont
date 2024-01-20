@@ -49,7 +49,12 @@ export default async function ({ interaction, client }: CommandArgs) {
         if (!dbUser)
             return await interaction.Error("Nieznaleziono użytkownika w bazie danych!", { ephemeral: true });
 
-        const response = await client.database.notes.delete(id);
+        const note = dbUser.getNote(id);
+
+        if (!note)
+            return await interaction.Error(`Nie znaleziono notatki od id ${id || "brak"}`, { ephemeral: true });
+
+        const response = await client.database.notes.delete(note.id);
 
         if (!response)
             return await interaction.Error("Wystąpił wewnętrzny błąd bota (KOD: COMMAND_NOTE_DELETE_DB_ERROR). Spróbuj ponownie później / skontaktuj się z administracją!", { ephemeral: true });
