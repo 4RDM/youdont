@@ -71,15 +71,14 @@ export class UsersManager extends EventEmitter {
     async fetch() {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM users");
-            const response: UserSchema[] = await query.execute();
+            const res: UserSchema[] = await connection.query("SELECT * FROM users");
 
             await connection.end();
 
-            if (!response)
+            if (!res)
                 return false;
 
-            response.forEach(user => this.users.set(user.discordID, new User(user.discordID, new Date(user.createdAt))));
+            res.forEach(user => this.users.set(user.discordID, new User(user.discordID, new Date(user.createdAt))));
 
             return true;
         } catch(err) {
@@ -92,12 +91,11 @@ export class UsersManager extends EventEmitter {
     async create(discordID: string) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT IGNORE INTO users(discordID) VALUES(?)");
-            const response: OkPacketInterface = await query.execute([ discordID ]);
+            const res: OkPacketInterface = await connection.execute("INSERT IGNORE INTO users(discordID) VALUES(?)", [ discordID ]);
 
             await connection.end();
 
-            if (response.affectedRows || !this.users.get(discordID)) {
+            if (res.affectedRows || !this.users.get(discordID)) {
                 const newUser = new User(discordID, new Date());
                 this.users.set(discordID, newUser);
             }

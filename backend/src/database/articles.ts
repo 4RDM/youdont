@@ -27,16 +27,14 @@ export class ArticlesManager {
     async getByURL(articleURL: string): Promise<ArticleDatabaseResultObject | null> {
         try {
             const connection = await this.getConnection();
-            let query = await connection.prepare("SELECT * FROM articles WHERE articleURL = ? LIMIT 1");
-            const res: ArticleDatabaseResult = await query.execute([ articleURL ]);
+            const res: ArticleDatabaseResult = await connection.query("SELECT * FROM articles WHERE articleURL = ? LIMIT 1", [ articleURL ]);
 
             if (!res[0]) {
                 await connection.end();
                 return null;
             }
 
-            query = await connection.prepare("UPDATE articles SET views = views + 1 WHERE articleURL = ?");
-            await query.execute([ articleURL ]);
+            await connection.execute("UPDATE articles SET views = views + 1 WHERE articleURL = ?", [ articleURL ]);
 
             await connection.end();
 
@@ -51,16 +49,14 @@ export class ArticlesManager {
     async get(id: number): Promise<ArticleDatabaseResultObject | null> {
         try {
             const connection = await this.getConnection();
-            let query = await connection.prepare("SELECT * FROM articles WHERE id = ? LIMIT 1");
-            const res: ArticleDatabaseResult = await query.execute([ id ]);
+            const res: ArticleDatabaseResult = await connection.execute("SELECT * FROM articles WHERE id = ? LIMIT 1", [ id ]);
 
             if (!res[0]) {
                 await connection.end();
                 return null;
             }
 
-            query = await connection.prepare("UPDATE articles SET views = views + 1 WHERE id = ?");
-            await query.execute([ id ]);
+            await connection.execute("UPDATE articles SET views = views + 1 WHERE id = ?", [ id ]);
 
             await connection.end();
 
@@ -75,8 +71,7 @@ export class ArticlesManager {
     async getAll(): Promise<ArticleDatabaseResult | null> {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM articles");
-            const res: ArticleDatabaseResult = await query.execute();
+            const res: ArticleDatabaseResult = await connection.execute("SELECT * FROM articles");
 
             await connection.end();
 
@@ -93,8 +88,7 @@ export class ArticlesManager {
     async create({ articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResultObject | null> {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT INTO articles (articleURL, title, content, articleDescription, discordID) VALUES (?, ?, ?, ?, ?)");
-            const article: OkPacketInterface = await query.execute([ articleURL, title, content, articleDescription, discordID ]);
+            const article: OkPacketInterface = await connection.execute("INSERT INTO articles (articleURL, title, content, articleDescription, discordID) VALUES (?, ?, ?, ?, ?)", [ articleURL, title, content, articleDescription, discordID ]);
 
             await connection.end();
 
@@ -111,8 +105,7 @@ export class ArticlesManager {
     async update(id: number, { articleURL, title, content, articleDescription, discordID }: { articleURL: string, title: string; content: string; articleDescription: string; discordID: string }): Promise<ArticleDatabaseResultObject | null> {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("UPDATE articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?");
-            const res: OkPacketInterface = await query.execute([ articleURL, discordID, title, content, articleDescription, id ]);
+            const res: OkPacketInterface = await connection.execute("UPDATE articles SET articleURL = ?, discordID = ?, title = ?, content = ?, articleDescription = ? WHERE id = ?", [ articleURL, discordID, title, content, articleDescription, id ]);
 
             await connection.end();
 
@@ -129,8 +122,7 @@ export class ArticlesManager {
     async delete(id: number): Promise<boolean> {
         try {
             const connection  = await this.getConnection();
-            const query = await connection.prepare("DELETE FROM articles WHERE id = ?");
-            const res: OkPacketInterface = await query.execute([ id ]);
+            const res: OkPacketInterface = await connection.execute("DELETE FROM articles WHERE id = ?", [ id ]);
 
             await connection.end();
 

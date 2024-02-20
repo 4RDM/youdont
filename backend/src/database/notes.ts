@@ -52,15 +52,14 @@ export class NotesManager {
     async fetch() {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM notes");
-            const response: NoteSchema[] = await query.execute();
+            const res: NoteSchema[] = await connection.query("SELECT * FROM notes");
 
             await connection.end();
 
-            if (!response)
+            if (!res)
                 return false;
 
-            response.forEach(note => {
+            res.forEach(note => {
                 const newNote = new Note(note.id, note.noteID, note.content, new Date(note.createdAt));
 
                 const user = this.database.users.get(note.discordID);
@@ -99,8 +98,7 @@ export class NotesManager {
             const notes = this.getUserNotes(discordID);
 
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT INTO notes(discordID, authorID, content, noteID) VALUES(?, ?, ?, ?)");
-            const res: OkPacketInterface = await query.execute([ discordID, authorID, content, notes ? notes.length + 1 : 1 ]);
+            const res: OkPacketInterface = await connection.execute("INSERT INTO notes(discordID, authorID, content, noteID) VALUES(?, ?, ?, ?)", [ discordID, authorID, content, notes ? notes.length + 1 : 1 ]);
 
             await connection.end();
 
@@ -138,8 +136,7 @@ export class NotesManager {
     async delete(id: number) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("DELETE FROM notes WHERE id = ?");
-            const res: OkPacketInterface = await query.execute([ id ]);
+            const res: OkPacketInterface = await connection.execute("DELETE FROM notes WHERE id = ?", [ id ]);
 
             await connection.end();
 

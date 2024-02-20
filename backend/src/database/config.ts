@@ -14,8 +14,7 @@ export class ConfigManager {
 
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("INSERT INTO config(dKey, dValue) VALUES(?, ?) ON DUPLICATE KEY UPDATE dValue = VALUES(dValue)");
-            const res: OkPacketInterface = await query.execute([ key, value ]);
+            const res: OkPacketInterface = await connection.execute("INSERT INTO config(dKey, dValue) VALUES(?, ?) ON DUPLICATE KEY UPDATE dValue = VALUES(dValue)", [ key, value ]);
 
             await connection.end();
 
@@ -30,8 +29,7 @@ export class ConfigManager {
     async get(key: string) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM config WHERE dKey = ?");
-            const res: { dKey: string, dValue: string }[] = await query.execute([ key ]);
+            const res: { dKey: string, dValue: string }[] = await connection.query("SELECT * FROM config WHERE dKey = ?", [ key ]);
 
             await connection.end();
 
@@ -49,8 +47,7 @@ export class ConfigManager {
     async getAll() {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM config");
-            const res: { dKey: string, dValue: string }[] = await query.execute();
+            const res: { dKey: string, dValue: string }[] = await connection.query("SELECT * FROM config");
 
             await connection.end();
 
@@ -65,8 +62,7 @@ export class ConfigManager {
     async reset(key: string) {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("DELETE FROM config WHERE dKey = ?");
-            const res: OkPacketInterface = await query.execute([ key ]);
+            const res: OkPacketInterface = await connection.execute("DELETE FROM config WHERE dKey = ?", [ key ]);
 
             await connection.end();
 

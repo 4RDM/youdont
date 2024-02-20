@@ -28,8 +28,7 @@ export class BansManager {
     async fetch() {
         try {
             const connection = await this.getConnection();
-            const query = await connection.prepare("SELECT * FROM bans");
-            const response: BanSchema[] = await query.execute();
+            const response: BanSchema[] = await connection.query("SELECT * FROM bans");
 
             await connection.end();
 
@@ -47,8 +46,7 @@ export class BansManager {
         try {
             const connection = await this.getConnection();
 
-            const query = await connection.prepare("INSERT IGNORE INTO bans(banID) VALUES(?)");
-            const res: OkPacketInterface = await query.execute([ banID ]);
+            const res: OkPacketInterface = await connection.execute("INSERT IGNORE INTO bans(banID) VALUES(?)" ,[ banID ]);
 
             await connection.end();
 
@@ -76,8 +74,7 @@ export class BansManager {
         try {
             const connection = await this.getConnection();
 
-            const query = await connection.prepare("UPDATE bans SET counter = 0 WHERE banID = ?");
-            const res: OkPacketInterface = await query.execute([ banID ]);
+            const res: OkPacketInterface = await connection.execute("UPDATE bans SET counter = 0 WHERE banID = ?", [ banID ]);
 
             await connection.end();
 
@@ -97,8 +94,7 @@ export class BansManager {
 
             const connection = await this.getConnection();
 
-            const query = await connection.prepare("UPDATE bans SET counter = counter + 1 WHERE banID = ?");
-            await query.execute([ banID ]);
+            await connection.execute("UPDATE bans SET counter = counter + 1 WHERE banID = ?", [ banID ]);
 
             await connection.end();
 

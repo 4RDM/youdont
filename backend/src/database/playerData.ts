@@ -72,8 +72,7 @@ export class PlayerDataManager {
     async getUserFromServer(discordID: string) {
         try {
             const connection = await this.database.getServerConnection();
-            const query = await connection.prepare("SELECT * FROM kdr WHERE discord = ?");
-            const res: DBUser[] = await query.execute([ discordID ]);
+            const res: DBUser[] = await connection.query("SELECT * FROM kdr WHERE discord = ?", [ discordID ]);
 
             await connection.end();
 
@@ -86,8 +85,7 @@ export class PlayerDataManager {
     async getDiscordBySteam(steam: string) {
         try {
             const connection = await this.database.getServerConnection();
-            const query = await connection.prepare("SELECT discord FROM users WHERE identifier = ?");
-            const res: Array<{ discord: string }> = await query.execute([ steam ]);
+            const res: Array<{ discord: string }> = await connection.query("SELECT discord FROM users WHERE identifier = ?", [ steam ]);
 
             await connection.end();
             

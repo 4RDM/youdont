@@ -1,5 +1,5 @@
 import logger from "utils/logger";
-import { Database, OkPacketInterface } from "./database";
+import { Database } from "./database";
 import { User } from "./users";
 import { addFile } from "utils/filesystem";
 import rcon from "utils/rcon";
