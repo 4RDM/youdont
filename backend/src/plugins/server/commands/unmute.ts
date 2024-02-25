@@ -19,7 +19,6 @@ export default async function ({ interaction }: CommandArgs) {
 
     if (!interactionReply) return;
     let command = `unmuteoffline ${muteid.toString().replace(/[`;]/gm, "").split(";")[0]}`;
-    console.log(playerid);
     if (playerid) {
         command = `unmute ${muteid.toString().replace(/[`;]/gm, "").split(";")[0]} ${playerid.toString().replace(/[`;]/gm, "").split(";")[0]}`;
     }
