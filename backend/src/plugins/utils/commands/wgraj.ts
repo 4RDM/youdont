@@ -9,7 +9,7 @@ import { Embed } from "utils/embedBuilder";
 export default async function ({ interaction }: CommandArgs) {
     const file = interaction.options.get("file", true);
 
-    interaction.deferReply();
+    await interaction.deferReply();
 
     if (!file)
         return await interaction.Error("Nie podano pliku");
@@ -27,17 +27,20 @@ export default async function ({ interaction }: CommandArgs) {
         return await interaction.Error(`Plik jest za duży \`${Math.round(attachment.size / (1024 * 1024))}MB\` (max: \`100MB\`)`);
 
     try {
-        const stream = createWriteStream(join(__dirname, `../../../../temp/${attachment.name}_${Date.now()}.zip`));
-        const { body } = await fetch(attachment.url);
-
-        if (!body)
-            return await interaction.Error("Wystąpił błąd podczas pobierania pliku");
-
-        // I don't want to mess with typescript here so I'm casting it to any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await finished(Readable.fromWeb(body as any).pipe(stream));
-
-        stream.close();
+        const stream = createWriteStream(join(__dirname, `../../../../temp/${attachment.name}_${Date.now()}.zip`), { flags: "w" });
+        
+        stream.on("open", async () => {
+            const { body } = await fetch(attachment.url);
+              
+            if (!body)
+                return await interaction.Error("Wystąpił błąd podczas pobierania pliku");
+    
+            // I don't want to mess with typescript here so I'm casting it to any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await finished(Readable.fromWeb(body as any).pipe(stream));
+              
+            stream.close();  
+        });
     } catch(err) {
         return await interaction.Error("Wystąpił błąd podczas zapisywania pliku");
     }
