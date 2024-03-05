@@ -3,8 +3,19 @@ import { CommandArgs, CommandInfoType } from "handlers/commands";
 // import { Embed } from "utils/embedBuilder";
 
 export default async function ({ interaction }: CommandArgs) {
-    interaction;
-    // template for upload command
+    const file = interaction.options.get("file", true);
+
+    if (!file)
+        return interaction.Error("Nie podano pliku", { ephemeral: true });
+
+    if (!file.attachment)
+        return interaction.Error("Nie podano pliku", { ephemeral: true });
+
+    const attachment = file.attachment;
+
+    console.log(attachment.contentType);
+
+    interaction.Reply("Plik został przesłany");
 }
 
 export const info: CommandInfoType = {
