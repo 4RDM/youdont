@@ -30,7 +30,9 @@ export const handleInteraction = async (interaction: Interaction, client: RDMBot
         if (interaction.replied) {
             return await interaction.followUp(messageObject);
         } else {
-            return await interaction.reply(messageObject);
+            if (!interaction.deferred)
+                return await interaction.reply(messageObject);
+            else return await interaction.editReply(messageObject);
         }
     };
 

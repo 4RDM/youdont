@@ -1,4 +1,4 @@
-import { GuildMember, SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { createWriteStream } from "fs";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { join } from "path";
@@ -12,26 +12,26 @@ export default async function ({ interaction }: CommandArgs) {
     interaction.deferReply();
 
     if (!file)
-        return await interaction.Error("Nie podano pliku", { ephemeral: true });
+        return await interaction.Error("Nie podano pliku");
 
     if (!file.attachment)
-        return await interaction.Error("Nie podano pliku", { ephemeral: true });
+        return await interaction.Error("Nie podano pliku");
 
     const attachment = file.attachment;
 
     if (attachment.contentType !== "application/zip")
-        return await interaction.Error("Plik musi być w formacie .zip", { ephemeral: true });
+        return await interaction.Error("Plik musi być w formacie .zip");
 
     // 100 MB
     if (attachment.size > 1024 * 1024 * 100)
-        return await interaction.Error(`Plik jest za duży \`${Math.round(attachment.size / (1024 * 1024))}MB\` (max: \`100MB\`)`, { ephemeral: true });
+        return await interaction.Error(`Plik jest za duży \`${Math.round(attachment.size / (1024 * 1024))}MB\` (max: \`100MB\`)`);
 
     try {
         const stream = createWriteStream(join(__dirname, `../../../../temp/${attachment.name}_${Date.now()}.zip`));
         const { body } = await fetch(attachment.url);
 
         if (!body)
-            return await interaction.Error("Wystąpił błąd podczas pobierania pliku", { ephemeral: true });
+            return await interaction.Error("Wystąpił błąd podczas pobierania pliku");
 
         // I don't want to mess with typescript here so I'm casting it to any
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,7 +39,7 @@ export default async function ({ interaction }: CommandArgs) {
 
         stream.close();
     } catch(err) {
-        return await interaction.Error("Wystąpił błąd podczas zapisywania pliku", { ephemeral: true });
+        return await interaction.Error("Wystąpił błąd podczas zapisywania pliku");
     }
 
     return await interaction.Reply([
