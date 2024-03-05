@@ -9,8 +9,10 @@ import { Embed } from "utils/embedBuilder";
 export default async function ({ interaction }: CommandArgs) {
     const file = interaction.options.get("file", true);
 
+    interaction.deferReply();
+
     if (!file)
-        return awaitinteraction.Error("Nie podano pliku", { ephemeral: true });
+        return await interaction.Error("Nie podano pliku", { ephemeral: true });
 
     if (!file.attachment)
         return await interaction.Error("Nie podano pliku", { ephemeral: true });
