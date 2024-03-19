@@ -58,7 +58,7 @@ export async function autocomplete({ interaction }: AutocompleteArgs) {
 export const info: CommandInfoType = {
     name: "rename",
     description: "Zmienia status ticketa",
-    role: [ ...Rl.DeveloperTeam,  Rl.HeadAdmin, Rl.SeniorAdmin, Rl.Admin ],
+    role: [ ...Rl.DeveloperTeam,  Rl.HeadAdmin, Rl.SeniorAdmin, Rl.Admin,Rl.TrialDeveloper ],
     builder: new SlashCommandBuilder()
         .addStringOption(option => option.setName("status").setDescription("Status ticketa").setAutocomplete(true).setRequired(true))
         .setName("rename"),

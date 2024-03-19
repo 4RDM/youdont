@@ -37,7 +37,7 @@ export const info: CommandInfoType = {
     name: "sprawdz",
     description: "Sprawdź czy auto jest dodane na serwer",
     permissions: PermissionFlagsBits.Administrator,
-    role: [ Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.Developer ],
+    role: [ Roles.Owner, Roles.Zarzad, Roles.HeadAdmin, Roles.Developer, Roles.TrialDeveloper ],
     builder: new SlashCommandBuilder()
         .addStringOption(option => option.setName("resp-name").setDescription("Nazwa pojazdu").setRequired(true))
         .setName("sprawdz"),

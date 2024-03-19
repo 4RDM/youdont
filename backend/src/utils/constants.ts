@@ -30,7 +30,7 @@ const JuniorModerator = "1013519449489428491";
 const Support = "843444639666143252";
 const TrialSupport = "843444639997886465";
 const Developer = "883475949964906516";
-const TrialDevelopr = "863107202365390879";
+const TrialDeveloper = "863107202365390879";
 const Team = "843444642539110400";
 const OpiekunHounds = "962784956197765192";
 const Hounds = "932345054142529538";
@@ -57,7 +57,7 @@ export const Roles = {
     Support,
     TrialSupport,
     Developer,
-    TrialDevelopr,
+    TrialDeveloper,
     Team,
     OpiekunHounds,
     Hounds,
