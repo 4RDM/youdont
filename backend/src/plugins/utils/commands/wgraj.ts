@@ -1,10 +1,12 @@
 import { SlashCommandBuilder } from "discord.js";
-import { createWriteStream } from "fs";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { join } from "path";
 import { Readable } from "stream";
 import { finished } from "stream/promises";
-import { Embed } from "utils/embedBuilder";
+import { Embed } from "utils/embedBuilder"
+
+import { createWriteStream, createReadStream, pipeline } from "node:fs";
+import zlib from "node:zlib";
 
 export default async function ({ interaction }: CommandArgs) {
     const file = interaction.options.get("file", true);
@@ -26,8 +28,10 @@ export default async function ({ interaction }: CommandArgs) {
     if (attachment.size > 1024 * 1024 * 100)
         return await interaction.Error(`Plik jest za duży \`${Math.round(attachment.size / (1024 * 1024))}MB\` (max: \`100MB\`)`);
 
+    const generatedName = `${attachment.name}_${Date.now()}`; 
+
     try {
-        const stream = createWriteStream(join(__dirname, `../../../../temp/${attachment.name}_${Date.now()}.zip`), { flags: "w" });
+        const stream = createWriteStream(join(__dirname, `../../../../temp/${generatedName}.zip`), { flags: "w" });
         
         stream.on("open", async () => {
             const { body } = await fetch(attachment.url);
@@ -43,6 +47,14 @@ export default async function ({ interaction }: CommandArgs) {
         });
     } catch(err) {
         return await interaction.Error("Wystąpił błąd podczas zapisywania pliku");
+    }
+
+    try {
+        const stream = createReadStream(join(__dirname, `../../../../temp/${generatedName}.zip`));
+        
+        pipeline(stream, zlib.createGzip(), null, null); // todo replace null with writeStream and null with onError handler 
+    } catch(err) {
+       return await interaction.Error("Wystąpił błąd podczas odczytywania pliku");
     }
 
     return await interaction.Reply([
