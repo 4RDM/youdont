@@ -39,6 +39,7 @@ export default () => {
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				<Link to="/administration">Administracja</Link>
+				<a href="https://indrop.eu/s/4rdm">Sklep</a>
 				{loggedIn ? (
 					location.pathname == '/dashboard' ? (
 						<a href="/api/dashboard/logout">Wyloguj się</a>
@@ -68,6 +69,7 @@ export default () => {
 				<Link to="/">Strona główna</Link>
 				<Link to="/articles">Artykuły</Link>
 				<Link to="/administration">Administracja</Link>
+				<a href="https://indrop.eu/s/4rdm">Sklep</a>
 				{loggedIn ? (
 					location.pathname == '/dashboard' ? (
 						<a href="/api/dashboard/logout">Wyloguj się</a>
