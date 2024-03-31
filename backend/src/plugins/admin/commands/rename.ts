@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Embed } from "utils/embedBuilder";
-import { Roles as Rl } from "utils/constants";
+import { Roles as Rl, embedColors } from "utils/constants";
 import { AutocompleteArgs, CommandArgs, CommandInfoType } from "handlers/commands";
 import logger from "utils/logger";
 
@@ -23,7 +23,7 @@ export default async function ({ interaction }: CommandArgs) {
 
     channel.setName(`${channelName.join("-")}-${status.split(" ").join("-")}`)
         .then(() => {
-            interaction.Reply([ Embed({ color: "#1F8B4C", title: ":white_check_mark: | Zmieniono status ticketa", user: interaction.user }) ]);
+            interaction.Reply([ Embed({ color: embedColors.green, title: ":white_check_mark: | Zmieniono status ticketa", user: interaction.user }) ]);
         }).catch((err) => {
             interaction.Error("Wystąpił błąd, sprawdź konsolę!", { ephemeral: true });
             logger.error(err);

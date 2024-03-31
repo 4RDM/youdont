@@ -1,12 +1,13 @@
 import { SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { join } from "path";
-import { Readable } from "stream";
+import { Readable, pipeline } from "stream";
+import { createWriteStream, createReadStream } from "fs";
 import { finished } from "stream/promises";
-import { Embed } from "utils/embedBuilder"
-
-import { createWriteStream, createReadStream, pipeline } from "node:fs";
 import zlib from "node:zlib";
+import { embedColors } from "utils/constants";
+import { Embed } from "utils/embedBuilder";
+
 
 export default async function ({ interaction }: CommandArgs) {
     const file = interaction.options.get("file", true);
@@ -32,36 +33,37 @@ export default async function ({ interaction }: CommandArgs) {
 
     try {
         const stream = createWriteStream(join(__dirname, `../../../../temp/${generatedName}.zip`), { flags: "w" });
-        
+
         stream.on("open", async () => {
             const { body } = await fetch(attachment.url);
-              
+
             if (!body)
                 return await interaction.Error("Wystąpił błąd podczas pobierania pliku");
     
             // I don't want to mess with typescript here so I'm casting it to any
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await finished(Readable.fromWeb(body as any).pipe(stream));
-              
-            stream.close();  
+
+            stream.close();
         });
     } catch(err) {
         return await interaction.Error("Wystąpił błąd podczas zapisywania pliku");
     }
 
     try {
-        const stream = createReadStream(join(__dirname, `../../../../temp/${generatedName}.zip`));
+        const readStream = createReadStream(join(__dirname, `../../../../temp/${generatedName}.zip`));
+        const writeStream = createWriteStream(join(__dirname, `../../../../temp/${generatedName}`));
         
-        pipeline(stream, zlib.createGzip(), null, null); // todo replace null with writeStream and null with onError handler 
+        pipeline(readStream, zlib.createGzip(), writeStream, function() {}); // todo replace null with writeStream and null with onError handler 
     } catch(err) {
-       return await interaction.Error("Wystąpił błąd podczas odczytywania pliku");
+        return await interaction.Error("Wystąpił błąd podczas odczytywania pliku");
     }
 
     return await interaction.Reply([
         Embed({
             title: "Pomyślnie wgrano plik",
             description: `Plik \`${attachment.name}\` został pomyślnie wgrany na serwer`,
-            color: "#1F8B4C",
+            color: embedColors.green,
             user: interaction.user,
         })
     ]);

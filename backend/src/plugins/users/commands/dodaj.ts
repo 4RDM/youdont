@@ -4,7 +4,7 @@ import { addFile } from "utils/filesystem";
 import { hexToDec } from "utils/strings";
 import { join } from "path";
 import { existsSync } from "fs";
-import { Roles } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import rcon from "utils/rcon";
 
@@ -34,7 +34,7 @@ export default async function ({ interaction }: CommandArgs) {
             interactionReply.edit({
                 embeds: [
                     Embed({
-                        color: "#1F8B4C",
+                        color: embedColors.green,
                         description: "**Wysłano!**",
                         user: interaction.user,
                     }),

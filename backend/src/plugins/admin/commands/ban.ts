@@ -1,7 +1,7 @@
 import { GuildMember, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
-import { Roles } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 
 export default async function ({ interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand() || !interaction.guild) return;
@@ -35,7 +35,7 @@ export default async function ({ interaction }: CommandArgs) {
             interaction.Reply([
                 Embed({
                     title: ":hammer: Banhammer",
-                    color: "#1F8B4C",
+                    color: embedColors.green,
                     description: `Zbanowany: \`${typeof user !== "string" ? user.id : user}\` (\`${mention.id}\`)\nModerator: \`${interaction.user.tag}\` (\`${interaction.user.id}\`)\nPowód: \`${reason || "Brak"}\``,
                     user: interaction.user,
                 }),

@@ -2,7 +2,7 @@ import { GuildMember, PermissionFlagsBits, SlashCommandBuilder } from "discord.j
 import { Embed } from "utils/embedBuilder";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import logger from "utils/logger";
-import { Roles } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 
 export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
@@ -22,7 +22,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     }, { reason: "User joined channel" }).catch(res => logger.error(`EventHandler(): Error while editing channel permissions: ${res}`));
 
     await interaction.Reply([ Embed({
-        color: "#1F8B4C",
+        color: embedColors.green,
         title: ":white_check_mark: | Nadano uprawnienia do live",
         description: `Nadano uprawnienia do live użytkownikowi \`${member.user.tag}\` (\`${member.id}\`)`,
         user: interaction.user,

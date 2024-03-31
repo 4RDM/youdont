@@ -1,5 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
+import { embedColors } from "utils/constants";
 import { Embed } from "utils/embedBuilder";
 
 export default async function ({ interaction }: CommandArgs) {
@@ -11,7 +12,7 @@ export default async function ({ interaction }: CommandArgs) {
     await interaction.channel.bulkDelete(messages).then(() =>
         interaction.Reply([
             Embed({
-                color: "#1F8B4C",
+                color: embedColors.green,
                 title: ":broom: Brooooom",
                 description: `Usunięto **${amount}** wiadomości!`,
                 user: interaction.user,

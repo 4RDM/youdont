@@ -2,6 +2,7 @@ import { getPlayers } from "utils/serverStatus";
 import { Embed } from "utils/embedBuilder";
 import { SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
+import { embedColors } from "utils/constants";
 
 export default async function ({ client, interaction }: CommandArgs) {
     const status = await getPlayers();
@@ -15,7 +16,7 @@ export default async function ({ client, interaction }: CommandArgs) {
             Embed({
                 title: ":white_check_mark: | 4RDM jest online!",
                 description: `**Graczy online:** ${status.length}/${client.config.maxPlayers}`,
-                color: "#1F8B4C",
+                color: embedColors.green,
                 user: interaction.user,
             }),
         ]);

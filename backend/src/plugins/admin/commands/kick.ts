@@ -3,7 +3,7 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
-import { Roles } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 import { Embed } from "utils/embedBuilder";
 
@@ -36,7 +36,7 @@ export default async function ({ interaction }: CommandArgs) {
             interaction.Reply([
                 Embed({
                     title: ":hammer: | Pomyślnie wyrzucono",
-                    color: "#1F8B4C",
+                    color: embedColors.green,
                     description: `Wyrzucony: \`${mention.user.tag}\` (\`${mention.id}\`)\nModerator: \`${interaction.user.tag}\` (\`${interaction.user.id}\`)\nPowód: \`${reason || "Brak"}\``,
                     user: interaction.user,
                 }),

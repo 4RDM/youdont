@@ -1,6 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Embed } from "utils/embedBuilder";
-import { Roles } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
 
 export default async function ({ interaction, client }: CommandArgs) {
@@ -31,7 +31,7 @@ export default async function ({ interaction, client }: CommandArgs) {
             Embed({
                 title: ":pencil: | Dodano notatkę!",
                 description: `ID utworzonej notatki: ${note.noteID}`,
-                color: "#1F8B4C",
+                color: embedColors.green,
                 user: interaction.user,
             }),
         ]);

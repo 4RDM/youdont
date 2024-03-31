@@ -1,6 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandArgs, CommandInfoType } from "handlers/commands";
-import { Roles } from "utils/constants";
+import { Roles, embedColors } from "utils/constants";
 import { Embed } from "utils/embedBuilder";
 
 export default async function ({ client, interaction }: CommandArgs) {
@@ -22,7 +22,7 @@ export default async function ({ client, interaction }: CommandArgs) {
 
     const embed = Embed({
         title: ":white_check_mark: | Nadano houndsa!",
-        color: "#1F8B4C",
+        color: embedColors.green,
         user: interaction.user
     });
 
