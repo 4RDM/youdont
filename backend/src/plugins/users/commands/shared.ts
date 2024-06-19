@@ -12,9 +12,7 @@ import { DBUser } from "database/playerData";
 import { Embed } from "utils/embedBuilder";
 import { readFile } from "fs/promises";
 
-const filePath = join(
-    "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json"
-);
+const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/shared.json");
 
 export const awaitMessage = (
     interaction: CommandInteraction

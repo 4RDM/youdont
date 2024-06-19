@@ -8,11 +8,7 @@ import { Embed } from "utils/embedBuilder";
 import { Roles, embedColors } from "utils/constants";
 import { readFile } from "fs/promises";
 
-const filePath = join(
-    // __dirname,
-    // "vehicles.json"
-    "/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/vehicles.json"
-);
+const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/auta/limitki.json");
 
 export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
@@ -40,8 +36,8 @@ export default async function ({ client, interaction }: CommandArgs) {
 
         if (!currentHex) return;
 
-        if (!userJson[currentHex]) userJson[currentHex] = [];
-        userJson[currentHex].push([ spawnName, displayName ]);
+        if (!userJson[currentHex]) userJson[currentHex] = {};
+        userJson[currentHex][displayName] = spawnName;
 
         writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
@@ -68,12 +64,12 @@ export default async function ({ client, interaction }: CommandArgs) {
 
         if (!currentHex) return;
 
-        const index = userJson[currentHex].findIndex((x: string[]) => x[0] == spawnName);
-        if (index == -1) {
+        const displayNameToFind = Object.keys(userJson[currentHex] || {}).find(x => (userJson[currentHex] || {})[x] === spawnName);
+        if (!displayNameToFind) {
             return await interaction.Error(`Nie znaleziono limitki o nazwie \`${spawnName}\`!`, { ephemeral: true });
         }
 
-        userJson[currentHex].splice(index, 1);
+        delete userJson[currentHex][displayNameToFind];
 
         writeFileSync(filePath, JSON.stringify(userJson), { encoding: "utf-8" });
 
@@ -98,7 +94,7 @@ export default async function ({ client, interaction }: CommandArgs) {
         if (!userHexes[0])
             return await interaction.Error("Nie znaleziono gracza!", { ephemeral: true });
 
-        const limitki: { [key: string]: string[][] } = {};
+        const limitki: { [key: string]: { [key: string]: string } } = {};
         const description: string[] = [];
 
         userHexes.forEach((x) => {
@@ -108,8 +104,8 @@ export default async function ({ client, interaction }: CommandArgs) {
         Array.from(Object.keys(limitki)).forEach((hex) => {
             if (limitki[hex]) {
                 description.push(`**${hex}**:`);
-                limitki[hex].forEach((limitka: string[]) => {
-                    description.push(`\`${limitka[0]}\`: \`${limitka[1]}\``);
+                Object.keys(limitki[hex]).forEach(displayName => {
+                    description.push(`\`${limitki[hex][displayName]}\`: \`${displayName}\``);
                 });
             }
         });

@@ -7,7 +7,7 @@ import { finished } from "stream/promises";
 import zlib from "node:zlib";
 import { embedColors } from "utils/constants";
 import { Embed } from "utils/embedBuilder";
-
+import logger from "utils/logger";
 
 export default async function ({ interaction }: CommandArgs) {
     const file = interaction.options.get("file", true);
@@ -43,20 +43,24 @@ export default async function ({ interaction }: CommandArgs) {
             // I don't want to mess with typescript here so I'm casting it to any
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await finished(Readable.fromWeb(body as any).pipe(stream));
-
+            
             stream.close();
+
+            try {
+                const readStream = createReadStream(join(__dirname, `../../../../temp/${generatedName}.zip`));
+                const writeStream = createWriteStream(join(__dirname, `../../../../temp/${generatedName}`));
+
+                pipeline(readStream, zlib.createUnzip(), writeStream, function(err) {
+                    if (err) logger.error(err);
+                });
+                
+            } catch(err) {
+                return await interaction.Error("Wystąpił błąd podczas odczytywania pliku");
+            }
+
         });
     } catch(err) {
         return await interaction.Error("Wystąpił błąd podczas zapisywania pliku");
-    }
-
-    try {
-        const readStream = createReadStream(join(__dirname, `../../../../temp/${generatedName}.zip`));
-        const writeStream = createWriteStream(join(__dirname, `../../../../temp/${generatedName}`));
-        
-        pipeline(readStream, zlib.createGzip(), writeStream, function() {}); // todo replace null with writeStream and null with onError handler 
-    } catch(err) {
-        return await interaction.Error("Wystąpił błąd podczas odczytywania pliku");
     }
 
     return await interaction.Reply([
