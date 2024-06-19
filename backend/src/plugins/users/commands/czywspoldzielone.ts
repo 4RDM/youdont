@@ -20,8 +20,8 @@ export default async function ({ interaction }: CommandArgs) {
     
     for (const hex in sharedJson) {
         const entries = sharedJson[hex];
-        for (const respname of entries) {
-            if (respname.toLowerCase() === spawnName.toLowerCase()) {
+        for (const respname of Object.values(entries)) {
+            if ((respname as string).toLowerCase() === spawnName.toLowerCase()) {
                 const embed = Embed({
                     title: ":white_check_mark: | Znaleziono wspóldzielenie!",
                     color: embedColors.green,
