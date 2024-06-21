@@ -24,7 +24,7 @@ export default async function ({ client, interaction }: CommandArgs) {
     if (!response)
         return interaction.Error("Nie znaleziono użytkownika w bazie danych", { ephemeral: true });
 
-    const identifiers = response.map(x => x?.identifier);
+    const identifiers = response.map(x => `${x?.identifier} -> ${BigInt("0x" + x?.identifier.replace("steam:", "")).toString(10)}`);
 
     if (identifiers.length == 0)
         return interaction.Error("Nie znaleziono użytkownika w bazie danych", { ephemeral: true });
