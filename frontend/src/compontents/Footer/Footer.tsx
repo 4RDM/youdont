@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Discord } from '@styled-icons/fa-brands/Discord'
-import { Github } from '@styled-icons/fa-brands/Github'
-import { Steam } from '@styled-icons/fa-brands/Steam'
+import React, { useState } from "react";
+import { Discord } from "@styled-icons/fa-brands/Discord";
+import { Github } from "@styled-icons/fa-brands/Github";
+import { Steam } from "@styled-icons/fa-brands/Steam";
+import { Tiktok } from "@styled-icons/fa-brands/Tiktok";
 
-import './Footer.scss'
-import { Link } from 'react-router-dom'
+import "./Footer.scss";
+import { Link } from "react-router-dom";
 
 const cytaty = [
 	'"helix drze ryja nie wiem czy działa" ~ Nimplex 2021',
@@ -21,10 +22,10 @@ const cytaty = [
 	'"Zabij sie" ~ K3IX 2021',
 	'"Jaki mówiłeś vps? Bo jak nic nie znajdziemy, to ja mogę hostowac" ~ Kubamaz 2019/20',
 	'"Litwo, Ojczyzno moja! ty jesteś jak zdrowie, Ile cię trzeba cenić, ten tylko się dowie, Kto cię stracił. Dziś piękność twą w całej ozdobie Widzę i opisuję, bo tęsknię po tobie." ~ Adam Mickiewicz 1834',
-]
+];
 
 export default () => {
-	const [cytat] = useState(cytaty[Math.floor(Math.random() * cytaty.length)])
+	const [cytat] = useState(cytaty[Math.floor(Math.random() * cytaty.length)]);
 
 	return (
 		<footer>
@@ -44,7 +45,11 @@ export default () => {
 					<a href="https://github.com/4RDM">
 						<Github size={20} /> Github
 					</a>
-				</div>
+				       	<a href="https://tiktok.com/@4rdm.pl">
+						<Tiktok size={20} /> TikTok
+					</a>
+	
+                                </div>
 				<div>
 					<h1>Mapa strony</h1>
 					<Link to="/">Strona główna</Link>
@@ -54,11 +59,11 @@ export default () => {
 				</div>
 				<div>
 					<p id="footer-author">
-						4RDM © 2020-{new Date().getFullYear()}, made by{' '}
+						4RDM © 2020-{new Date().getFullYear()}, made by{" "}
 						<a href="https://github.com/Nimplex">Nimplex</a>
 					</p>
 				</div>
 			</div>
 		</footer>
-	)
+	);
 }
