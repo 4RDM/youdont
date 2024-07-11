@@ -40,7 +40,7 @@ const Antilag = "1196829757363474554"; // zostawiam na kiedyś ale na razie niec
 export const Roles = {
     DodajTeam: [ Owner, Zarzad, Dodaj, HeadAdmin ],
     NickTeam: [ Owner, Zarzad, Nick, HeadAdmin ],
-    AntilagTeam: [ Owner ],
+    AntilagTeam: [ Owner, Antilag ],
     NotatkaTeam: [ Owner, Zarzad, HeadAdmin, Developer ],
     DeveloperTeam: [ Owner, Zarzad, HeadAdmin, Developer ],
     Owner,
