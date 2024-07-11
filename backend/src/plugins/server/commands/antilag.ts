@@ -18,17 +18,17 @@ export default async function ({ interaction }: CommandArgs) {
         return await interaction.Error("Funkcja niedostępna na tym komputerze!", { ephemeral: true });
 
     const file = await readFile(filePath, { encoding: "utf-8" });
-    const json = JSON.parse(file) as string[];
+    const json = JSON.parse(file) as { [key: string]: true };
 
     let antilagJson = json;
     const subcommand = interaction.options.getSubcommand();
     const spawnName = interaction.options.getString("spawn-name", true);
 
     if (subcommand == "dodaj") {
-        if (antilagJson.find(x => x == spawnName))
+        if (Object.keys(antilagJson).find(x => x == spawnName))
             return await interaction.Error("Samochód jest już dodany!", { ephemeral: true });
 
-        antilagJson.push(spawnName);
+        antilagJson[spawnName] = true;
 
         writeFileSync(filePath, JSON.stringify(antilagJson), { encoding: "utf-8" });
 
@@ -40,10 +40,10 @@ export default async function ({ interaction }: CommandArgs) {
 
         return await interaction.Reply([ embed ]);
     } else if (subcommand == "usun") {
-        if (!antilagJson.find(x => x == spawnName))
+        if (!Object.keys(antilagJson).find(x => x == spawnName))
             return await interaction.Error("Samochód nie znajduje się na liście!", { ephemeral: true });
 
-        antilagJson = antilagJson.filter(x => x != spawnName);
+        delete antilagJson[spawnName];
 
         writeFileSync(filePath, JSON.stringify(antilagJson), { encoding: "utf-8" });
 
