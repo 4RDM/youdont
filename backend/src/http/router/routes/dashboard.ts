@@ -6,6 +6,7 @@ import config from "../../../config";
 import timeSince from "utils/timeSince";
 import { internalError, notFound, unauthorized } from "../errors";
 import rateLimit from "express-rate-limit";
+import { DBUser } from "database/playerData";
 
 interface IUserCache {
     [index: string]: {
@@ -124,10 +125,13 @@ router.get("/stats", userCheck, async (req, res) => {
 
     if (!userCache[userid] || timeSince(userCache[userid].date) > 3600) {
         const response = await req.core.database.players.getUserFromServer(userid);
+
         if (response) {
             if (response.length == 0) return notFound(res, "User not found in database");
 
-            const user = response[0];
+            // @ts-expect-error this is always good good to go fuck you eslint
+            const user: DBUser = Object.assign(response[0], response.reduce((first, second) => ({ kills: first.kills + second!.kills, deaths: first.deaths + second!.deaths, heady: first.heady + second!.heady }), { kills: 0, deaths: 0, heady: 0 }));
+
             if (user === null) return internalError(res, "Database error");
 
             const { discord, identifier, license, heady, kills, deaths } = user;
