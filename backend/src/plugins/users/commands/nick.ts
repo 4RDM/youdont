@@ -26,7 +26,7 @@ export interface Roles extends Array<{ [k: `steam:${string}`]: Role }> {
     [k: `steam:${string}`]: Role;
 }
 
-const filePath = join("/home/rdm/server/data/resources/[4rdm]/4rdm/data/roles.json");
+const filePath = join("/home/rdm/server/data/resources/[core]/chat_beta/data/roles.json");
 
 export default async function ({ client, interaction }: CommandArgs) {
     if (!interaction.isChatInputCommand()) return;
