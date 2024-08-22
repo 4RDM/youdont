@@ -19,7 +19,7 @@ export interface PaymentSchema {
     title: string
     price: string
     paymentChannel: string,
-    dicountCode: string,
+    discountCode?: string,
     email: string
     steamID: string
     steamUsername: string
@@ -130,7 +130,7 @@ export class PaymentsManager {
                 if (!res)
                     return logger.error("PaymentsManager(): cannot fetch payments from API!");
 
-                res.forEach(async ({ date, email, id, payment_channel, price, product_id, steam_id, steam_username, title }) => {
+                res.forEach(async ({ date, email, id, payment_channel, price, product_id, steam_id, steam_username, title, discount_code }) => {
                     const hex = BigInt(steam_id).toString(16);
                     let discordID = await database.players.getDiscordBySteam(`steam:${hex}`);
                     const payment = this.get(id);
@@ -142,6 +142,7 @@ export class PaymentsManager {
                         const res = await this.create({
                             date,
                             email,
+                            discountCode: discount_code,
                             id,
                             paymentChannel: payment_channel,
                             price,
