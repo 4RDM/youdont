@@ -18,7 +18,8 @@ export interface PaymentSchema {
     productID: string
     title: string
     price: string
-    paymentChannel: string
+    paymentChannel: string,
+    dicountCode: string,
     email: string
     steamID: string
     steamUsername: string
@@ -32,6 +33,7 @@ export interface PaymentSchemaAPI {
     title: string
     price: string
     payment_channel: string
+    discount_code?: string,
     email: string
     steam_id: string
     steam_username: string
@@ -109,7 +111,7 @@ export class PaymentsManager {
     private webhook: WebhookClient;
     private newDiscord: WebhookClient;
 
-    constructor(private database: Database, private key: string) {
+    constructor(private database: Database, private key: string, private partnerId: string) {
         this.webhook = new WebhookClient({ url: config.discord.btDonate });
         this.newDiscord = new WebhookClient({ url: config.discord.btDev });
 
@@ -232,7 +234,9 @@ export class PaymentsManager {
 
     async fetchPayments() {
         try {
-            const res = await fetch(`https://indrop.pro/api/auth/${this.key}/payments`);
+            const res = await fetch(`https://indrop.pro/api/v2/auth/${this.partnerId}/payments`, {
+                headers: { "ID-API-Secret": this.key }
+            });
 
             if (res.status !== 200)
                 return false;
@@ -288,10 +292,10 @@ export class PaymentsManager {
     async fraudPayment(id: string) {
         try {
             const res = await fetch(
-                `https://indrop.pro/api/auth/${this.key}/payment-fraud`,
+                `https://indrop.pro/api/v2/auth/${this.partnerId}/payment-fraud`,
                 {
                     body: formBody({ id }),
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    headers: { "Content-Type": "application/x-www-form-urlencoded", "ID-API-Secret": this.key },
                     method: "post"
                 }
             );
@@ -312,10 +316,10 @@ export class PaymentsManager {
     async acceptPayment(id: string) {
         try {
             const res = await fetch(
-                `https://indrop.pro/api/auth/${this.key}/payment`,
+                `https://indrop.pro/api/v2/auth/${this.partnerId}/payment`,
                 {
                     body: formBody({ id }),
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    headers: { "Content-Type": "application/x-www-form-urlencoded", "ID-API-Secret": this.key },
                     method: "post"
                 }
             );
